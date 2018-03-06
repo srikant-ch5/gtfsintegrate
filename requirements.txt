@@ -1,0 +1,5 @@
+Django==1.10
+multigtfs
+psycopg2==2.7.3.2
+whitenoise==3.3.1
+python-decouple==3.1

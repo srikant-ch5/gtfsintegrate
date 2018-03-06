@@ -1,0 +1,11 @@
+{% extends 'gs/home.html' %}
+{% block main %}
+<h2> Downloading the file wait for some time </h2>
+{% if context %}
+	{% for feed in feeds %}
+		<p>{{feed.name}}</p>
+	{% endfor %}
+{% else %}
+	<p>No feeds yet</p>
+{% endif %}
+{% endblock %}

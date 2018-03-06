@@ -1,0 +1,23 @@
+body,html{
+  margin:0;
+  height:100%;
+  background-color:#1E90FF;
+}
+.navbar-fixed{
+  min-height:10px;
+}
+.navbar-nav > li > a,
+.navbar-header > a {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    line-height: 70px;
+}
+.navbar >.navbar-nav >ul >li> a .active{
+  background-color: red;
+}
+.videoinfo-cont{
+  background-color:#1E90FF;
+}
+#video-img{
+  width:200px;
+}
