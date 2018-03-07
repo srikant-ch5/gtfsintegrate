@@ -2,11 +2,16 @@
 
 {% block main %}
         <div id="input">
-            <form method="post" action="gtfs/downloading_page/">
-            {% csrf_token %}
-                <input type="text" name="gtfs_file" />
-                <input type="submit" clas="btn" value ="click">
+            <form method="post" enctype="multipart/form-data" action="gtfs/downloading_page/">
+                {% csrf_token %}
+                <input type="file" name="gtfsfile">
+                <button type="submit">UPLOAD A GTFS FILE</button>
             </form>
+
+            {% if uploaded_file_url %}
+            <p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
+            {% endif %}
+
         </div>
         <div id="gtfs_data">
             {% if context %}
