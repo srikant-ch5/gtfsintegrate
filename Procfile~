@@ -1,1 +1,1 @@
-web: gunicorn gtfsintegrate.wsgi --log-file -
+web: gunicorn geodjango.wsgi --log-file -
