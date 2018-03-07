@@ -33,11 +33,16 @@ def download(request):
 		schedule.WriteGoogleTransitFeed('google_transit.zip')'''
 
 		gtfs_feed = request.FILES['gtfsfile']
-		name = "Test3"
-		feeds = Feed.objects.create(name=name)
-		feeds.import_gtfs(gtfs_feed)
+		name = gtfs_feed.name[:-4]
 
-	return render(request,'gs/download.html',{'uploaded_file_url':uploaded_file_url})
+		if(Feed.objects.filter(name=name).exists()):
+			context = 'File is already present in the Database'
+		else:
+			feeds = Feed.objects.create(name=name)
+			feeds.import_gtfs(gtfs_feed)
+			context = name + "GTFS file is uploaded to Database"
+
+	return render(request,'gs/map.html',{'context':context})
 
 class FeedListView(ListView):
 	model = Feed
