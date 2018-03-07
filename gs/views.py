@@ -12,7 +12,6 @@ from django.core.files.storage import FileSystemStorage
 from multigtfs.models import Agency, Feed, Service
 
 from multigtfs.management.commands.importgtfs import Command
-import transitfeed
 
 def map(request):
 	return render(request,'gs/map.html')
