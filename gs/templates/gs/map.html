@@ -8,10 +8,6 @@
                 <button type="submit">UPLOAD A GTFS FILE</button>
             </form>
 
-            {% if uploaded_file_url %}
-            <p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
-            {% endif %}
-
         </div>
         <div id="gtfs_data">
             {% if context %}
@@ -20,39 +16,19 @@
         </div>
         <div id="map" ></div>
 
-        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
         <script type="text/javascript">
-            var element = document.getElementById("map");
-
-            /*
-            Build list of map types.
-            You can also use var mapTypeIds = ["roadmap", "satellite", "hybrid", "terrain", "OSM"]
-            but static lists sucks when google updates the default list of map types.
-            */
-            var mapTypeIds = [];
-            for(var type in google.maps.MapTypeId) {
-                mapTypeIds.push(google.maps.MapTypeId[type]);
-            }
-            mapTypeIds.push("OSM");
-
-            var map = new google.maps.Map(element, {
-                center: new google.maps.LatLng(48.1391265, 11.580186300000037),
-                zoom: 11,
-                mapTypeId: "OSM",
-                mapTypeControlOptions: {
-                    mapTypeIds: mapTypeIds
-                }
-            });
-
-            map.mapTypes.set("OSM", new google.maps.ImageMapType({
-                getTileUrl: function(coord, zoom) {
-                    // See above example if you need smooth wrapping at 180th meridian
-                    return "http://tile.openstreetmap.org/" + zoom + "/" + coord.x + "/" + coord.y + ".png";
-                },
-                tileSize: new google.maps.Size(256, 256),
-                name: "OpenStreetMap",
-                maxZoom: 18
-            }));
-        </script>
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          })
+        ],
+        view: new ol.View({
+          center: ol.proj.fromLonLat([37.41, 8.82]),
+          zoom: 4
+        })
+      });
+    </script>
 
 {% endblock %}
