@@ -1,15 +1,23 @@
 $(document).ready(function(){
   var longs,lats;
   $("#query").on("click",function(){
+
             var loc = document.getElementById("location");
-            var lats,longs;
-            
+            //var lats,longs;
+      
               if(navigator.geolocation){
                 navigator.geolocation.getCurrentPosition(showPosition);
               }
               else{
                 x.innHTML = "Your location cannot be retrieved";
               }
+
+            function showPosition(position){
+               lats = position.coords.latitude;
+               longs = position.coords.longitude;
+          
+            }
+            console.log(longs + " " +lats )
             $(this).prop("disabled",true)
             var map;
 
@@ -68,6 +76,7 @@ $(document).ready(function(){
                 return null;
               }
             });
+
             var raster = new ol.layer.Tile({
               source: new ol.source.BingMaps({
                 imagerySet: 'Aerial',
@@ -84,7 +93,7 @@ $(document).ready(function(){
                 }
               }),
               view: new ol.View({
-                center:ol.proj.transform([longs,lats],'EPSG:4326', 'EPSG:3857'),
+                center:ol.proj.transform([long,lat],'EPSG:4326', 'EPSG:3857'),
                 maxZoom: 19,
                 zoom: 17
               })
