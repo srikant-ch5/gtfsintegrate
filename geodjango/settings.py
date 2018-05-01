@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'geodjango.wsgi.application'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
-
+#uses env var
 DATABASES = {
     'default': dj_database_url.config(
         default=config('DATABASE_URL')
