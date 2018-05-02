@@ -11,9 +11,9 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
-import dj_database_url
+'''import dj_database_url
 from decouple import config
-
+'''
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     'multigtfs',
     'gs',
+    'django_extensions'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -81,15 +82,27 @@ WSGI_APPLICATION = 'geodjango.wsgi.application'
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool)
+#DEBUG = config('DEBUG', default=False, cast=bool)
 #uses env var
-DATABASES = {
+'''DATABASES = {
     'default': dj_database_url.config(
         default=config('DATABASE_URL')
     )
 }
 DATABASES['default'] = dj_database_url.config()
 DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
+'''
+DATABASES = {
+     'default': {
+         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+         'NAME': 'gtfs2',
+         'USER': 'srikant', 
+         'PASSWORD': 'sriks@123',
+         'HOST': 'localhost', # '127.0.0.1' probably works also
+         'PORT': '5432',
+     }
+ }
+
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 
@@ -141,7 +154,7 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
 )
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
-DATABASES['default'] =  dj_database_url.config()
+#DATABASES['default'] =  dj_database_url.config()
 DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
 GDAL_LIBRARY_PATH = os.getenv('GDAL_LIBRARY_PATH')
