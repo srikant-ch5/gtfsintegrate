@@ -5,7 +5,7 @@ from django.contrib.gis.db import models
 
 # Create your models here.
 
-def Member(models.Model):
+class Member(models.Model):
 	member_type = models.CharField(max_length=20)
 	member_ref  = models.IntegerField()
 	member_role = models.CharField(max_length=20)
