@@ -19,7 +19,7 @@ class Relation(models.Model):
 	version   = models.IntegerField()
 	changeset = models.IntegerField()
 
-	def __str__(models.Model):
+	def __str__(self):
 		return self.rel_id
 
 class Way(models.Model):
