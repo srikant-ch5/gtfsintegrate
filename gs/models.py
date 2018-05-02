@@ -1,15 +1,8 @@
 from __future__ import unicode_literals
-
 from django.db import models
 from django.contrib.gis.db import models
 
 # Create your models here.
-
-class Member(models.Model):
-	member_type = models.CharField(max_length=20)
-	member_ref  = models.IntegerField()
-	member_role = models.CharField(max_length=20)
-	relation    = models.ForeignKey(Relation, blank=True, null=True)
 
 class Relation(models.Model):
 	rel_id    = models.IntegerField()
@@ -19,8 +12,14 @@ class Relation(models.Model):
 	version   = models.IntegerField()
 	changeset = models.IntegerField()
 
-	def __str__(models.Model):
+	def __str__(self):
 		return self.rel_id
+
+class Member(models.Model):
+	member_type = models.CharField(max_length=20)
+	member_ref  = models.IntegerField()
+	member_role = models.CharField(max_length=20)
+	relation    = models.ForeignKey(Relation, blank=True, null=True)
 
 class Way(models.Model):
 	way_id    = models.IntegerField(primary_key=True)
