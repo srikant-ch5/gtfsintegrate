@@ -10,45 +10,47 @@ def parseXML(osmFile):
     root = etree.fromstring(xml)
 
     tag_counter = 10000
+    keyid_counter = 5000
+    valueid_counter = 5000
 
     for primitive in root.getchildren():
         if primitive.tag == "node":
-            snode_id   = primitive.get("id")
-            snode_id   = int(snode_id)
+            snode_id   = int(primitive.get("id"))
             stimestamp = primitive.get("timestamp")
-            suid       = primitive.get("uid")
-            suid       = int(suid)
+            suid       = int(primitive.get("uid"))
             suser      = primitive.get("user")
-            sversion   = primitive.get("version")
-            sversion   = int(sversion)
-            schangeset = primitive.get("changeset")
-            schangeest = int(schangeset)
-            slat       = primitive.get("lat")
-            slat       = Decimal(slat)
-            slon       = primitive.get("lon")
-            slon       = Decimal(slon)
+            sversion   = int(primitive.get("version"))
+            schangeset = int(primitive.get("changeset"))
+            slat       = Decimal(primitive.get("lat"))
+            slon       = Decimal(primitive.get("lon"))
 
+            print(" Node %d %s %d %s %d %d %f %f" % (snode_id,stimestamp,suid,suser,sversion,schangeset,slat,slon))
             node = Node(node_id=snode_id, timestamp=stimestamp,uid=suid,user=suser,version=sversion,changeset=schangeset,lat=slat,lon=slon)
             node.save()
             for xmlTag in primitive.getchildren():
                 stag_id = tag_counter
-                skey = xmlTag.get("key")
-                svalue = xmlTag.get("value")
+                skey = xmlTag.get("k")
+                svalue = xmlTag.get("v")
 
+                print("Key %d %s" %(keyid_counter,skey))
+                print("Value %d %s " %(valueid_counter,svalue))
+                
+                
                 key = Key(key_id=keyid_counter,key_text=skey)
                 key.save()
                 value = Value(value_id=valueid_counter,value_text=svalue)
                 value.save()
+                
 
-                tag_counter += tag_counter
-                keyid_counter += keyid_counter
-                valueid_counter += valueid_counter
+                tag_counter += 1
+                keyid_counter += 1
+                valueid_counter += 1
 
+                print("Tag %d (%d %s)(%d %s)" %(tag_counter,keyid_counter,skey,valueid_counter,svalue))
                 tag = Tag(tag_id=stag_id,key_ref=key,value_ref=value,node_tag=node)
                 tag.save()
                 node.tag_set.add(tag)
                 node.save()
-
         elif primitive.tag == "way":
             #w prefix refers single way
             wway_id    = int(primitive.get("id"))
@@ -71,8 +73,8 @@ def parseXML(osmFile):
 
                 elif xmlTag.tag == "tag":
                     wtag_id = tag_counter
-                    wkey    = xmlTag.get("key")
-                    wvalue  = xmlTag.get("value")
+                    wkey    = xmlTag.get("k")
+                    wvalue  = xmlTag.get("v")
 
                     key = Key(key_id=keyid_counter,key_text=wkey)
                     key.save()
@@ -117,8 +119,8 @@ def parseXML(osmFile):
                         relation.save()
                     elif xmlTag.tag == "tag":
                         rtag_id = tag_counter
-                        rkey    = xmlTag.get("key")
-                        rvalue  = xmlTag.get("value")
+                        rkey    = xmlTag.get("k")
+                        rvalue  = xmlTag.get("v")
 
                         key = Key(key_id=keyid_counter,key_text=rkey)
                         key.save()
