@@ -1,13 +1,16 @@
 from lxml import etree
-from models import Node,Tag,Way,Relation,Value,Key
+#from models import Node,Tag,Way,Relation,Value,Key
 from decimal import Decimal
 
 def parseXML(osmFile):
-
+    #osmFile = osmFile.encode('utf-8')
     with open(osmFile) as fileobj:
-        xml = fileobj.read()
+        xmlfile = fileobj.read()
 
-    root = etree.fromstring(xml)
+    xmlfile = xmlfile.encode('utf-8')
+    parser = etree.XMLParser(ns_clean=True, recover=True, encoding='utf-8')
+
+    root = etree.fromstring(xmlfile,parser=parser)
 
     tag_counter = 10000
     keyid_counter = 5000
@@ -25,8 +28,8 @@ def parseXML(osmFile):
             slon       = Decimal(primitive.get("lon"))
 
             print(" Node %d %s %d %s %d %d %f %f" % (snode_id,stimestamp,suid,suser,sversion,schangeset,slat,slon))
-            node = Node(node_id=snode_id, timestamp=stimestamp,uid=suid,user=suser,version=sversion,changeset=schangeset,lat=slat,lon=slon)
-            node.save()
+            '''node = Node(node_id=snode_id, timestamp=stimestamp,uid=suid,user=suser,version=sversion,changeset=schangeset,lat=slat,lon=slon)
+            node.save()'''
             for xmlTag in primitive.getchildren():
                 stag_id = tag_counter
                 skey = xmlTag.get("k")
@@ -34,23 +37,22 @@ def parseXML(osmFile):
 
                 print("Key %d %s" %(keyid_counter,skey))
                 print("Value %d %s " %(valueid_counter,svalue))
-                
-                
+                '''
                 key = Key(key_id=keyid_counter,key_text=skey)
                 key.save()
                 value = Value(value_id=valueid_counter,value_text=svalue)
                 value.save()
-                
+                '''
 
                 tag_counter += 1
                 keyid_counter += 1
                 valueid_counter += 1
 
                 print("Tag %d (%d %s)(%d %s)" %(tag_counter,keyid_counter,skey,valueid_counter,svalue))
-                tag = Tag(tag_id=stag_id,key_ref=key,value_ref=value,node_tag=node)
+                '''tag = Tag(tag_id=stag_id,key_ref=key,value_ref=value,node_tag=node)
                 tag.save()
                 node.tag_set.add(tag)
-                node.save()
+                node.save()'''
         elif primitive.tag == "way":
             #w prefix refers single way
             wway_id    = int(primitive.get("id"))
@@ -60,35 +62,40 @@ def parseXML(osmFile):
             wversion   = int(primitive.get("version"))
             wchangeset = int(primitive.get("changeset"))
             
+            print("        Way  %d %s %d %s %d %d" %(wway_id,wtimestamp,wuid,wuser,wversion,wchangeset))
+            '''
             way = Way(way_id=wway_id,timestamp=wtimestamp,uid=wuid,user=wuser,version=wversion,changeset=wchangeset)
-            way.save()
+            way.save()'''
 
             for xmlTag in primitive.getchildren():
                 if xmlTag.tag == "nd":
                     #reference for node
                     nodeReference = int(xmlTag.get("ref"))
-                    node_in_way  = Node.objects.filter(node_id=nodeReference)
-                    way.node_set.add(node_in_way)
-                    way.save()
+                    #node_in_way  = Node.objects.filter(node_id=nodeReference)
+                    #way.node_set.add(node_in_way)
+                    #way.save()
 
                 elif xmlTag.tag == "tag":
                     wtag_id = tag_counter
                     wkey    = xmlTag.get("k")
                     wvalue  = xmlTag.get("v")
 
-                    key = Key(key_id=keyid_counter,key_text=wkey)
+                    #print("Key %d %s" %(keyid_counter,skey))
+                    #print("Value %d %s " %(valueid_counter,svalue))
+                    '''key = Key(key_id=keyid_counter,key_text=wkey)
                     key.save()
                     value = Value(value_id = valueid_counter,value_text=wvalue)
                     value.save()
+                    '''
+                    tag_counter += 1
+                    keyid_counter += 1
+                    valueid_counter += 1
 
-                    tag_counter += tag_counter
-                    keyid_counter += keyid_counter
-                    valueid_counter += valueid_counter
-
-                    tag = Tag(tag_id=stag_id,key_ref=key,value_ref=value,node_tag=node)
+                    print("Tag %d (%d %s)(%d %s)" %(tag_counter,keyid_counter,wkey,valueid_counter,wvalue))
+                    '''tag = Tag(tag_id=stag_id,key_ref=key,value_ref=value,node_tag=node)
                     tag.save()
                     way.tag_set.add(tag)
-                    way.save()
+                    way.save()'''
 
         elif primitive.tag == "relation":
             rrelation_id    = int(primitive.get("id"))
@@ -98,43 +105,43 @@ def parseXML(osmFile):
             rversion   = int(primitive.get("version"))
             rchangeset = int(primitive.get("changeset"))
             
-            relation = Relation(relation_id=rrelation_id,timestamp=rtimestamp,uid=ruid,user=ruser,version=rversion,changeset=rchangeset)
-            relation.save()
+            print("         Relation   %d %s %d %s %d %d" %(rrelation_id,rtimestamp,ruid,ruser,rversion,rchangeset))
+            #relation = Relation(relation_id=rrelation_id,timestamp=rtimestamp,uid=ruid,user=ruser,version=rversion,changeset=rchangeset)
+            #relation.save()
+            for xmlTag in primitive.getchildren():
 
-            if primitive.tag == 'member':
+                if xmlTag.tag == "member":
+                    mem_type = xmlTag.get("type")
+                    mem_ref = int(xmlTag.get("ref"))
+                    '''
+                    if mem_type == "node":
+                        node = Node.objects.filter(node_id=mem_ref)
+                        relation.node_set.add(node)
+                    elif mem_type == "way":
+                        way = Way.objects.filter(way_id=mem_ref)
+                        relation.way_set.add(way)
+    
+                    relation.save()'''
+                elif xmlTag.tag == "tag":
+                    rtag_id = tag_counter
+                    rkey    = xmlTag.get("k")
+                    rvalue  = xmlTag.get("v")
 
-                for xmlTag in primitive.getchildren():
+                    '''
+                    key = Key(key_id=keyid_counter,key_text=rkey)
+                    key.save()
+                    value = Value(value_id = valueid_counter,value_text=rvalue)
+                    value.save()'''
 
-                    if xmlTag.tag == "member":
-                        mem_type = xmlTag.get("type")
-                        mem_ref = int(xmlTag.get("ref"))
-
-                        if mem_type == "node":
-                            node = Node.objects.filter(node_id=mem_ref)
-                            relation.node_set.add(node)
-                        elif mem_type == "way":
-                            way = Way.objects.filter(way_id=mem_ref)
-                            relation.way_set.add(way)
-
-                        relation.save()
-                    elif xmlTag.tag == "tag":
-                        rtag_id = tag_counter
-                        rkey    = xmlTag.get("k")
-                        rvalue  = xmlTag.get("v")
-
-                        key = Key(key_id=keyid_counter,key_text=rkey)
-                        key.save()
-                        value = Value(value_id = valueid_counter,value_text=rvalue)
-                        value.save()
-
-                        tag_counter += tag_counter
-                        keyid_counter += keyid_counter
-                        valueid_counter += valueid_counter
-
-                        tag = Tag(tag_id=stag_id,key_ref=key,value_ref=value,node_tag=node)
-                        tag.save()
-                        relation.tag_set.add(tag)
-                        relation.save()
+                    tag_counter += 1
+                    keyid_counter += 1
+                    valueid_counter += 1
+                    print("Tag %d (%d %s)(%d %s)" %(tag_counter,keyid_counter,rkey,valueid_counter,rvalue))
+                    '''
+                    tag = Tag(tag_id=stag_id,key_ref=key,value_ref=value,node_tag=node)
+                    tag.save()
+                    relation.tag_set.add(tag)
+                    relation.save()'''
 
 if __name__ == "__main__":
     parseXML("PTsamples.xml")
