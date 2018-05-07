@@ -12,10 +12,9 @@ def storeIntoDb(request):
   parser = etree.XMLParser(ns_clean=True, recover=True, encoding='utf-8')
 
   root = etree.fromstring(xmlfile,parser=parser)
-
-  tag_counter = 102342787685
-  key_counter = 5234376878786
-  value_counter = 6323467675642
+  tag_counter = 678555
+  key_counter = 4569875
+  value_counter =856474
 
   for primitive in root.getchildren():
 
@@ -207,25 +206,24 @@ def storeIntoDb(request):
 
           if xmlTag.tag == "member":
 
-            mem_type = xmlTag.get("type")
-            mem_ref = int(xmlTag.get("ref"))
-            mem_role = xmlTag.get("role")
-            member = Member(member_type=mem_type,member_role=mem_role)
-            member.save()
+            try:
+              mem_type = xmlTag.get("type")
+              mem_role = xmlTag.get("role")
 
-            if mem_type == "node":
-                print(mem_ref)
-                node_refering_relation = Node.objects.get(node_id=mem_ref)
-                print(node_refering_relation)
-                member.node_ref.add(node_refering_relation)
+              if xmlTag.get("type") == 'node':
+                node_id_to_ref = xmlTag.get("ref")
+                node_obj       = Node.objects.get(node_id=node_id_to_ref)
+                member_node = Member(member_type=mem_type,member_role=mem_role,node_ref=node_obj)
+                member_node.save()
 
-            elif mem_type == "way":
-                way = Way.objects.get(way_id=mem_ref)
-                member.way_ref.add(way)
+              elif xmlTag.get("type") == 'way':
+                way_id_to_ref  = xmlTag.get("ref")
+                way_obj        = Way.objects.get(way_id=way_id_to_ref)
+                member_way = Member(member_type=mem_type,member_role=mem_role,way_ref=way_obj)
+                member_way.save()
 
-            relation = Relation(relation_id=rrelation_id)
-            relation.mem_ref.add(member)
-            relation.save()
+            except Exception as e:
+              print("The member already exists in some other relation")
 
           elif xmlTag.tag == "tag":
 
@@ -291,9 +289,9 @@ def storeIntoDb(request):
                 print(tag_to_use)
                 tag_counter += 1
                 
-                relation = relation.objects.get(rel_id=rrel_id)
-                relation.tag_ref.add(tag_to_use)
-                relation.save()
+                relation_n = Relation.objects.get(rel_id=rrelation_id)
+                relation_n.tag_ref.add(tag_to_use)
+                relation_n.save()
 
 
   return render(request,'osm/confirm.html')
