@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     'multigtfs',
     'gs',
-    'django_extensions'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -95,9 +94,9 @@ DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 DATABASES = {
      'default': {
          'ENGINE': 'django.db.backends.postgresql_psycopg2',
-         'NAME': 'gtfs2',
-         'USER': 'srikant', 
-         'PASSWORD': 'sriks@123',
+         'NAME': 'gtfs',
+         'USER': 'sriks', 
+         'PASSWORD': '',
          'HOST': 'localhost', # '127.0.0.1' probably works also
          'PORT': '5432',
      }
