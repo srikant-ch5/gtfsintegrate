@@ -64,6 +64,11 @@
       </div>
     </div>
     <br><br><br><br>
+
+    <a class="btn btn-primary" href="{% url 'load' %}">Load OSM Data</a>
+    <br><br>
+    <a class="btn btn-primary" href="{% url 'map' %}">Load GTFS Data </a>
+
     <div class="container">
     {% block main%}
     {% endblock %}

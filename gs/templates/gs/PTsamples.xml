@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='313586' timestamp='2018-01-15T17:26:05Z' uid='72151' user='GeorgFausB' version='13' changeset='55469382' lat='50.9558026' lon='6.9691347'>
+    <tag k='TMC:cid_58:tabcd_1:Class' v='Point' />
+    <tag k='TMC:cid_58:tabcd_1:Direction' v='positive' />
+    <tag k='TMC:cid_58:tabcd_1:LCLversion' v='9.00' />
+    <tag k='TMC:cid_58:tabcd_1:LocationCode' v='39623' />
+    <tag k='TMC:cid_58:tabcd_1:NextLocationCode' v='39624' />
+    <tag k='TMC:cid_58:tabcd_1:PrevLocationCode' v='39622' />
+  </node>
+ </osm>
