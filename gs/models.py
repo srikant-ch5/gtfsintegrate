@@ -60,11 +60,11 @@ class Tag(models.Model):
 class OSM_Primitive(models.Model):
     _id = models.BigIntegerField(primary_key=True, db_column="id")
     timestamp = models.DateTimeField(null=True)
-    _uid = models.IntegerField(null=True)
-    user = models.TextField(null=True)  # textfield for large ammount of text to store
+    _uid = models.IntegerField(null=True, db_column="uid")
+    user = models.TextField(null=True)  # textfield for large amount of text to store
     visible = models.BooleanField()
-    _version = models.IntegerField(null=True)
-    _changeset = models.IntegerField(null=True)
+    _version = models.IntegerField(null=True, db_column="version")
+    _changeset = models.IntegerField(null=True, db_column="changeset")
     tags = models.ManyToManyField('Tag', blank=True)
     incomplete = models.BooleanField(default=False)
 
