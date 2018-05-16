@@ -16,7 +16,7 @@ def storeIntoDb(request):
   key_counter = 4569875
   value_counter =856474
 
-    for primitive in root.getchildren():
+  for primitive in root.getchildren():
     if primitive.tag == "node":
       #create tag
       snode_id   = int(primitive.get("id"))
@@ -61,7 +61,7 @@ def storeIntoDb(request):
             print(node)
           except Exception as e:
             print("Node does not exist creating dummy node")
-            dummy_node = Node.objects.create(id=node_reference, visible=False,incomplete=True)
+            dummy_node = Node.objects.create(id=node_reference, visible=False, incomplete=True)
             dummy_node.set_cordinates(0,0)
             dummy_node.save()
             way.incomplete = 'True'
@@ -102,14 +102,35 @@ def storeIntoDb(request):
           ref  = xmlTag.get("ref")
           role = xmlTag.get("role")
 
-          if type == 'node':
-            rel_node = Node.objects.get(id=ref)
-            rm = relation.add_member(rel_node,type ,role)
-          elif type == 'way':
-            rel_way = Way.objects.get(id=ref)
-            rm = relation.add_member(rel_way,type, role)
-          elif type == 'relation':
-            rel_child_relation = OSM_Relation.get(id=ref)
-            rm = relation.add_member(rel_child_relation,type, role)
+          try:
+            if type == 'node':
+              rel_node = Node.objects.get(id=ref)
+              rm = relation.add_member(rel_node,type ,role)
+            elif type == 'way':
+              rel_way = Way.objects.get(id=ref)
+              rm = relation.add_member(rel_way,type, role)
+            elif type == 'relation':
+              rel_child_relation = OSM_Relation.get(id=ref)
+              rm = relation.add_member(rel_child_relation,type, role)
+
+          except Exception as e:
+            if type == 'node':
+              dummy_rel_node = Node.objects.create(id=ref, visible=False, incomplete=True)
+              dummy_rel_node.set_cordinates(0,0)
+              dummy_rel_node.save()
+
+              rm = relation.add_member(dummy_rel_node, type, role)
+            
+            elif type == 'way':
+              dummy_rel_way = Way.objects.create(id=ref, visible=False, incomplete=True)
+              dummy_rel_way.save()
+
+              rm = relation.add_member(dummy_rel_way, type ,role)
+
+            elif type == 'relation':
+              dummy_rel_relation = OSM_Relation.objects.create(id= ref, visible=False, incomplete=True)
+              dummy_rel_relation.save()
+
+              rm = relation.add_member(dummy_rel_relation, type, role)
 
   return render(request,'osm/load.html')
