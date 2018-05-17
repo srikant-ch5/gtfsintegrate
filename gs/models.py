@@ -73,35 +73,35 @@ class OSM_Primitive(models.Model):
 
     @property
     def id(self):
-      return self._id
+        return self._id
 
     @id.setter
     def id(self, value):
-      self._id= int(value)
+        self._id = int(value)
 
     @property
     def uid(self):
-      return self._uid
+        return self._uid
 
     @uid.setter
     def uid(self, value):
-      self._uid= int(value)
+        self._uid = int(value)
 
     @property
     def version(self):
-      return self._version
+        return self._version
 
     @version.setter
     def version(self, value):
-      self._version= int(value)
+        self._version = int(value)
 
     @property
     def changeset(self):
-      return self._changeset
+        return self._changeset
 
     @changeset.setter
     def changeset(self, value):
-      self._changeset= int(value)
+        self._changeset = int(value)
 
     def add_tag(self, key, value):
         self.tags = Tag.add_tag(key=key, value=value)
