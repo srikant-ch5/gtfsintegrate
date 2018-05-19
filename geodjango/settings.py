@@ -87,7 +87,7 @@ DATABASES = {
 }
 DATABASES['default'] = dj_database_url.config()
 DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
-'''
+
 DATABASES = {
      'default': {
          'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -98,7 +98,6 @@ DATABASES = {
          'PORT': '5432',
      }
  }
-'''
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 

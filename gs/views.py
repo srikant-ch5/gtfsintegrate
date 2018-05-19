@@ -58,6 +58,39 @@ class FeedListView(ListView):
 	def get_queryset(self):
 		return Feed.objects.all().order_by('id').reverse()
 
+def get_stops(request):
+	#filter stops from Node table
+	#highway 
+	#public_transport = stop_position
+	stop_key  = KeyValueString.objects.get(value="public_transport")
+	stop_value = KeyValueString.objects.get(value="stop_position")
+	stop_tag   = Tag.objects.get(key=stop_key, value=stop_value)
+	stop_nodes = stop_tag.node_set.all()
+
+	'''	
+	While filtering with public_transport=stop_position there are 3 cases
+	1. nodes may have tag with both bus=yes/tram=yes and highway=bus_stop/railway=tram_stop
+	2. nodes may have tag only with bus=yes/tram=yes
+	3. nodes may have tag only waith highway=bus_stop/railway=tram_stop
+	'''
+	print(Node.objects.get(id=313586).tags.all())
+	for stop_node in stop_nodes:
+		tags = stop_node.tags.all()
+		bus_stop_key_text = ['highway','bus']
+		bus_stop_value_text = ['bus_stop','yes']
+		is_bus_stop = 0
+
+		for (sbus_stop_key_text, sbus_stop_value_text) in zip(bus_stop_key_text, bus_stop_value_text):
+			bus_stop_key   = KeyValueString.objects.get(value=sbus_stop_key_text)
+			bus_stop_value = KeyValueString.objects.get(value=sbus_stop_value_text)
+			
+			is_bus_stop = tags.filter(key=bus_stop_key, value=bus_stop_value).count()
+
+		print(is_bus_stop)
+
+	return render(request,'osm/stops.html')
+
+
 def load(request):
 	xmlfile = '''
 	<osm version='0.6' generator='JOSM'>

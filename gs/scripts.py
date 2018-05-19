@@ -32,7 +32,7 @@ def storeIntoDb(request):
       node.set_cordinates(slat,slon)
       node.save()
 
-      for xmlTag in primitive.getchildren():
+t      for xmlTag in primitive.getchildren():
         getkey_fromxml = xmlTag.get("k")
         getvalue_fromxml = xmlTag.get("v")
 
