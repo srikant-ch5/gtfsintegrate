@@ -57,6 +57,14 @@ class FeedListView(ListView):
 
 	def get_queryset(self):
 		return Feed.objects.all().order_by('id').reverse()
+from django.shortcuts import render
+from .models import Tag, KeyValueString, Node, Way,OSM_Relation, MemberRelation
+from lxml import etree
+from decimal import Decimal
+from django.contrib.gis.geos import Point
+
+def home(request):
+	return render(request, 'osm/home.html')
 
 def get_stops(request):
 	#filter stops from Node table
@@ -90,59 +98,20 @@ def get_stops(request):
 
 	return render(request,'osm/stops.html')
 
+def get_route_master_relations(request):
+	return render(request, 'osm/route_master.html')
+
+def get_route_relations(request):
+	return render(request, 'osm/route.html')
 
 def load(request):
-	xmlfile = '''
-	<osm version='0.6' generator='JOSM'>
-	  <node id='313586' timestamp='2018-01-15T17:26:05Z' uid='72151' user='GeorgFausB' version='13' changeset='55469382' lat='50.9558026' lon='6.9691347'>
-		<tag k='TMC:cid_58:tabcd_1:Class' v='Point' />
-		<tag k='TMC:cid_58:tabcd_1:Direction' v='positive' />
-		<tag k='TMC:cid_58:tabcd_1:LCLversion' v='9.00' />
-		<tag k='TMC:cid_58:tabcd_1:LocationCode' v='39623' />
-		<tag k='TMC:cid_58:tabcd_1:NextLocationCode' v='39624' />
-		<tag k='TMC:cid_58:tabcd_1:PrevLocationCode' v='39622' />
-		<tag k='test-tag' v='testvalue' />
-	  </node>
-	  <node id='23423432' timestamp='2017-01-15T17:26:05Z' uid='51' user='FausB' version='1' changeset='469382' lat='50.9558026' lon='6.9691347'>
-	  <tag k='test-tag' v='testvalue' />
-	  </node>
-	  <node id='474327' timestamp='2017-03-23T16:54:06Z' uid='445794' user='hsimpson' version='20' changeset='47101627' lat='50.9555172' lon='6.9679685'>
-    <tag k='VRS:gemeinde' v='Köln' />
-    <tag k='VRS:ortsteil' v='Innenstadt' />
-    <tag k='bus' v='yes' />
-    <tag k='name' v='Worringer Straße' />
-    <tag k='network' v='VRS' />
-    <tag k='operator' v='KVB' />
-    <tag k='public_transport' v='stop_position' />
-  </node>
-	  <way id='25250108' timestamp='2016-03-28T13:24:52Z' uid='109062' user='Jojo4u' version='28' changeset='38120453'>
-	    <nd ref='313586' />
-	    <nd ref='23423432' />
-	    <tag k='electrified' v='contact_line' />
-	    <tag k='frequency' v='0' />
-	    <tag k='gauge' v='1000;1435' />
-	    <tag k='maxspeed' v='30' />
-	    <tag k='network' v='VVS' />
-	    <tag k='operator' v='Stuttgarter Straßenbahnen AG' />
-	    <tag k='railway' v='light_rail' />
-	    <tag k='railway:pzb' v='no' />
-	    <tag k='voltage' v='750' />
-	    <tag k='workrules' v='DE:BOStrab' />
-	  </way>
-	  <way id='39694704' timestamp='2015-04-28T05:41:32Z' uid='15188' user='Polyglot' version='9' changeset='30569585'>
-    <nd ref='474327' />
-    <nd ref='12312343' />
-    <nd ref='5667674563' />
-    <tag k='bicycle' v='yes' />
-    <tag k='highway' v='residential' />
-    <tag k='name' v='Tommestraat' />
-    <tag k='oneway' v='yes' />
-  </way>
-	 </osm>
-	'''
-	xmlfile = xmlfile.encode('utf-8')
-	parser = etree.XMLParser(ns_clean=True, recover=True, encoding='utf-8')
-	root = etree.fromstring(xmlfile,parser=parser)
+	osmFile = 'osm/PTsamples.xml'
+    with open(osmFile) as fileobj:
+        xmlfile = fileobj.read()
+    xmlfile = xmlfile.encode('utf-8')
+    parser = etree.XMLParser(ns_clean=True, recover=True, encoding='utf-8')
+
+    root = etree.fromstring(xmlfile, parser=parser)
 
 	for primitive in root.getchildren():
 		if primitive.tag == "node":
@@ -186,10 +155,9 @@ def load(request):
 					try:
 						node = Node.objects.get(id=node_reference)
 						way.add_node(node)
-						print(node)
 					except Exception as e:
 						print("Node does not exist creating dummy node")
-						dummy_node = Node.objects.create(id=node_reference, visible=False,incomplete=True)
+						dummy_node = Node.objects.create(id=node_reference, visible=False, incomplete=True)
 						dummy_node.set_cordinates(0,0)
 						dummy_node.save()
 						way.incomplete = 'True'
@@ -203,7 +171,7 @@ def load(request):
 					tag = Tag()
 					tag = tag.add_tag(getkey_fromxml,getvalue_fromxml)
 					way.tags.add(tag)
-		elif primitive.tag == "reltaion":
+		elif primitive.tag == "relation":
 			rid        = int(primitive.get("id"))
 			rtimestamp = primitive.get("timestamp")
 			ruid       = int(primitive.get("uid"))
@@ -211,8 +179,9 @@ def load(request):
 			rversion   = int(primitive.get("version"))
 			rchangeset = int(primitive.get("changeset"))
 
-			relation = Relation(id=rid, timestamp=rtimestamp, uid=ruid, user=ruser, version=rversion, changeset=rchangeset)
+			relation = OSM_Relation(id=rid, timestamp=rtimestamp, uid=ruid, user=ruser, version=rversion, changeset=rchangeset,visible=True,incomplete=False)
 			relation.save()
+			relation.memberrelation_set.all().delete()
 
 			for xmlTag in primitive.getchildren():
 
@@ -229,4 +198,35 @@ def load(request):
 					ref  = xmlTag.get("ref")
 					role = xmlTag.get("role")
 
-	return render(request,'gs/load.html')
+					try:
+						if type == 'node':
+							rel_node = Node.objects.get(id=ref)
+							rm = relation.add_member(rel_node,type ,role)
+						elif type == 'way':
+							rel_way = Way.objects.get(id=ref)
+							rm = relation.add_member(rel_way,type, role)
+						elif type == 'relation':
+							rel_child_relation = OSM_Relation.objects.get(id=ref)
+							rm = relation.add_member(rel_child_relation,type, role)
+
+					except Exception as e:
+						if type == 'node':
+							dummy_rel_node = Node.objects.create(id=ref, visible=False, incomplete=True)
+							dummy_rel_node.set_cordinates(0,0)
+							dummy_rel_node.save()
+
+							rm = relation.add_member(dummy_rel_node, type, role)
+						
+						elif type == 'way':
+							dummy_rel_way = Way.objects.create(id=ref, visible=False, incomplete=True)
+							dummy_rel_way.save()
+
+							rm = relation.add_member(dummy_rel_way, type ,role)
+
+						elif type == 'relation':
+							dummy_rel_relation = OSM_Relation.objects.create(id= ref, visible=False, incomplete=True)
+							dummy_rel_relation.save()
+
+							rm = relation.add_member(dummy_rel_relation, type, role)
+
+	return render(request,'osm/load.html')
