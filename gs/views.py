@@ -22,6 +22,11 @@ from django.utils import timezone
 
 import requests
 
+def download_feed_in_db(file, file_name):
+	feeds = Feed.objects.create(name=file_name)
+	feeds.import_gtfs(file)
+	print("Creating new gtfs file")
+
 def feed_form(request):
 	if request.method == 'POST':
 
@@ -46,6 +51,8 @@ def feed_form(request):
 			feed_file = 'gs/gtfsfeeds/'+feed_name+'.zip'
 			open(feed_file,'wb').write(r.content)
 
+			download_feed_in_db(feed_file,feed_name)
+
 			if form.is_valid():
 				print("Going through this")
 				gtfs_feed_info = form.save(commit=False)
@@ -66,9 +73,7 @@ def map(request):
 def download(request):
 
 	if request.method == 'POST' and request.FILES['gtfsfile']:
-		gtfs_feed = request.FILES['gtfsfile']
-		name = gtfs_feed.name[:-4]
-		print(name)
+
 
 		if(Feed.objects.filter(name=name).exists()):
 			context = 'File is already present in the Database'
