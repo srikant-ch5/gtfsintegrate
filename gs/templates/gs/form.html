@@ -1,0 +1,10 @@
+{% extends 'gs/home.html' %}
+
+{% block main %}
+	<h2>New GTFS Feed </h1>
+	<form method="POST" >
+		{% csrf_token %}
+		{{ form.as_p}}
+		<button type="submit" class="save btn btn-deafult"> Save </button>
+	</form>
+{% endblock %}

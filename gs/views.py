@@ -10,12 +10,52 @@ from django.views.generic import ListView
 from django.core.files.storage import FileSystemStorage
 
 from multigtfs.models import Agency, Feed, Service
-
 from multigtfs.management.commands.importgtfs import Command
-from .models import Tag, KeyValueString, Node, Way
+
+from .models import Tag, KeyValueString, Node, Way, GTFSForm
 from lxml import etree
 from decimal import Decimal
 from django.contrib.gis.geos import Point
+
+from .forms import GTFSInfoForm
+from django.utils import timezone
+
+import requests
+
+def feed_form(request):
+	if request.method == 'POST':
+
+		form = GTFSInfoForm(request.POST)
+		#check if the url is already since the timestamp changes for every entry django creates a gtfs form
+		is_feed_present = GTFSForm.objects.filter(url=request.POST['url'], osm_tag=request.POST['osm_tag'],
+												  gtfs_tag=request.POST['gtfs_tag'],
+												  frequency=request.POST['frequency'])
+		
+		feed_name = ((lambda: request.POST['name'], lambda: request.POST['osm_tag'])[request.POST['name']=='']())
+		print(feed_name)
+		if is_feed_present.count() > 0:
+			print('Feed already exists with name %s ' %(feed_name))
+			context = 'Feed already exists'
+		else:
+			context = "Creating new feed"
+			print(context)
+
+			#download the zip file 
+			url = request.POST['url']
+			r = requests.get(url, allow_redirects=True)
+			feed_file = 'gs/gtfsfeeds/'+feed_name+'.zip'
+			open(feed_file,'wb').write(r.content)
+
+			if form.is_valid():
+				print("Going through this")
+				gtfs_feed_info = form.save(commit=False)
+				gtfs_feed_info.timestamp = timezone.now()
+				gtfs_feed_info.save()
+
+		return render(request, 'gs/form.html',{'form':form,'context':context})
+	else:
+		form = GTFSInfoForm()
+		return render(request,'gs/form.html',{'form':form})
 
 def home(request):
 	return render(request,'gs/home.html')
@@ -26,19 +66,6 @@ def map(request):
 def download(request):
 
 	if request.method == 'POST' and request.FILES['gtfsfile']:
-
-		'''schedule = transitfeed.Schedule()
-		schedule.AddAgency("File Agency","http://iflyagency.com",
-                   "America/Los_Angeles")
-		service_period = schedule.GetDefaultServicePeriod()
-		service_period.SetStartDate("20160101")
-		service_period.SetEndDate("20170101")
-		service_period.SetWeekdayService(True)
-		service_period.SetDateHasService('20070704', False)
-
-		schedule.Validate()
-		schedule.WriteGoogleTransitFeed('google_transit.zip')'''
-
 		gtfs_feed = request.FILES['gtfsfile']
 		name = gtfs_feed.name[:-4]
 		print(name)

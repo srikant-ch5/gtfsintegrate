@@ -7,6 +7,7 @@ from django.utils import timezone
 
 class GTFSForm(models.Model):
   url = models.URLField()
+  name = models.CharField(max_length=50, blank=True )
   osm_tag   = models.CharField(max_length=20, blank=True)
   gtfs_tag  = models.CharField(max_length=20, blank=True)
   frequency = models.IntegerField(blank=True, default=3)
