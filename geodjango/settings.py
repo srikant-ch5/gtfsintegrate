@@ -54,7 +54,7 @@ DATABASES = {
          'ENGINE': 'django.contrib.gis.db.backends.postgis',
          'NAME': 'gtfsintegrate',
          'USER': 'sriks', 
-         'PASSWORD': 'sriks@123',
+         'PASSWORD': '',
          'HOST': 'localhost', # '127.0.0.1' probably works also
          'PORT': '5432',
      }
