@@ -5,7 +5,7 @@ from django.views.generic import RedirectView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$',RedirectView.as_view(url="/gtfs/",permanent=True)),
+    url(r'^$',RedirectView.as_view(url="/gtfs/")),
     url(r'^gtfs/',include('gs.urls'))
 
 ]

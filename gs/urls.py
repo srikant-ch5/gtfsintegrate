@@ -9,7 +9,6 @@ from .views import FeedListView
 urlpatterns = [
     url(r'^$',views.home,name="home"),
     url(r'^map/', views.map,name="map"),
-    url(r'^load_osmdata/', views.load,name="load"),
-    url(r'feed/$', FeedListView.as_view(model=Feed), name='feed_list'),
-    url(r'downloading_page/',views.download,name="download"),
+    url(r'^feed/$', FeedListView.as_view(model=Feed), name='feed_list'),
+    url(r'^downloading_page/',views.download,name="download"),
 ]

@@ -53,7 +53,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href='#'>Explore</a>
+          <a class="navbar-brand" href='{% url "home" %}'>Explore</a>
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
@@ -65,10 +65,10 @@
     </div>
     <br><br><br><br>
 
-    <a class="btn btn-primary" href="{% url 'load' %}">Load OSM Data</a>
-    <br><br>
-    <a class="btn btn-primary" href="{% url 'map' %}">Load GTFS Data </a>
-
+    <div class="container">
+        <a class="btn btn-primary" href="{% url 'map' %}">Load GTFS Data </a>
+    </div>
+    <br>
     <div class="container">
     {% block main%}
     {% endblock %}

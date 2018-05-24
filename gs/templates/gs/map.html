@@ -2,7 +2,7 @@
 
 {% block main %}
         <div id="input">
-            <form method="post" enctype="multipart/form-data" action="gtfs/downloading_page/">
+            <form method="post" enctype="multipart/form-data" action="/gtfs/downloading_page/">
                 {% csrf_token %}
                 <input type="file" name="gtfsfile">
                 <button type="submit">UPLOAD A GTFS FILE</button>
