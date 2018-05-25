@@ -1,6 +1,10 @@
+django==1.11
 multigtfs
 psycopg2==2.7.3.2
 whitenoise==3.3.1
 python-decouple==3.1
 dj-database-url>=0.4.2
 gunicorn>=19.7
+celery
+lxml
+requests

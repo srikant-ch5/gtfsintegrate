@@ -3,6 +3,6 @@ from .models import GTFSForm
 
 class GTFSInfoForm(forms.ModelForm):
 
-	class Meta:
-		model = GTFSForm
-		fields = ('name','url','osm_tag','gtfs_tag','frequency')
+    class Meta:
+        model = GTFSForm
+        fields = ('url','name','osm_tag','gtfs_tag','frequency')

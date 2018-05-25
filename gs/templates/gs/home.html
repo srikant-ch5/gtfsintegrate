@@ -9,7 +9,7 @@
         <meta name="apple-mobile-web-app-capable" content="yes" />
 
         <link rel="stylesheet"  href ="{% static 'css/bootstrap.min.css' %}" type="text/css" />
-        <link rel="stylesheet"  href ="{% static 'css/index.css' %}" type="text/css" />
+        <link rel="stylesheet"  href ="{% static 'css/home.css' %}" type="text/css" />
 
         <script  src="{% static 'js/jquery-3.2.1.js' %}"></script>
         <script  src="{% static 'js/bootstrap.js' %}"></script>
@@ -20,28 +20,6 @@
         <script src="https://openlayers.org/en/v4.6.4/build/ol.js"></script>
         <script src="{% static 'js/app.js' %}"></script>
 
-        <style type="text/css">
-            html ,body {
-                height:100%;
-                width :100%;
-                background :grey;
-            }
-           
-            #map {
-                width:100%;
-                height:400px;
-                padding-left: 10px;
-                padding-top: 50px;
-            }
-            #query-textbox{
-                padding-top: 10px;
-                padding-left: 0px;
-            }
-            #query_label{
-                padding-top:15px;
-                font-size: 20px;
-            }
-        </style>
     </head>
     <body>
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -65,14 +43,17 @@
     </div>
     <br><br><br><br>
 
-    <div class="container">
-        <a href="{% url 'feed_form' %}">Enter GTFS Feed <span class="glyphicon glyphicon-plus"></span></a>
+    <div class="container" id="box1">
+        <a class="btn btn-primary" href="{% url 'feed_form' %}">Enter GTFS Feed</a>
     </div>
-    <div class="container">
+    <div class="container" id="box2">
         <a class="btn btn-primary" href="{% url 'map' %}">Load GTFS Data </a>
     </div>
+    <div class="container" od="box1">
+        <a class="btn btn-primary" href="{% url 'celery_task' %}">Celery Click </a>
+    </div>
     <br>
-    <div class="container">
+    <div class="container-fluid">
     {% block main%}
     {% endblock %}
     </div>

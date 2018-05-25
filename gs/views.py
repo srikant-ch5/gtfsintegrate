@@ -1,13 +1,14 @@
 from __future__ import unicode_literals
-from django.shortcuts import render
 from datetime import datetime
 import logging
 
+from django.shortcuts import render
 from django.db import connection
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.views.generic import ListView
 from django.core.files.storage import FileSystemStorage
+from django.contrib.gis.geos import Point
 
 from multigtfs.models import Agency, Feed, Service
 from multigtfs.management.commands.importgtfs import Command
@@ -15,20 +16,38 @@ from multigtfs.management.commands.importgtfs import Command
 from .models import Tag, KeyValueString, Node, Way, GTFSForm
 from lxml import etree
 from decimal import Decimal
-from django.contrib.gis.geos import Point
 
 from .forms import GTFSInfoForm
 from django.utils import timezone
 
 import requests
 
+from .tasks import printnumbers, setup_periodic_tasks,test
+
+def feed_frm(request):
+
+	if request.method == 'POST':
+
+		#check if the url is already since the timestamp changes for every entry django creates a gtfs form
+		is_feed_present = GTFSForm.objects.filter(url=request.POST['url'], osm_tag=request.POST['osm_tag'],
+												  gtfs_tag=request.POST['gtfs_tag'],
+												  frequency=request.POST['frequency'])
+		feed_name = ((lambda: request.POST['name'], lambda: request.POST['osm_tag'])[request.POST['name']=='']())
+
+
+		download_feed(is_feed_present)
+
+
 def download_feed_in_db(file, file_name):
 	feeds = Feed.objects.create(name=file_name)
 	feeds.import_gtfs(file)
 	print("Creating new gtfs file")
 
+
 def feed_form(request):
 	if request.method == 'POST':
+
+		test()
 
 		form = GTFSInfoForm(request.POST)
 		#check if the url is already since the timestamp changes for every entry django creates a gtfs form
@@ -48,6 +67,7 @@ def feed_form(request):
 			#download the zip file 
 			url = request.POST['url']
 			r = requests.get(url, allow_redirects=True)
+
 			feed_file = 'gs/gtfsfeeds/'+feed_name+'.zip'
 			open(feed_file,'wb').write(r.content)
 
@@ -91,3 +111,8 @@ class FeedListView(ListView):
 
 	def get_queryset(self):
 		return Feed.objects.all().order_by('id').reverse()
+
+def celery_task(request):
+	printnumbers()
+
+	return render(request, 'gs/task_template.html')
