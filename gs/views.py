@@ -19,59 +19,29 @@ from decimal import Decimal
 
 from .forms import GTFSInfoForm
 from django.utils import timezone
-
+import datetime
 import requests
 
-from .tasks import printnumbers, setup_periodic_tasks,test
-
-def feed_frm(request):
-
-	if request.method == 'POST':
-
-		#check if the url is already since the timestamp changes for every entry django creates a gtfs form
-		is_feed_present = GTFSForm.objects.filter(url=request.POST['url'], osm_tag=request.POST['osm_tag'],
-												  gtfs_tag=request.POST['gtfs_tag'],
-												  frequency=request.POST['frequency'])
-		feed_name = ((lambda: request.POST['name'], lambda: request.POST['osm_tag'])[request.POST['name']=='']())
-
-
-		download_feed(is_feed_present)
-
-
-def download_feed_in_db(file, file_name):
-	feeds = Feed.objects.create(name=file_name)
-	feeds.import_gtfs(file)
-	print("Creating new gtfs file")
-
+from .tasks import test2, download_feed_task
 
 def feed_form(request):
 	if request.method == 'POST':
-
-		test()
-
 		form = GTFSInfoForm(request.POST)
 		#check if the url is already since the timestamp changes for every entry django creates a gtfs form
 		is_feed_present = GTFSForm.objects.filter(url=request.POST['url'], osm_tag=request.POST['osm_tag'],
 												  gtfs_tag=request.POST['gtfs_tag'],
 												  frequency=request.POST['frequency'])
 		
-		feed_name = ((lambda: request.POST['name'], lambda: request.POST['osm_tag'])[request.POST['name']=='']())
-		print(feed_name)
+		'''feed_name = ((lambda: request.POST['name'], lambda: request.POST['osm_tag'])[request.POST['name']=='']())
+		print(feed_name)'''
 		if is_feed_present.count() > 0:
-			print('Feed already exists with name %s ' %(feed_name))
+			print('Feed already exists with name ')
 			context = 'Feed already exists'
+
+			#call celery task which checks the timestamp of the 
 		else:
 			context = "Creating new feed"
 			print(context)
-
-			#download the zip file 
-			url = request.POST['url']
-			r = requests.get(url, allow_redirects=True)
-
-			feed_file = 'gs/gtfsfeeds/'+feed_name+'.zip'
-			open(feed_file,'wb').write(r.content)
-
-			download_feed_in_db(feed_file,feed_name)
 
 			if form.is_valid():
 				print("Going through this")
@@ -79,12 +49,16 @@ def feed_form(request):
 				gtfs_feed_info.timestamp = timezone.now()
 				gtfs_feed_info.save()
 
+				download_feed_task(gtfs_feed_info.id)
+
 		return render(request, 'gs/form.html',{'form':form,'context':context})
 	else:
 		form = GTFSInfoForm()
 		return render(request,'gs/form.html',{'form':form})
 
+
 def home(request):
+	print(datetime.datetime.now().isoformat())
 	return render(request,'gs/home.html')
 
 def map(request):

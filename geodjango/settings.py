@@ -1,4 +1,6 @@
 import os
+from celery.schedules import crontab
+from settings_secret import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -54,7 +56,7 @@ DATABASES = {
          'ENGINE': 'django.contrib.gis.db.backends.postgis',
          'NAME': 'gtfsintegrate',
          'USER': 'sriks', 
-         'PASSWORD': '',
+         'PASSWORD': DB_PASS,
          'HOST': 'localhost', # '127.0.0.1' probably works also
          'PORT': '5432',
      }

@@ -1,0 +1,1 @@
+DB_PASS='sriks@123'

@@ -11,7 +11,7 @@ class GTFSForm(models.Model):
   osm_tag   = models.CharField(max_length=20, blank=True)
   gtfs_tag  = models.CharField(max_length=20, blank=True)
   frequency = models.IntegerField(blank=True, default=3)
-  timestamp = models.DateTimeField(default=timezone.now())
+  timestamp = models.DateTimeField(null=True)
 
 class KeyValueString(models.Model):
     value = models.TextField(unique=True)
