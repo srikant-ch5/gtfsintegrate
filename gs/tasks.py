@@ -2,6 +2,7 @@ import string
 import os
 import requests
 import datetime
+from django.utils import timezone
 
 from django.contrib.auth.models import User
 from celery import shared_task,Celery, task
@@ -91,13 +92,23 @@ def check_feeds_task():
 	for feed in all_feeds:
 		#get the name of the feed
 		feed_name = feed.name
-		feed_url  = feed.url
-		feed_timestamp = feed.timestamp
+		print(feed_name)
+		feed_form = GTFSForm.objects.get(name=feed_name)
+		feed_url  = feed_form.url
+		feed_timestamp = feed_form.timestamp
+		current_timestamp= timezone.now()
+		print("{}  {}".format(feed_timestamp,current_timestamp))
 
-		feed.delete()
+		ts_diff = str(current_timestamp - feed_timestamp)[0]
+
+		if int(ts_diff) > 2:
+			download_feed_with_url(feed_url, feed_name, code)	
 
 		code = 'present'
-		download_feed_with_url(feed_url, feed_name, code)
+		print("renewing the feed")
+		download_feed_with_url(feed_url, feed_name, code, feed_form.id)
+		print("Feed renewed")
+		feed.delete()
 
 @app.task
 def reset_feed(formId):

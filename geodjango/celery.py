@@ -14,6 +14,11 @@ app.conf.beat_schedule = {
         'task': 'gs.tasks.test2',
         'schedule': crontab(),  # change to `crontab(minute=0, hour=0)` if you want it to run daily at midnight
     },
+    'send-report-every-single-minute': {
+        'task': 'gs.tasks.check_feeds_task',
+        'schedule': crontab(),  # change to `crontab(minute=0, hour=0)` if you want it to run daily at midnight
+    },
+
 }
 
 @app.task(bind=True)

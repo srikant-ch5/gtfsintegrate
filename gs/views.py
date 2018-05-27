@@ -22,7 +22,7 @@ from django.utils import timezone
 import datetime
 import requests
 
-from .tasks import test2, download_feed_task
+from .tasks import test2, download_feed_task, reset_feed, check_feeds_task
 
 def feed_form(request):
 	if request.method == 'POST':
@@ -60,7 +60,6 @@ def feed_form(request):
 
 
 def home(request):
-	print(datetime.datetime.now().isoformat())
 	return render(request,'gs/home.html')
 
 def map(request):

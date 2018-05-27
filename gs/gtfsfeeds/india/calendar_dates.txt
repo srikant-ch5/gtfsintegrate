@@ -1,5 +1,0 @@
-service_id,date,holiday_name,exception_type
-c_6023_b_6369_d_21,20181224,Christmas Eve,2
-c_6023_b_6369_d_21,20180903,Labor Day,2
-c_6023_b_6369_d_21,20180704,Independence Day,2
-c_6023_b_6369_d_21,20180528,Memorial Day,2
