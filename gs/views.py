@@ -29,14 +29,16 @@ def feed_form(request):
 		form = GTFSInfoForm(request.POST)
 		#check if the url is already since the timestamp changes for every entry django creates a gtfs form
 		is_feed_present = GTFSForm.objects.filter(url=request.POST['url'], osm_tag=request.POST['osm_tag'],
-												  gtfs_tag=request.POST['gtfs_tag'],
-												  frequency=request.POST['frequency'])
+												  gtfs_tag=request.POST['gtfs_tag'])
 		
 		'''feed_name = ((lambda: request.POST['name'], lambda: request.POST['osm_tag'])[request.POST['name']=='']())
 		print(feed_name)'''
 		if is_feed_present.count() > 0:
-			print('Feed already exists with name ')
+			print('Feed already exists with name trying to renew the feed in DB')
 			context = 'Feed already exists'
+
+			formId = is_feed_present[0].id
+			reset_feed(formId)
 
 			#call celery task which checks the timestamp of the 
 		else:

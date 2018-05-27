@@ -24,7 +24,7 @@ def test2():
     print("HI")
 
 @app.task
-def rename_feed(name):
+def rename_feed(name, formId):
 	present_name = name
 	feed = Feed.objects.get(name=name)
 	agencies = feed.agency_set.all()
@@ -34,21 +34,37 @@ def rename_feed(name):
 		agname = agency.name.replace(" ","")
 		update_name += agname
 		#remove space
+	user_form 		= GTFSForm.objects.get(id=formId)
+	user_form.name  = update_name
+	user_form.save()
 	feed.name = update_name
 	feed.save()
 	to_change = '/home/srikant/workspace/allprojects/gtfs/env/gtfsapp/gtfsintegrate/gs/gtfsfeeds/'+name+'.zip'
 	update_name = '/home/srikant/workspace/allprojects/gtfs/env/gtfsapp/gtfsintegrate/gs/gtfsfeeds/'+update_name+'.zip'
 	os.rename(to_change,update_name)
 
-
-
 @app.task
-def download_feed_in_db(file, file_name):
+def download_feed_in_db(file, file_name, code, formId):
 	feeds = Feed.objects.create(name=file_name)
 	feeds.import_gtfs(file)
 	print("Creating new gtfs file")
 	print(feeds.id)
-	rename_feed(file_name)
+
+	if code == 'not_present':
+		rename_feed(file_name, formId)
+	
+@app.task
+def download_feed_with_url(download_url, save_feed_name, code, formId):
+	r = requests.get(download_url, allow_redirects=True)
+
+	feed_file = 'gs/gtfsfeeds/'+save_feed_name+'.zip'
+	#temporary name for file
+	if code == 'present':
+		os.remove(feed_file)
+	
+	open(feed_file,'wb').write(r.content)
+
+	download_feed_in_db(feed_file,save_feed_name, code, formId)
 
 @app.task
 def download_feed_task(formId):
@@ -58,15 +74,43 @@ def download_feed_task(formId):
 	entered_osm_tag = user_form.osm_tag
 	entered_gtfs_tag= user_form.gtfs_tag
 	entered_name  	= user_form.name
-	user_form.timestamp = datetime.datetime.now().isoformat()
+	user_form.timestamp = datetime.datetime.utcnow()	
 	user_form.save()
 
-	r = requests.get(entered_url, allow_redirects=True)
-
-	#temporary name for file
 	feed_name = ((lambda: entered_name, lambda: entered_osm_tag)[entered_name=='']())
-	feed_file = 'gs/gtfsfeeds/'+feed_name+'.zip'
-	open(feed_file,'wb').write(r.content)
 
-	download_feed_in_db(feed_file,feed_name)
+	code = 'not_present'
+	download_feed_with_url(entered_url, feed_name, code, formId)
+
+@app.task
+def check_feeds_task():
+	#keep on checking the feeds for every five days all the feeds are downloaded again into the database
+	#1. get all the feeds
+	all_feeds = Feed.objects.all()
+
+	for feed in all_feeds:
+		#get the name of the feed
+		feed_name = feed.name
+		feed_url  = feed.url
+		feed_timestamp = feed.timestamp
+
+		feed.delete()
+
+		code = 'present'
+		download_feed_with_url(feed_url, feed_name, code)
+
+@app.task
+def reset_feed(formId):
+	form = GTFSForm.objects.get(id=formId)
+	form_timestamp = form.timestamp
+	current_timestamp = datetime.datetime.utcnow()
+
+	ts_diff = str(current_timestamp - form_timestamp)[0]
+
+	code = 'present'
+	if int(ts_diff) > 2:
+		download_feed_with_url(form.url, form.name, code, formId)
+
+
+
 

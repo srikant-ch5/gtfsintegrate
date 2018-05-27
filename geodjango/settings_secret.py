@@ -1,1 +1,1 @@
-DB_PASS='sriks@123'
+DB_PASS=''

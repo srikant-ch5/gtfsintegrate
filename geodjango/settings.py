@@ -1,6 +1,6 @@
 import os
 from celery.schedules import crontab
-from settings_secret import *
+from .settings_secret import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -95,8 +95,8 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+
 STATICFILES_DIRS = (
-    os.path.join(PROJECT_ROOT, 'static'),
-    '/home/srikant/workspace/allprojects/gtfsintegrate/gs/static'
+    os.path.join(os.path.dirname(PROJECT_ROOT),'gs', 'static'),
 )
 CELERY_BROKER_URL = 'amqp://localhost'
