@@ -6,7 +6,7 @@ REMOTE=$(git rev-parse "$UPSTREAM")
 BASE=$(git merge-base @ "$UPSTREAM")
 
 if [ $LOCAL = $REMOTE ]; then
-    echo "Up-to-date"
+    echo "Repositories are up-to-date"
 elif [ $LOCAL = $BASE ]; then
     git pull || { echo 'pulling from github failed' ; exit 1; }
     pip install -r requirements.txt
@@ -17,7 +17,7 @@ elif [ $LOCAL = $BASE ]; then
 elif [ $REMOTE = $BASE ]; then
     git push
 else
-    echo "Diverged"
+    echo "Repositories diverged"
 fi
 
 
