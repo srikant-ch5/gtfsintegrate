@@ -3,6 +3,7 @@
 {% block main %}
 <div class="container" id="form_download_inform">
 	<h2>Download Feed from <a href="https://transitfeeds.com/feeds">TransitFeeds</a> </h2>
+	<h3>{{ context }}</h3>
 </div>
 <div class="container" id="feed_form">
 	<h2 id="form_heading">New GTFS Feed </h2>
@@ -12,4 +13,6 @@
 		<button type="submit" class="save btn btn-default"> Save </button>
 	</form>
 </div>
+<script type="text/javascript">
+
 {% endblock %}

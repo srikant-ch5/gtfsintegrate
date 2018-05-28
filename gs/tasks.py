@@ -21,7 +21,7 @@ def test():
 
 @app.task
 def test2():
-    print("HI")
+	print("HI")
 
 @app.task
 def rename_feed(name, formId):
@@ -114,12 +114,20 @@ def reset_feed(formId):
 	form = GTFSForm.objects.get(id=formId)
 	form_timestamp = form.timestamp
 	current_timestamp = timezone.now()
+	form_name = form.name
 
 	ts_diff = str(current_timestamp - form_timestamp)[0]
+	status = 'The Feed is up to date'
 
 	code = 'present'
 	if int(ts_diff) > 2:
+		status = 'Reseting feed with latest data'
+		form.timestamp = timezone.now()
+		form.save()
+		Feed.objects.filter(name=form_name).all().delete()
 		download_feed_with_url(form.url, form.name, code, formId)
+
+	return status
 
 
 
