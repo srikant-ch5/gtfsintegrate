@@ -1,3 +1,1 @@
-gtfsintegrate/secret_settings.py
-gtfsintegrate/secret_settis.py
-geodjango/secret_settings.py
+settings_secret.py
