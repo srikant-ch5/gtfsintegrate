@@ -1,5 +1,4 @@
 from __future__ import unicode_literals
-from datetime import datetime
 import logging
 
 from django.shortcuts import render
@@ -19,7 +18,6 @@ from decimal import Decimal
 
 from .forms import GTFSInfoForm
 from django.utils import timezone
-import datetime
 import requests
 
 from .tasks import test2, download_feed_task, reset_feed, check_feeds_task

@@ -1,7 +1,6 @@
 import string
 import os
 import requests
-import datetime
 from django.utils import timezone
 
 from django.contrib.auth.models import User
@@ -18,7 +17,7 @@ app = Celery()
 
 @shared_task
 def test():
-	print("I am not gonna say hello I will say it works instead")
+	print("shared_task")
 
 @app.task
 def test2():
@@ -40,8 +39,8 @@ def rename_feed(name, formId):
 	user_form.save()
 	feed.name = update_name
 	feed.save()
-	to_change = '/home/srikant/workspace/allprojects/gtfs/env/gtfsapp/gtfsintegrate/gs/gtfsfeeds/'+name+'.zip'
-	update_name = '/home/srikant/workspace/allprojects/gtfs/env/gtfsapp/gtfsintegrate/gs/gtfsfeeds/'+update_name+'.zip'
+	to_change = os.path.join(os.path.dirname(os.path.abspath(__file__)),"gtfsfeeds/") +name+'.zip'
+	update_name = os.path.join(os.path.dirname(os.path.abspath(__file__)),"gtfsfeeds/")+update_name+'.zip'
 	os.rename(to_change,update_name)
 
 @app.task
@@ -75,7 +74,7 @@ def download_feed_task(formId):
 	entered_osm_tag = user_form.osm_tag
 	entered_gtfs_tag= user_form.gtfs_tag
 	entered_name  	= user_form.name
-	user_form.timestamp = datetime.datetime.utcnow()	
+	user_form.timestamp = timezone.now()	
 	user_form.save()
 
 	feed_name = ((lambda: entered_name, lambda: entered_osm_tag)[entered_name=='']())
@@ -114,14 +113,13 @@ def check_feeds_task():
 def reset_feed(formId):
 	form = GTFSForm.objects.get(id=formId)
 	form_timestamp = form.timestamp
-	current_timestamp = datetime.datetime.utcnow()
+	current_timestamp = timezone.now()
 
 	ts_diff = str(current_timestamp - form_timestamp)[0]
 
 	code = 'present'
 	if int(ts_diff) > 2:
 		download_feed_with_url(form.url, form.name, code, formId)
-
 
 
 
