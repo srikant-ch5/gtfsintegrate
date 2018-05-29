@@ -20,7 +20,7 @@ from .forms import GTFSInfoForm
 from django.utils import timezone
 import requests
 
-from .tasks import test2, download_feed_task, reset_feed, check_feeds_task
+from .tasks import test2, download_feed_task, reset_feed, check_feeds_task, download_feed_with_url
 
 def feed_form(request):
 	if request.method == 'POST':
@@ -31,12 +31,24 @@ def feed_form(request):
 		
 		'''feed_name = ((lambda: request.POST['name'], lambda: request.POST['osm_tag'])[request.POST['name']=='']())
 		print(feed_name)'''
+		context = 'Error downloading the feed'
 		if is_feed_present.count() > 0:
 			print('Feed already exists with name trying to renew the feed in DB')
-			context = 'Feed already exists'
 
 			formId = is_feed_present[0].id
-			reset_feed(formId)
+			form = GTFSForm.objects.get(id=formId)
+			form_timestamp = form.timestamp
+			current_timestamp = timezone.now()
+
+			ts_diff = str(current_timestamp - form_timestamp)[0]
+			status = 'The Feed is up to date'
+
+			code = 'present'
+			if int(ts_diff) > 2:
+				print(int(ts_diff))
+				status = 'Reseting feed with latest data'
+				print(status)
+				download_feed_with_url.delay(form.url, form.name, code, formId)
 
 			#call celery task which checks the timestamp of the 
 		else:
@@ -49,7 +61,9 @@ def feed_form(request):
 				gtfs_feed_info.timestamp = timezone.now()
 				gtfs_feed_info.save()
 
-				download_feed_task(gtfs_feed_info.id)
+				download_feed_task.delay(gtfs_feed_info.id)
+
+		context = status
 
 		return render(request, 'gs/form.html',{'form':form,'context':context})
 	else:

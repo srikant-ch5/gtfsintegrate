@@ -1,0 +1,45 @@
+html ,body {
+    height:100%;
+    width :100%;
+    background :#92B558;
+}
+
+#map {
+    width:100%;
+    height:400px;
+    padding-left: 10px;
+    padding-top: 50px;
+}
+#query-textbox{
+    padding-top: 10px;
+    padding-left: 0px;
+}
+#query_label{
+    padding-top:15px;
+    font-size: 20px;
+}
+#feed_form {
+    border-radius: 25px;
+    border: 10px solid #2778D4;
+    padding: 20px; 
+    width: 220px;
+    height: 500px; 
+}
+#form_heading{
+    font-family: "Times New Roman", Times, serif
+}
+#box1{
+    display:block;
+    padding:10px;
+}
+#box2{
+    display:block;
+    padding:10px;
+}
+#load{
+    width:100%;
+    height:100%;
+    position:fixed;
+    z-index:9999;
+    background:url("https://www.creditmutuel.fr/cmne/fr/banques/webservices/nswr/images/loading.gif") no-repeat center center rgba(0,0,0,0.25)
+}
