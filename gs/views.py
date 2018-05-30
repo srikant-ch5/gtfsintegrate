@@ -20,7 +20,7 @@ from .forms import GTFSInfoForm
 from django.utils import timezone
 import requests
 
-from .tasks import test2, download_feed_task, reset_feed, check_feeds_task, download_feed_with_url
+from .tasks import test2, download_feed_task, reset_feed, check_feeds_task
 
 def feed_form(request):
 	if request.method == 'POST':
@@ -29,26 +29,12 @@ def feed_form(request):
 		is_feed_present = GTFSForm.objects.filter(url=request.POST['url'], osm_tag=request.POST['osm_tag'],
 												  gtfs_tag=request.POST['gtfs_tag'])
 		
-		'''feed_name = ((lambda: request.POST['name'], lambda: request.POST['osm_tag'])[request.POST['name']=='']())
-		print(feed_name)'''
-		context = 'Error downloading the feed'
+		context = 'Error'
 		if is_feed_present.count() > 0:
 			print('Feed already exists with name trying to renew the feed in DB')
 
 			formId = is_feed_present[0].id
-			form = GTFSForm.objects.get(id=formId)
-			form_timestamp = form.timestamp
-			current_timestamp = timezone.now()
-
-			ts_diff = str(current_timestamp - form_timestamp)[0]
-			status = 'The Feed is up to date'
-
-			code = 'present'
-			if int(ts_diff) > 2:
-				print(int(ts_diff))
-				status = 'Reseting feed with latest data'
-				print(status)
-				download_feed_with_url.delay(form.url, form.name, code, formId)
+			context = reset_feed(formId)
 
 			#call celery task which checks the timestamp of the 
 		else:
@@ -56,14 +42,10 @@ def feed_form(request):
 			print(context)
 
 			if form.is_valid():
-				print("Going through this")
 				gtfs_feed_info = form.save(commit=False)
-				gtfs_feed_info.timestamp = timezone.now()
 				gtfs_feed_info.save()
 
-				download_feed_task.delay(gtfs_feed_info.id)
-
-		context = status
+				download_feed_task(gtfs_feed_info.id)
 
 		return render(request, 'gs/form.html',{'form':form,'context':context})
 	else:
@@ -72,6 +54,7 @@ def feed_form(request):
 
 
 def home(request):
+	check_feeds_task()
 	return render(request,'gs/home.html')
 
 def map(request):
@@ -80,8 +63,6 @@ def map(request):
 def download(request):
 
 	if request.method == 'POST' and request.FILES['gtfsfile']:
-
-
 		if(Feed.objects.filter(name=name).exists()):
 			context = 'File is already present in the Database'
 			print(context)
@@ -100,6 +81,6 @@ class FeedListView(ListView):
 		return Feed.objects.all().order_by('id').reverse()
 
 def celery_task(request):
-	printnumbers()
+	printnumbers()	
 
 	return render(request, 'gs/task_template.html')

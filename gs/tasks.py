@@ -52,15 +52,19 @@ def download_feed_in_db(file, file_name, code, formId):
 
 	if code == 'not_present':
 		rename_feed(file_name, formId)
+	else:
+		print("Not renewing")
 	
 @app.task
 def download_feed_with_url(download_url, save_feed_name, code, formId):
+	print("Downloading with url")
 	r = requests.get(download_url, allow_redirects=True)
 
 	feed_file = 'gs/gtfsfeeds/'+save_feed_name+'.zip'
 	#temporary name for file
 	if code == 'present':
 		os.remove(feed_file)
+		print("renewing feed file")
 	
 	open(feed_file,'wb').write(r.content)
 
@@ -76,6 +80,7 @@ def download_feed_task(formId):
 	entered_name  	= user_form.name
 	user_form.timestamp = timezone.now()	
 	user_form.save()
+	print(user_form.timestamp)
 
 	feed_name = ((lambda: entered_name, lambda: entered_osm_tag)[entered_name=='']())
 
@@ -88,26 +93,33 @@ def check_feeds_task():
 	#1. get all the feeds
 	all_feeds = Feed.objects.all()
 
+	feed_form_not_found = ''
 	for feed in all_feeds:
 		#get the name of the feed
 		feed_name = feed.name
 		print(feed_name)
-		feed_form = GTFSForm.objects.get(name=feed_name)
-		feed_url  = feed_form.url
-		feed_timestamp = feed_form.timestamp
-		current_timestamp= timezone.now()
-		print("{}  {}".format(feed_timestamp,current_timestamp))
+		try:
+			feed_form = GTFSForm.objects.get(name=feed_name)
+			feed_url  = feed_form.url
+			feed_timestamp = feed_form.timestamp
+			current_timestamp= timezone.now()
+			print("{}  {}".format(feed_timestamp,current_timestamp))
 
-		ts_diff = str(current_timestamp - feed_timestamp)[0]
+			ts_diff = str(current_timestamp - feed_timestamp)[0]
 
-		if int(ts_diff) > 2:
-			download_feed_with_url(feed_url, feed_name, code)	
+			print(ts_diff)
+			frequency = feed_form.frequency
+			if int(ts_diff) > frequency:
+				feed_form_not_found = "Downloading the feed again"
+				print(feed_form_not_found)
+				code='present'
+				download_feed_with_url(feed_url, feed_name, code, feed_form.id)	
 
-		code = 'present'
-		print("renewing the feed")
-		download_feed_with_url(feed_url, feed_name, code, feed_form.id)
-		print("Feed renewed")
-		feed.delete()
+			feed.delete()
+		except Exception as e:
+			feed_form_not_found = 'Form not found with present feed'
+
+		print(feed_form_not_found)
 
 @app.task
 def reset_feed(formId):
@@ -120,7 +132,8 @@ def reset_feed(formId):
 	status = 'The Feed is up to date'
 
 	code = 'present'
-	if int(ts_diff) > 2:
+	frequency = form.frequency
+	if int(ts_diff) > frequency:
 		status = 'Reseting feed with latest data'
 		form.timestamp = timezone.now()
 		form.save()
