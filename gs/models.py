@@ -13,6 +13,9 @@ class GTFSForm(models.Model):
   frequency = models.IntegerField(blank=True, default=3)
   timestamp = models.DateTimeField(null=True)
 
+  def __str__(self):
+    return self.name
+
 class KeyValueString(models.Model):
     value = models.TextField(unique=True)
 

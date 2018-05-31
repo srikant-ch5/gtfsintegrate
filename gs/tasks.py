@@ -142,5 +142,3 @@ def reset_feed(formId):
 
 	return status
 
-
-

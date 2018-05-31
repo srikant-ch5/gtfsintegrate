@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from datetime import datetime
 import logging
 
 from django.shortcuts import render
@@ -18,6 +19,7 @@ from decimal import Decimal
 
 from .forms import GTFSInfoForm
 from django.utils import timezone
+import datetime
 import requests
 
 from .tasks import test2, download_feed_task, reset_feed, check_feeds_task
@@ -29,12 +31,14 @@ def feed_form(request):
 		is_feed_present = GTFSForm.objects.filter(url=request.POST['url'], osm_tag=request.POST['osm_tag'],
 												  gtfs_tag=request.POST['gtfs_tag'])
 		
-		context = 'Error'
+		'''feed_name = ((lambda: request.POST['name'], lambda: request.POST['osm_tag'])[request.POST['name']=='']())
+		print(feed_name)'''
 		if is_feed_present.count() > 0:
 			print('Feed already exists with name trying to renew the feed in DB')
+			context = 'Feed already exists'
 
 			formId = is_feed_present[0].id
-			context = reset_feed(formId)
+			reset_feed(formId)
 
 			#call celery task which checks the timestamp of the 
 		else:
@@ -42,20 +46,19 @@ def feed_form(request):
 			print(context)
 
 			if form.is_valid():
+				print("Going through this")
 				gtfs_feed_info = form.save(commit=False)
 				gtfs_feed_info.save()
 
 				download_feed_task(gtfs_feed_info.id)
 
-		return render(request, 'gs/form.html',{'form':form,'context':context})
+		return render(request, 'gs/load.html',{'form':form,'context':context})
 	else:
 		form = GTFSInfoForm()
 		return render(request,'gs/form.html',{'form':form})
 
-
 def home(request):
-	check_feeds_task()
-	return render(request,'gs/home.html')
+	return render(request,'gs/option.html')
 
 def map(request):
 	return render(request,'gs/map.html')
@@ -63,6 +66,8 @@ def map(request):
 def download(request):
 
 	if request.method == 'POST' and request.FILES['gtfsfile']:
+
+
 		if(Feed.objects.filter(name=name).exists()):
 			context = 'File is already present in the Database'
 			print(context)
@@ -81,6 +86,6 @@ class FeedListView(ListView):
 		return Feed.objects.all().order_by('id').reverse()
 
 def celery_task(request):
-	printnumbers()	
+	printnumbers()
 
 	return render(request, 'gs/task_template.html')
