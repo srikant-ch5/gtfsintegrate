@@ -21,6 +21,10 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     'multigtfs',
     'gs',
+    'osmapp',
+    'rest_framework',
+    'leaflet',
+    'djgeojson',
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -36,7 +40,7 @@ ROOT_URLCONF = 'geodjango.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,"gs", "templates"),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
