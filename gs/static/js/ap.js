@@ -1,4 +1,33 @@
 $(document).ready(function(){
+
+	var $form = $('.feed-form');
+	$form.submit(function(event){
+		event.preventDefault();
+		var forms = [];
+		var formdata;
+
+		for(i=1;i<=2;i++){
+			formdata = "/gtfs/formdata/"+i+"/";
+			$.getJSON(formdata,function(data){
+				//pdata = JSON.parse(data)
+				forms.push(data);
+					//console.log(forms[1]);
+				//console.log(forms)
+			});
+		}
+		
+		for(obj in forms){
+			console.log(obj)
+		}
+
+		//console.log(forms[0]["url"]);
+		var formurl		=	$("#formurl").val();		
+		var formname	=	$("#formname").val();
+		var formosmtag	=	$("#formosmtag").val();
+		var	formgtfstag	=	$("#formgftstag").val();
+		var formfrequency=	$("#formfrequency").val();
+
+	});
 /*
 	var nodedata = '{% url "nodedata" %}';
     function loadmapfunction(map, options){
