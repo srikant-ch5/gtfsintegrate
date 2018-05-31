@@ -23,11 +23,12 @@
 		for(i=0;i<10;i++){
 			var formdata = "/gtfs/formdata/"+i+"/";
 			$.getJSON(formdata,function(data){
-				forms.push(data.name);
+				forms.push(data);
 				console.log(forms)
 			})
-
 		}
-	})
+	});
+
+
 </script>
 {% endblock %}

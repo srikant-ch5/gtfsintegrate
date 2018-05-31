@@ -1,5 +1,5 @@
 $(document).ready(function(){
-
+/*
 	var nodedata = '{% url "nodedata" %}';
     function loadmapfunction(map, options){
 		//$.getJSON(waydata, function(data){
@@ -12,7 +12,7 @@ $(document).ready(function(){
 
 	var $form = $('.feed-form');
 	$form.submit(function(event){
-		event.preventDefault();
+		//event.preventDefault();
 		var forms = [];
 
 		for(i=0;i<10;i++){
@@ -24,5 +24,5 @@ $(document).ready(function(){
 
 		}
 	})
-
+*/
 })

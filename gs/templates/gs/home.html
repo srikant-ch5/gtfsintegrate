@@ -30,7 +30,7 @@
         
         <link rel="stylesheet" href="https://openlayers.org/en/v4.6.4/css/ol.css" type="text/css">
         <script src="https://openlayers.org/en/v4.6.4/build/ol.js"></script>
-        <script src="{% static 'js/ap.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/a.js' %}"></script>
 
     </head>
     <body>
@@ -64,12 +64,6 @@
     </div>
 
     <script type="text/javascript">
-        $(document).ready(function(){
-            var formdata = "/gtfs/formdata/5/"
-            $.getJSON(formdata , function(data){
-                console.log(data.frequency);
-            })
-        });
     </script>
 
     </body>
