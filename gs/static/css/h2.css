@@ -22,7 +22,7 @@ html ,body {
     border-radius: 25px;
     border: 10px solid #2778D4;
     padding: 20px; 
-    width: 220px;
+    width: 550px;
     height: 500px; 
 }
 #form_heading{
@@ -55,4 +55,39 @@ html ,body {
 }
 #specialbigmap {
     height: 800px;
+}
+#formname{
+    width:100%;
+    float:right;
+}
+#formurl{
+    width: 100%;
+    float:right;
+}
+#formosmtag{
+    width:100%;
+    float:right;
+}
+#formgtfstag{
+    width:100%;
+    float:right;
+}
+#formfrequency{
+    width:100%;
+    float:right;
+}
+.save{
+    padding-top:12px;
+    float:left;
+}
+label{
+    float:left;
+    margin-right:10px;
+    font-family: bold;
+}
+#status{
+    font-family:"Times New Roman", Times, serif;
+    box-shadow: 5px 5px 5px 5px;
+    padding:10px 10px 10px 10px;
+    background: #28CBA0;
 }

@@ -45,7 +45,7 @@ def feed_form(request):
 			context = "Creating new feed"
 			print(context)
 
-			if form.is_valid():
+			if form.for_valid():
 				print("Going through this")
 				gtfs_feed_info = form.save(commit=False)
 				gtfs_feed_info.save()

@@ -5,11 +5,11 @@ from .settings_secret import *
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 #THESE 3 LINES NEED TO BE MOVED to settings_secret
-#SECRET_KEY = '5@ch@sqd_+(4eaj2h60qofszfhuuxk#h#f#ehyb&b+drp@v0&s'
+SECRET_KEY = '5@ch@sqd_+(4eaj2h60qofszfhuuxk#h#f#ehyb&b+drp@v0&s'
 
-#DEBUG = True
+DEBUG = True
 
-#ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -36,6 +36,17 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 ROOT_URLCONF = 'geodjango.urls'
+
+DATABASES = {
+     'default': {
+         'ENGINE': 'django.contrib.gis.db.backends.postgis',
+         'NAME': 'osmdatamodel',
+         'USER': 'sriks', 
+         'PASSWORD': DB_PASS,
+         'HOST': 'localhost', # '127.0.0.1' probably works also
+         'PORT': '5432',
+     }
+ }
 
 TEMPLATES = [
     {
