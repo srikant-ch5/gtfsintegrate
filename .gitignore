@@ -3,3 +3,7 @@ settings_secret.py
 gs/gtfsfeeds
 *.pyc
 geodjango/settings.py
+venv
+.venv
+.idea
+.vscode

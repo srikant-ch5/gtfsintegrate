@@ -80,6 +80,7 @@ $(document).ready(function(){
 		if(feed_entry_found > 0 && current_date-form_date > formfrequency){
 			$("#feed-status2").text("Feed in Database is updaing to latest version");
 		}
+		
 	});
 /*
 	var nodedata = '{% url "nodedata" %}';
