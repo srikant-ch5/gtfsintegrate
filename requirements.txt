@@ -1,3 +1,4 @@
+# Utilities
 django==1.11
 multigtfs
 psycopg2==2.7.3.2
@@ -19,3 +20,7 @@ lxml
 ordered_set
 flup6
 urllib3
+
+# Testing
+coverage==4.0.3
+nose==1.3.7
