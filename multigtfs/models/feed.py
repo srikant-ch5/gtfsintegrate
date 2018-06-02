@@ -34,7 +34,6 @@ from .frequency import Frequency
 from .route import Route
 from .service import Service
 from .service_date import ServiceDate
-from .shape import ShapePoint, post_save_shapepoint
 from .stop import Stop, post_save_stop
 from .stop_time import StopTime
 from .transfer import Transfer
@@ -89,10 +88,9 @@ class Feed(models.Model):
             filelist = zfile.namelist()
 
         gtfs_order = (
-            Agency, Stop, Route, Service, ServiceDate, ShapePoint, Trip,
+            Agency, Stop, Route, Service, ServiceDate, Trip,
             StopTime, Frequency, Fare, FareRule, Transfer, FeedInfo,
         )
-        post_save.disconnect(dispatch_uid='post_save_shapepoint')
         post_save.disconnect(dispatch_uid='post_save_stop')
         try:
             for klass in gtfs_order:
@@ -110,39 +108,7 @@ class Feed(models.Model):
                         table.close()
 
         finally:
-            post_save.connect(post_save_shapepoint, sender=ShapePoint)
             post_save.connect(post_save_stop, sender=Stop)
-
-        # Update geometries
-        start_time = time.time()
-        for shape in self.shape_set.all():
-            shape.update_geometry(update_parent=False)
-        end_time = time.time()
-        logger.info(
-            "Updated geometries for %d shapes in %0.1f seconds",
-            self.shape_set.count(), end_time - start_time)
-
-        start_time = time.time()
-        trips = Trip.objects.in_feed(self)
-        for trip in trips:
-            trip.update_geometry(update_parent=False)
-        end_time = time.time()
-        logger.info(
-            "Updated geometries for %d trips in %0.1f seconds",
-            trips.count(), end_time - start_time)
-
-        start_time = time.time()
-        routes = self.route_set.all()
-        for route in routes:
-            route.update_geometry()
-        end_time = time.time()
-        logger.info(
-            "Updated geometries for %d routes in %0.1f seconds",
-            routes.count(), end_time - start_time)
-
-        total_end = time.time()
-        logger.info(
-            "Import completed in %0.1f seconds.", total_end - total_start)
 
     def export_gtfs(self, gtfs_file):
         """Export a GTFS file as feed
@@ -157,7 +123,7 @@ class Feed(models.Model):
 
         gtfs_order = (
             Agency, Service, ServiceDate, Fare, FareRule, FeedInfo, Frequency,
-            Route, ShapePoint, StopTime, Stop, Transfer, Trip,
+            Route, StopTime, Stop, Transfer, Trip,
         )
 
         for klass in gtfs_order:
