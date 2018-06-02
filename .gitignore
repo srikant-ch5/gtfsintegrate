@@ -1,3 +1,5 @@
 geodjango/settings_secret.py
 settings_secret.py
+gs/gtfsfeeds
 *.pyc
+geodjango/settings.py

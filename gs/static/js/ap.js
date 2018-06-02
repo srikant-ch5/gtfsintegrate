@@ -2,8 +2,7 @@ $(document).ready(function(){
 
 	var $form = $('.feed-form');
 	$form.submit(function(event){
-		event.preventDefault();
-<<<<<<< HEAD
+		//event.preventDefault();
 
 		var formurl		=	$("#formurl").val();		
 		var formname	=	$("#formname").val();
@@ -47,6 +46,13 @@ $(document).ready(function(){
 			$("#feed-status").text("->Feed not found Downloading the new feed wait until the feed is downloaded");	
 		}
 
+		function stateChange(newState) {
+    setTimeout(function(){
+        if(newState == -1){alert('VIDEO HAS STOPPED');}
+    }, 5000);
+}
+	stateChange();
+
 		var today = new Date();
 		var dd 	 = today.getDate();
 		var mm 	 = today.getMonth()+1;
@@ -74,32 +80,6 @@ $(document).ready(function(){
 		if(feed_entry_found > 0 && current_date-form_date > formfrequency){
 			$("#feed-status2").text("Feed in Database is updaing to latest version");
 		}
-=======
-		var forms = [];
-		var formdata;
-
-		for(i=1;i<=2;i++){
-			formdata = "/gtfs/formdata/"+i+"/";
-			$.getJSON(formdata,function(data){
-				//pdata = JSON.parse(data)
-				forms.push(data);
-					//console.log(forms[1]);
-				//console.log(forms)
-			});
-		}
-		
-		for(obj in forms){
-			console.log(obj)
-		}
-
-		//console.log(forms[0]["url"]);
-		var formurl		=	$("#formurl").val();		
-		var formname	=	$("#formname").val();
-		var formosmtag	=	$("#formosmtag").val();
-		var	formgtfstag	=	$("#formgftstag").val();
-		var formfrequency=	$("#formfrequency").val();
-
->>>>>>> a0703b30aa07e7528784157bccc3a64375e076f7
 	});
 /*
 	var nodedata = '{% url "nodedata" %}';

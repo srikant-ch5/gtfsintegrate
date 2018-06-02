@@ -5,26 +5,11 @@ import requests
 from django.utils import timezone
 
 from django.contrib.auth.models import User
-from celery import shared_task,Celery, task
-from celery.schedules import crontab
-from geodjango.celery import app
 from .models import GTFSForm
 
 from multigtfs.models import Agency, Feed, Service
 from multigtfs.management.commands.importgtfs import Command
 
-#should be included here app will refer to gs https://groups.google.com/forum/#!topic/celery-users/XiSDiNjBR6k
-app = Celery()
-
-@shared_task
-def test():
-	print("shared_task")
-
-@app.task
-def test2():
-	print("HI")
-
-@app.task
 def rename_feed(name, formId):
 	present_name = name
 	feed = Feed.objects.get(name=name)
@@ -44,7 +29,6 @@ def rename_feed(name, formId):
 	update_name = os.path.join(os.path.dirname(os.path.abspath(__file__)),"gtfsfeeds/")+update_name+'.zip'
 	os.rename(to_change,update_name)
 
-@app.task
 def download_feed_in_db(file, file_name, code, formId):
 	feeds = Feed.objects.create(name=file_name)
 	feeds.import_gtfs(file)
@@ -56,7 +40,6 @@ def download_feed_in_db(file, file_name, code, formId):
 	else:
 		print("Not renewing")
 	
-@app.task
 def download_feed_with_url(download_url, save_feed_name, code, formId):
 	print("Downloading with url")
 	r = requests.get(download_url, allow_redirects=True)
@@ -71,7 +54,6 @@ def download_feed_with_url(download_url, save_feed_name, code, formId):
 
 	download_feed_in_db(feed_file,save_feed_name, code, formId)
 
-@app.task
 def download_feed_task(formId):
 	#get url osm_tag gtfs_tag of the user entered form
 	user_form 		= GTFSForm.objects.get(id=formId)
@@ -88,7 +70,6 @@ def download_feed_task(formId):
 	code = 'not_present'
 	download_feed_with_url(entered_url, feed_name, code, formId)
 
-@app.task
 def check_feeds_task():
 	#keep on checking the feeds for every five days all the feeds are downloaded again into the database
 	#1. get all the feeds
@@ -122,7 +103,6 @@ def check_feeds_task():
 
 		print(feed_form_not_found)
 
-@app.task
 def reset_feed(formId):
 	form = GTFSForm.objects.get(id=formId)
 	form_timestamp = form.timestamp

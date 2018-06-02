@@ -13,16 +13,14 @@ from django.contrib.gis.geos import Point
 from multigtfs.models import Agency, Feed, Service
 from multigtfs.management.commands.importgtfs import Command
 
-from .models import Tag, KeyValueString, Node, Way, GTFSForm
-from lxml import etree
-from decimal import Decimal
-
+from .models import GTFSForm
 from .forms import GTFSInfoForm
+
 from django.utils import timezone
 import datetime
 import requests
 
-from .tasks import test2, download_feed_task, reset_feed, check_feeds_task
+from .tasks import download_feed_task, reset_feed, check_feeds_task
 
 def feed_form(request):
 	if request.method == 'POST':
@@ -30,9 +28,7 @@ def feed_form(request):
 		#check if the url is already since the timestamp changes for every entry django creates a gtfs form
 		is_feed_present = GTFSForm.objects.filter(url=request.POST['url'], osm_tag=request.POST['osm_tag'],
 												  gtfs_tag=request.POST['gtfs_tag'])
-		
-		'''feed_name = ((lambda: request.POST['name'], lambda: request.POST['osm_tag'])[request.POST['name']=='']())
-		print(feed_name)'''
+
 		if is_feed_present.count() > 0:
 			print('Feed already exists with name trying to renew the feed in DB')
 			context = 'Feed already exists'
@@ -40,12 +36,11 @@ def feed_form(request):
 			formId = is_feed_present[0].id
 			reset_feed(formId)
 
-			#call celery task which checks the timestamp of the 
 		else:
 			context = "Creating new feed"
 			print(context)
 
-			if form.for_valid():
+			if form.is_valid():
 				print("Going through this")
 				gtfs_feed_info = form.save(commit=False)
 				gtfs_feed_info.save()
@@ -84,8 +79,3 @@ class FeedListView(ListView):
 
 	def get_queryset(self):
 		return Feed.objects.all().order_by('id').reverse()
-
-def celery_task(request):
-	printnumbers()
-
-	return render(request, 'gs/task_template.html')
