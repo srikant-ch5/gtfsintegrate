@@ -30,7 +30,9 @@
                 //L.geoJson(data).addTo(map);
             //})
             $.getJSON(nodedata, function(data){
-                L.geoJson(data).addTo(map);
+                var mapLayer = L.geoJSON().addTo(map);
+                mapLayer.addData(data);
+                L.marker([50.5, 30.5]).addTo(map);
             })
         }
 </script>

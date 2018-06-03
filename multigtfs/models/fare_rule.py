@@ -48,7 +48,7 @@ class FareRule(Base):
         return u
 
     class Meta:
-        db_table = 'fare_rules'
+        db_table = 'gtfs_fare_rules'
         app_label = 'multigtfs'
 
     # For Base import/export

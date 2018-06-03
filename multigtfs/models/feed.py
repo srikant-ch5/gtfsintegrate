@@ -54,7 +54,7 @@ class Feed(models.Model):
     meta = JSONField(default={}, blank=True, null=True)
 
     class Meta:
-        db_table = 'feed'
+        db_table = 'gtfs_feed'
         app_label = 'multigtfs'
 
     def __str__(self):

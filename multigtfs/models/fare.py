@@ -56,7 +56,7 @@ class Fare(Base):
             self.feed.id, self.fare_id, self.price, self.currency_type)
 
     class Meta:
-        db_table = 'fare'
+        db_table = 'gtfs_fare'
         app_label = 'multigtfs'
 
     # For Base import/export

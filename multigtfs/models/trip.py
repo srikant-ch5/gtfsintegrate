@@ -67,7 +67,7 @@ class Trip(Base):
         return "%s-%s" % (self.route, self.trip_id)
 
     class Meta:
-        db_table = 'trip'
+        db_table = 'gtfs_trip'
         app_label = 'multigtfs'
 
     _column_map = (

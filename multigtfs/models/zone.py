@@ -35,5 +35,5 @@ class Zone(Base):
         return "%d-%s" % (self.feed_id, self.zone_id)
 
     class Meta:
-        db_table = 'zone'
+        db_table = 'gtfs_zone'
         app_label = 'multigtfs'

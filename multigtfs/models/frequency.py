@@ -42,7 +42,7 @@ class Frequency(Base):
         return str(self.trip)
 
     class Meta:
-        db_table = 'frequency'
+        db_table = 'gtfs_frequency'
         app_label = 'multigtfs'
         verbose_name_plural = "frequencies"
 

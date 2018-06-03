@@ -50,7 +50,7 @@ class Transfer(Base):
         return "%s-%s" % (self.from_stop, self.to_stop.stop_id)
 
     class Meta:
-        db_table = 'transfer'
+        db_table = 'gtfs_transfer'
         app_label = 'multigtfs'
 
     _column_map = (

@@ -60,7 +60,7 @@ class Service(Base):
         return "%d-%s" % (self.feed.id, self.service_id)
 
     class Meta:
-        db_table = 'service'
+        db_table = 'gtfs_service'
         app_label = 'multigtfs'
 
     # For Base import/export

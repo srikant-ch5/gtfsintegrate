@@ -126,6 +126,7 @@ def get_route_relations(request):
     return render(request, 'gs/load.html')
 
 def load(request):
+
     osmFile = '''
     <osm version='0.6' generator='JOSM'>
       <node id='313586' timestamp='2018-01-15T17:26:05Z' uid='72151' user='GeorgFausB' version='13' changeset='55469382' lat='50.9558026' lon='6.9691347'>
@@ -274,5 +275,6 @@ def load(request):
                             dummy_rel_relation.save()
 
                             rm = relation.add_member(dummy_rel_relation, type, role)
+
 
     return render(request,'gs/load.html')

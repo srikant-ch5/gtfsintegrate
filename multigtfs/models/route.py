@@ -88,7 +88,7 @@ class Route(Base):
         return "%d-%s" % (self.feed.id, self.route_id)
 
     class Meta:
-        db_table = 'route'
+        db_table = 'gtfs_route'
         app_label = 'multigtfs'
 
     _column_map = (

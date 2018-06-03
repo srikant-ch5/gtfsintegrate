@@ -72,7 +72,7 @@ class Command(BaseCommand):
         if settings.DEBUG:
             connection.use_debug_cursor = False
 
-        feed = Feed.objects.create(name=name)
+        feed = gtfs_Feed.objects.create(name=name)
         feed.import_gtfs(gtfs_feed)
 
         # Set name based on feed

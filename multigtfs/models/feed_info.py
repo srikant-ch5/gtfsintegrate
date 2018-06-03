@@ -51,7 +51,7 @@ class FeedInfo(Base):
         return '%s-%s' % (self.feed.id, self.publisher_name)
 
     class Meta:
-        db_table = 'feed_info'
+        db_table = 'gtfs_feed_info'
         app_label = 'multigtfs'
         verbose_name_plural = "feed info"
 

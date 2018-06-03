@@ -22,6 +22,10 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.six import StringIO
 from jsonfield import JSONField
 
+from django.contrib.gis.db.models import PointField,LineStringField
+from django.contrib.gis.geos import Point,LineString
+from django.db.models import Manager as GeoManager
+
 from multigtfs.models.base import models, Base
 
 
@@ -50,6 +54,7 @@ class Stop(Base):
         help_text='Description of a stop.')
     point = models.PointField(
         help_text='WGS 84 latitude/longitude of stop or station')
+    #geom  = models.PointField(help_text="Add for test", null=True,blank=True)
     zone = models.ForeignKey(
         'Zone', null=True, blank=True, on_delete=models.SET_NULL,
         help_text="Fare zone for a stop ID.")
@@ -101,6 +106,9 @@ class Stop(Base):
     def __init__(self, *args, **kwargs):
         lat = kwargs.pop('lat', None)
         lon = kwargs.pop('lon', None)
+        #self.geom = Point(lat,lon)
+        #self.save()
+
         if lat is not None or lon is not None:
             assert kwargs.get('point') is None
             msg = "Setting Stop location with lat and lon is deprecated"
@@ -109,7 +117,7 @@ class Stop(Base):
         super(Stop, self).__init__(*args, **kwargs)
 
     class Meta:
-        db_table = 'stop'
+        db_table = 'gtfs_stop'
         app_label = 'multigtfs'
 
     _column_map = (
