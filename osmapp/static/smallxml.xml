@@ -1,0 +1,73 @@
+<osm version='0.6' generator='JOSM'>
+  <node id='313586' timestamp='2018-01-15T17:26:05Z' uid='72151' user='GeorgFausB' version='13' changeset='55469382' lat='50.9558026' lon='6.9691347'>
+    <tag k='TMC:cid_58:tabcd_1:Class' v='Point' />
+    <tag k='TMC:cid_58:tabcd_1:Direction' v='positive' />
+    <tag k='TMC:cid_58:tabcd_1:LCLversion' v='9.00' />
+    <tag k='TMC:cid_58:tabcd_1:LocationCode' v='39623' />
+    <tag k='TMC:cid_58:tabcd_1:NextLocationCode' v='39624' />
+    <tag k='TMC:cid_58:tabcd_1:PrevLocationCode' v='39622' />
+  </node>
+  <node id='359701' timestamp='2013-10-11T15:45:54Z' uid='116044' user='berndw' version='6' changeset='18300089' lat='50.9370965' lon='6.908692' />
+  <node id='359966' timestamp='2012-03-29T15:54:33Z' uid='116044' user='berndw' version='3' changeset='11140330' lat='50.9397721' lon='6.9107352' />
+  <node id='359968' timestamp='2013-01-12T18:52:41Z' uid='16478' user='Raymond' version='5' changeset='14625995' lat='50.9388811' lon='6.9101378' />
+  <node id='359970' timestamp='2013-01-12T18:52:42Z' uid='16478' user='Raymond' version='3' changeset='14625995' lat='50.9383374' lon='6.909518' />
+  <node id='359972' timestamp='2011-10-08T21:35:19Z' uid='39890' user='AJoNee' version='2' changeset='9507148' lat='50.9377311' lon='6.9089441' />
+  <node id='360139' timestamp='2018-04-29T16:35:40Z' uid='16478' user='Raymond' version='5' changeset='58531782' lat='50.9369933' lon='6.9114082' />
+  <node id='423161' timestamp='2012-10-08T16:58:42Z' uid='116044' user='berndw' version='7' changeset='13415174' lat='50.9525553' lon='6.8988881' />
+  <node id='423162' timestamp='2016-12-02T16:15:50Z' uid='16478' user='Raymond' version='4' changeset='44117564' lat='50.9527249' lon='6.8989613'>
+    <tag k='highway' v='traffic_signals' />
+  </node>
+  <node id='423163' timestamp='2016-09-10T16:55:47Z' uid='38919' user='krza' version='4' changeset='42062849' lat='50.953528' lon='6.8998145' />
+  <node id='423164' timestamp='2012-04-21T18:45:16Z' uid='116044' user='berndw' version='4' changeset='11376819' lat='50.954846' lon='6.9011633' />
+  <node id='423166' timestamp='2011-10-07T12:33:40Z' uid='89943' user='Bengatzer' version='3' changeset='9493589' lat='50.9565598' lon='6.9028375' />
+  <node id='423172' timestamp='2012-10-07T12:44:17Z' uid='116044' user='berndw' version='9' changeset='13397401' lat='50.9628953' lon='6.9095211' />
+  <node id='423173' timestamp='2012-10-07T12:44:17Z' uid='116044' user='berndw' version='9' changeset='13397401' lat='50.9636775' lon='6.9103573' />
+  <node id='423179' timestamp='2015-04-12T18:08:48Z' uid='38919' user='krza' version='10' changeset='30169205' lat='50.9691546' lon='6.9169639'>
+    <tag k='TMC:cid_58:tabcd_1:Class' v='Point' />
+    <tag k='TMC:cid_58:tabcd_1:LCLversion' v='9.00' />
+    <tag k='TMC:cid_58:tabcd_1:LocationCode' v='39588' />
+    <tag k='TMC:cid_58:tabcd_1:PrevLocationCode' v='39587' />
+  </node>
+  <node id='423198' timestamp='2012-04-21T18:45:16Z' uid='116044' user='berndw' version='2' changeset='11376819' lat='50.9527072' lon='6.8991522' />
+  <node id='423207' timestamp='2012-04-21T18:45:16Z' uid='116044' user='berndw' version='11' changeset='11376819' lat='50.9567074' lon='6.9029845'>
+    <tag k='TMC:cid_58:tabcd_1:Class' v='Point' />
+    <tag k='TMC:cid_58:tabcd_1:LCLversion' v='9.00' />
+    <tag k='TMC:cid_58:tabcd_1:LocationCode' v='39666' />
+    <tag k='TMC:cid_58:tabcd_1:NextLocationCode' v='39667' />
+    <tag k='TMC:cid_58:tabcd_1:PrevLocationCode' v='39665' />
+    <tag k='highway' v='traffic_signals' />
+  </node>
+  <way id='51236926' timestamp='2016-06-14T14:59:37Z' uid='445794' user='hsimpson' version='15' changeset='40019240'>
+    <nd ref='313586' />
+    <nd ref='359701' />
+    <nd ref='359966' />
+    <tag k='fixed' v='Amsterdamer Straße ist stadteinwärts die Fortsetzung der Industriestr. (Trunk) und liegt auf der optimalen Route für den Fernverkehr aus der Innenstadt in Richtung Ruhrgebiet, Hannover, Bremen, Berlin und Hamburg. Deshalb als primary road kennzeichnen!' />
+    <tag k='highway' v='primary' />
+    <tag k='lanes' v='3' />
+    <tag k='maxspeed' v='50' />
+    <tag k='name' v='Amsterdamer Straße' />
+    <tag k='oneway' v='yes' />
+  </way>
+  <way id='51240788' timestamp='2012-03-27T13:32:56Z' uid='152520' user='Rainer_Driesen' version='4' changeset='11116479'>
+    <nd ref='359968' />
+    <nd ref='359970' />
+    <tag k='highway' v='tertiary' />
+    <tag k='name' v='Escher Straße' />
+  </way>
+  <way id='51240789' timestamp='2017-10-21T11:55:27Z' uid='225990' user='muetzekoeln' version='8' changeset='53126183'>
+    <nd ref='423207' />
+    <nd ref='423161' />
+    <nd ref='423164' />
+    <tag k='highway' v='tertiary' />
+    <tag k='name' v='Escher Straße' />
+  </way>
+  <way id='51240790' timestamp='2013-02-23T02:27:51Z' uid='152520' user='Rainer_Driesen' version='9' changeset='15130743'>
+    <nd ref='423198' />
+    <nd ref='423179' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='maxspeed' v='50' />
+    <tag k='name' v='Äußere Kanalstraße' />
+    <tag k='oneway' v='yes' />
+  </way>
+</osm>

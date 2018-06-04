@@ -1,4 +1,3 @@
-
 import os
 from celery.schedules import crontab
 from .settings_secret import *
@@ -94,3 +93,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATICFILES_DIRS = (
     os.path.join(os.path.dirname(PROJECT_ROOT),'gs', 'static'),
 )
+CELERY_BROKER_URL = 'amqp://localhost'
