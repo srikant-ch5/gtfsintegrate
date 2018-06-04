@@ -124,4 +124,4 @@ class SecondsField(Field):
     def value_to_string(self, obj):
         '''Convert to HH:MM:SS format.'''
         value = self.value_from_object(obj)
-        return value.__str__()
+        return value.__str__

@@ -1,6 +1,7 @@
 from django.contrib.gis.db import models
 from django.contrib.gis.geos import Point, LineString
 from django.db.models import Manager as GeoManager
+from typing import Tuple
 
 
 class KeyValueString(models.Model):
@@ -18,7 +19,7 @@ class Tag(models.Model):
         return " {} = {}".format(self.key, self.value)
 
     class Meta:
-        unique_together = ("key", "value")
+        unique_together = ("key", "value")  # type: Tuple[str, str]
 
     def add_tag(self, key, value):
 
@@ -84,7 +85,7 @@ class Node(OSM_Primitive):
     geom = models.PointField(geography=True, spatial_index=True, null=True)  # geography will force srid to be 4326
     objects = GeoManager()
 
-    def set_cordinates(self, lat, lon):
+    def set_coordinates(self, lat, lon):
         self.geom = Point(lon, lat)
         self.save()
 
