@@ -1,14 +1,7 @@
 import os
-from celery.schedules import crontab
 from geodjango.settings_secret import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-#SECRET_KEY = '5@ch@sqd_+(4eaj2h60qofszfhuuxk#h#f#ehyb&b+drp@v0&s'
-
-#DEBUG = True
-
-#ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -18,9 +11,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
-    'multigtfs',
     'gs',
+    'compare',
+    'osmapp',
+    'leaflet',
+    'djgeojson',
+    'rest_framework',
 ]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -30,6 +28,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 ROOT_URLCONF = 'geodjango.urls'
 
 TEMPLATES = [
@@ -86,6 +85,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
-    os.path.join(PROJECT_ROOT, 'gs/static'),
+    os.path.join(PROJECT_ROOT, 'gs','static'),
 )
-CELERY_BROKER_URL = 'amqp://localhost'
