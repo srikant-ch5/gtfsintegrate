@@ -4,13 +4,14 @@ from rest_framework import generics
 from gs.models import GTFSForm
 from .serializers import FormSerializer
 
+
 def main(request):
-	return render(request,'gtfstoosmtool/base.html')
+    return render(request, 'gtfstoosmtool/base.html')
+
 
 class FormView(generics.RetrieveUpdateDestroyAPIView):
-	lookup_field = 'pk'
-	serializer_class = FormSerializer
+    lookup_field = 'pk'
+    serializer_class = FormSerializer
 
-	def get_queryset(self):
-		return GTFSForm.objects.all()
-	
+    def get_queryset(self):
+        return GTFSForm.objects.all()
