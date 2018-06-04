@@ -1,13 +1,7 @@
 import os
+from .settings_secret import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-#THESE 3 LINES NEED TO BE MOVED to settings_secret
-#SECRET_KEY = '5@ch@sqd_+(4eaj2h60qofszfhuuxk#h#f#ehyb&b+drp@v0&s'
-
-#DEBUG = True
-
-#ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -24,6 +18,7 @@ INSTALLED_APPS = [
     'leaflet',
     'djgeojson',
 ]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -91,4 +86,3 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATICFILES_DIRS = (
     os.path.join(os.path.dirname(PROJECT_ROOT),'gs', 'static'),
 )
-CELERY_BROKER_URL = 'amqp://localhost'
