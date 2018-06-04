@@ -4,26 +4,9 @@ import xml.etree.cElementTree as cetree
 from django.contrib.gis.geos import LineString
 from django.shortcuts import render
 from ordered_set import OrderedSet
+from typing import List, Any
 
 from .models import Tag, KeyValueString, Node, Way, OSM_Relation
-
-
-def home(request):
-    # whenever load map the ways should have the nodes
-    ways = Way.objects.all()
-
-    for way in ways:
-        way_nodes = way.nodes.all()
-        nodes = []
-        for way_node in way_nodes:
-            single_node_geom = list(way_node.geom)
-            nodes.append(single_node_geom)
-
-        print(nodes)
-        way.geom = LineString(nodes)
-        way.save()
-
-    return render(request, 'gs/load.html')
 
 
 def get_stops(request):
@@ -72,7 +55,7 @@ def get_stops(request):
         if is_tram_stop > 0:
             tram_nodes.append(stop_node)
 
-    print(OrderedSet(bus_nodes))
+    OrderedSet(bus_nodes)
     print(OrderedSet(tram_nodes))
 
     return render(request, 'gs/load.html')
@@ -151,7 +134,7 @@ def load(request):
 
                 node = Node(id=snode_id, timestamp=stimestamp, uid=suid, user=suser, version=sversion, visible=True,
                             changeset=schangeset, incomplete=False)
-                node.set_cordinates(slat, slon)
+                node.set_coordinates(slat, slon)
                 node.save()
             except Exception as e:
                 print(e)
@@ -205,7 +188,7 @@ def load(request):
                     way.tags.add(tag)
 
             way_nodes = way.nodes.all()
-            nodes = []
+            nodes = []  # type: List[List[Any]]
 
             for way_node in way_nodes:
                 single_node_geom = list(way_node.geom)
