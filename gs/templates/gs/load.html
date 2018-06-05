@@ -27,7 +27,7 @@
 
     function loadmapfunction(map, options) {
 
-        var nodedata = '{% url "gtfsstopdata" %}';
+        var nodedata = '{% url "stopdata" %}';
         $.getJSON(nodedata, function (data) {
             var mapLayer = L.geoJSON().addTo(map);
             mapLayer.addData(data);

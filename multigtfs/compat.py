@@ -31,6 +31,7 @@ def _get_blank_value_19(field):
     else:
         return ''
 
+
 if DJ_VERSION >= LooseVersion('1.9'):
     get_blank_value = _get_blank_value_19
 else:
@@ -80,7 +81,7 @@ def opener_from_zipfile(zipfile):
         inner_file = zipfile.open(filename)
         if PY3:
             from io import TextIOWrapper
-            return TextIOWrapper(inner_file)
+            return TextIOWrapper(inner_file, encoding="utf-8")
         else:
             return inner_file
 

@@ -1,14 +1,7 @@
 import os
-from .settings_secret import *
+from geodjango.settings_secret import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-# THESE 3 LINES NEED TO BE MOVED to settings_secret
-# SECRET_KEY = '5@ch@sqd_+(4eaj2h60qofszfhuuxk#h#f#ehyb&b+drp@v0&s'
-
-# DEBUG = True
-
-# ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -24,6 +17,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'leaflet',
     'djgeojson',
+    'compare',
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -39,7 +33,7 @@ ROOT_URLCONF = 'geodjango.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "gs", "templates"), ],
+        'DIRS': [os.path.join(BASE_DIR,"gs", "templates"),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -88,6 +82,7 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+
 STATICFILES_DIRS = (
-    os.path.join(os.path.dirname(PROJECT_ROOT), 'gs', 'static'),
+    os.path.join(os.path.dirname(PROJECT_ROOT),'gs', 'static'),
 )

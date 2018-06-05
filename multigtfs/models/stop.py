@@ -52,9 +52,10 @@ class Stop(Base):
         "description",
         max_length=255, blank=True,
         help_text='Description of a stop.')
-    point = models.PointField(
-        help_text='WGS 84 latitude/longitude of stop or station')
-    #geom  = models.PointField(help_text="Add for test", null=True,blank=True)
+    '''geom = models.geomField(
+        help_text='WGS 84 latitude/longitude of stop or station', null=True)'''
+    geom = models.PointField(
+        help_text='WGS 84 latitude/longitude of stop or station', null=True)
     zone = models.ForeignKey(
         'Zone', null=True, blank=True, on_delete=models.SET_NULL,
         help_text="Fare zone for a stop ID.")
@@ -82,39 +83,41 @@ class Stop(Base):
         return "%d-%s" % (self.feed_id, self.stop_id)
 
     def getlon(self):
-        return self.point[0] if self.point else 0.0
+        print("getting lon ")
+        return self.geom[0] if self.geom else 0.0
 
     def setlon(self, value):
-        if self.point:
-            self.point[0] = value
+        print("Setting lon ")
+        if self.geom:
+            self.geom[0] = value
         else:
-            self.point = "POINT(%s 0)" % value
+            self.geom = "geom(%s 0)" % value
 
     lon = property(getlon, setlon, doc="WGS 84 longitude of stop or station")
 
     def getlat(self):
-        return self.point[1] if self.point else 0.0
+        return self.geom[1] if self.geom else 0.0
 
     def setlat(self, value):
-        if self.point:
-            self.point[1] = value
+        if self.geom:
+            self.geom[1] = value
         else:
-            self.point = "POINT(0 %s)" % value
+            self.geom = "geom(0 %s)" % value
 
     lat = property(getlat, setlat, doc="WGS 84 latitude of stop or station")
 
     def __init__(self, *args, **kwargs):
         lat = kwargs.pop('lat', None)
         lon = kwargs.pop('lon', None)
-        #self.geom = Point(lat,lon)
-        #self.save()
 
         if lat is not None or lon is not None:
-            assert kwargs.get('point') is None
+            assert kwargs.get('geom') is None
             msg = "Setting Stop location with lat and lon is deprecated"
             warnings.warn(msg, DeprecationWarning)
-            kwargs['point'] = "POINT(%s %s)" % (lon or 0.0, lat or 0.0)
+            kwargs['geom'] = "geom(%s %s)" % (lon or 0.0, lat or 0.0)
+
         super(Stop, self).__init__(*args, **kwargs)
+        #print('{}  {}',format(lat,lon))
 
     class Meta:
         db_table = 'gtfs_stop'
@@ -125,8 +128,8 @@ class Stop(Base):
         ('stop_code', 'code'),
         ('stop_name', 'name'),
         ('stop_desc', 'desc'),
-        ('stop_lat', 'point[1]'),
-        ('stop_lon', 'point[0]'),
+        ('stop_lat', 'geom[1]'),
+        ('stop_lon', 'geom[0]'),
         ('zone_id', 'zone__zone_id'),
         ('stop_url', 'url'),
         ('location_type', 'location_type'),
@@ -139,6 +142,7 @@ class Stop(Base):
 
     @classmethod
     def import_txt(cls, txt_file, feed):
+        print('Inside stop.imoprt_txt')
         '''Import from a stops.txt file
 
         Stations need to be imported before stops
@@ -153,9 +157,9 @@ class Stop(Base):
                     return val == '1'
             return False
 
-        logger.info("Importing station stops")
+        print("Importing station stops")
         stations = super(Stop, cls).import_txt(StringIO(txt), feed, is_station)
-        logger.info("Imported %d station stops", stations)
+        print("Imported %d station stops", stations)
 
         def is_stop(pairs):
             '''Does the row represent a stop?'''
@@ -164,9 +168,9 @@ class Stop(Base):
                     return val != '1'
             return True
 
-        logger.info("Importing non-station stops")
+        print("Importing non-station stops")
         stops = super(Stop, cls).import_txt(StringIO(txt), feed, is_stop)
-        logger.info("Imported %d non-station stops", stops)
+        print("Imported %d non-station stops", stops)
         return stations + stops
 
 

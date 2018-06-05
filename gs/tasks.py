@@ -1,14 +1,12 @@
 from __future__ import unicode_literals
-import string
+
 import os
+
 import requests
 from django.utils import timezone
+from multigtfs.models import Feed
 
-from django.contrib.auth.models import User
 from .models import GTFSForm
-
-from multigtfs.models import Agency, Feed, Service
-from multigtfs.management.commands.importgtfs import Command
 
 
 def rename_feed(name, formId):

@@ -13,22 +13,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from __future__ import unicode_literals
+import codecs
+import csv
+import re
 from codecs import BOM_UTF8
 from collections import defaultdict
-from csv import reader, writer
 from datetime import datetime, date
+from io import StringIO
 from logging import getLogger
-import re
-
+from csv import reader, writer
 from django.contrib.gis.db import models
 from django.db.models.fields.related import ManyToManyField
 from django.utils.six import StringIO, text_type, PY3
-
 from multigtfs.compat import (
     get_blank_value, write_text_rows, Manager, QuerySet)
 
 logger = getLogger(__name__)
-re_point = re.compile(r'(?P<name>point)\[(?P<index>\d)\]')
+re_geom = re.compile(r'(?P<name>geom)\[(?P<index>\d)\]')
+
 batch_size = 1000
 large_queryset_size = 100000
 CSV_BOM = BOM_UTF8.decode('utf-8') if PY3 else BOM_UTF8
@@ -111,17 +113,22 @@ class Base(models.Model):
 
         # Setup the conversion from GTFS to Django Format
         # Conversion functions
-        def no_convert(value): return value
+        def no_convert(value):
+            return value
 
-        def date_convert(value): return datetime.strptime(value, '%Y%m%d')
+        def date_convert(value):
+            return datetime.strptime(value, '%Y%m%d')
 
-        def bool_convert(value): return (value == '1')
+        def bool_convert(value):
+            return (value == '1')
 
-        def char_convert(value): return (value or '')
+        def char_convert(value):
+            return (value or '')
 
-        def null_convert(value): return (value or None)
+        def null_convert(value):
+            return (value or None)
 
-        def point_convert(value):
+        def geom_convert(value):
             """Convert latitude / longitude, strip leading +."""
             if value.startswith('+'):
                 return value[1:]
@@ -136,6 +143,7 @@ class Base(models.Model):
                     return field.get_default()
                 else:
                     return value
+
             return get_value_or_default
 
         def instance_convert(field, feed, rel_name):
@@ -162,6 +170,7 @@ class Base(models.Model):
                     return cache[key1][key2]
                 else:
                     return None
+
             return get_instance
 
         # Check unique fields
@@ -173,7 +182,7 @@ class Base(models.Model):
         # Map of field_name to converters from GTFS to Django format
         val_map = dict()
         name_map = dict()
-        point_map = dict()
+        geom_map = dict()
         for csv_name, field_pattern in cls._column_map:
             # Separate the local field name from foreign columns
             if '__' in field_pattern:
@@ -185,15 +194,15 @@ class Base(models.Model):
             name_map[csv_name] = field_name
 
             # Is it a point field?
-            point_match = re_point.match(field_name)
-            if point_match:
+            geom_match = re_geom.match(field_name)
+            if geom_match:
                 field = None
             else:
                 field = cls._meta.get_field(field_base)
 
             # Pick a conversion function for the field
-            if point_match:
-                converter = point_convert
+            if geom_match:
+                converter = geom_convert
             elif isinstance(field, models.DateField):
                 converter = date_convert
             elif isinstance(field, models.BooleanField):
@@ -210,13 +219,39 @@ class Base(models.Model):
             else:
                 converter = no_convert
 
-            if point_match:
-                index = int(point_match.group('index'))
-                point_map[csv_name] = (index, converter)
+            if geom_match:
+                index = int(geom_match.group('index'))
+                geom_map[csv_name] = (index, converter)
             else:
                 val_map[csv_name] = converter
 
         # Read and convert the source txt
+
+        class UTF8Recoder:
+            def __init__(self, f, encoding):
+                self.reader = codecs.getreader(encoding)(f)
+
+            def __iter__(self):
+                return self
+
+            def next(self):
+                return self.reader.next().encode("utf-8")
+
+        class UnicodeReader:
+            def __init__(self, f, dialect=csv.excel, encoding="utf-8-sig", **kwds):
+                f = UTF8Recoder(f, encoding)
+                self.reader = csv.reader(f, dialect=dialect, **kwds)
+
+            def next(self):
+                '''next() -> unicode
+                This function reads and returns the next line as a Unicode string.
+                '''
+                row = self.reader.next()
+                return [unicode(s, "utf-8") for s in row]
+
+            def __iter__(self):
+                return self
+
         csv_reader = reader(txt_file, skipinitialspace=True)
         unique_line = dict()
         count = 0
@@ -240,7 +275,7 @@ class Base(models.Model):
 
             # Read a data row
             fields = dict()
-            point_coords = [None, None]
+            geom_coords = [None, None]
             ukey_values = {}
             if cls._rel_to_feed == 'feed':
                 fields['feed'] = feed
@@ -253,18 +288,18 @@ class Base(models.Model):
                 elif column_name in val_map:
                     fields[name_map[column_name]] = val_map[column_name](value)
                 else:
-                    assert column_name in point_map
-                    pos, converter = point_map[column_name]
-                    point_coords[pos] = converter(value)
+                    assert column_name in geom_map
+                    pos, converter = geom_map[column_name]
+                    geom_coords[pos] = converter(value)
 
                 # Is it part of the unique key?
                 if column_name in cls._unique_fields:
                     ukey_values[column_name] = value
 
-            # Join the lat/long into a point
-            if point_map:
-                assert point_coords[0] and point_coords[1]
-                fields['point'] = "POINT(%s)" % (' '.join(point_coords))
+            # Join the lat/long into a geom
+            if geom_map:
+                assert geom_coords[0] and geom_coords[1]
+                fields['geom'] = "POINT(%s)" % (' '.join(geom_coords))
 
             # Is the item unique?
             ukey = tuple(ukey_values.get(u) for u in cls._unique_fields)
