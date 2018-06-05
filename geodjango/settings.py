@@ -11,14 +11,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
-    'multigtfs',
     'gs',
+    'compare',
     'osmapp',
-    'rest_framework',
     'leaflet',
     'djgeojson',
     'compare',
+    'rest_framework',
 ]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -28,23 +29,29 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 ROOT_URLCONF = 'geodjango.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,"gs", "templates"),],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.media',
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
+    << << << < HEAD
+    'DIRS': [os.path.join(BASE_DIR, "gs", "templates"), ],
+== == == =
+'DIRS': [],
+>> >> >> > 134e89
+ca93656a8757fd4572068a4cd79b7ceb46
+'APP_DIRS': True,
+'OPTIONS': {
+    'context_processors': [
+        'django.template.context_processors.media',
+        'django.template.context_processors.debug',
+        'django.template.context_processors.request',
+        'django.contrib.auth.context_processors.auth',
+        'django.contrib.messages.context_processors.messages',
+    ],
+},
+},
 ]
 
 WSGI_APPLICATION = 'geodjango.wsgi.application'
@@ -82,7 +89,7 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-
 STATICFILES_DIRS = (
-    os.path.join(os.path.dirname(PROJECT_ROOT),'gs', 'static'),
+    os.path.join(PROJECT_ROOT, 'static'),
+    os.path.join(PROJECT_ROOT, 'gs', 'static'),
 )
