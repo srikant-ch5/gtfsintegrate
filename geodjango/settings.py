@@ -12,12 +12,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.gis',
     'gs',
-    'compare',
     'osmapp',
     'leaflet',
     'djgeojson',
     'compare',
     'rest_framework',
+    'multigtfs',
 ]
 
 MIDDLEWARE = [
@@ -35,23 +35,17 @@ ROOT_URLCONF = 'geodjango.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-    << << << < HEAD
-    'DIRS': [os.path.join(BASE_DIR, "gs", "templates"), ],
-== == == =
-'DIRS': [],
->> >> >> > 134e89
-ca93656a8757fd4572068a4cd79b7ceb46
-'APP_DIRS': True,
-'OPTIONS': {
-    'context_processors': [
-        'django.template.context_processors.media',
-        'django.template.context_processors.debug',
-        'django.template.context_processors.request',
-        'django.contrib.auth.context_processors.auth',
-        'django.contrib.messages.context_processors.messages',
-    ],
-},
-},
+        'DIRS': [os.path.join(BASE_DIR, "gs", "templates"), ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.media',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages', ],
+        },
+    },
 ]
 
 WSGI_APPLICATION = 'geodjango.wsgi.application'

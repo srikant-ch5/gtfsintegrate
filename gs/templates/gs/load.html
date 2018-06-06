@@ -26,11 +26,25 @@
 <script type="text/javascript">
 
     function loadmapfunction(map, options) {
-
+        var mapLayer;
+        var markerArray = [];
         var nodedata = '{% url "stopdata" %}';
         $.getJSON(nodedata, function (data) {
-            var mapLayer = L.geoJSON().addTo(map);
+            mapLayer = L.geoJSON().addTo(map);
             mapLayer.addData(data);
+            var lon, lat;
+            var coordinates_arr = [];
+            var length = data.features.length;
+            for (var i = 0; i < length; i++) {
+                lon = data.features[i].geometry.coordinates[1];
+                lat = data.features[i].geometry.coordinates[0];
+                coordinates_arr = [lon, lat];
+                markerArray.push(L.marker(coordinates_arr));
+
+            }
+            console.log(markerArray);
+            var group = new L.featureGroup(markerArray);
+            map.fitBounds(group.getBounds());
         })
     }
 </script>
