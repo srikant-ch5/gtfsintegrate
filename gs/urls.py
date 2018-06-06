@@ -17,7 +17,7 @@ urlpatterns = [
     url(r'^$', views.home, name="home"),
     url(r'^osm/', osmview.load, name="osm"),
     url(r'^nodedata/', GeoJSONLayerView.as_view(model=Node, properties=('id')), name="nodedata"),
-    url(r'^stopdata/', GeoJSONLayerView.as_view(model=Stop), name="stopdata"),
+    url(r'^stopdata/', GeoJSONLayerView.as_view(model=Stop, properties=('id','feed')), name="stopdata"),
     url(r'^gtfsstopdata',GeoJSONLayerView.as_view(model=CMP_Stop), name="gtfsstopdata"),
     # url(r'^waydata/', GeoJSONLayerView.as_view(model=Way, properties=('id','version','visible','incomplete')), name="waydata"),
     url(r'^stops/', compview.get_gtfs_stops, name="stops"),

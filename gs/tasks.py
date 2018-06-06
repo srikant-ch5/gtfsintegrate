@@ -31,14 +31,17 @@ def rename_feed(name, formId):
 
 def download_feed_in_db(file, file_name, code, formId):
     feeds = Feed.objects.create(name=file_name)
-    feeds.import_gtfs(file)
-    print("Creating new gtfs file")
-    print(feeds.id)
+    successfull_download = False
+    try:
+        feeds.import_gtfs(file)
+        successfull_download = True
+    except Exception as e:
+        print(e)
 
     if code == 'not_present':
         rename_feed(file_name, formId)
-    else:
-        print("Not renewing")
+
+    return successfull_download
 
 
 def download_feed_with_url(download_url, save_feed_name, code, formId):
@@ -53,7 +56,9 @@ def download_feed_with_url(download_url, save_feed_name, code, formId):
 
     open(feed_file, 'wb').write(r.content)
 
-    download_feed_in_db(feed_file, save_feed_name, code, formId)
+    feed_download_status = download_feed_in_db(feed_file, save_feed_name, code, formId)
+
+    return feed_download_status
 
 
 def download_feed_task(formId):
@@ -65,13 +70,18 @@ def download_feed_task(formId):
     entered_name = user_form.name
     user_form.timestamp = timezone.now()
     user_form.save()
-    print(user_form.timestamp)
 
     feed_name = ((lambda: entered_name, lambda: entered_osm_tag)[entered_name == '']())
 
     code = 'not_present'
-    download_feed_with_url(entered_url, feed_name, code, formId)
+    feed_download_status = download_feed_with_url(entered_url, feed_name, code, formId)
 
+    if  not feed_download_status:
+        form_to_delete = GTFSForm.objects.all()[-1]
+        feed_to_delete =  Feed.objects.all()[-1]
+
+        form_to_delete.delete()
+        feed_to_delete.delete()
 
 def check_feeds_task():
     # keep on checking the feeds for every five days all the feeds are downloaded again into the database
