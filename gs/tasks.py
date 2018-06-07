@@ -32,15 +32,25 @@ def rename_feed(name, formId):
 def download_feed_in_db(file, file_name, code, formId):
     feeds = Feed.objects.create(name=file_name)
     successfull_download = False
+    print("{} in down Feed init ".format(successfull_download))
     try:
         feeds.import_gtfs(file)
+        feed = Feed.objects.latest('id')
+        form = GTFSForm.objects.get(id=formId)
+        print(form)
+        form.feed = feed
+        form.save()
+
         successfull_download = True
+        print("{} in  Feed import ".format(successfull_download))
+
     except Exception as e:
         print(e)
 
     if code == 'not_present':
         rename_feed(file_name, formId)
 
+    print("{} in down Feed end ".format(successfull_download))
     return successfull_download
 
 
@@ -76,9 +86,11 @@ def download_feed_task(formId):
     code = 'not_present'
     feed_download_status = download_feed_with_url(entered_url, feed_name, code, formId)
 
+    print(feed_download_status)
+
     if  not feed_download_status:
-        form_to_delete = GTFSForm.objects.all()[-1]
-        feed_to_delete =  Feed.objects.all()[-1]
+        form_to_delete = GTFSForm.objects.latest('id')
+        feed_to_delete =  Feed.objects.latest('id')
 
         form_to_delete.delete()
         feed_to_delete.delete()
@@ -134,5 +146,7 @@ def reset_feed(formId):
         form.save()
         Feed.objects.filter(name=form_name).all().delete()
         download_feed_with_url(form.url, form.name, code, formId)
+
+    '''since form has one to one relationship with every feed so when the feed is renewed form.feed should be updated'''
 
     return status

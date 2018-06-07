@@ -10,6 +10,18 @@ from .tasks import download_feed_task, reset_feed
 
 
 def feed_form(request):
+    form_entries = GTFSForm.objects.all()
+    forms_list = []
+
+    for form_entry in form_entries:
+        forms_list.append(form_entry.id)
+
+    context = {
+        'feed_downloaded_status': '',
+        'form_id': 0,
+        'forms_list': forms_list,
+    }
+
     if request.method == 'POST':
         form = GTFSInfoForm(request.POST)
         # check if the url is already since the timestamp changes for every entry django creates a gtfs form
@@ -18,30 +30,41 @@ def feed_form(request):
 
         if is_feed_present.count() > 0:
             print('Feed already exists with name trying to renew the feed in DB')
-            context = 'Feed already exists'
-
+            context['feed_download_status'] = 'Feed already exists'
+            form_entry = GTFSForm.objects.get(url=request.POST['url'], osm_tag=request.POST['osm_tag'],
+                                                  gtfs_tag=request.POST['gtfs_tag'])
+            context['form_id'] = form_entry.id
             formId = is_feed_present[0].id
             reset_feed(formId)
 
         else:
-            context = "Creating new feed"
-            print(context)
-
             if form.is_valid():
                 print("Going through this")
                 gtfs_feed_info = form.save(commit=False)
                 gtfs_feed_info.save()
 
                 download_feed_task(gtfs_feed_info.id)
+                context['feed_downloaded_status'] = 'yes'
+                context['form_id'] = gtfs_feed_info.id
 
         return render(request, 'gs/load.html', {'form': form, 'context': context})
     else:
         form = GTFSInfoForm()
-        return render(request, 'gs/form.html', {'form': form})
+        return render(request, 'gs/form.html', {'form': form, 'context':context})
 
 
 def home(request):
-    return render(request, 'gs/option.html')
+    '''First get all the valid form entry ids so that iteration is easy'''
+    form_entries = GTFSForm.objects.all()
+    forms_list = []
+
+    for form_entry in form_entries:
+        forms_list.append(form_entry.id)
+
+    context = {
+        'form_array': forms_list
+    }
+    return render(request, 'gs/option.html', {'context': context})
 
 
 def map(request):

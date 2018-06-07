@@ -81,7 +81,7 @@ def opener_from_zipfile(zipfile):
         inner_file = zipfile.open(filename)
         if PY3:
             from io import TextIOWrapper
-            return TextIOWrapper(inner_file, encoding="utf-8")
+            return TextIOWrapper(inner_file)
         else:
             return inner_file
 

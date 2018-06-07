@@ -4,21 +4,112 @@
 
 
 <div class="container col-xs-6" id="form_download_inform">
-	<h2 id="download-url" >Download Feed from <a href="https://transitfeeds.com/feeds" target="_blank">TransitFeeds</a> </h2>
-	<div id="status">
-		<h2 id="status-header">Feed Status</h2>
-		<h3 id="feed-status"></h3>
-		<h3 id="feed-status2"></h3>
+    <h2 id="download-url">Download Feed from <a href="https://transitfeeds.com/feeds" target="_blank">TransitFeeds</a>
+    </h2>
+    <div id="status">
+        <h2 id="status-header">Feed Status</h2>
+        <h3 id="feed-status"></h3>
+        <h3 id="feed-status2"></h3>
 
-	</div>
+    </div>
 </div>
 <div class="container col-xs-3" id="feed_form">
-	<h2 id="form_heading">New GTFS Feed </h2>
-	<form method="POST" class="feed-form" >
-		{% csrf_token %}
-		{{ form.as_p}}
-		<button type="submit" class="save btn btn-default"> Save </button>
-	</form>
+    <h2 id="form_heading">New GTFS Feed </h2>
+    <form method="POST" class="feed-form">
+        {% csrf_token %}
+        {{ form.as_p}}
+        <button type="submit" class="save btn btn-default"> Save</button>
+    </form>
 </div>
+
+<script type="text/javascript">
+    var forms_list = {{context.forms_list}}
+    var $form = $('.feed-form');
+    $form.submit(function (event) {
+        //event.preventDefault();
+
+        var formurl = $("#formurl").val();
+        var formname = $("#formname").val();
+        var formosmtag = $("#formosmtag").val();
+        var formgtfstag = $("#formgtfstag").val();
+        var formfrequency = $("#formfrequency").val();
+
+        var formdata;
+
+        var feed_entry_found = 0;
+        var feed_instances_in_db = 0;
+        var feed_name = '';
+        var form_timestamp;
+
+
+        for (i in forms_list) {
+            ;
+            formdata = "/gtfs/formdata/" + forms_list[i] + "/";
+            console.log("calling " + formdata)
+
+            $.ajax({
+                type: "GET",
+                url: formdata,
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    if (data.url == formurl && data.osm_tag == formosmtag && data.gtfs_tag == formgtfstag) {
+                        feed_entry_found = 1;
+                        feed_instances_in_db += 1;
+                        feed_name = data.name;
+                        form_timestamp = data.timestamp;
+                    }
+                },
+                error: function () {
+                    console.log("Feed is not available at " + i);
+                }
+            });
+        }
+
+        if (feed_entry_found > 0) {
+            $("#feed-status").text("->Feed is already present with name of operator " + feed_name);
+        }
+        else {
+            $("#feed-status").text("->Feed not found Downloading the new feed wait until the feed is downloaded");
+        }
+
+        function stateChange(newState) {
+            setTimeout(function () {
+                if (newState == -1) {
+                    alert('VIDEO HAS STOPPED');
+                }
+            }, 5000);
+        }
+
+        stateChange();
+
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1;
+        var yy = today.getFullYear();
+
+        dd = dd.toString();
+        mm = mm.toString();
+        yy = yy.toString();
+
+        if (dd.length == 1) {
+            dd = '0' + dd;
+        }
+        if (mm.length == 1) {
+            mm = '0' + mm;
+        }
+
+        var current_date = yy + '-' + mm + '-' + dd;
+
+        var current_date = Date.parse(current_date);
+        var form_date = Date.parse(form_timestamp.substring(0, 9));
+
+        if (feed_entry_found > 0 && current_date - form_date > formfrequency) {
+            $("#feed-status2").text("Feed in Database is updaing to latest version");
+        }
+
+    });
+</script>
+<script src="gs/form.js" ></script>
 
 {% endblock %}

@@ -11,5 +11,6 @@ class FormSerializer(serializers.ModelSerializer):
             'osm_tag',
             'gtfs_tag',
             'timestamp',
-            'frequency'
+            'frequency',
+            'feed'
         ]
