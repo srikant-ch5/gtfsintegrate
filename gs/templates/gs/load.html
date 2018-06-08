@@ -117,16 +117,16 @@
         var north_bound = feed_bounds.getNorth();
         var south_bound = feed_bounds.getSouth();
         var northeast_bound = [];
-        northeast_bound[0] = feed_bounds.getNorthEast().lon;
+        northeast_bound[0] = feed_bounds.getNorthEast().lng;
         northeast_bound[1] = feed_bounds.getNorthEast().lat;
         var northwest_bound = []
-        northwest_bound[0] = feed_bounds.getNorthWest().lon;
+        northwest_bound[0] = feed_bounds.getNorthWest().lng;
         northwest_bound[1] = feed_bounds.getNorthWest().lat;
         var southeast_bound = [];
-        southeast_bound[0] = feed_bounds.getSouthEast().lon;
+        southeast_bound[0] = feed_bounds.getSouthEast().lng;
         southeast_bound[1] = feed_bounds.getSouthEast().lat;
         var southwest_bound = [];
-        southwest_bound[0] = feed_bounds.getSouthWest().lon;
+        southwest_bound[0] = feed_bounds.getSouthWest().lng;
         southwest_bound[1] = feed_bounds.getSouthWest().lat;
         var URL = "{% url 'bounds' %}";
 

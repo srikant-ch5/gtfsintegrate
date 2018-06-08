@@ -16,8 +16,8 @@ def get_bounds(request):
     }
 
     if request.method == 'POST':
-        east = request.POST.get('east')
-        print(east)
+        northeast_lon = request.POST.get('northeast_lon')
+        print(northeast_lon)
 
     context['loaded'] = request.POST.get('bounds')
     return render(request,'gs/load.html',{'context':context})
