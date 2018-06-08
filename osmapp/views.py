@@ -1,4 +1,5 @@
 import os
+import overpy
 import xml.etree.cElementTree as cetree
 
 from django.contrib.gis.geos import LineString
@@ -8,6 +9,32 @@ from typing import List, Any
 
 from .models import Tag, KeyValueString, Node, Way, OSM_Relation
 
+
+def get_bounds(request):
+    context = {
+        'loaded': ''
+    }
+
+    if request.method == 'POST':
+        east = request.POST.get('east')
+        print(east)
+
+    context['loaded'] = request.POST.get('bounds')
+    return render(request,'gs/load.html',{'context':context})
+
+def get_osm_data(request):
+    context = {
+        'loaded' :'Data has been loaded'
+    }
+
+    api = overpy.Overpass()
+
+    result = api.query("node(50.745,7.17,50.75,7.18);out;")
+
+
+
+
+    return render(request, 'gs/load.html',{'context':context})
 
 def get_stops(request):
     # filter stops from Node table

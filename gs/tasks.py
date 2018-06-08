@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import os
+from typing import Union
 
 import requests
 from django.utils import timezone
@@ -31,7 +32,7 @@ def rename_feed(name, formId):
 
 def download_feed_in_db(file, file_name, code, formId):
     feeds = Feed.objects.create(name=file_name)
-    successfull_download = False
+    successfull_download = 'False'
     print("{} in down Feed init ".format(successfull_download))
     try:
         feeds.import_gtfs(file)
@@ -41,11 +42,11 @@ def download_feed_in_db(file, file_name, code, formId):
         form.feed = feed
         form.save()
 
-        successfull_download = True
+        successfull_download = 'True'
         print("{} in  Feed import ".format(successfull_download))
 
     except Exception as e:
-        print(e)
+        successfull_download = e
 
     if code == 'not_present':
         rename_feed(file_name, formId)
@@ -84,16 +85,19 @@ def download_feed_task(formId):
     feed_name = ((lambda: entered_name, lambda: entered_osm_tag)[entered_name == '']())
 
     code = 'not_present'
-    feed_download_status = download_feed_with_url(entered_url, feed_name, code, formId)
+    feed_download_status: Union[str, Exception] = download_feed_with_url(entered_url, feed_name, code, formId)
 
     print(feed_download_status)
 
-    if  not feed_download_status:
+    if not feed_download_status:
         form_to_delete = GTFSForm.objects.latest('id')
-        feed_to_delete =  Feed.objects.latest('id')
+        feed_to_delete = Feed.objects.latest('id')
 
         form_to_delete.delete()
         feed_to_delete.delete()
+
+    return feed_download_status
+
 
 def check_feeds_task():
     # keep on checking the feeds for every five days all the feeds are downloaded again into the database

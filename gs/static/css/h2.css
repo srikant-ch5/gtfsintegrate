@@ -51,10 +51,13 @@ html ,body {
 }
 .leaflet-container { 
     width:  900px;
-    height: 550px;
+    height: 600px;
+}
+#lmap{
+    height:10%;
 }
 #specialbigmap {
-    height: 800px;
+    height: 1000px;
 }
 #formname{
     width:100%;

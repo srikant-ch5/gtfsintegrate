@@ -5,26 +5,28 @@
 
 {% block main %}
 <div class="container">
-
-    <h3>{{context.feed_download_status}}</h3>
-
     <div class="col-xs-3">
-        <a class="btn btn-primary" href="osm/">Load Openstreetmap Data </a>
+
+    <h3>{{context.loaded}}</h3>
+    <h3>{{context.error}}</h3>
+
+        <a class="btn btn-primary"  id="get_bounds" >Get Bounds </a>
         <br><br>
-        <a class="btn btn-primary" href="stops/">Get Stops </a>
+        <a class="btn btn-primary"  href="stops/">Get Stops </a>
         <br><br>
         <a class="btn btn-primary" href="route_masters/">Get route_master relations</a>
         <br><br>
         <a class="btn btn-primary" href="#">Get route relations</a>
     </div>
 
-    <div class="col-xs-9">
+    <div id ="lmap" class="col-xs-9">
         {% leaflet_map "osmmap" callback="loadmapfunction"%}
     </div>
 </div>
 
 <script type="text/javascript">
 
+    var feed_bounds;
     function loadmapfunction(map, options) {
 
         //get the latest form
@@ -67,9 +69,92 @@
             }
             console.log(markerArray);
             var group = new L.featureGroup(markerArray);
-            map.fitBounds(group.getBounds());
+            var bounds = group.getBounds();
+            feed_bounds = bounds;
+            map.fitBounds(bounds);
         })
     }
+
+    $("#get_bounds").click(function(){
+
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        var csrftoken = getCookie('csrftoken');
+
+        console.log(csrftoken);
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+
+        console.log(feed_bounds)
+
+        //0 = lon 1 =lat
+        var east_bound = feed_bounds.getEast();
+        var west_bound = feed_bounds.getWest();
+        var north_bound = feed_bounds.getNorth();
+        var south_bound = feed_bounds.getSouth();
+        var northeast_bound = [];
+        northeast_bound[0] = feed_bounds.getNorthEast().lon;
+        northeast_bound[1] = feed_bounds.getNorthEast().lat;
+        var northwest_bound = []
+        northwest_bound[0] = feed_bounds.getNorthWest().lon;
+        northwest_bound[1] = feed_bounds.getNorthWest().lat;
+        var southeast_bound = [];
+        southeast_bound[0] = feed_bounds.getSouthEast().lon;
+        southeast_bound[1] = feed_bounds.getSouthEast().lat;
+        var southwest_bound = [];
+        southwest_bound[0] = feed_bounds.getSouthWest().lon;
+        southwest_bound[1] = feed_bounds.getSouthWest().lat;
+        var URL = "{% url 'bounds' %}";
+
+        $.ajax({
+           url:URL,
+           method:'POST',
+           data: {'east':east_bound,
+               'west':west_bound,
+               'north':north_bound,
+               'south':south_bound,
+               'northeast_lon':northeast_bound[0],
+               'northeast_lat':northeast_bound[1],
+               'northwest_lon':northwest_bound[0],
+               'northwest_lat':northwest_bound[1],
+               'southeast_lon':southeast_bound[0],
+               'southeast_lat':southeast_bound[1],
+               'southwest_lon':southwest_bound[0],
+               'southwest_lat':southwest_bound[1],
+               'csrfmiddlewaretoken': '{{ csrf_token }}'},
+           success: function(data){
+                console.log("happy!")
+           },
+           error : function(xhr,status,e){
+               alert("You should not be happy");
+           }
+        });
+    });
+
 </script>
 
 {% endblock %}

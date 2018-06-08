@@ -6,26 +6,8 @@ from leaflet.forms.widgets import LeafletWidget
 from multigtfs.models import Stop
 
 
-class AjaxableResponseMixin:
-    def form_invalid(self, form):
-        response = super().form_invalid(form)
-        if self.request.is_ajax():
-            return JsonResponse(form.errors, status=400)
-        else:
-            return response
 
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        if self.request.is_ajax():
-            data = {
-                'pk': self.object.pk,
-            }
-            return JsonResponse(data)
-        else:
-            return response
-
-
-class GTFSInfoForm(AjaxableResponseMixin, forms.ModelForm):
+class GTFSInfoForm(forms.ModelForm):
     class Meta:
         model = GTFSForm
         fields = ('url', 'name', 'osm_tag', 'gtfs_tag', 'frequency')

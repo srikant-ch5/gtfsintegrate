@@ -20,6 +20,7 @@ def feed_form(request):
         'feed_downloaded_status': '',
         'form_id': 0,
         'forms_list': forms_list,
+        'error':'No Error',
     }
 
     if request.method == 'POST':
@@ -32,10 +33,10 @@ def feed_form(request):
             print('Feed already exists with name trying to renew the feed in DB')
             context['feed_download_status'] = 'Feed already exists'
             form_entry = GTFSForm.objects.get(url=request.POST['url'], osm_tag=request.POST['osm_tag'],
-                                                  gtfs_tag=request.POST['gtfs_tag'])
+                                              gtfs_tag=request.POST['gtfs_tag'])
             context['form_id'] = form_entry.id
             formId = is_feed_present[0].id
-            reset_feed(formId)
+            context['error'] = reset_feed(formId)
 
         else:
             if form.is_valid():
@@ -43,14 +44,14 @@ def feed_form(request):
                 gtfs_feed_info = form.save(commit=False)
                 gtfs_feed_info.save()
 
-                download_feed_task(gtfs_feed_info.id)
+                context['error'] = download_feed_task(gtfs_feed_info.id)
                 context['feed_downloaded_status'] = 'yes'
                 context['form_id'] = gtfs_feed_info.id
 
         return render(request, 'gs/load.html', {'form': form, 'context': context})
     else:
         form = GTFSInfoForm()
-        return render(request, 'gs/form.html', {'form': form, 'context':context})
+        return render(request, 'gs/form.html', {'form': form, 'context': context})
 
 
 def home(request):
