@@ -18,3 +18,4 @@ lxml
 ordered_set
 flup6
 urllib3
+django-dotenv
