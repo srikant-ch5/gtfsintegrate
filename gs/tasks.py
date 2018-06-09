@@ -85,7 +85,7 @@ def download_feed_task(formId):
     feed_name = ((lambda: entered_name, lambda: entered_osm_tag)[entered_name == '']())
 
     code = 'not_present'
-    feed_download_status: Union[str, Exception] = download_feed_with_url(entered_url, feed_name, code, formId)
+    feed_download_status = download_feed_with_url(entered_url, feed_name, code, formId)
 
     print(feed_download_status)
 

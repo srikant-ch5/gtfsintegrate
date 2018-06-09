@@ -16,10 +16,22 @@ def get_bounds(request):
     }
 
     if request.method == 'POST':
+        east = request.POST.get('east')
+        west = request.POST.get('west')
+        north = request.POST.get('north')
+        south = request.POST.get('south')
         northeast_lon = request.POST.get('northeast_lon')
-        print(northeast_lon)
+        northwest_lon = request.POST.get('northwest_lon')
+        northwest_lat = request.POST.get('northwest_lat')
+        southeast_lon = request.POST.get('southeast_lon')
+        southeast_lat = request.POST.get('southeast_lat')
 
-    context['loaded'] = request.POST.get('bounds')
+        print('{} {} {} {}'.format(south,west,north,east))
+        api = overpy.Overpass()
+        get_nodes_query = "[out:xml];node("+south+","+west+","+north+","+east+");out;"
+        result = api.query(get_nodes_query)
+        print(result)
+
     return render(request,'gs/load.html',{'context':context})
 
 def get_osm_data(request):
