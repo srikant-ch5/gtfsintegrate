@@ -20,7 +20,6 @@ urlpatterns = [
     url(r'^stopdata/', GeoJSONLayerView.as_view(model=Stop, properties=('id','feed')), name="stopdata"),
     url(r'^gtfsstopdata/(?P<pk>\d+)/$',GTFS_Stop_View.as_view(), name="gtfsstopdata"),
     # url(r'^waydata/', GeoJSONLayerView.as_view(model=Way, properties=('id','version','visible','incomplete')), name="waydata"),
-    url(r'^stops/', compview.get_gtfs_stops, name="stops"),
     url(r'^route_masters', osmview.get_route_master_relations, name="route_master"),
     url(r'^map/', views.map, name="map"),
     url(r'^feed/', FeedListView.as_view(model=Feed), name='feed_list'),

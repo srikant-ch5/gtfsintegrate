@@ -20,7 +20,7 @@ def feed_form(request):
         'feed_downloaded_status': '',
         'form_id': 0,
         'forms_list': forms_list,
-        'error':'No Error',
+        'error': 'No Error',
     }
 
     if request.method == 'POST':
@@ -45,7 +45,6 @@ def feed_form(request):
                 gtfs_feed_info.save()
 
                 context['error'] = download_feed_task(gtfs_feed_info.id)
-                context['feed_downloaded_status'] = 'yes'
                 context['form_id'] = gtfs_feed_info.id
 
         return render(request, 'gs/load.html', {'form': form, 'context': context})

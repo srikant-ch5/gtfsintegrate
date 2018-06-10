@@ -32,7 +32,8 @@ def rename_feed(name, formId):
 
 def download_feed_in_db(file, file_name, code, formId):
     feeds = Feed.objects.create(name=file_name)
-    successfull_download = 'False'
+    successfull_download = 0 #0 = False
+    error = 'No error while downloading the file'
     print("{} in down Feed init ".format(successfull_download))
     try:
         feeds.import_gtfs(file)
@@ -42,17 +43,18 @@ def download_feed_in_db(file, file_name, code, formId):
         form.feed = feed
         form.save()
 
-        successfull_download = 'True'
+        successfull_download = 1 #1 =True
         print("{} in  Feed import ".format(successfull_download))
 
     except Exception as e:
-        successfull_download = e
+        error = "File was not downloaded properly because the url or the data is not right"
+        successfull_download = 0
 
     if code == 'not_present':
         rename_feed(file_name, formId)
 
     print("{} in down Feed end ".format(successfull_download))
-    return successfull_download
+    return successfull_download,error
 
 
 def download_feed_with_url(download_url, save_feed_name, code, formId):
@@ -67,9 +69,9 @@ def download_feed_with_url(download_url, save_feed_name, code, formId):
 
     open(feed_file, 'wb').write(r.content)
 
-    feed_download_status = download_feed_in_db(feed_file, save_feed_name, code, formId)
+    feed_download_status,error = download_feed_in_db(feed_file, save_feed_name, code, formId)
 
-    return feed_download_status
+    return feed_download_status,error
 
 
 def download_feed_task(formId):
@@ -85,18 +87,18 @@ def download_feed_task(formId):
     feed_name = ((lambda: entered_name, lambda: entered_osm_tag)[entered_name == '']())
 
     code = 'not_present'
-    feed_download_status = download_feed_with_url(entered_url, feed_name, code, formId)
+    feed_download_status,error = download_feed_with_url(entered_url, feed_name, code, formId)
 
     print(feed_download_status)
 
-    if not feed_download_status:
+    if feed_download_status == 0:
         form_to_delete = GTFSForm.objects.latest('id')
         feed_to_delete = Feed.objects.latest('id')
 
         form_to_delete.delete()
         feed_to_delete.delete()
 
-    return feed_download_status
+    return error
 
 
 def check_feeds_task():
