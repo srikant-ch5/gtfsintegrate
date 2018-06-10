@@ -3,6 +3,9 @@ Main repository
 Install GDAL:  https://docs.djangoproject.com/en/2.0/ref/contrib/gis/install/geolibs/#gdal
 Install GEOS: https://docs.djangoproject.com/en/2.0/ref/contrib/gis/install/geolibs/#geos
 
+clone the project from https://github.com/sriks123/gtfsintegrate.
+Run 'cd gtfsintegrate'.
+
 Install virtualenv and postgres,postgis
 
 A)
@@ -18,8 +21,6 @@ B) 'USER=username scripts/create_user_db.sh'
 
 C) Run the project
 Steps to run project through makefile 
-1. clone the project from https://github.com/sriks123/gtfsintegrate in a new folder.
-   Run 'cd gtfsintegrate'.
-2. Run command 'touch setup.py' and then 'make venv'  (this will create a virtualenv inside the project).
-3. Run command 'make setup' (this will install all the requirements from requirements.txt) 
-4. Run command  'make run' (this will makemigrations and migrate into database(needs to be looked into) and run the app on port 8000)
+1. Run command 'touch setup.py' and then 'make venv'  (this will create a virtualenv inside the project).
+2. Run command 'make setup' (this will install all the requirements from requirements.txt) 
+3. Run command  'make run' (this will makemigrations and migrate into database(needs to be looked into) and run the app on port 8000)
