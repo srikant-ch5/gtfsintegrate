@@ -10,7 +10,7 @@ A)
 
 To setup database 
 
-B) 'scripts/create_user_db.sh'
+B) --scripts/create_user_db.sh--
 
 If to specify a string as user 
 
