@@ -33,51 +33,46 @@
 
         latest_form_id = {{context.form_id}};
 
-        if (latest_form_id.equals('all_forms')){
-            console.log("Show")
-        }
-        else {
-            formdata = "/gtfs/formdata/" + latest_form_id + "/";
-            var feed_id;
+        formdata = "/gtfs/formdata/" + latest_form_id + "/";
+        var feed_id;
 
-            $.ajax({
-                url: formdata,
-                type: 'GET',
-                dataType: 'json',
-                async: false,
-                success: function (data) {
-                    feed_id = data.feed;
+        $.ajax({
+            url: formdata,
+            type: 'GET',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                feed_id = data.feed;
+            }
+
+        });
+
+
+        var mapLayer;
+        var markerArray = [];
+        var nodedata = '{% url "stopdata" %}';
+
+        $.getJSON(nodedata, function (data) {
+
+            var lon, lat;
+            var coordinates_arr = [];
+            var length = data.features.length;
+            for (var i = 0; i < length; i++) {
+                if (data.features[i].properties.feed == feed_id) {
+                    lon = data.features[i].geometry.coordinates[1];
+                    lat = data.features[i].geometry.coordinates[0];
+                    coordinates_arr = [lon, lat];
+                    var marker = L.marker(coordinates_arr);
+                    marker.addTo(map);
+                    markerArray.push(marker);
                 }
-
-            });
-
-
-            var mapLayer;
-            var markerArray = [];
-            var nodedata = '{% url "stopdata" %}';
-
-            $.getJSON(nodedata, function (data) {
-
-                var lon, lat;
-                var coordinates_arr = [];
-                var length = data.features.length;
-                for (var i = 0; i < length; i++) {
-                    if (data.features[i].properties.feed == feed_id) {
-                        lon = data.features[i].geometry.coordinates[1];
-                        lat = data.features[i].geometry.coordinates[0];
-                        coordinates_arr = [lon, lat];
-                        var marker = L.marker(coordinates_arr);
-                        marker.addTo(map);
-                        markerArray.push(marker);
-                    }
-                }
-                console.log(markerArray);
-                var group = new L.featureGroup(markerArray);
-                var bounds = group.getBounds();
-                feed_bounds = bounds;
-                map.fitBounds(bounds);
-            })
-        }
+            }
+            console.log(markerArray);
+            var group = new L.featureGroup(markerArray);
+            var bounds = group.getBounds();
+            feed_bounds = bounds;
+            map.fitBounds(bounds);
+        })
     }
     $("#get_bounds").click(function(){
 
