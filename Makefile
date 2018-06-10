@@ -1,6 +1,6 @@
 .PHONY: clean doc help lint prepare-dev python-reqs run setup test
 
-VENV_NAME?=.venv
+VENV_NAME?=./venv
 VENV_ACTIVATE=. $(VENV_NAME)/bin/activate
 PYTHON=${VENV_NAME}/bin/python3
 PYTHON_BIN := $(VENV_NAME)/bin
@@ -32,7 +32,7 @@ help:
 .git:
 	git init
 
-VENV = .venv
+VENV = ./venv
 export VIRTUAL_ENV := $(abspath ${VENV})
 export PATH := ${VIRTUAL_ENV}/bin:${PATH}
 
@@ -67,7 +67,9 @@ python-reqs: requirements.txt | ${VENV}
 	pip install --upgrade -r requirements.txt
 
 run: venv
-	${PYTHON} manage.py
+	${PYTHON} manage.py makemigrations
+	${PYTHON} manage.py migrate
+	${PYTHON} manage.py runserver
 
 setup: python-reqs git-config | .git ${VENV}
 
