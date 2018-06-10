@@ -5,7 +5,8 @@ Install GEOS: https://docs.djangoproject.com/en/2.0/ref/contrib/gis/install/geol
 
 Install virtualenv and postgres,postgis
 
-A)sudo apt-get install virtualenv python3-dev postgresql-9.6.8 postgresql-9.6.8-postgis-2.1 postgresql-contrib-9.6.8 libpq-dev libgeos-dev redis-server libffi6 libffi-dev
+A)
+'''sudo apt-get install virtualenv python3-dev postgresql-9.6.8 postgresql-9.6.8-postgis-2.1 postgresql-contrib-9.6.8 libpq-dev libgeos-dev redis-server libffi6 libffi-dev'''
 
 To setup database 
 
