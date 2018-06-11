@@ -1,6 +1,8 @@
 import os
 import overpy
 import xml.etree.cElementTree as cetree
+import pdb
+from requests import post
 
 from django.contrib.gis.geos import LineString
 from django.shortcuts import render
@@ -26,27 +28,44 @@ def get_bounds(request):
         southeast_lon = request.POST.get('southeast_lon')
         southeast_lat = request.POST.get('southeast_lat')
 
-        print('{} {} {} {}'.format(south,west,north,east))
-        api = overpy.Overpass()
-        get_nodes_query = "[out:xml];node("+south+","+west+","+north+","+east+");out;"
-        result = api.query(get_nodes_query)
-        print(result)
+        print('{} {} {} {}'.format(south, west, north, east))
 
-    return render(request,'gs/load.html',{'context':context})
+        bbox = south + "," + west + "," + north + "," + east
+
+        get_stops_query = '''
+        [out:xml];
+            (
+            node(''' + bbox + ''')[highway=bus_stop];
+            node(''' + bbox + ''')[bus=yes];
+            node(''' + bbox + ''')[public_transport=stop_position];
+        );
+        out meta;
+        '''
+        print(get_stops_query)
+        result = post("http://overpass-api.de/api/interpreter", get_stops_query)
+        PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+        xmlfiledir = xmlfiledir = os.path.join(os.path.dirname(PROJECT_ROOT), 'osmapp', 'static')
+        xmlfile = xmlfiledir + '/node.xml'
+        with open(xmlfile, 'wb') as fh:
+            fh.write(result.content)
+
+        print("Content has been copied")
+        load(xmlfile)
+
+    return render(request, 'gs/load.html', {'context': context})
+
 
 def get_osm_data(request):
     context = {
-        'loaded' :'Data has been loaded'
+        'loaded': 'Data has been loaded'
     }
 
     api = overpy.Overpass()
 
     result = api.query("node(50.745,7.17,50.75,7.18);out;")
 
+    return render(request, 'gs/load.html', {'context': context})
 
-
-
-    return render(request, 'gs/load.html',{'context':context})
 
 def get_stops(request):
     # filter stops from Node table
@@ -150,10 +169,8 @@ def get_route_relations(request):
     return render(request, 'gs/load.html')
 
 
-def load(request):
-    PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-    xmlfiledir = os.path.join(os.path.dirname(PROJECT_ROOT), 'osmapp', 'static')
-    xmlfile = xmlfiledir + '/PTsample.xml'
+def load(xmlfile):
+    print("Downloading the nodes")
     data = open(xmlfile)
 
     tree = cetree.parse(data)
@@ -296,4 +313,4 @@ def load(request):
 
                             rm = relation.add_member(dummy_rel_relation, type, role)
 
-    return render(request, 'gs/load.html')
+    print("The data has been downloaded")

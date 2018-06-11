@@ -9,7 +9,7 @@
     <h3>{{context.feed_download_status}}</h3>
     <h3>{{context.error}}</h3>
 
-        <a class="btn btn-primary"  id="get_bounds" >Get Bounds </a>
+        <a class="btn btn-primary"  id="get_bounds" >Load OpenstreetMap Data</a>
         <br><br>
         <a class="btn btn-primary"  href="stops/">Get Stops </a>
         <br><br>
@@ -146,10 +146,10 @@
                'southwest_lat':southwest_bound[1],
                'csrfmiddlewaretoken': '{{ csrf_token }}'},
            success: function(data){
-                console.log("happy!")
+                alert("OpenStreetMap Data has been loaded");
            },
            error : function(xhr,status,e){
-               alert("You should not be happy");
+               alert("Something went wrong");
            }
         });
     });

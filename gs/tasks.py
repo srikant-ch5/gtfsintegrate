@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
 import os
-from typing import Union
 
 import requests
 from django.utils import timezone
@@ -32,7 +31,7 @@ def rename_feed(name, formId):
 
 def download_feed_in_db(file, file_name, code, formId):
     feeds = Feed.objects.create(name=file_name)
-    successfull_download = 0 #0 = False
+    successfull_download = 0  # 0 = False
     error = 'No error while downloading the file'
     print("{} in down Feed init ".format(successfull_download))
     try:
@@ -43,7 +42,7 @@ def download_feed_in_db(file, file_name, code, formId):
         form.feed = feed
         form.save()
 
-        successfull_download = 1 #1 =True
+        successfull_download = 1  # 1 =True
         print("{} in  Feed import ".format(successfull_download))
 
     except Exception as e:
@@ -54,7 +53,7 @@ def download_feed_in_db(file, file_name, code, formId):
         rename_feed(file_name, formId)
 
     print("{} in down Feed end ".format(successfull_download))
-    return successfull_download,error
+    return successfull_download, error
 
 
 def download_feed_with_url(download_url, save_feed_name, code, formId):
@@ -69,9 +68,9 @@ def download_feed_with_url(download_url, save_feed_name, code, formId):
 
     open(feed_file, 'wb').write(r.content)
 
-    feed_download_status,error = download_feed_in_db(feed_file, save_feed_name, code, formId)
+    feed_download_status, error = download_feed_in_db(feed_file, save_feed_name, code, formId)
 
-    return feed_download_status,error
+    return feed_download_status, error
 
 
 def download_feed_task(formId):
@@ -87,7 +86,7 @@ def download_feed_task(formId):
     feed_name = ((lambda: entered_name, lambda: entered_osm_tag)[entered_name == '']())
 
     code = 'not_present'
-    feed_download_status,error = download_feed_with_url(entered_url, feed_name, code, formId)
+    feed_download_status, error = download_feed_with_url(entered_url, feed_name, code, formId)
 
     print(feed_download_status)
 
