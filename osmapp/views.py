@@ -38,6 +38,7 @@ def get_bounds(request):
             node(''' + bbox + ''')[highway=bus_stop];
             node(''' + bbox + ''')[bus=yes];
             node(''' + bbox + ''')[public_transport=stop_position];
+            node(''' + bbox + ''')[public_transport=platform];
         );
         out meta;
         '''
