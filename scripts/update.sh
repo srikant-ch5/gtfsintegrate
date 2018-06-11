@@ -44,8 +44,8 @@ fi
 fetched=".git/index"
 if comparedate $fetched;
 then
-    python manage.py makemigrations --merge
-    python manage.py makemigrations
-    python manage.py migrate
+    python manage.py makemigrations --merge || { echo 'makemigrations merge failed' ; exit 1; }
+    python manage.py makemigrations || { echo 'makemigrations failed' ; exit 1; }
+    python manage.py migrate || { echo 'migrate failed' ; exit 1; }
     touch ~/www/mysite.fcgi
 fi
