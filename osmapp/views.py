@@ -171,6 +171,8 @@ def get_route_relations(request):
 
 
 def load(xmlfile):
+    Node.objects.all().delete()
+    Way.objects.all().delete()
     print("Downloading the nodes")
     data = open(xmlfile)
 
@@ -191,7 +193,7 @@ def load(xmlfile):
 
                 node = Node(id=snode_id, timestamp=stimestamp, uid=suid, user=suser, version=sversion, visible=True,
                             changeset=schangeset, incomplete=False)
-                node.set_coordinates(slat, slon)
+                node.set_cordinates(slat, slon)
                 node.save()
             except Exception as e:
                 print(e)
@@ -202,6 +204,7 @@ def load(xmlfile):
 
                 tag = Tag()
                 tag = tag.add_tag(getkey_fromxml, getvalue_fromxml)
+                node.save()
                 node.tags.add(tag)
 
         elif primitive.tag == 'way':

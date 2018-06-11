@@ -85,7 +85,7 @@ class Node(OSM_Primitive):
     geom = models.PointField(geography=True, spatial_index=True, null=True)  # geography will force srid to be 4326
     objects = GeoManager()
 
-    def set_coordinates(self, lat, lon):
+    def set_cordinates(self, lat, lon):
         self.geom = Point(lon, lat)
         self.save()
 

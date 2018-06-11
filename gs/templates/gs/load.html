@@ -63,6 +63,7 @@
                     lat = data.features[i].geometry.coordinates[0];
                     coordinates_arr = [lon, lat];
                     var marker = L.marker(coordinates_arr);
+
                     marker.addTo(map);
                     markerArray.push(marker);
                 }
