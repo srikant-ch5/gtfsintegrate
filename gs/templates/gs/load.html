@@ -67,10 +67,13 @@
             var length = data.features.length;
             for (var i = 0; i < length; i++) {
                 if (data.features[i].properties.feed == feed_id) {
+                    name = data.features[i].properties.name
                     lon = data.features[i].geometry.coordinates[1];
                     lat = data.features[i].geometry.coordinates[0];
                     coordinates_arr = [lon, lat];
-                    var marker = L.marker(coordinates_arr);
+                    var marker = L.marker(coordinates_arr).bindTooltip(name+",lat="+lat+",lon="+lon,{ 
+        direction: 'top'
+    });
 
                     marker.addTo(map);
                     markerArray.push(marker);
@@ -179,10 +182,15 @@
             var coordinates_arr = [];
             var length = data.features.length;
             for (var i = 0; i < length; i++) {
+                    node_id=data.features[i].properties.id
                     lon = data.features[i].geometry.coordinates[1];
                     lat = data.features[i].geometry.coordinates[0];
                     coordinates_arr = [lon, lat];
-                    var marker = L.marker(coordinates_arr, {icon:greenIcon});
+                    var marker = L.marker(coordinates_arr, {icon:greenIcon}).bindTooltip(
+                        node_id+",lat="+lat+",lon="+lon,{
+                            direction:'top'
+                        }
+                        );
 
                     marker.addTo(map);
 
