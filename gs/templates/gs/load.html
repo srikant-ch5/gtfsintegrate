@@ -4,6 +4,9 @@
 {% load leaflet_tags %}
 
 {% block main %}
+<div id="loading">
+<img id="loading-image" src='http://i.stack.imgur.com/FhHRx.gif' alt="Loading..." />
+</div>
 <div class="container">
     <div class="col-xs-3">
     <h3>{{context.feed_download_status}}</h3>
@@ -25,6 +28,7 @@
 </div>
 
 <script type="text/javascript">
+    window.onload = function(){ document.getElementById("loading").style.display = "none" }
 
     var feed_bounds;
     function loadmapfunction(map, options){
