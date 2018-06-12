@@ -12,11 +12,11 @@ This application requires several tools to run it. These tools are:
 ### How to start
 
 0. clone the project with
-
+    
 ```git clone git@github.com:sriks123/gtfsintegrate.git```
 
 1. setup database **(only once)**
-
+    username is the existing postgres user which is already created
     `bash scripts/create_user_db.sh username`
 
 2. install and run project:
