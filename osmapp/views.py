@@ -77,12 +77,12 @@ def get_stops(request):
     stop_tag = Tag.objects.get(key=stop_key, value=stop_value)
     stop_nodes = stop_tag.node_set.all()
 
-    ''' 
-	While filtering with public_transport=stop_position there are 3 cases
-	1. nodes may have tag with both bus=yes/tram=yes and highway=bus_stop/railway=tram_stop
-	2. nodes may have tag only with bus=yes/tram=yes
-	3. nodes may have tag only waith highway=bus_stop/railway=tram_stop
-	'''
+    '''
+    While filtering with public_transport=stop_position there are 3 cases
+    1. nodes may have tag with both bus=yes/tram=yes and highway=bus_stop/railway=tram_stop
+    2. nodes may have tag only with bus=yes/tram=yes
+    3. nodes may have tag only waith highway=bus_stop/railway=tram_stop
+    '''
     bus_nodes = []
     tram_nodes = []
 

@@ -6,7 +6,6 @@ from leaflet.forms.widgets import LeafletWidget
 from multigtfs.models import Stop
 
 
-
 class GTFSInfoForm(forms.ModelForm):
     class Meta:
         model = GTFSForm

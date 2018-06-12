@@ -15,12 +15,12 @@ def get_stops(request):
     stop_tag = Tag.objects.get(key=stop_key, value=stop_value)
     stop_nodes = stop_tag.node_set.all()
 
-    ''' 
-	While filtering with public_transport=stop_position there are 3 cases
-	1. nodes may have tag with both bus=yes/tram=yes and highway=bus_stop/railway=tram_stop
-	2. nodes may have tag only with bus=yes/tram=yes
-	3. nodes may have tag only waith highway=bus_stop/railway=tram_stop
-	'''
+    '''
+    While filtering with public_transport=stop_position there are 3 cases
+    1. nodes may have tag with both bus=yes/tram=yes and highway=bus_stop/railway=tram_stop
+    2. nodes may have tag only with bus=yes/tram=yes
+    3. nodes may have tag only waith highway=bus_stop/railway=tram_stop
+    '''
     bus_nodes = []
     tram_nodes = []
 
@@ -67,6 +67,6 @@ def get_gtfs_stops(request):
         gtfs_stop_lon = gtfs_stop.lon
         print('{} {}'.format(gtfs_stop_lon, gtfs_stop_lat))
         cmp_stop.gtfs_save_geom(gtfs_stop_lon, gtfs_stop_lat)
-        #cmp_stop.save()
+        # cmp_stop.save()
 
     return render(request, 'gs/load.html')
