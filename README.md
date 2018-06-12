@@ -29,4 +29,5 @@ This application requires several tools to run it. These tools are:
       (it also runs `make venv` internally (this will create a virtualenv inside the project).) **(run only once)**
     - run command `make lint` to check for any errors which can cause problems
     - run command `make setup` - this will install all the dependencies from `requirements.txt` file)
+    - create and setup `geodjango/settings_secret.py` with settings based on the template in the same folder
     - run command `make run` - this will makemigrations and migrate into database (needs to be looked into) and run the app on port 8000)
