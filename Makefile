@@ -37,29 +37,32 @@ export VIRTUAL_ENV := $(abspath ${VENV})
 export PATH := ${VIRTUAL_ENV}/bin:${PATH}
 
 ${VENV}:
-	python3.6 -m venv $@
+	python3 -m venv $@
 
-# Requirements are in setup.py, so whenever setup.py is changed, re-run installation of dependencies.
-venv: $(VENV_NAME)/bin/activate
-$(VENV_NAME)/bin/activate: requirements.txt
+# Requirements are in requirements.txt, so whenever requirements.txt is changed, re-run installation of dependencies.
+venv:
 	test -d $(VENV_NAME) || virtualenv -p python3 $(VENV_NAME)
-	${PYTHON} -m pip install -U pip
-	${PYTHON} -m pip install -e .
+	${PYTHON} -m pip install --upgrade pip
+	${PYTHON} -m pip install -r requirements.txt
 	touch $(VENV_NAME)/bin/activate
 
 clean:
 	rm -rf ${CLEANUP}
+	rm -rf venv
 
 doc:
 	@echo "FIXME"
 	$(VENV_ACTIVATE) && cd docs; make html
 
 lint: venv
+	${PYTHON} -m pep8
 	${PYTHON} -m pylint
 	${PYTHON} -m mypy
 
 prepare-dev:
-	sudo apt-get -y install python3 python3-pip
+	sudo apt-get --yes install python3 python3-pip virtualenv python3-dev \
+		postgresql postgresql-contrib postgis libpq-dev libgeos-dev \
+		redis-server libffi6 libffi-dev
 	python3 -m pip install virtualenv
 	make venv
 
