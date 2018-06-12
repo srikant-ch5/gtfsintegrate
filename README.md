@@ -16,11 +16,6 @@ This application requires several tools to run it. These tools are:
 ```git clone git@github.com:sriks123/gtfsintegrate.git```
 
 1. setup database **(only once)**
-    - for simple database setup:
-
-    `bash scripts/create_user_db.sh`
-
-    - if you want to specify a string as user
 
     `bash scripts/create_user_db.sh username`
 
