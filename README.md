@@ -11,16 +11,22 @@ This application requires several tools to run it. These tools are:
 
 ### How to start
 
-0. clone the project with `git clone git@github.com:sriks123/gtfsintegrate.git`
-1. (only once) ... run `make prepare-dev` to install all relevant packages
-2. (only once) ... setup database
-    - to simply setup database:
-    `scripts/create_user_db.sh`
-    - if you want to specify a string as user
-    `USER=username scripts/create_user_db.sh`
-3. run project:
-    - run command `touch setup.py` and then `make venv`  (this will create a virtualenv inside the project).
-    - run command `make setup` (this will install all the requirements from requirements.txt)
-    - run command  `make run` (this will makemigrations and migrate into database(needs to be looked into) and run the app on port 8000)
+0. clone the project with
 
-`make install` to install all packages
+```git clone git@github.com:sriks123/gtfsintegrate.git```
+
+1. setup database **(only once)**
+    - for simple database setup:
+
+    `bash scripts/create_user_db.sh`
+
+    - if you want to specify a string as user
+
+    `bash USER=username scripts/create_user_db.sh`
+
+2. install and run project:
+    - run `make prepare-dev` to install all relevant packages
+      (it also runs `make venv` internally (this will create a virtualenv inside the project).) **(run only once)**
+    - run command `make lint` to check for any errors which can cause problems
+    - run command `make setup` - this will install all the dependencies from `requirements.txt` file)
+    - run command `make run` - this will makemigrations and migrate into database (needs to be looked into) and run the app on port 8000)
