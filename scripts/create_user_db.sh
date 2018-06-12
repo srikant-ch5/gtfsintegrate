@@ -1,8 +1,11 @@
 #!/bin/sh
 sudo -u postgres psql <<EOF
-create database $1_gtfsintegrate owner $1;
+DROP DATABASE IF EXISTS $1_gtfsintegrate;
+DROP USER IF EXISTS $1;
+CREATE USER $1;
+CREATE DATABASE $1_gtfsintegrate owner $1;
 \c $1_gtfsintegrate
-create extension postgis;
-create extension postgis_topology;
+CREATE EXTENSION postgis;
+CREATE EXTENSION postgis_topology;
 \q
 EOF
