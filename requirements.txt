@@ -15,7 +15,7 @@ lxml==4.2.1
 mypy==0.610
 ordered_set
 overpy==0.4
-pep8==1.7.1
+pycodestyle==2.4.0
 psycopg2==2.7.3.2
 pylint==1.9.2
 python-decouple==3.1

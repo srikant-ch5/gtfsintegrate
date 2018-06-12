@@ -55,8 +55,8 @@ doc:
 	$(VENV_ACTIVATE) && cd docs; make html
 
 lint: venv
-	${PYTHON} -m pep8
-	${PYTHON} -m pylint
+	${PYTHON} -m pycodestyle --show-source --show-pep8 **/*.py
+	${PYTHON} -m pylint **/*.py
 	${PYTHON} -m mypy
 
 prepare-dev:
