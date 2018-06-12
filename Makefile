@@ -55,9 +55,12 @@ doc:
 	$(VENV_ACTIVATE) && cd docs; make html
 
 lint: venv
-	${PYTHON} -m pycodestyle --show-source --show-pep8 **/*.py
+	${PYTHON} -m pycodestyle --show-source --first --show-pep8 **/*.py
 	${PYTHON} -m pylint **/*.py
 	${PYTHON} -m mypy
+
+lint-fix: venv
+	${PYTHON} -m autopep8 --aggressive --aggressive --recursive --in-place --max-line-length 139 **/*.py
 
 prepare-dev:
 	sudo apt-get --yes install python3 python3-pip virtualenv python3-dev \
