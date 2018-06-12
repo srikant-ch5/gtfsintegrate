@@ -1,9 +1,9 @@
 #!/bin/sh
 sudo -u postgres psql <<EOF
-create user "www-data"
-create database gtfsintegrate_$USER owner "www-data";
+CREATE USER "www-data";
+CREATE DATABASE gtfsintegrate_$USER owner "www-data";
 \c gtfsintegrate_$USER
-create extension postgis;
-create extension postgis_topology;
+CREATE EXTENSION postgis;
+CREATE EXTENSION postgis_topology;
 \q
 EOF
