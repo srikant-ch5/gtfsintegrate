@@ -22,7 +22,7 @@ This application requires several tools to run it. These tools are:
 
     - if you want to specify a string as user
 
-    `bash USER=username scripts/create_user_db.sh`
+    `bash scripts/create_user_db.sh username`
 
 2. install and run project:
     - run `make prepare-dev` to install all relevant packages
