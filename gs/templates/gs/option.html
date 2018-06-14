@@ -3,24 +3,25 @@
 {% block main %}
 
 <div class="container">
-    <div class="col-xs-6" id="box1">
-        <h2>Work with last feed </h2>
+    <div class="col-xs-6" id="last-feed-box">
+        <h2 id="heading" >Work with last feed </h2>
         <a class="btn btn-primary" href="{% url 'latest-feed' %}">{{context.feed}}</a>
+        <br><br>
+        <h2 id="heading"> Enter New Feed</h2>
+        <a id="download-button" class="btn btn-primary" href="{% url 'feed_form' %}">Enter GTFS Feed</a>
+        <br><br><br><br><br><br><br><br>
+
     </div>
-    <div class="col-xs-6" id="box1">
-        <h2>Available feeds</h2>
+    <div class="col-xs-6" id="avail-feed-box">
+        <h2 id="heading">Available feeds</h2>
         {% if context.feeds %}
         {% for feed in context.feeds %}
             <h3>{{feed}}</h3>
         {% endfor %}
         {% endif %}
+        <br>
     </div>
 
 </div>
 
-<div class="container-fluid">
-    <div id="box1">
-        <a id="download-button" class="btn btn-primary" href="{% url 'feed_form' %}">Enter GTFS Feed</a>
-    </div>
-</div>
 {% endblock %}
