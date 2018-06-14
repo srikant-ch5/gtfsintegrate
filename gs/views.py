@@ -17,6 +17,7 @@ def feed_form(request):
         forms_list.append(form_entry.id)
 
     context = {
+        'sent_through':'new_feed',
         'feed_downloaded_status': '',
         'form_id': 0,
         'forms_list': forms_list,
@@ -36,6 +37,7 @@ def feed_form(request):
                                               gtfs_tag=request.POST['gtfs_tag'])
             context['form_id'] = form_entry.id
             formId = is_feed_present[0].id
+            request.session['feed'] = is_feed_present[0].feed.name
             context['error'] = reset_feed(formId)
 
         else:
@@ -44,6 +46,7 @@ def feed_form(request):
                 gtfs_feed_info = form.save(commit=False)
                 gtfs_feed_info.save()
 
+                request.session['feed'] = gtfs_feed_info.feed.name
                 context['error'] = download_feed_task(gtfs_feed_info.id)
                 context['form_id'] = gtfs_feed_info.id
 
@@ -54,6 +57,26 @@ def feed_form(request):
 
 
 def home(request):
+    context = {
+        'feed': 'Please enter some feed',
+        'message': 'Message to be shown ',
+    }
+
+    try:
+        context['feed'] = request.session['feed']
+        print(request.session['feed'])
+    except Exception as e:
+        print("The session cannot feed be because user have not entered any feed")
+
+    '''Get all the feeds ids and pass to home page'''
+    feeds = Feed.objects.all()
+    feeds_list = []
+
+    for feed in reversed(feeds):
+        feeds_list.append(feed.name)
+
+    context['feeds'] = feeds_list
+
     '''First get all the valid form entry ids so that iteration is easy'''
     form_entries = GTFSForm.objects.all()
     forms_list = []
@@ -61,9 +84,7 @@ def home(request):
     for form_entry in form_entries:
         forms_list.append(form_entry.id)
 
-    context = {
-        'form_array': forms_list
-    }
+    context['form_array'] = forms_list
     return render(request, 'gs/option.html', {'context': context})
 
 
@@ -73,7 +94,6 @@ def map(request):
 
 def download(request):
     if request.method == 'POST' and request.FILES['gtfsfile']:
-
         if (Feed.objects.filter(name=name).exists()):
             context = 'File is already present in the Database'
             print(context)

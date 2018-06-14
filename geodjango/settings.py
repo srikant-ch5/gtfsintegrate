@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     'compare',
     'rest_framework',
     'multigtfs',
+    'rest_framework_swagger',
 ]
 
 MIDDLEWARE = [

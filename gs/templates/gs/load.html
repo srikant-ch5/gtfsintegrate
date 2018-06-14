@@ -9,8 +9,10 @@
 </div>
 <div class="container">
     <div class="col-xs-3">
-    <h3>{{context.feed_download_status}}</h3>
-    <h3>{{context.error}}</h3>
+        {% if context.sent_through == 'new_feed'%}
+            <h3>{{context.feed_download_status}}</h3>
+            <h3>{{context.error}}</h3>
+        {% endif %}
 
         <a class="btn btn-primary"  id="get_bounds" >Load OpenstreetMap Data</a>
         <br><br>
