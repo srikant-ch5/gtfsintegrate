@@ -37,6 +37,7 @@ class NodeView(APIView):
         serializer = NodeSerializer(nodes, many=True)
         return Response(serializer.data)
 
+
 class WayView(APIView):
     def get(self, request):
         ways = Way.objects.all()

@@ -27,6 +27,7 @@ This application requires several tools to run it. These tools are:
     `bash scripts/create_user_db.sh username`
 
 2. install and run project:
+    - ```sudo apt install make```
     - run `make prepare-dev` to install all relevant packages
       (it also runs `make venv` internally (this will create a virtualenv inside the project).) **(run only once)**
     - run command `make lint` to check for any errors which can cause problems
