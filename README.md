@@ -15,6 +15,12 @@ This application requires several tools to run it. These tools are:
     
 ```git clone git@github.com:sriks123/gtfsintegrate.git```
 
+     Extra steps if you want to contribute back:
+     ```ssh-keygen -t rsa -b 4096 -C "your@email.domain"```
+     ```cat ~/.ssh/id_rsa.pub```
+
+     Copy this to your github.com settings, add ssh key
+
 1. setup database **(only once)**
     username is the existing postgres user which is already created
     `bash scripts/create_user_db.sh username`
