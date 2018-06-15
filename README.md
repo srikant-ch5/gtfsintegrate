@@ -16,6 +16,7 @@ This application requires several tools to run it. These tools are:
 ```git clone git@github.com:sriks123/gtfsintegrate.git```
 
      Extra steps if you want to contribute back:
+     ```git config --global --edit```
      ```ssh-keygen -t rsa -b 4096 -C "your@email.domain"```
      ```cat ~/.ssh/id_rsa.pub```
 
