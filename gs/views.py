@@ -17,7 +17,7 @@ def feed_form(request):
         forms_list.append(form_entry.id)
 
     context = {
-        'sent_through':'new_feed',
+        'sent_through': 'new_feed',
         'feed_downloaded_status': '',
         'form_id': 0,
         'forms_list': forms_list,
