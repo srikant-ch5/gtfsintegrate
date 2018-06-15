@@ -4,10 +4,18 @@ from django.contrib.gis.geos import Point, LineString
 
 
 class CMP_Stop(models.Model):
-    stop = models.ForeignKey('multigtfs.Stop', on_delete=models.CASCADE, null=True)
-    node = models.ForeignKey('osmapp.Node', on_delete=models.CASCADE, null=True)
-    geom = models.PointField(geography=True, spatial_index=True, null=True)
-    node_geom = models.PointField(geography=True, spatial_index=True, null=True)
+    stop = models.ForeignKey('multigtfs.Stop',
+                             on_delete=models.CASCADE,
+                             null=True)
+    node = models.ForeignKey('osmapp.Node',
+                             on_delete=models.CASCADE,
+                             null=True)
+    geom = models.PointField(geography=True,
+                             spatial_index=True,
+                             null=True)
+    node_geom = models.PointField(geography=True,
+                                  spatial_index=True,
+                                  null=True)
     type = models.CharField(max_length=10, null=True)
     objects = GeoManager()
 
@@ -19,6 +27,9 @@ class CMP_Stop(models.Model):
         db_table = 'cmp_stop'
         app_label = 'compare'
 
-# class CMP_Line(models.Model):
+class CMP_Line(models.Model):
+    pass
 
-# class iteneraries(models.Model):
+
+class itineraries(models.Model):
+    pass

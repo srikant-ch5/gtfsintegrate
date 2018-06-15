@@ -23,10 +23,11 @@ def main(request):
 
 
 class FormView(APIView):
-    def get(self,request):
+    def get(self, request):
         forms = GTFSForm.objects.all()
         serializer = FormSerializer(forms, many=True)
         return Response(serializer.data)
+
 
 '''OSM app models'''
 

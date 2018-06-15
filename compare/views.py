@@ -17,9 +17,10 @@ def get_stops(request):
 
     '''
     While filtering with public_transport=stop_position there are 3 cases
-    1. nodes may have tag with both bus=yes/tram=yes and highway=bus_stop/railway=tram_stop
+    1. nodes may have tag with both bus=yes/tram=yes
+       and highway=bus_stop/railway=tram_stop
     2. nodes may have tag only with bus=yes/tram=yes
-    3. nodes may have tag only waith highway=bus_stop/railway=tram_stop
+    3. nodes may have tag only with highway=bus_stop/railway=tram_stop
     '''
     bus_nodes = []
     tram_nodes = []
