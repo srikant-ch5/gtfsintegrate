@@ -5,7 +5,7 @@
 <div class="container">
     <div class="col-xs-6" id="last-feed-box">
         <h2 id="heading" >Work with last feed </h2>
-        <a class="btn btn-primary" href="{% url 'latest-feed' %}">{{context.feed}}</a>
+        <a class="btn btn-primary" href="map/mapview/{{context.feed_id}}">{{context.feed}}</a>
         <br><br>
         <h2 id="heading"> Enter New Feed</h2>
         <a id="download-button" class="btn btn-primary" href="{% url 'feed_form' %}">Enter GTFS Feed</a>
@@ -14,14 +14,39 @@
     </div>
     <div class="col-xs-6" id="avail-feed-box">
         <h2 id="heading">Available feeds</h2>
-        {% if context.feeds %}
-        {% for feed in context.feeds %}
-            <h3>{{feed}}</h3>
-        {% endfor %}
-        {% endif %}
-        <br>
+        <div id="all-feed-box">
+
+        </div>
+        <br><br><br><br><br><br><br><br><br><br>
     </div>
 
 </div>
+<script type="text/javascript">
+    var feed_names=[];
+    var pks = [];
+    var feed_url = "/api/feeddata/"
+    $.ajax({
+        url:feed_url,
+        type:'GET', 
+        dataType: 'json',
+        async:false,
+        success:function(data){
+            for(var i=0;i<data.length;i++){
+                feed_names.push(data[i].name)
+                pks.push(data[i].id)
+            }
+        },
+        error:function(){
+            console.log("No data")
+        }
+    });
+
+    for(var i=0;i<feed_names.length;i++){
+        url= "map/mapview/"+pks[i]
+        $("#all-feed-box").append("<div id='feeds-box'><h3 id=''><a id='click' href='"+url+"''>"+feed_names[i]+"</h3></div>");
+    }
+
+
+</script>
 
 {% endblock %}

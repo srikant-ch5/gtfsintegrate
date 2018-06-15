@@ -35,7 +35,7 @@ def feed_form(request):
             context['feed_download_status'] = 'Feed already exists'
             form_entry = GTFSForm.objects.get(url=request.POST['url'], osm_tag=request.POST['osm_tag'],
                                               gtfs_tag=request.POST['gtfs_tag'])
-            context['form_id'] = form_entry.id
+            context['feed_id'] = form_entry.id
             formId = is_feed_present[0].id
             request.session['feed'] = is_feed_present[0].feed.name
             context['error'] = reset_feed(formId)
@@ -64,6 +64,8 @@ def home(request):
 
     try:
         context['feed'] = request.session['feed']
+        context['feed_id'] = Feed.objects.get(name=context['feed']).id
+        print(context['feed_id'])
         print(request.session['feed'])
     except Exception as e:
         print("The session cannot feed be because user have not entered any feed")
@@ -88,22 +90,12 @@ def home(request):
     return render(request, 'gs/option.html', {'context': context})
 
 
-def map(request):
-    return render(request, 'gs/map.html')
-
-
-def download(request):
-    if request.method == 'POST' and request.FILES['gtfsfile']:
-        if (Feed.objects.filter(name=name).exists()):
-            context = 'File is already present in the Database'
-            print(context)
-        else:
-            feeds = Feed.objects.create(name=name)
-            feeds.import_gtfs(gtfs_feed)
-            context = name + "GTFS file is uploaded to Database"
-
-    return render(request, 'gs/map.html', {'context': context})
-
+def showmap(request, pk=None):
+    context = {
+        'data':'data',
+    }
+    context['feed_id'] =pk
+    return render(request, 'gs/load.html', {'context':context})
 
 class FeedListView(ListView):
     model = Feed
@@ -111,3 +103,4 @@ class FeedListView(ListView):
 
     def get_queryset(self):
         return Feed.objects.all().order_by('id').reverse()
+

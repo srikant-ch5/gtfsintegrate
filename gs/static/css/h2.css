@@ -1,7 +1,7 @@
 html ,body {
     height:100%;
     width :100%;
-    background :#92B558;
+    background :white;
 }
 
 #map {
@@ -102,7 +102,16 @@ label{
     color:#4A524C;
     font-weight:bold ;
 }
-#last-feed-box, #avail-feed-box{
+#last-feed-box{
+ /* or whatever width you want. */
+   max-width:1000px;
+max-height:350px;
+   display: inline-block;
+    box-shadow: 5px 5px 5px 5px;
+    padding:10px 10px 10px 10px;
+    background: #28CBA0;
+}
+#avail-feed-box{
  /* or whatever width you want. */
  overflow-y: auto;
    max-width:1000px;
@@ -110,5 +119,18 @@ max-height:350px;
    display: inline-block;
     box-shadow: 5px 5px 5px 5px;
     padding:10px 10px 10px 10px;
-    background: #28CBA0;
+    background: #BFBEBE;
+}
+#feeds-box{
+background:#A29D9F;
+}
+#feeds-box:hover, #feeds-nox:focus{
+    background:#C8C0C3;
+}
+h3{
+font-style:italic;
+font-size:1.5em;
+color:green;
+
+
 }

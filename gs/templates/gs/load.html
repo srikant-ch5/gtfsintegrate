@@ -9,12 +9,8 @@
 </div>
 <div class="container">
     <div class="col-xs-3">
-        {% if context.sent_through == 'new_feed'%}
-            <h3>{{context.feed_download_status}}</h3>
-            <h3>{{context.error}}</h3>
-        {% endif %}
-
-        <a class="btn btn-primary"  id="get_bounds" >Load OpenstreetMap Data</a>
+        <h3>{{context.feed_download_status}}</h3>
+        <h3>{{context.error}}</h3>
         <br><br>
         <a class="btn btn-primary"  href="stops/">Get Stops </a>
         <br><br>
@@ -35,8 +31,8 @@
     var feed_bounds;
     function loadmapfunction(map, options){
 
+        /*
         //get the latest form
-
         latest_form_id = {{context.form_id}};
 
         formdata = "/gtfs/formdata/" + latest_form_id + "/";
@@ -51,9 +47,11 @@
                 feed_id = data.feed;
             }
 
-        });
+        })
+        */
 
-
+        feed_id = {{context.feed_id}}
+        console.log(feed_id)
         var mapLayer;
         var markerArray = [];
         var gtfsstopsdata = '{% url "stopdata" %}';
@@ -168,7 +166,7 @@
         });
 
 
-        var nodedata = '{% url "nodedata" %}' ;
+        var nodedata = '{% url "osmnodedata" %}' ;
 
         $.getJSON(nodedata, function(data){
 
