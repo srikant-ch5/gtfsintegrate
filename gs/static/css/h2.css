@@ -3,13 +3,27 @@ html ,body {
     width :100%;
     background :white;
 }
-
-#map {
-    width:100%;
-    height:400px;
-    padding-left: 10px;
-    padding-top: 50px;
+.fill
+{
+    min-height: 100%;
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
 }
+#map-holder{
+    height: 100%;
+}
+
+
+#map
+{
+
+    width: 100px;
+    height:100px;
+    min-height: 100%;
+    min-width: 100%;
+    display: block;}
+
 #query-textbox{
     padding-top: 10px;
     padding-left: 0px;
@@ -21,9 +35,9 @@ html ,body {
 #feed_form {
     border-radius: 25px;
     border: 10px solid #2778D4;
-    padding: 20px; 
+    padding: 20px;
     width: 550px;
-    height: 500px; 
+    height: 500px;
 }
 #form_heading{
     font-family: "Times New Roman", Times, serif
@@ -49,12 +63,11 @@ html ,body {
     padding-left: 10px;
     padding-top: 50px;
 }
-.leaflet-container { 
+.leaflet-container {
     width:  900px;
     height: 600px;
 }
 #lmap{
-    height:10%;
 }
 #specialbigmap {
     height: 1000px;
@@ -108,8 +121,7 @@ label{
 max-height:350px;
    display: inline-block;
     box-shadow: 5px 5px 5px 5px;
-    padding:10px 10px 10px 10px;
-    background: #28CBA0;
+    background: #ABEAF2;
 }
 #avail-feed-box{
  /* or whatever width you want. */
@@ -118,8 +130,8 @@ max-height:350px;
 max-height:350px;
    display: inline-block;
     box-shadow: 5px 5px 5px 5px;
-    padding:10px 10px 10px 10px;
-    background: #BFBEBE;
+
+    background: #ABEAF2;
 }
 #feeds-box{
 background:#A29D9F;

@@ -3,14 +3,16 @@
 {% load static %}
 {% load leaflet_tags %}
 
-{% block main %}
+{% block map %}
 <div id="loading">
 <img id="loading-image" src='http://i.stack.imgur.com/FhHRx.gif' alt="Loading..." />
 </div>
 <div class="container">
     <div class="col-xs-3">
+        <br><br><br><br>
         <h3>{{context.feed_download_status}}</h3>
         <h3>{{context.error}}</h3>
+        <h3>{{context.connection_error}}
         <br><br>
         <a class="btn btn-primary"  href="stops/">Get Stops </a>
         <br><br>
@@ -19,9 +21,12 @@
         <a class="btn btn-primary" href="#">Get route relations</a>
     </div>
 
-    <div id ="lmap" class="col-xs-9">
-        {% leaflet_map "osmmap" callback="loadmapfunction"%}
+    <div id="map-holder">
+  <div class=" col-xs-9">
+    <div id="map">{% leaflet_map "osmmap" callback="loadmapfunction"%}
     </div>
+  </div>
+</div>
 
 </div>
 
@@ -30,25 +35,6 @@
 
     var feed_bounds;
     function loadmapfunction(map, options){
-
-        /*
-        //get the latest form
-        latest_form_id = {{context.form_id}};
-
-        formdata = "/gtfs/formdata/" + latest_form_id + "/";
-        var feed_id;
-
-        $.ajax({
-            url: formdata,
-            type: 'GET',
-            dataType: 'json',
-            async: false,
-            success: function (data) {
-                feed_id = data.feed;
-            }
-
-        })
-        */
 
         feed_id = {{context.feed_id}}
         console.log(feed_id)

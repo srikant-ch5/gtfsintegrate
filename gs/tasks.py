@@ -137,6 +137,7 @@ def check_feeds_task():
 def reset_feed(formId):
     form = GTFSForm.objects.get(id=formId)
     form_timestamp = form.timestamp
+    print(form_timestamp)
     current_timestamp = timezone.now()
     form_name = form.name
 

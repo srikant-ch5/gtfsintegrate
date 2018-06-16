@@ -43,7 +43,11 @@ def get_bounds(request):
         out meta;
         '''
         print(get_stops_query)
-        result = post("http://overpass-api.de/api/interpreter", get_stops_query)
+        try:
+            result = post("http://overpass-api.de/api/interpreter", get_stops_query)
+        except ConnectionError as ce:
+            context['connection_error'] ="There is a connection error while downloading the OSM data"
+
         PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
         xmlfiledir = xmlfiledir = os.path.join(os.path.dirname(PROJECT_ROOT), 'osmapp', 'static')
         xmlfile = xmlfiledir + '/node.xml'
