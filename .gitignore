@@ -2,6 +2,7 @@ geodjango/settings_secret.py
 settings_secret.py
 gs/gtfsfeeds
 *.pyc
+*.xml
 geodjango/settings.py
 venv
 .venv
