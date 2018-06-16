@@ -46,7 +46,7 @@ def download_feed_in_db(file, file_name, code, formId):
         print("{} in  Feed import ".format(successfull_download))
 
     except Exception as e:
-        error = "File was not downloaded properly because the url or the data is not right"
+        error = "File was not downloaded properly because the url or the data is not right (failed)"
         successfull_download = 0
 
     if code == 'not_present':
