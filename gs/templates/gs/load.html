@@ -7,8 +7,48 @@
 <div id="loading">
 <img id="loading-image" src='http://i.stack.imgur.com/FhHRx.gif' alt="Loading..." />
 </div>
+<br><br>
+<div class="dropdown">
+  <button onclick="myFunction()" class="dropbtn">Dropdown</button>
+  <div id="myDropdown" class="dropdown-content">
+    <a href="#">Link 1</a>
+    <a href="#">Link 2</a>
+    <a href="#">Link 3</a>
+  </div>
+</div>
+
+
 <div class="container">
-    <div class="col-xs-3">
+    <div class="row widgets">
+        <div class="col-md-6">
+            <div class="mr-2">
+                <div id="info-div">
+                    <div class="information-box">
+                        <h3>{{context.feed_download_status}}</h3>
+                        <h3>{{context.error}}</h3>
+                        <h3>{{context.connection_error}}</h3>
+                        <br><br>
+                        <a class="btn btn-primary"  href="stops/">Get Stops </a>
+                        <br><br>
+                        <a class="btn btn-primary" href="route_masters/">Get route_master relations</a>
+                        <br><br>
+                        <a class="btn btn-primary" href="#">Get route relations</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="ml-2">
+                <div class="map-box">
+                    <div id="map">{% leaflet_map "osmmap" callback="loadmapfunction"%}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--
+<div class="row">
+    <div class="col-xs-6">
         <br><br><br><br>
         <h3>{{context.feed_download_status}}</h3>
         <h3>{{context.error}}</h3>
@@ -22,17 +62,38 @@
     </div>
 
     <div id="map-holder">
-  <div class=" col-xs-9">
+  <div class=" col-xs-6">
     <div id="map">{% leaflet_map "osmmap" callback="loadmapfunction"%}
     </div>
   </div>
 </div>
-
 </div>
-
+</div>
+-->
 <script type="text/javascript">
+
     window.onload = function(){ document.getElementById("loading").style.display = "none" }
 
+/* When the user clicks on the button, 
+toggle between hiding and showing the dropdown content */
+function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+}
+
+// Close the dropdown menu if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
     var feed_bounds;
     function loadmapfunction(map, options){
 
@@ -71,7 +132,7 @@
             feed_bounds = bounds;
             map.fitBounds(bounds);
         });
-
+/*
         function getCookie(name) {
             var cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -182,6 +243,7 @@
 
             }
         });
+        */
 
 }
 </script>

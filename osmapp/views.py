@@ -55,7 +55,7 @@ def get_bounds(request):
             fh.write(result.content)
 
         print("Content has been copied")
-        load(xmlfile)
+        #load(xmlfile)
 
     return render(request, 'gs/load.html', {'context': context})
 

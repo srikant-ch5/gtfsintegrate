@@ -3,27 +3,10 @@ html ,body {
     width :100%;
     background :white;
 }
-.fill
-{
-    min-height: 100%;
-    height: 100%;
-    width: 100%;
-    max-width: 100%;
+.widgets {
+    display: flex;
+    justify-content: space-around;
 }
-#map-holder{
-    height: 100%;
-}
-
-
-#map
-{
-
-    width: 100px;
-    height:100px;
-    min-height: 100%;
-    min-width: 100%;
-    display: block;}
-
 #query-textbox{
     padding-top: 10px;
     padding-left: 0px;
@@ -60,15 +43,27 @@ html ,body {
 #map {
     width:100%;
     height:400px;
-    padding-left: 10px;
-    padding-top: 50px;
+    padding-left:25px;
+    padding-top: 25px;
 }
-.leaflet-container {
-    width:  900px;
-    height: 600px;
+#info-div{
+    width:100%;
+    height:500px;
+    padding-left: 0px;
+    padding-top: 25px;
+    margin: 0;
+    border:0;
 }
-#lmap{
+.information-box{
+    padding-left:10px;
 }
+.information-box, .leaflet-container {
+    border-radius: 25px;
+    border: 10px solid #2778D4;
+    width:  600px;
+    height: 500px;
+}
+
 #specialbigmap {
     height: 1000px;
 }
@@ -121,6 +116,7 @@ label{
 max-height:350px;
    display: inline-block;
     box-shadow: 5px 5px 5px 5px;
+    padding:10px 10px 10px 10px;
     background: #ABEAF2;
 }
 #avail-feed-box{
@@ -143,6 +139,48 @@ h3{
 font-style:italic;
 font-size:1.5em;
 color:green;
-
-
 }
+/* Dropdown Button */
+.dropbtn {
+    background-color: #3498DB;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+/* Dropdown button on hover & focus */
+.dropbtn:hover, .dropbtn:focus {
+    background-color: #2980B9;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {display:block;}

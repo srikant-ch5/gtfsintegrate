@@ -48,7 +48,7 @@ def feed_form(request):
                     gtfs_feed_info.save()
 
                     context['error'] = download_feed_task(gtfs_feed_info.id)
-                    if(context['error'].find("(failed)")) >= 0:
+                    if(context['error'].find("(failed)")) < 0:
                         gform = GTFSForm.objects.get(id=gtfs_feed_info.id)
                         request.session['feed'] = gform.feed.name
                         context['feed_id'] = gform.feed.id
