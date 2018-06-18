@@ -38,7 +38,9 @@ def feed_form(request):
                 formId = is_feed_present[0].id
                 context['error'] = reset_feed(formId)
                 context['feed_id'] = form_entry.feed.id
-                request.session['feed'] = Feed.objects.get(id=form_entry.feed.id).name
+                feed_name = Feed.objects.get(id=form_entry.feed.id).name
+                request.session['feed'] = feed_name
+                context['feed_name'] = feed_name
             except Exception as e:
                 context['error'] = e
         else:
@@ -52,6 +54,7 @@ def feed_form(request):
                         gform = GTFSForm.objects.get(id=gtfs_feed_info.id)
                         request.session['feed'] = gform.feed.name
                         context['feed_id'] = gform.feed.id
+                        context['feed_name'] = gform.feed.name
                 except Exception as e:
                     GTFSForm.objects.all()[3].delete()
                     Feed.objects.all()[3].delete()
@@ -104,7 +107,9 @@ def showmap(request, pk=None):
     context = {
         'data': 'data',
     }
+    context['feed_name'] = feed
     context['feed_id'] = pk
+
     return render(request, 'gs/load.html', {'context': context})
 
 

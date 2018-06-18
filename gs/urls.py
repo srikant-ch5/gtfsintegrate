@@ -15,8 +15,10 @@ import compare.views as compview
 urlpatterns = [
     url(r'^$', views.home, name="home"),
     url('^map/mapview/(?P<pk>\d+)/$', views.showmap, name="showmap"),
-    url(r'^osmnodedata/', GeoJSONLayerView.as_view(model=Node, properties=('id')), name="osmnodedata"),
-    url(r'^stopdata/', GeoJSONLayerView.as_view(model=Stop, properties=('id', 'feed', 'name')), name="stopdata"),
+    url(r'^osmnodedata/', GeoJSONLayerView.as_view(model=Node, properties=('id','version')), name="osmnodedata"),
+    url(r'^stopdata/',
+        GeoJSONLayerView.as_view(model=Stop, properties=('stop_id', 'feed', 'name', 'zone', 'description', 'code')),
+        name="stopdata"),
     # url(r'^waydata/', GeoJSONLayerView.as_view(model=Way, properties=('id','version','visible','incomplete')), name="waydata"),
     url(r'^route_masters', osmview.get_route_master_relations, name="route_master"),
     url(r'^feed/', FeedListView.as_view(model=Feed), name='feed_list'),

@@ -5,95 +5,69 @@
 
 {% block map %}
 <div id="loading">
-<img id="loading-image" src='http://i.stack.imgur.com/FhHRx.gif' alt="Loading..." />
+    <img id="loading-image" src='http://i.stack.imgur.com/FhHRx.gif' alt="Loading..."/>
 </div>
 <br><br>
-<div class="dropdown">
-  <button onclick="myFunction()" class="dropbtn">Available Feeds</button>
-  <div id="myDropdown" class="dropdown-content">
-    <a href="#">Link 1</a>
-    <a href="#">Link 2</a>
-    <a href="#">Link 3</a>
-  </div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="cold-md-12">
+            <h2>You are working on {{context.feed_name}}</h2>
+            <h3>{{context.feed_download_status}}</h3>
+            <h3>{{context.error}}</h3>
+            <h3>{{context.connection_error}}</h3>
+        </div>
+    </div>
 </div>
-
 
 <div class="container">
     <div class="row widgets">
         <div class="col-md-6">
-            <div class="mr-2">
-                <div id="info-div">
-                    <div class="information-box">
-                        <h3>{{context.feed_download_status}}</h3>
-                        <h3>{{context.error}}</h3>
-                        <h3>{{context.connection_error}}</h3>
-                        <br><br>
-                        <a class="btn btn-primary"  href="stops/">Get Stops </a>
-                        <br><br>
-                        <a class="btn btn-primary" href="route_masters/">Get route_master relations</a>
-                        <br><br>
-                        <a class="btn btn-primary" href="#">Get route relations</a>
-                    </div>
+
+            <div id="info-div">
+                <div class="information-box">
+                    <table style="width:100%">
+                        <tr>
+                            <th>GTFS</th>
+                            <th>Result</th>
+                            <th>OSM</th>
+                        </tr>
+                        <tr>
+                            <td id="gtfsstopid"></td>
+                            <td id="resultstopid"></td>
+                            <td id="osmstopid"></td>
+                        </tr>
+                        <tr>
+                            <td id="gtfsstopcode"></td>
+                            <td>--------</td>
+                            <td>--------</td>
+                        </tr>
+                        <tr>
+                            <td id="gtfsstopname"></td>
+                            <td>--------</td>
+                            <td id="osmstopname"></td>
+                        </tr>
+                        
+                        <tr>
+                            <td id="gtfsstopzone"></td>
+                            <td>--------</td>
+                            <td id="osmstopversion"></td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="ml-2">
-                <div class="map-box">
-                    <div id="map">{% leaflet_map "osmmap" callback="loadmapfunction"%}</div>
-                </div>
+            <div class="map-box">
+                <div id="map">{% leaflet_map "osmmap" callback="loadmapfunction"%}</div>
             </div>
         </div>
     </div>
 </div>
-<!--
-<div class="row">
-    <div class="col-xs-6">
-        <br><br><br><br>
-        <h3>{{context.feed_download_status}}</h3>
-        <h3>{{context.error}}</h3>
-        <h3>{{context.connection_error}}
-        <br><br>
-        <a class="btn btn-primary"  href="stops/">Get Stops </a>
-        <br><br>
-        <a class="btn btn-primary" href="route_masters/">Get route_master relations</a>
-        <br><br>
-        <a class="btn btn-primary" href="#">Get route relations</a>
-    </div>
 
-    <div id="map-holder">
-  <div class=" col-xs-6">
-    <div id="map">{% leaflet_map "osmmap" callback="loadmapfunction"%}
-    </div>
-  </div>
-</div>
-</div>
-</div>
--->
 <script type="text/javascript">
 
     window.onload = function(){ document.getElementById("loading").style.display = "none" }
 
-/* When the user clicks on the button, 
-toggle between hiding and showing the dropdown content */
-function myFunction() {
-    document.getElementById("myDropdown").classList.toggle("show");
-}
-
-// Close the dropdown menu if the user clicks outside of it
-window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
-
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
-    }
-  }
-}
     var feed_bounds;
     function loadmapfunction(map, options){
 
@@ -120,9 +94,27 @@ window.onclick = function(event) {
                     coordinates_arr = [lon, lat];
                     var marker = L.marker(coordinates_arr).bindTooltip(name+",lat="+lat+",lon="+lon,{ 
         direction: 'top'
-    });
+    }).on('click', markerOnClick).addTo(map);
+                    marker.stopid = data.features[i].properties.stop_id;
+                    marker.stopcode = data.features[i].properties.code;
+                    marker.stopzone = data.features[i].properties.zone;
+                    marker.stopname = name;
 
-                    marker.addTo(map);
+                    function markerOnClick(e){
+                        $("#gtfsstopid").text(this.stopid);
+                        if(this.stopcode == ""){
+                            $("#gtfsstopcode").text("code undefined");    
+                        }else{
+                            $("#gtfsstopcode").text(this.stopcode);
+                        }
+                        $("#gtfsstopname").text(this.stopname);
+                        if(this.stopzone == null){
+                            $("#gtfsstopzone").text("zone undefined");    
+                        }else{
+                            $("#gtfsstopzone").text(this.stopzone);
+                        }
+                    }
+
                     markerArray.push(marker);
                 }
             }
@@ -132,7 +124,6 @@ window.onclick = function(event) {
             feed_bounds = bounds;
             map.fitBounds(bounds);
         });
-/*
         function getCookie(name) {
             var cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -237,15 +228,22 @@ window.onclick = function(event) {
                         node_id+",lat="+lat+",lon="+lon,{
                             direction:'top'
                         }
-                        );
-
-                    marker.addTo(map);
+                        ).on('click', markerClick).addTo(map);
+                    marker.nodeid = node_id
+                    marker.nodeversion = data.features[i].properties.version
+                    function markerClick(e){
+                        $("#osmstopid").text(this.nodeid);
+                        $("#osmstopversion").text("version "+this.nodeversion);
+                    }
 
             }
         });
-        */
+
+
+      
 
 }
+
 </script>
 
 {% endblock %}

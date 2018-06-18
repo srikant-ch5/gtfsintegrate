@@ -22,6 +22,7 @@ def get_bounds(request):
         west = request.POST.get('west')
         north = request.POST.get('north')
         south = request.POST.get('south')
+        northeast_lat = request.POST.get('northwast_lat')
         northeast_lon = request.POST.get('northeast_lon')
         northwest_lon = request.POST.get('northwest_lon')
         northwest_lat = request.POST.get('northwest_lat')
@@ -55,7 +56,8 @@ def get_bounds(request):
             fh.write(result.content)
 
         print("Content has been copied")
-        #load(xmlfile)
+        #dividemap(east,west,north,south,northeast_lat)
+        load(xmlfile)
 
     return render(request, 'gs/load.html', {'context': context})
 
