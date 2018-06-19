@@ -7,10 +7,10 @@ gs/gtfsfeeds
 geodjango/settings.py
 
 #migration folders
-compare/migrations
-gs/migrations
-multigtfs/migrations
-osmapp/migrations
+#compare/migrations
+#gs/migrations
+#multigtfs/migrations
+#osmapp/migrations
 
 #environment
 venv
