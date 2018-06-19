@@ -7,6 +7,17 @@ from django.utils import timezone
 from multigtfs.models import Feed
 
 from .models import GTFSForm
+from django.db import connection
+
+
+def dividemap(east, west, north, south, northeast_lat, northeast_lon, northwest_lat, northwest_lon, southeast_lat,
+              southeast_lon, southwest_lat, southwest_lon):
+    cursor = connection.cursor()
+    bbox = (south, west, north, east)
+    cursor.execute(
+        "SELECT * FROM myTable WHERE ST_MakeEnvelope(%s, %s, %s, %s, 4326) && ST_Transform(myTable.geom, 4326)", bbox)
+    result = cursor.fetchall()
+    print(result)
 
 
 def rename_feed(name, formId):

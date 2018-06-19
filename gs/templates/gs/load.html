@@ -69,6 +69,10 @@
     window.onload = function(){ document.getElementById("loading").style.display = "none" }
 
     var feed_bounds;
+
+    function dividemapfunction(map,options){
+        L.marker([50.5, 30.5]).addTo(map);
+    }
     function loadmapfunction(map, options){
 
         feed_id = {{context.feed_id}}

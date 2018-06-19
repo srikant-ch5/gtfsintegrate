@@ -10,7 +10,7 @@ from ordered_set import OrderedSet
 from typing import List, Any
 
 from .models import Tag, KeyValueString, Node, Way, OSM_Relation
-
+from gs.tasks import dividemap
 
 def get_bounds(request):
     context = {
@@ -28,6 +28,8 @@ def get_bounds(request):
         northwest_lat = request.POST.get('northwest_lat')
         southeast_lon = request.POST.get('southeast_lon')
         southeast_lat = request.POST.get('southeast_lat')
+        southwest_lat = request.POST.get('southwest_lat')
+        southwest_lon = request.POST.get('southwest_lon')
 
         print('{} {} {} {}'.format(south, west, north, east))
 
@@ -44,6 +46,7 @@ def get_bounds(request):
         out meta;
         '''
         print(get_stops_query)
+        #dividemap(east,west, north, south, northeast_lat,northeast_lon,northwest_lat, northwest_lon, southeast_lat, southeast_lon,southwest_lat,southwest_lon)
         try:
             result = post("http://overpass-api.de/api/interpreter", get_stops_query)
         except ConnectionError as ce:
@@ -51,12 +54,12 @@ def get_bounds(request):
 
         PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
         xmlfiledir = xmlfiledir = os.path.join(os.path.dirname(PROJECT_ROOT), 'osmapp', 'static')
-        xmlfile = xmlfiledir + '/node.xml'
+        xmlfile = xmlfiledir + '/node.osm'
         with open(xmlfile, 'wb') as fh:
             fh.write(result.content)
 
         print("Content has been copied")
-        #dividemap(east,west,north,south,northeast_lat)
+        dividemap(east,west,north,south,northeast_lat)
         load(xmlfile)
 
     return render(request, 'gs/load.html', {'context': context})
