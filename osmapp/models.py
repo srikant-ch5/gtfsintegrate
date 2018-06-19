@@ -86,7 +86,7 @@ class Node(OSM_Primitive):
     objects = GeoManager()
 
     def set_cordinates(self, lat, lon):
-        self.geom = Point(lon, lat)
+        self.geom = Point(lat, lon)
         self.save()
 
 

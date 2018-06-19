@@ -11,6 +11,8 @@ from typing import List, Any
 
 from .models import Tag, KeyValueString, Node, Way, OSM_Relation
 from gs.tasks import dividemap
+import json
+
 
 def get_bounds(request):
     context = {
@@ -22,7 +24,7 @@ def get_bounds(request):
         west = request.POST.get('west')
         north = request.POST.get('north')
         south = request.POST.get('south')
-        northeast_lat = request.POST.get('northwast_lat')
+        northeast_lat = request.POST.get('northeast_lat')
         northeast_lon = request.POST.get('northeast_lon')
         northwest_lon = request.POST.get('northwest_lon')
         northwest_lat = request.POST.get('northwest_lat')
@@ -30,8 +32,13 @@ def get_bounds(request):
         southeast_lat = request.POST.get('southeast_lat')
         southwest_lat = request.POST.get('southwest_lat')
         southwest_lon = request.POST.get('southwest_lon')
+        coordinates_arr = request.POST.get('stopscoordinates_array')
 
-        print('{} {} {} {}'.format(south, west, north, east))
+        data = json.loads(coordinates_arr)
+
+        print('{} {} {} {} {} {} {} {} {} {} {} {}'.format(south, west, north, east, northeast_lat,northeast_lon,
+                northwest_lat, northwest_lon, southeast_lat, southeast_lon, southwest_lat, southwest_lon
+                ))
 
         bbox = south + "," + west + "," + north + "," + east
 
@@ -46,11 +53,10 @@ def get_bounds(request):
         out meta;
         '''
         print(get_stops_query)
-        #dividemap(east,west, north, south, northeast_lat,northeast_lon,northwest_lat, northwest_lon, southeast_lat, southeast_lon,southwest_lat,southwest_lon)
         try:
             result = post("http://overpass-api.de/api/interpreter", get_stops_query)
         except ConnectionError as ce:
-            context['connection_error'] ="There is a connection error while downloading the OSM data"
+            context['connection_error'] = "There is a connection error while downloading the OSM data"
 
         PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
         xmlfiledir = xmlfiledir = os.path.join(os.path.dirname(PROJECT_ROOT), 'osmapp', 'static')
@@ -59,7 +65,8 @@ def get_bounds(request):
             fh.write(result.content)
 
         print("Content has been copied")
-        dividemap(east,west,north,south,northeast_lat)
+        dividemap(east, west, north, south, northeast_lat, northeast_lon, northwest_lat, northwest_lon, southeast_lat,
+                  southeast_lon, southwest_lat, southwest_lon, coordinates_arr)
         load(xmlfile)
 
     return render(request, 'gs/load.html', {'context': context})

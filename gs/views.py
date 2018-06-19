@@ -6,8 +6,7 @@ from multigtfs.models import Feed
 
 from .forms import GTFSInfoForm
 from .models import GTFSForm
-from .tasks import download_feed_task, reset_feed
-
+from .tasks import download_feed_task, reset_feed, dividemap
 
 def feed_form(request):
     form_entries = GTFSForm.objects.all()
@@ -67,6 +66,7 @@ def feed_form(request):
 
 
 def home(request):
+    dividemap()
     context = {
         'feed': 'Please enter some feed',
         'message': 'Message to be shown ',

@@ -79,6 +79,7 @@
         console.log(feed_id)
         var mapLayer;
         var markerArray = [];
+        var stopscoordinates_array = [];
         var gtfsstopsdata = '{% url "stopdata" %}';
 
         $.ajaxSetup({
@@ -96,6 +97,7 @@
                     lon = data.features[i].geometry.coordinates[1];
                     lat = data.features[i].geometry.coordinates[0];
                     coordinates_arr = [lon, lat];
+                    stopscoordinates_array.push(coordinates_arr);
                     var marker = L.marker(coordinates_arr).bindTooltip(name+",lat="+lat+",lon="+lon,{ 
         direction: 'top'
     }).on('click', markerOnClick).addTo(map);
@@ -180,7 +182,8 @@
         southwest_bound[0] = feed_bounds.getSouthWest().lng;
         southwest_bound[1] = feed_bounds.getSouthWest().lat;
         var URL = "{% url 'bounds' %}";
-
+        
+        ar = JSON.stringify(stopscoordinates_array)
         $.ajax({
            url:URL,
            method:'POST',
@@ -197,6 +200,7 @@
                'southeast_lat':southeast_bound[1],
                'southwest_lon':southwest_bound[0],
                'southwest_lat':southwest_bound[1],
+               'stopscoordinates_array':ar,
                'csrfmiddlewaretoken': '{{ csrf_token }}'},
            success: function(data){
                 alert("OpenStreetMap Data has been loaded loading stop on the map");
@@ -227,7 +231,7 @@
                     node_id=data.features[i].properties.id
                     lon = data.features[i].geometry.coordinates[1];
                     lat = data.features[i].geometry.coordinates[0];
-                    coordinates_arr = [lon, lat];
+                    coordinates_arr = [lat, lon];
                     var marker = L.marker(coordinates_arr, {icon:greenIcon}).bindTooltip(
                         node_id+",lat="+lat+",lon="+lon,{
                             direction:'top'
