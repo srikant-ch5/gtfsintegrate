@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 import os
-
+import numpy as np
 import requests
 from django.utils import timezone
 from multigtfs.models import Feed
@@ -9,6 +9,8 @@ from multigtfs.models import Feed
 from .models import GTFSForm
 from django.db import connection
 from geographiclib.geodesic import Geodesic
+from shapely.geometry import Point
+from shapely.geometry.polygon import Polygon
 
 
 def getmidpoint(lat1, lon1, lat2, lon2):
@@ -31,7 +33,7 @@ def dividemap(east=None, west=None, north=None, south=None, northeast_lat=None, 
     southeast_lon = -72.0132064819
     southwest_lat = 43.6245117188
     southwest_lon = -72.343421936
-    west = {'lat':0.0,'lon':0.0}
+    west = {'lat': 0.0, 'lon': 0.0}
     west['lat'], west['lon'] = getmidpoint(northwest_lat, northwest_lon, southwest_lat, southwest_lon)
     east = {'lat': 0.0, 'lon': 0.0}
     east['lat'], east['lon'] = getmidpoint(northeast_lat, northeast_lon, southeast_lat, southeast_lon)
@@ -39,6 +41,9 @@ def dividemap(east=None, west=None, north=None, south=None, northeast_lat=None, 
     north['lat'], north['lon'] = getmidpoint(northeast_lat, northeast_lon, northwest_lat, northwest_lon)
     south = {'lat': 0.0, 'lon': 0.0}
     south['lat'], south['lon'] = getmidpoint(southwest_lat, southwest_lon, southeast_lat, southeast_lon)
+
+    center = {'lat': 0, 'lon': 0}
+    center['lat'], center['lon'] = getmidpoint(west['lat'], west['lon'], east['lat'], east['lon'])
 
     stops_coordinates = [[43.6377754211, -72.2750091553], [43.6361541748, -72.2879180908],
                          [43.6380233765, -72.3021316528], [43.640838623, -72.2555389404],
@@ -121,6 +126,21 @@ def dividemap(east=None, west=None, north=None, south=None, northeast_lat=None, 
                          [43.6816978455, -72.3141326904], [43.6761703491, -72.3091659546],
                          [43.673210144, -72.3091278076], [43.6685371399, -72.3108978271],
                          [43.6956787109, -72.3189849854]]
+
+    v0 = [northwest_lat, northwest_lon]
+    v1 = [northeast_lat, northeast_lon]
+    v2 = [southwest_lat, southwest_lon]
+    v3 = [southeast_lat, southeast_lon]
+
+    lats_vect = np.array([v0[0], v1[0], v2[0], v3[0]])
+    lons_vect = np.array([v0[1], v1[1], v2[1], v3[1]])
+
+    x, y = 43.729133606, -72.2674865723
+
+    lats_lon_vect = np.column_stack((lats_vect, lons_vect))
+    polygon = Polygon(lats_lon_vect)
+    point = Point(x, y)
+    print(polygon.contains(point))
 
     '''
     cursor = connection.cursor()

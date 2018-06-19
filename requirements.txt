@@ -26,6 +26,9 @@ requests==2.19.0
 urllib3==1.23
 whitenoise==3.3.1
 django-rest-swagger
+geographiclib
+numpy
+shapely
 
 #Testing
 coverage==4.5.1
