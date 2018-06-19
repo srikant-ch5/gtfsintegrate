@@ -5,6 +5,14 @@ gs/gtfsfeeds
 *.xml
 *.osm
 geodjango/settings.py
+
+#migration folders
+compare/migrations
+gs/migrations
+multigtfs/migrations
+osmapp/migrations
+
+#environment
 venv
 .venv
 .idea
