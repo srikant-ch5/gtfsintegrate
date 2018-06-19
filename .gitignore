@@ -3,6 +3,7 @@ settings_secret.py
 gs/gtfsfeeds
 *.pyc
 *.xml
+*.osm
 geodjango/settings.py
 venv
 .venv
