@@ -211,9 +211,6 @@ def download_feed_in_db(file, file_name, code, formId):
         feed = Feed.objects.latest('id')
         form = GTFSForm.objects.get(id=formId)
         print(form)
-        form.feed = feed
-        form.save()
-
         successfull_download = 1  # 1 =True
         print("{} in  Feed import ".format(successfull_download))
 
@@ -306,7 +303,7 @@ def check_feeds_task():
         print(feed_form_not_found)
 
 
-def reset_feed(formId):
+def reset_feed(formId, associated_feed_id):
     form = GTFSForm.objects.get(id=formId)
     form_timestamp = form.timestamp
     print(form_timestamp)
@@ -322,7 +319,7 @@ def reset_feed(formId):
         status = 'Reseting feed with latest data'
         form.timestamp = timezone.now()
         form.save()
-        Feed.objects.filter(name=form_name).all().delete()
+        Feed.objects.get(name=form_name).delete()
         download_feed_with_url(form.url, form.name, code, formId)
 
     '''since form has one to one relationship with every feed so when the feed is renewed form.feed should be updated'''

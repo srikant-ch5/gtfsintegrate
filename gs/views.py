@@ -8,6 +8,7 @@ from .forms import GTFSInfoForm
 from .models import GTFSForm
 from .tasks import download_feed_task, reset_feed, dividemap
 
+
 def feed_form(request):
     form_entries = GTFSForm.objects.all()
     forms_list = []
@@ -35,13 +36,13 @@ def feed_form(request):
                 form_entry = GTFSForm.objects.get(url=request.POST['url'], osm_tag=request.POST['osm_tag'],
                                                   gtfs_tag=request.POST['gtfs_tag'])
                 formId = is_feed_present[0].id
-                context['error'] = reset_feed(formId)
-                context['feed_id'] = form_entry.feed.id
-                feed_name = Feed.objects.get(id=form_entry.feed.id).name
+                associated_feed_id = Feed.objects.get(name=is_feed_present[0].name).name
+                context['error'] = reset_feed(formId, associated_feed_id)
+                context['feed_id'] = Feed.objects.get(name=form_entry.name).id
+                feed_name = Feed.objects.get(name=form_entry.name).name
                 request.session['feed'] = feed_name
                 context['feed_name'] = feed_name
             except Exception as e:
-
                 context['error'] = e
         else:
             if form.is_valid():
@@ -50,11 +51,12 @@ def feed_form(request):
                     gtfs_feed_info.save()
 
                     context['error'] = download_feed_task(gtfs_feed_info.id)
-                    if(context['error'].find("(failed)")) < 0:
+                    if (context['error'].find("(failed)")) < 0:
                         gform = GTFSForm.objects.get(id=gtfs_feed_info.id)
-                        request.session['feed'] = gform.feed.name
-                        context['feed_id'] = gform.feed.id
-                        context['feed_name'] = gform.feed.name
+                        feed = Feed.objects.get(name=gform.name)
+                        request.session['feed'] = feed.name
+                        context['feed_id'] = feed.id
+                        context['feed_name'] = feed.name
                 except Exception as e:
 
                     context['error'] = e
