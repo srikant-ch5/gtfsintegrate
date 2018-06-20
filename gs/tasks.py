@@ -11,6 +11,8 @@ from django.db import connection
 from geographiclib.geodesic import Geodesic
 from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
+import cartopy.crs as ccrs
+import matplotlib.pyplot as plt
 
 
 def getmidpoint(lat1, lon1, lat2, lon2):
@@ -129,26 +131,55 @@ def dividemap(east=None, west=None, north=None, south=None, northeast_lat=None, 
 
     v0 = [northwest_lat, northwest_lon]
     v1 = [northeast_lat, northeast_lon]
-    v2 = [southwest_lat, southwest_lon]
-    v3 = [southeast_lat, southeast_lon]
+    v3 = [southwest_lat, southwest_lon]
+    v2 = [southeast_lat, southeast_lon]
 
     lats_vect = np.array([v0[0], v1[0], v2[0], v3[0]])
     lons_vect = np.array([v0[1], v1[1], v2[1], v3[1]])
 
-    x, y = 43.729133606, -72.2674865723
-
     lats_lon_vect = np.column_stack((lats_vect, lons_vect))
     polygon = Polygon(lats_lon_vect)
-    point = Point(x, y)
-    print(polygon.contains(point))
+
+    points_in_bound = []
+    points_not_in_bound = []
+
+    for i in range(0, len(stops_coordinates)):
+        x, y = stops_coordinates[i][0], stops_coordinates[i][1]
+        point = Point(x, y)
+        if polygon.contains(point):
+            points_in_bound.append(point)
+        else:
+            points_not_in_bound.append(point)
 
     '''
+    print(len(points_in_bound))
+    print(len(points_not_in_bound))
+
+    ax = plt.axes(projection=ccrs.PlateCarree())
+    ax.stock_img()
+
+    # Append first vertex to end of vector to close polygon when plotting
+    lats_vect = np.append(lats_vect, lats_vect[0])
+    lons_vect = np.append(lons_vect, lons_vect[0])
+    plt.plot([lons_vect[0:-1], lons_vect[1:]], [lats_vect[0:-1], lats_vect[1:]],
+             color='black', linewidth=1,
+             transform=ccrs.Geodetic(),
+             )
+
+
+    plt.plot(y, x,
+             '*',  # marker shape
+             color='blue',  # marker colour
+             markersize=8  # marker size
+             )
+
+    plt.show()
+    
     cursor = connection.cursor()
     cursor.execute('SELECT COUNT(gtfs_stop.feed) FROM gtfs_feed INNER JOIN gtfs_stop ON gtfs_feed.id=15')
     result = cursor.fetchall()
     print(result)
     '''
-
 
 def rename_feed(name, formId):
     present_name = name

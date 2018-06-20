@@ -229,8 +229,8 @@
             var length = data.features.length;
             for (var i = 0; i < length; i++) {
                     node_id=data.features[i].properties.id
-                    lon = data.features[i].geometry.coordinates[1];
-                    lat = data.features[i].geometry.coordinates[0];
+                    lat = data.features[i].geometry.coordinates[1];
+                    lon = data.features[i].geometry.coordinates[0];
                     coordinates_arr = [lat, lon];
                     var marker = L.marker(coordinates_arr, {icon:greenIcon}).bindTooltip(
                         node_id+",lat="+lat+",lon="+lon,{

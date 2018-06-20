@@ -28,6 +28,7 @@ from django.utils.six import StringIO, text_type, PY3
 from multigtfs.compat import (
     get_blank_value, write_text_rows, Manager, QuerySet)
 
+
 logger = getLogger(__name__)
 re_geom = re.compile(r'(?P<name>geom)\[(?P<index>\d)\]')
 

@@ -209,7 +209,7 @@ def load(xmlfile):
 
                 node = Node(id=snode_id, timestamp=stimestamp, uid=suid, user=suser, version=sversion, visible=True,
                             changeset=schangeset, incomplete=False)
-                node.set_cordinates(slat, slon)
+                node.set_cordinates(slon, slat)
                 node.save()
             except Exception as e:
                 print(e)
