@@ -41,6 +41,7 @@ def feed_form(request):
                 request.session['feed'] = feed_name
                 context['feed_name'] = feed_name
             except Exception as e:
+
                 context['error'] = e
         else:
             if form.is_valid():
@@ -55,8 +56,7 @@ def feed_form(request):
                         context['feed_id'] = gform.feed.id
                         context['feed_name'] = gform.feed.name
                 except Exception as e:
-                    GTFSForm.objects.all()[3].delete()
-                    Feed.objects.all()[3].delete()
+
                     context['error'] = e
 
         return render(request, 'gs/load.html', {'form': form, 'context': context})
