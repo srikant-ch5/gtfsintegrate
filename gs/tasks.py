@@ -13,6 +13,11 @@ from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
 import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
+import operator
+topleft_block_stops = []
+topright_block_stops = []
+bottomleft_block_stops = []
+bottomright_block_stops = []
 
 
 def getmidpoint(lat1, lon1, lat2, lon2):
@@ -21,6 +26,52 @@ def getmidpoint(lat1, lon1, lat2, lon2):
     m = l.Position(0.5 * l.s13)
 
     return m['lat2'], m['lon2']
+
+
+def plotblock(v0, v1, v2, v3, stops_coordinates, block=None):
+    lats_vect = np.array([v0[0], v1[0], v2[0], v3[0]])
+    lons_vect = np.array([v0[1], v1[1], v2[1], v3[1]])
+
+    lats_lon_vect = np.column_stack((lats_vect, lons_vect))
+    polygon = Polygon(lats_lon_vect)
+
+    points_in_bound = []
+    points_not_in_bound = []
+
+    for i in range(0, len(stops_coordinates)):
+        x, y = stops_coordinates[i][0], stops_coordinates[i][1]
+        point = Point(x, y)
+        p = [x, y]
+        if polygon.contains(point):
+            block.append([x, y])
+        else:
+            points_not_in_bound.append([x, y])
+
+    # print(len(points_not_in_bound))#includes points ne,nw,se,sw
+
+    '''
+    Display bound and a stop using matlpotlib
+    ax = plt.axes(projection=ccrs.PlateCarree())
+    ax.stock_img()
+
+    # Append first vertex to end of vector to close polygon when plotting
+    lats_vect = np.append(lats_vect, lats_vect[0])
+    lons_vect = np.append(lons_vect, lons_vect[0])
+    plt.plot([lons_vect[0:-1], lons_vect[1:]], [lats_vect[0:-1], lats_vect[1:]],
+             color='black', linewidth=1,
+             transform=ccrs.Geodetic(),
+             )
+
+    plt.plot(-72.343421936, 43.729133606,
+             '*',
+             color='blue',
+             markersize=8)
+
+    plt.show()
+    
+    '''
+
+    return len(block)
 
 
 def dividemap(east=None, west=None, north=None, south=None, northeast_lat=None, northeast_lon=None, northwest_lat=None,
@@ -35,17 +86,17 @@ def dividemap(east=None, west=None, north=None, south=None, northeast_lat=None, 
     southeast_lon = -72.0132064819
     southwest_lat = 43.6245117188
     southwest_lon = -72.343421936
-    west = {'lat': 0.0, 'lon': 0.0}
-    west['lat'], west['lon'] = getmidpoint(northwest_lat, northwest_lon, southwest_lat, southwest_lon)
-    east = {'lat': 0.0, 'lon': 0.0}
-    east['lat'], east['lon'] = getmidpoint(northeast_lat, northeast_lon, southeast_lat, southeast_lon)
-    north = {'lat': 0.0, 'lon': 0.0}
-    north['lat'], north['lon'] = getmidpoint(northeast_lat, northeast_lon, northwest_lat, northwest_lon)
-    south = {'lat': 0.0, 'lon': 0.0}
-    south['lat'], south['lon'] = getmidpoint(southwest_lat, southwest_lon, southeast_lat, southeast_lon)
+    west = [0, 0]
+    west[0], west[1] = getmidpoint(northwest_lat, northwest_lon, southwest_lat, southwest_lon)
+    east = [0, 0]
+    east[0], east[1] = getmidpoint(northeast_lat, northeast_lon, southeast_lat, southeast_lon)
+    north = [0, 0]
+    north[0], north[1] = getmidpoint(northeast_lat, northeast_lon, northwest_lat, northwest_lon)
+    south = [0, 0]
+    south[0], south[1] = getmidpoint(southwest_lat, southwest_lon, southeast_lat, southeast_lon)
 
-    center = {'lat': 0, 'lon': 0}
-    center['lat'], center['lon'] = getmidpoint(west['lat'], west['lon'], east['lat'], east['lon'])
+    center = [0, 0]
+    center[0], center[1] = getmidpoint(north[0], north[1], south[0], south[1])
 
     stops_coordinates = [[43.6377754211, -72.2750091553], [43.6361541748, -72.2879180908],
                          [43.6380233765, -72.3021316528], [43.640838623, -72.2555389404],
@@ -129,32 +180,63 @@ def dividemap(east=None, west=None, north=None, south=None, northeast_lat=None, 
                          [43.673210144, -72.3091278076], [43.6685371399, -72.3108978271],
                          [43.6956787109, -72.3189849854]]
 
+    ''' whole block '''
+
     v0 = [northwest_lat, northwest_lon]
     v1 = [northeast_lat, northeast_lon]
-    v3 = [southwest_lat, southwest_lon]
     v2 = [southeast_lat, southeast_lon]
+    v3 = [southwest_lat, southwest_lon]
 
-    lats_vect = np.array([v0[0], v1[0], v2[0], v3[0]])
-    lons_vect = np.array([v0[1], v1[1], v2[1], v3[1]])
+    # plotblock(v0, v1, v2, v3, stops_coordinates)
 
-    lats_lon_vect = np.column_stack((lats_vect, lons_vect))
-    polygon = Polygon(lats_lon_vect)
+    ''' top-left block '''
+    v0 = [northwest_lat, northwest_lon]
+    v1 = north
+    v2 = center
+    v3 = west
 
-    points_in_bound = []
-    points_not_in_bound = []
+    block1_len = plotblock(v0, v1, v2, v3, stops_coordinates, topleft_block_stops)
 
-    for i in range(0, len(stops_coordinates)):
-        x, y = stops_coordinates[i][0], stops_coordinates[i][1]
-        point = Point(x, y)
-        if polygon.contains(point):
-            points_in_bound.append(point)
-        else:
-            points_not_in_bound.append(point)
+    '''top right block '''
+    v0 = north
+    v1 = [northeast_lat, northeast_lon]
+    v2 = east
+    v3 = center
 
+    block2_len = plotblock(v0, v1, v2, v3, stops_coordinates, topright_block_stops)
+
+    '''bottom right block'''
+    v0 = center
+    v1 = east
+    v2 = [southeast_lat, southeast_lon]
+    v3 = south
+    block3_len = plotblock(v0, v1, v2, v3, stops_coordinates, bottomright_block_stops)
+
+    '''bottom left block'''
+    v0 = west
+    v1 = center
+    v2 = south
+    v3 = [southwest_lat, southwest_lon]
+    block4_len = plotblock(v0, v1, v2, v3, stops_coordinates, bottomleft_block_stops)
+
+    print('block I {} II {} III {} IV {} '.format(block1_len, block2_len, block3_len, block4_len))
+    total_stops = len(stops_coordinates)
+
+    # get that one block which has the highest number of stops
+    blocks = [block1_len, block2_len, block3_len, block4_len]
+    populated_block, value = max(enumerate(blocks), key=operator.itemgetter(1))
+
+    ind = {
+        '0': topleft_block_stops,
+        '1': topright_block_stops,
+        '2': bottomright_block_stops,
+        '3': bottomleft_block_stops
+    }
+    s = str(populated_block)
+    block = ind[s]
+
+    print(block)
     '''
-    print(len(points_in_bound))
-    print(len(points_not_in_bound))
-
     ax = plt.axes(projection=ccrs.PlateCarree())
     ax.stock_img()
 
@@ -167,11 +249,12 @@ def dividemap(east=None, west=None, north=None, south=None, northeast_lat=None, 
              )
 
 
-    plt.plot(y, x,
-             '*',  # marker shape
-             color='blue',  # marker colour
-             markersize=8  # marker size
-             )
+    for i in range(0,len(points_in_bound)):
+        y,x = points_in_bound[1],points_in_bound[0]
+        plt.plot(y,x,
+                 '*',
+                 color='blue',
+                 markersize=8)
 
     plt.show()
     
@@ -180,6 +263,7 @@ def dividemap(east=None, west=None, north=None, south=None, northeast_lat=None, 
     result = cursor.fetchall()
     print(result)
     '''
+
 
 def rename_feed(name, formId):
     present_name = name
