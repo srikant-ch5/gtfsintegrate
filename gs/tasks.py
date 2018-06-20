@@ -76,28 +76,20 @@ def plotblock(v0, v1, v2, v3, stops_coordinates, block=None):
 
 def dividemap(east=None, west=None, north=None, south=None, northeast_lat=None, northeast_lon=None, northwest_lat=None,
               northwest_lon=None, southeast_lat=None,
-              southeast_lon=None, southwest_lat=None, southwest_lon=None, coordinates_arr=None):
+              southeast_lon=None, southwest_lat=None, southwest_lon=None, stops_coordinates=None):
+
+
     '''testing to get 1/4th of the bbbox using AdvanceTransit bounds'''
-    northeast_lat = 43.729133606
-    northeast_lon = -72.0132064819
-    northwest_lat = 43.729133606
-    northwest_lon = -72.343421936
-    southeast_lat = 43.6245117188
-    southeast_lon = -72.0132064819
-    southwest_lat = 43.6245117188
-    southwest_lon = -72.343421936
-    west = [0, 0]
-    west[0], west[1] = getmidpoint(northwest_lat, northwest_lon, southwest_lat, southwest_lon)
-    east = [0, 0]
-    east[0], east[1] = getmidpoint(northeast_lat, northeast_lon, southeast_lat, southeast_lon)
-    north = [0, 0]
-    north[0], north[1] = getmidpoint(northeast_lat, northeast_lon, northwest_lat, northwest_lon)
-    south = [0, 0]
-    south[0], south[1] = getmidpoint(southwest_lat, southwest_lon, southeast_lat, southeast_lon)
+    northeast_lat = float(northeast_lat)
+    northeast_lon = float(northeast_lon)
+    northwest_lat = float(northwest_lat)
+    northwest_lon = float(northwest_lon)
+    southeast_lat = float(southeast_lat)
+    southeast_lon = float(southeast_lon)
+    southwest_lat = float(southwest_lat)
+    southwest_lon = float(southwest_lon)
 
-    center = [0, 0]
-    center[0], center[1] = getmidpoint(north[0], north[1], south[0], south[1])
-
+    '''
     stops_coordinates = [[43.6377754211, -72.2750091553], [43.6361541748, -72.2879180908],
                          [43.6380233765, -72.3021316528], [43.640838623, -72.2555389404],
                          [43.6389656067, -72.2579574585], [43.638458252, -72.2679672241],
@@ -178,7 +170,21 @@ def dividemap(east=None, west=None, north=None, south=None, northeast_lat=None, 
                          [43.6870231628, -72.3208236694], [43.6837005615, -72.3178482056],
                          [43.6816978455, -72.3141326904], [43.6761703491, -72.3091659546],
                          [43.673210144, -72.3091278076], [43.6685371399, -72.3108978271],
-                         [43.6956787109, -72.3189849854]]
+                         [43.6956787109, -72.3189849854]]'''
+
+
+    west = [0, 0]
+    west[0], west[1] = getmidpoint(northwest_lat, northwest_lon, southwest_lat, southwest_lon)
+    east = [0, 0]
+    east[0], east[1] = getmidpoint(northeast_lat, northeast_lon, southeast_lat, southeast_lon)
+    north = [0, 0]
+    north[0], north[1] = getmidpoint(northeast_lat, northeast_lon, northwest_lat, northwest_lon)
+    south = [0, 0]
+    south[0], south[1] = getmidpoint(southwest_lat, southwest_lon, southeast_lat, southeast_lon)
+
+    center = [0, 0]
+    center[0], center[1] = getmidpoint(north[0], north[1], south[0], south[1])
+
 
     ''' whole block '''
 

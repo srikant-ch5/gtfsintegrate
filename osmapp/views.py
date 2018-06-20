@@ -66,7 +66,7 @@ def get_bounds(request):
 
         print("Content has been copied")
         dividemap(east, west, north, south, northeast_lat, northeast_lon, northwest_lat, northwest_lon, southeast_lat,
-                  southeast_lon, southwest_lat, southwest_lon, coordinates_arr)
+                  southeast_lon, southwest_lat, southwest_lon, data)
         load(xmlfile)
 
     return render(request, 'gs/load.html', {'context': context})
