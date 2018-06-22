@@ -11,8 +11,7 @@ from django.db import connection
 from geographiclib.geodesic import Geodesic
 from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
-import cartopy.crs as ccrs
-import matplotlib.pyplot as plt
+
 import operator
 
 topleft_block_stops = []
@@ -73,6 +72,9 @@ def plotblock(v0, v1, v2, v3, stops_coordinates, block=None):
     '''
 
     return block
+
+def queries():
+    query = ''
 
 
 def dividemap(east=None, west=None, north=None, south=None, northeast_lat=None, northeast_lon=None, northwest_lat=None,
@@ -213,11 +215,6 @@ def dividemap(east=None, west=None, north=None, south=None, northeast_lat=None, 
                  markersize=8)
 
     plt.show()
-    
-    cursor = connection.cursor()
-    cursor.execute('SELECT COUNT(gtfs_stop.feed) FROM gtfs_feed INNER JOIN gtfs_stop ON gtfs_feed.id=15')
-    result = cursor.fetchall()
-    print(result)
     '''
 
 

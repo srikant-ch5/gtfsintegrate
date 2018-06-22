@@ -29,10 +29,7 @@ django-rest-swagger
 geographiclib
 numpy
 shapely
-scipy
-matplotlib
-cartopy
-cython
+
 
 #Testing
 coverage==4.5.1
