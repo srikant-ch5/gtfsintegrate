@@ -68,6 +68,7 @@ def feed_form(request):
 
 
 def home(request):
+    dividemap()
     context = {
         'feed': 'Please enter some feed',
         'message': 'Message to be shown ',

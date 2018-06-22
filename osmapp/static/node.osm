@@ -1,84 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="Overpass API 0.7.55.3 9da5e7ae">
 <note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
-<meta osm_base="2018-06-20T21:15:02Z"/>
+<meta osm_base="2018-06-21T19:21:01Z"/>
 
-  <node id="856138261" lat="-6.6054175" lon="106.8058102" version="4" timestamp="2012-07-16T07:26:00Z" changeset="12240355" uid="538459" user="Alex Rollin">
-    <tag k="bus" v="yes"/>
-    <tag k="name" v="BaranangSiang"/>
-    <tag k="public_transport" v="stop_position"/>
-  </node>
-  <node id="1014211024" lat="-6.5700107" lon="106.7549897" version="1" timestamp="2010-12-01T06:29:56Z" changeset="6500054" uid="377900" user="rawengdri">
+  <node id="4440762069" lat="30.2560599" lon="-85.9615288" version="1" timestamp="2016-10-10T14:39:52Z" changeset="42778913" uid="349063" user="BertoUCF">
+    <tag k="bench" v="no"/>
+    <tag k="covered" v="no"/>
     <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Terminal Bubulak"/>
+    <tag k="name" v="Front Beach Rd. &amp; Shasta Pl."/>
+    <tag k="operator" v="Bay Town Trolley"/>
+    <tag k="shelter" v="no"/>
   </node>
-  <node id="1014211025" lat="-6.5760673" lon="106.7528415" version="2" timestamp="2012-05-01T12:05:14Z" changeset="11468878" uid="538459" user="Alex Rollin">
-    <tag k="amenity" v="bus_station"/>
+  <node id="4440762070" lat="30.2561144" lon="-85.9614079" version="1" timestamp="2016-10-10T14:39:53Z" changeset="42778913" uid="349063" user="BertoUCF">
+    <tag k="bench" v="no"/>
+    <tag k="covered" v="no"/>
     <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Terminal Laladon"/>
-  </node>
-  <node id="1700130565" lat="-6.5517542" lon="106.7456496" version="1" timestamp="2012-03-31T20:13:56Z" changeset="11167986" uid="538459" user="Alex Rollin">
-    <tag k="designation" v="#15"/>
-    <tag k="highway" v="bus_stop"/>
-    <tag k="local_ref" v="Situe Gedet"/>
-  </node>
-  <node id="1700350382" lat="-6.6053314" lon="106.8059492" version="3" timestamp="2012-07-16T03:24:07Z" changeset="12238834" uid="538459" user="Alex Rollin">
-    <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Kota Angkot Halte BaranangSiang"/>
-  </node>
-  <node id="1734066080" lat="-6.6020812" lon="106.8055579" version="1" timestamp="2012-04-28T12:44:28Z" changeset="11440732" uid="538459" user="Alex Rollin">
-    <tag k="alt_name" v="Terminal Damri"/>
-    <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Botani Square"/>
-  </node>
-  <node id="1738488162" lat="-6.6205139" lon="106.8219101" version="2" timestamp="2012-06-12T06:44:05Z" changeset="11871370" uid="538459" user="Alex Rollin">
-    <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="SKI"/>
-  </node>
-  <node id="1784389102" lat="-6.6249126" lon="106.8280373" version="1" timestamp="2012-06-12T06:42:15Z" changeset="11871370" uid="538459" user="Alex Rollin">
-    <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Bantar-Kemang"/>
-  </node>
-  <node id="3887172570" lat="-6.5965129" lon="106.7923232" version="1" timestamp="2015-12-11T05:51:34Z" changeset="35878223" uid="475560" user="Fidelis Awig Atmoko">
-    <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Halte Katedral"/>
-  </node>
-  <node id="3887172571" lat="-6.5958782" lon="106.7893765" version="1" timestamp="2015-12-11T05:51:34Z" changeset="35878223" uid="475560" user="Fidelis Awig Atmoko">
-    <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Halte Jembatan Merah"/>
-  </node>
-  <node id="3887172572" lat="-6.5961779" lon="106.7907688" version="1" timestamp="2015-12-11T05:51:34Z" changeset="35878223" uid="475560" user="Fidelis Awig Atmoko">
-    <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Halte Taman Topi"/>
-  </node>
-  <node id="3887172573" lat="-6.5961105" lon="106.7912400" version="1" timestamp="2015-12-11T05:51:34Z" changeset="35878223" uid="475560" user="Fidelis Awig Atmoko">
-    <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Halte Taman Topi"/>
-  </node>
-  <node id="3887179940" lat="-6.6301044" lon="106.8106324" version="1" timestamp="2015-12-11T06:10:42Z" changeset="35878393" uid="475560" user="Fidelis Awig Atmoko">
-    <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Pool Bus Damri Bogor"/>
-    <tag k="operator" v="DAMRI"/>
-  </node>
-  <node id="4754561649" lat="-6.5942575" lon="106.7779598" version="1" timestamp="2017-03-25T13:21:03Z" changeset="47151269" uid="475560" user="Fidelis Awig Atmoko">
-    <tag k="bench" v="yes"/>
-    <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Halte Pasar Gunung Batu"/>
-    <tag k="network" v="02, 03, 14, 05"/>
-    <tag k="operator" v="Pemkot Bogor"/>
-    <tag k="shelter" v="yes"/>
-  </node>
-  <node id="4784677221" lat="-6.6553447" lon="106.8473910" version="1" timestamp="2017-04-09T16:12:52Z" changeset="47596989" uid="3197972" user="ابوادهم">
-    <tag k="highway" v="bus_stop"/>
-    <tag k="name:ar" v="محطه باصات تشاوي"/>
-  </node>
-  <node id="4991557619" lat="-6.5964561" lon="106.7928963" version="1" timestamp="2017-07-25T04:03:52Z" changeset="50544613" uid="475560" user="Fidelis Awig Atmoko">
-    <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Halte DPRD"/>
-  </node>
-  <node id="4994363543" lat="-6.5990361" lon="106.8126228" version="1" timestamp="2017-07-26T09:20:57Z" changeset="50581726" uid="475560" user="Fidelis Awig Atmoko">
-    <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Ciheuleut"/>
+    <tag k="name" v="Front Beach Rd. &amp; Shasta Pl."/>
+    <tag k="operator" v="Bay Town Trolley"/>
+    <tag k="shelter" v="no"/>
   </node>
 
 </osm>
