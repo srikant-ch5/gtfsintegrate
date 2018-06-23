@@ -26,7 +26,7 @@ def get_bounds(request):
         feed_name = Feed.objects.get(id=feed_id).name
 
         query = 'SELECT gtfs_stop.geom FROM gtfs_stop where gtfs_stop.feed_id=8'
-        query2 = 'SELECT ST_AsGeoJson(ST_Envelope(ST_Union(ST_Envelope(geom)))) AS table_extent FROM gtfs_stop where gtfs_stop.feed_id=8'
+        query2 = 'SELECT ST_AsGeoJson(ST_Envelope(ST_Union(ST_Envelope(geom)))) AS table_extent FROM gtfs_stop where gtfs_stop.feed_id=' + feed_id
         cursor = connection.cursor()
         cursor.execute(query2)
         result = cursor.fetchall()
@@ -61,16 +61,46 @@ def get_bounds(request):
         innerbound = [bottom_left, top_left, top_right, bottom_right]
 
         if not FeedBounds.objects.filter(operator_name=feed_name).exists():
-            feedbound = FeedBounds(operator_name=feed_name, outer_bound=outerbound, inner_bound=innerbound)
+            feedbound = FeedBounds(feed_id=feed_id, operator_name=feed_name, outer_bound=outerbound,
+                                   inner_bound=innerbound)
             feedbound.save()
         else:
             feedbound = FeedBounds.objects.get(operator_name=feed_name)
+            feedbound.feed_id = feed_id
             feedbound.outer_bound = outerbound
             feedbound.inner_bound = innerbound
             feedbound.save()
 
         print('saved inner bound {} {} {} {} with operator {}'.format(top_left, top_right, bottom_left, bottom_right,
                                                                       feed_name))
+        bbox = str(southwest[1]) + "," + str(southwest[0]) + "," + str(northeast[1]) + "," + str(northeast[0])
+
+        get_stops_query = '''
+                [out:xml];
+                    (
+                    node(''' + bbox + ''')[highway=bus_stop];
+                    node(''' + bbox + ''')[bus=yes];
+                    node(''' + bbox + ''')[public_transport=stop_position];
+                    node(''' + bbox + ''')[public_transport=platform];
+                );
+                out meta;
+                '''
+        print(get_stops_query)
+        try:
+            result = post("http://overpass-api.de/api/interpreter", get_stops_query)
+        except ConnectionError as ce:
+            context['connection_error'] = "There is a connection error while downloading the OSM data"
+
+        PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+        xmlfiledir = xmlfiledir = os.path.join(os.path.dirname(PROJECT_ROOT), 'osmapp', 'static')
+        xmlfile = xmlfiledir + '/node.osm'
+        with open(xmlfile, 'wb') as fh:
+            fh.write(result.content)
+
+        print("Content has been copied")
+
+        load(xmlfile)
+
     return render(request, 'gs/load.html', {'context': context})
 
 
@@ -96,10 +126,7 @@ def set_bounds(request):
 
         data = json.loads(coordinates_arr)
 
-        print('{} {} {} {} {} {} {} {} {} {} {} {}'.format(south, west, north, east, northeast_lat, northeast_lon,
-                                                           northwest_lat, northwest_lon, southeast_lat, southeast_lon,
-                                                           southwest_lat, southwest_lon
-                                                           ))
+        print('{} {} {} {} '.format(type(south), type(west), type(north), type(east)))
 
         bbox = south + "," + west + "," + north + "," + east
 
@@ -128,7 +155,7 @@ def set_bounds(request):
         print("Content has been copied")
         dividemap(east, west, north, south, northeast_lat, northeast_lon, northwest_lat, northwest_lon, southeast_lat,
                   southeast_lon, southwest_lat, southwest_lon, data)
-        # load(xmlfile)
+        load(xmlfile)
 
     return render(request, 'gs/load.html', {'context': context})
 

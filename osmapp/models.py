@@ -7,6 +7,7 @@ from django.contrib.postgres.fields import ArrayField
 
 # model for storing bounds specific to the operator
 class FeedBounds(models.Model):
+    feed_id = models.IntegerField(primary_key=True, blank=True)
     operator_name = models.CharField(max_length=200)
     outer_bound = ArrayField(ArrayField(models.FloatField()), blank=True)
     inner_bound = ArrayField(ArrayField(models.FloatField()), blank=True)

@@ -3,7 +3,7 @@ from django.shortcuts import render
 from rest_framework import generics
 from gs.models import GTFSForm
 from multigtfs.models import Stop, Feed, Agency, Route
-from osmapp.models import Node, Way, KeyValueString, OSM_Relation, Tag
+from osmapp.models import Node, Way, KeyValueString, OSM_Relation, Tag, FeedBounds
 from .serializers import FormSerializer, StopSerializer, NodeSerializer, WaySerializer, \
     TagSerializer, KeyValueStringSerializer, RelationSerializer, FeedSerializer, AgencySerializer, \
     RouteSerializer, FeedBoundsSerializer
@@ -100,5 +100,5 @@ class RouteView(APIView):
 class FeedBoundsView(APIView):
     def get(selfself, request):
         feedbound = FeedBounds.objects.all()
-        serializer = FeedBoundSerializer(feedbound, many=True)
+        serializer = FeedBoundsSerializer(feedbound, many=True)
         return Response(serializer.data)

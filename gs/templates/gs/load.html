@@ -19,7 +19,8 @@
         </div>
     </div>
 </div>
-
+<div id="bbox">
+</div>
 <div class="container">
     <div class="row widgets">
         <div class="col-md-6">
@@ -247,7 +248,61 @@
         });
 
 
-      
+        var feedbounds = '/api/feedbounds/';
+        var outerbounds;
+        var innerbounds;
+        $.ajax({
+            type:"GET",
+            url:feedbounds,
+            dataType:'json',
+            async:false,
+            success : function(data){
+                for(var i=0;i<data.length;i++){
+                   if(data[i].feed_id == feed_id){
+                    outerbounds = data[i].outer_bound;
+                    innerbounds = data[i].inner_bound;
+                   }
+                }
+            },
+            error: function(xhr, ajaxOptions, thrownError){
+                alert('Error '+xhr.status+' cannot find the bounds');
+                alert(thrownError);
+            }
+        });
+        var drawnItems = new L.FeatureGroup();
+     map.addLayer(drawnItems);
+     var drawControl = new L.Control.Draw({
+         edit: {
+             featureGroup: drawnItems
+         }
+     });
+     map.addControl(drawControl);
+
+     var num =0;
+     map.on('draw:created', function (e) {
+
+        var type = e.layerType,
+            layer = e.layer;
+
+        if (type === 'rectangle') {
+            layer.on('mouseover', function() {
+                if(num == 0)
+                alert("After defining the bbox please click on the box to download data in that part");    
+            });
+            layer.on('click', function(){
+                var bounds = layer.getLatLngs();
+                num+=1;
+                $("#bbox").append("<h3>Included box"+num+"</h3>");
+            })
+        }
+
+        drawnItems.addLayer(layer);
+    });
+
+
+        //var bounds = [[innerbounds[0][1],innerbounds[0][0]],[innerbounds[2][1],innerbounds[2][0]]];
+        
+
 
 }
 
