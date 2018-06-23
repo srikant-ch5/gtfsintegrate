@@ -11,7 +11,7 @@ from django.db import connection
 from geographiclib.geodesic import Geodesic
 from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
-
+import pdb
 import operator
 
 topleft_block_stops = []
@@ -72,6 +72,7 @@ def plotblock(v0, v1, v2, v3, stops_coordinates, block=None):
     '''
 
     return block
+
 
 def queries():
     query = ''

@@ -6,7 +6,7 @@ from multigtfs.models import Stop, Feed, Agency, Route
 from osmapp.models import Node, Way, KeyValueString, OSM_Relation, Tag
 from .serializers import FormSerializer, StopSerializer, NodeSerializer, WaySerializer, \
     TagSerializer, KeyValueStringSerializer, RelationSerializer, FeedSerializer, AgencySerializer, \
-    RouteSerializer
+    RouteSerializer, FeedBoundsSerializer
 
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -95,4 +95,10 @@ class RouteView(APIView):
     def get(self, request):
         route = Route.objects.all()
         serializer = RouteSerializer(route, many=True)
+        return Response(serializer.data)
+
+class FeedBoundsView(APIView):
+    def get(selfself, request):
+        feedbound = FeedBounds.objects.all()
+        serializer = FeedBoundSerializer(feedbound, many=True)
         return Response(serializer.data)

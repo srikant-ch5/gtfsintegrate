@@ -4,17 +4,76 @@ import xml.etree.cElementTree as cetree
 import pdb
 from requests import post
 
+from django.contrib.gis.geos import Point, LineString
 from django.contrib.gis.geos import LineString
 from django.shortcuts import render
 from ordered_set import OrderedSet
 from typing import List, Any
+from django.db import connection
 
-from .models import Tag, KeyValueString, Node, Way, OSM_Relation
-from gs.tasks import dividemap
+from multigtfs.models import Feed, Stop
+from .models import Tag, KeyValueString, Node, Way, OSM_Relation, FeedBounds
+from gs.tasks import dividemap, getmidpoint
 import json
 
 
 def get_bounds(request):
+    if request.method == 'POST':
+        context = {
+            'feed_id': -1
+        }
+        feed_id = request.POST.get('feed_id')
+        feed_name = Feed.objects.get(id=feed_id).name
+
+        query = 'SELECT gtfs_stop.geom FROM gtfs_stop where gtfs_stop.feed_id=8'
+        query2 = 'SELECT ST_AsGeoJson(ST_Envelope(ST_Union(ST_Envelope(geom)))) AS table_extent FROM gtfs_stop where gtfs_stop.feed_id=8'
+        cursor = connection.cursor()
+        cursor.execute(query2)
+        result = cursor.fetchall()
+        bounds_json = json.loads(result[0][0])
+        southwest = bounds_json['coordinates'][0][0]
+        northwest = bounds_json['coordinates'][0][1]
+        northeast = bounds_json['coordinates'][0][2]
+        southeast = bounds_json['coordinates'][0][3]
+
+        west = [0.0, 0.0]
+        west[0], west[1] = getmidpoint(northwest[1], northwest[0], southwest[1], southwest[0])
+        east = [0.0, 0.0]
+        east[0], east[1] = getmidpoint(northeast[1], northeast[0], southeast[1], southeast[0])
+        north = [0.0, 0.0]
+        north[0], north[1] = getmidpoint(northeast[1], northeast[0], northwest[1], northwest[0])
+        south = [0.0, 0.0]
+        south[0], south[1] = getmidpoint(southwest[1], southwest[0], southeast[1], southeast[0])
+
+        center = [0.0, 0.0]
+        center[0], center[1] = getmidpoint(north[0], north[1], south[0], south[1])
+
+        top_left = getmidpoint(northwest[1], northwest[0], center[0], center[1])
+        top_right = getmidpoint(northeast[1], northeast[0], center[0], center[1])
+        bottom_left = getmidpoint(southwest[1], southwest[0], center[0], center[1])
+        bottom_right = getmidpoint(southeast[1], southeast[0], center[0], center[1])
+
+        top_left = Point(top_left[0],top_left[1])
+        top_right = Point(top_right[0],top_right[1])
+        bottom_left = Point(bottom_right[0],bottom_right[1])
+        bottom_left = Point(bottom_left[0],bottom_left[1])
+
+
+        outerbound = [southwest, northwest, northeast, southeast]
+        outerbound = LineString(outerbound)
+
+        innerbound = [bottom_left, top_left, top_right, bottom_right]
+        feedbound = FeedBounds(operator_name=feed_name, outer_bound=outerbound, inner_bound=innerbound)
+        feedbound.save()
+
+        print('saved inner bound {} {} {} {} with operator {}'.format(top_left, top_right, bottom_left, bottom_right,
+                                                                      feed_name))
+        pdb.set_trace()
+
+    return render(request, 'gs/load.html', {'context': context})
+
+
+def set_bounds(request):
     context = {
         'loaded': ''
     }
@@ -36,9 +95,10 @@ def get_bounds(request):
 
         data = json.loads(coordinates_arr)
 
-        print('{} {} {} {} {} {} {} {} {} {} {} {}'.format(south, west, north, east, northeast_lat,northeast_lon,
-                northwest_lat, northwest_lon, southeast_lat, southeast_lon, southwest_lat, southwest_lon
-                ))
+        print('{} {} {} {} {} {} {} {} {} {} {} {}'.format(south, west, north, east, northeast_lat, northeast_lon,
+                                                           northwest_lat, northwest_lon, southeast_lat, southeast_lon,
+                                                           southwest_lat, southwest_lon
+                                                           ))
 
         bbox = south + "," + west + "," + north + "," + east
 
@@ -67,7 +127,7 @@ def get_bounds(request):
         print("Content has been copied")
         dividemap(east, west, north, south, northeast_lat, northeast_lon, northwest_lat, northwest_lon, southeast_lat,
                   southeast_lon, southwest_lat, southwest_lon, data)
-        load(xmlfile)
+        # load(xmlfile)
 
     return render(request, 'gs/load.html', {'context': context})
 

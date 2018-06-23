@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from gs.models import GTFSForm
 from multigtfs.models import Stop, Agency, Route, Feed
-from osmapp.models import Node, Way, KeyValueString, OSM_Relation, Tag
+from osmapp.models import Node, Way, KeyValueString, OSM_Relation, Tag, FeedBounds
 
 
 class FormSerializer(serializers.ModelSerializer):
@@ -61,4 +61,10 @@ class RouteSerializer(serializers.ModelSerializer):
 class AgencySerializer(serializers.ModelSerializer):
     class Meta:
         model = Agency
+        fields = '__all__'
+
+
+class FeedBoundsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FeedBounds
         fields = '__all__'
