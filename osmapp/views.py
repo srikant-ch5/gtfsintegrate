@@ -48,28 +48,29 @@ def get_bounds(request):
         center = [0.0, 0.0]
         center[0], center[1] = getmidpoint(north[0], north[1], south[0], south[1])
 
-        top_left = getmidpoint(northwest[1], northwest[0], center[0], center[1])
-        top_right = getmidpoint(northeast[1], northeast[0], center[0], center[1])
-        bottom_left = getmidpoint(southwest[1], southwest[0], center[0], center[1])
-        bottom_right = getmidpoint(southeast[1], southeast[0], center[0], center[1])
-
-        top_left = Point(top_left[0],top_left[1])
-        top_right = Point(top_right[0],top_right[1])
-        bottom_left = Point(bottom_right[0],bottom_right[1])
-        bottom_left = Point(bottom_left[0],bottom_left[1])
-
+        top_left = [0.0, 0.0]
+        top_left[1], top_left[0] = getmidpoint(northwest[1], northwest[0], center[0], center[1])
+        top_right = [0.0, 0.0]
+        top_right[1], top_right[0] = getmidpoint(northeast[1], northeast[0], center[0], center[1])
+        bottom_left = [0.0, 0.0]
+        bottom_left[1], bottom_left[0] = getmidpoint(southwest[1], southwest[0], center[0], center[1])
+        bottom_right = [0.0, 0.0]
+        bottom_right[1], bottom_right[0] = getmidpoint(southeast[1], southeast[0], center[0], center[1])
 
         outerbound = [southwest, northwest, northeast, southeast]
-        outerbound = LineString(outerbound)
-
         innerbound = [bottom_left, top_left, top_right, bottom_right]
-        feedbound = FeedBounds(operator_name=feed_name, outer_bound=outerbound, inner_bound=innerbound)
-        feedbound.save()
+
+        if not FeedBounds.objects.filter(operator_name=feed_name).exists():
+            feedbound = FeedBounds(operator_name=feed_name, outer_bound=outerbound, inner_bound=innerbound)
+            feedbound.save()
+        else:
+            feedbound = FeedBounds.objects.get(operator_name=feed_name)
+            feedbound.outer_bound = outerbound
+            feedbound.inner_bound = innerbound
+            feedbound.save()
 
         print('saved inner bound {} {} {} {} with operator {}'.format(top_left, top_right, bottom_left, bottom_right,
                                                                       feed_name))
-        pdb.set_trace()
-
     return render(request, 'gs/load.html', {'context': context})
 
 
