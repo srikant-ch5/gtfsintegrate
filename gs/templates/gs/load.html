@@ -75,6 +75,7 @@
     function loadmapfunction(map, options){
 
         feed_id = {{context.feed_id}}
+        var feed_name;
         console.log(feed_id)
         var mapLayer;
         var markerArray = [];
@@ -84,7 +85,29 @@
         $.ajaxSetup({
             async: false
         });
+
+        //get the feed name
+        var feedurl="/api/feeddata/"
+        $.ajax({
+            type:"GET",
+            url:feedurl,
+            dataType:'json',
+            async:false,
+            success:function(data){
+                for(var i=0;i<data.length;i++){
+                    if(data[i].id == feed_id){
+                        feed_name = data[i].name;
+                        break;
+                    }
+                }
+            },
+            error :function(xhr,status,e){
+                alert("error "+status)
+            }
+        });
+        console.log(feed_name)
         
+        //get all the stops and show them on map
         $.getJSON(gtfsstopsdata, function (data) {
 
             var lon, lat;
@@ -129,6 +152,8 @@
             feed_bounds = bounds;
             map.fitBounds(bounds);
         });
+
+        //configure ajax to post
         function getCookie(name) {
             var cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -160,48 +185,16 @@
                 }
             }
         });
-
-        console.log(feed_bounds)
-
-        //0 = lon 1 =lat
-        var east_bound = feed_bounds.getEast();
-        var west_bound = feed_bounds.getWest();
-        var north_bound = feed_bounds.getNorth();
-        var south_bound = feed_bounds.getSouth();
-        var northeast_bound = [];
-        northeast_bound[0] = feed_bounds.getNorthEast().lng;
-        northeast_bound[1] = feed_bounds.getNorthEast().lat;
-        var northwest_bound = []
-        northwest_bound[0] = feed_bounds.getNorthWest().lng;
-        northwest_bound[1] = feed_bounds.getNorthWest().lat;
-        var southeast_bound = [];
-        southeast_bound[0] = feed_bounds.getSouthEast().lng;
-        southeast_bound[1] = feed_bounds.getSouthEast().lat;
-        var southwest_bound = [];
-        southwest_bound[0] = feed_bounds.getSouthWest().lng;
-        southwest_bound[1] = feed_bounds.getSouthWest().lat;
-        var URL = "{% url 'bounds' %}";
+       
+       //call django method get_bounds using post
+       URL = "{% url 'bounds' %}"
         
-        ar = JSON.stringify(stopscoordinates_array)
         $.ajax({
            url:URL,
            method:'POST',
            async:false,
            data: {
             'feed_id': feed_id,
-            'east':east_bound,
-               'west':west_bound,
-               'north':north_bound,
-               'south':south_bound,
-               'northeast_lon':northeast_bound[0],
-               'northeast_lat':northeast_bound[1],
-               'northwest_lon':northwest_bound[0],
-               'northwest_lat':northwest_bound[1],
-               'southeast_lon':southeast_bound[0],
-               'southeast_lat':southeast_bound[1],
-               'southwest_lon':southwest_bound[0],
-               'southwest_lat':southwest_bound[1],
-               'stopscoordinates_array':ar,
                'csrfmiddlewaretoken': '{{ csrf_token }}'},
            success: function(data){
                 alert("OpenStreetMap Data has been loaded loading stop on the map");
@@ -248,61 +241,64 @@
         });
 
 
-        var feedbounds = '/api/feedbounds/';
-        var outerbounds;
-        var innerbounds;
-        $.ajax({
-            type:"GET",
-            url:feedbounds,
-            dataType:'json',
-            async:false,
-            success : function(data){
-                for(var i=0;i<data.length;i++){
-                   if(data[i].feed_id == feed_id){
-                    outerbounds = data[i].outer_bound;
-                    innerbounds = data[i].inner_bound;
-                   }
-                }
-            },
-            error: function(xhr, ajaxOptions, thrownError){
-                alert('Error '+xhr.status+' cannot find the bounds');
-                alert(thrownError);
-            }
-        });
-        var drawnItems = new L.FeatureGroup();
-     map.addLayer(drawnItems);
-     var drawControl = new L.Control.Draw({
-         edit: {
-             featureGroup: drawnItems
-         }
-     });
-     map.addControl(drawControl);
-
-     var num =0;
-     map.on('draw:created', function (e) {
-
-        var type = e.layerType,
-            layer = e.layer;
-
-        if (type === 'rectangle') {
-            layer.on('mouseover', function() {
-                if(num == 0)
-                alert("After defining the bbox please click on the box to download data in that part");    
-            });
-            layer.on('click', function(){
-                var bounds = layer.getLatLngs();
-                num+=1;
-                $("#bbox").append("<h3>Included box"+num+"</h3>");
-            })
-        }
-
-        drawnItems.addLayer(layer);
-    });
-
-
         //var bounds = [[innerbounds[0][1],innerbounds[0][0]],[innerbounds[2][1],innerbounds[2][0]]];
-        
+        var drawnItems = new L.FeatureGroup();
+         map.addLayer(drawnItems);
+         var drawControl = new L.Control.Draw({
+             edit: {
+                 featureGroup: drawnItems
+             }
+         });
+         map.addControl(drawControl);
 
+         var num =0;
+         var boxbounds = '';
+         map.on('draw:created', function (e) {
+
+            var type = e.layerType,
+                layer = e.layer;
+
+            if (type === 'rectangle') {
+                layer.on('mouseover', function() {
+                    if(num == 0){
+                    alert("After defining the bbox please click on the box to download data in that part");    
+
+                    num+=1
+                }
+                });
+                layer.on('click', function(){
+                    bounds = layer.getLatLngs().toString();
+                    boxbounds= boxbounds + bounds;
+                    console.log("ON click "+ boxbounds);
+                    num+=1;
+                    $("#bbox").append("<h3>Included box"+num+"</h3>");
+                })
+            }
+
+            drawnItems.addLayer(layer);
+        });
+
+         $('#definebox').on("click",function(){
+            var boundurl = '/api/feedbounds/'
+            innerbounds = JSON.stringify(boxbounds)
+            console.log(innerbounds)
+            $.ajax({
+                url:boundurl,
+                type:"POST",
+                async:false,
+                data:{
+                    'feed_id':feed_id,
+                    'operator_name':feed_name,
+                    'inner_bound':innerbounds
+                },
+                success: function(){
+                    console.log('Posted data to feed bounds')
+                },
+                error:function(xhr,status,e){
+                    console.log("ER " + status)
+                }
+            });
+         });
 
 }
 

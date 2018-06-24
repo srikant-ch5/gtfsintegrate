@@ -3,7 +3,7 @@ from django.shortcuts import render
 from rest_framework import generics
 from gs.models import GTFSForm
 from multigtfs.models import Stop, Feed, Agency, Route
-from osmapp.models import Node, Way, KeyValueString, OSM_Relation, Tag, FeedBounds
+from osmapp.models import Node, Way, KeyValueString, OSM_Relation, Tag, Bounds
 from .serializers import FormSerializer, StopSerializer, NodeSerializer, WaySerializer, \
     TagSerializer, KeyValueStringSerializer, RelationSerializer, FeedSerializer, AgencySerializer, \
     RouteSerializer, FeedBoundsSerializer
@@ -28,6 +28,14 @@ class FormView(APIView):
         serializer = FormSerializer(forms, many=True)
         return Response(serializer.data)
 
+    def post(self, request):
+        serializer = FormSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 '''OSM app models'''
 
@@ -38,12 +46,28 @@ class NodeView(APIView):
         serializer = NodeSerializer(nodes, many=True)
         return Response(serializer.data)
 
+    def post(self, request):
+        serializer = NodeSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class WayView(APIView):
     def get(self, request):
         ways = Way.objects.all()
         serializer = WaySerializer(ways, many=True)
         return Response(serializer.data)
+
+    def post(self, request):
+        serializer = WaySerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class RelationView(APIView):
@@ -52,6 +76,14 @@ class RelationView(APIView):
         serializer = RelationSerializer(relations, many=True)
         return Response(serializer.data)
 
+    def post(self, request):
+        serializer = RelationSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class TagView(APIView):
     def get(self, request):
@@ -59,12 +91,28 @@ class TagView(APIView):
         serializer = TagSerializer(tags, many=True)
         return Response(serializer.data)
 
+    def post(self, request):
+        serializer = TagSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class KeyValueStringView(APIView):
     def get(self, request):
         kvs = KeyValueString.objects.all()
         serializer = KeyValueStringSerializer(kvs, many=True)
         return Response(serializer.data)
+
+    def post(self, request):
+        serializer = KeyValueStringSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 '''GTFS Models'''
@@ -76,12 +124,28 @@ class StopView(APIView):
         serializer = StopSerializer(stops, many=True)
         return Response(serializer.data)
 
+    def post(self, request):
+        serializer = StopSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class FeedView(APIView):
     def get(self, request):
         feeds = Feed.objects.all()
         serializer = FeedSerializer(feeds, many=True)
         return Response(serializer.data)
+
+    def post(self, request):
+        serializer = FeedSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class AgencyView(APIView):
@@ -90,6 +154,15 @@ class AgencyView(APIView):
         serializer = AgencySerializer(agencies, many=True)
         return Response(serializer.data)
 
+    def post(self, request):
+        serializer = AgencySerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 class RouteView(APIView):
     def get(self, request):
@@ -97,8 +170,27 @@ class RouteView(APIView):
         serializer = RouteSerializer(route, many=True)
         return Response(serializer.data)
 
+    def post(self, request):
+        serializer = RouteSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
 class FeedBoundsView(APIView):
-    def get(selfself, request):
-        feedbound = FeedBounds.objects.all()
+    def get(self, request):
+        feedbound = Bounds.objects.all()
         serializer = FeedBoundsSerializer(feedbound, many=True)
         return Response(serializer.data)
+
+    def post(self, request):
+        serializer = FeedBoundsSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

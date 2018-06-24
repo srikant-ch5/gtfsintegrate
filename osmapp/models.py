@@ -2,20 +2,18 @@ from django.contrib.gis.db import models
 from django.contrib.gis.geos import Point, LineString
 from django.db.models import Manager as GeoManager
 from typing import Tuple
-from django.contrib.postgres.fields import ArrayField
+from django.contrib.postgres.fields import ArrayField,JSONField
 
 
 # model for storing bounds specific to the operator
-class FeedBounds(models.Model):
-    feed_id = models.IntegerField(primary_key=True, blank=True)
+class Bounds(models.Model):
+    feed_id = models.IntegerField( blank=True)
     operator_name = models.CharField(max_length=200)
     outer_bound = ArrayField(ArrayField(models.FloatField()), blank=True)
-    inner_bound = ArrayField(ArrayField(models.FloatField()), blank=True)
+    inner_bound = models.CharField(max_length=10000000,blank=True)
 
     def __str__(self):  # __unicode__ on Python 2
         return self.operator_name
-
-
 class KeyValueString(models.Model):
     value = models.TextField(unique=True)
 

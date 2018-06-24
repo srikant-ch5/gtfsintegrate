@@ -12,7 +12,7 @@ from typing import List, Any
 from django.db import connection
 
 from multigtfs.models import Feed, Stop
-from .models import Tag, KeyValueString, Node, Way, OSM_Relation, FeedBounds
+from .models import Tag, KeyValueString, Node, Way, OSM_Relation, Bounds
 from gs.tasks import dividemap, getmidpoint
 import json
 
@@ -60,16 +60,6 @@ def get_bounds(request):
         outerbound = [southwest, northwest, northeast, southeast]
         innerbound = [bottom_left, top_left, top_right, bottom_right]
 
-        if not FeedBounds.objects.filter(operator_name=feed_name).exists():
-            feedbound = FeedBounds(feed_id=feed_id, operator_name=feed_name, outer_bound=outerbound,
-                                   inner_bound=innerbound)
-            feedbound.save()
-        else:
-            feedbound = FeedBounds.objects.get(operator_name=feed_name)
-            feedbound.feed_id = feed_id
-            feedbound.outer_bound = outerbound
-            feedbound.inner_bound = innerbound
-            feedbound.save()
 
         print('saved inner bound {} {} {} {} with operator {}'.format(top_left, top_right, bottom_left, bottom_right,
                                                                       feed_name))
@@ -102,6 +92,7 @@ def get_bounds(request):
         load(xmlfile)
 
     return render(request, 'gs/load.html', {'context': context})
+
 
 
 def set_bounds(request):
