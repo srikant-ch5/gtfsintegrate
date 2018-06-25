@@ -24,7 +24,7 @@ th{
     border: 10px solid #2778D4;
     padding: 20px;
     width: 550px;
-    height: 500px;
+    height: 530px;
 }
 #form_heading{
     font-family: "Times New Roman", Times, serif
@@ -119,21 +119,19 @@ label{
     font-weight:bold ;
 }
 #last-feed-box{
- /* or whatever width you want. */
    max-width:1000px;
-max-height:350px;
-   display: inline-block;
+    max-height:350px;
+    display: inline-block;
     box-shadow: 5px 5px 5px 5px;
     padding:10px 10px 10px 10px;
     background: #ABEAF2;
 }
 #avail-feed-box{
- /* or whatever width you want. */
  overflow-y: auto;
    max-width:1000px;
-max-height:350px;
+   max-height:350px;
    display: inline-block;
-    box-shadow: 5px 5px 5px 5px;
+   box-shadow: 5px 5px 5px 5px;
 
     background: #ABEAF2;
 }
@@ -147,4 +145,31 @@ h3{
 font-style:italic;
 font-size:1.5em;
 color:green;
+}
+h1 { color: #333333; font-family: 'Bitter', serif; font-size: 50px; font-weight: normal; line-height: 54px; margin: 0 0 54px; }
+#feed-name-heading,#download-url { color: #333333; font-family: 'Bitter', serif; font-size: 35px; font-weight: normal; line-height: 30px; margin: 0 0 30px; }
+#nav-text{
+    font-size: 18px;
+}
+#feed-name-heading{
+    padding-top:5px;
+}
+p { color: #333333; font-family: Georgia, serif; font-size: 18px; line-height: 28px; margin: 0 0 28px; }
+
+
+p:first-of-type { font-size: 26px; line-height: 36px; margin: 0 0 28px; }
+
+
+a { color: #c73036; font-family: Georgia, serif; text-decoration: underline; }
+
+
+a:hover { color: #333333; text-decoration: underline; }
+
+
+.author { color: #8d8d8d; font-family: Georgia, serif; font-style: italic; font-size: 14px; margin-bottom: 28px; }
+
+
+.author a { color: #c73036; font-family: "Helvetica Neue", sans-serif; font-weight: bold; text-decoration: none; text-transform: uppercase; }
+#form_headging{
+    font-size: 20px;
 }

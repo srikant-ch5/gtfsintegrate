@@ -1,7 +1,9 @@
 {% extends 'gs/home.html' %}
 
 {% block main %}
-
+<div id="loading">
+    <img id="loading-image" src='http://i.stack.imgur.com/FhHRx.gif' alt="Loading..."/>
+</div>
 
 <div class="container col-xs-6" id="form_download_inform">
     <h2 id="download-url">Download Feed from <a href="https://transitfeeds.com/feeds" target="_blank">TransitFeeds</a>
@@ -23,11 +25,12 @@
 </div>
 
 <script type="text/javascript">
+     window.onload = function(){ document.getElementById("loading").style.display = "none" }
     var forms_list = {{context.forms_list}}
     var $form = $('.feed-form');
     $form.submit(function (event) {
         //event.preventDefault();
-
+        document.getElementById("loading").style.display = "block" 
         var formurl = $("#formurl").val();
         var formname = $("#formname").val();
         var formosmtag = $("#formosmtag").val();
@@ -76,7 +79,7 @@
         function stateChange(newState) {
             setTimeout(function () {
                 if (newState == -1) {
-                    alert('VIDEO HAS STOPPED');
+                    alert('Processsing HAS STOPPED');
                 }
             }, 5000);
         }
@@ -100,16 +103,16 @@
         }
 
         var current_date = yy + '-' + mm + '-' + dd;
-
         var current_date = Date.parse(current_date);
-        var form_date = Date.parse(form_timestamp.substring(0, 9));
-
-        if (feed_entry_found > 0 && current_date - form_date > formfrequency) {
+        var form_date = Date.parse(form_timestamp.substring(0, 10));
+        
+        if (feed_entry_found > 0 && (current_date - form_date)/86400000 > formfrequency) {
             $("#feed-status2").text("Feed in Database is updaing to latest version");
         }
 
     });
+
 </script>
-<script src="gs/form.js" ></script>
+<script src="gs/form.js"></script>
 
 {% endblock %}

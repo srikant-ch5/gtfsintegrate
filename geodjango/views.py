@@ -163,7 +163,6 @@ class AgencyView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 class RouteView(APIView):
     def get(self, request):
         route = Route.objects.all()
@@ -177,8 +176,6 @@ class RouteView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 
 
 class FeedBoundsView(APIView):

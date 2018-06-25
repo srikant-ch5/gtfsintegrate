@@ -17,6 +17,75 @@ from gs.tasks import dividemap, getmidpoint
 import json
 
 
+def get_osm_data(feed_id):
+    print("Osm data in view")
+    feed_name = Feed.objects.get(id=feed_id).name
+
+    query2 = 'SELECT ST_AsGeoJson(ST_Envelope(ST_Union(ST_Envelope(geom)))) AS table_extent FROM gtfs_stop where gtfs_stop.feed_id=' + str(feed_id)
+    cursor = connection.cursor()
+    cursor.execute(query2)
+    result = cursor.fetchall()
+    bounds_json = json.loads(result[0][0])
+    southwest = bounds_json['coordinates'][0][0]
+    northwest = bounds_json['coordinates'][0][1]
+    northeast = bounds_json['coordinates'][0][2]
+    southeast = bounds_json['coordinates'][0][3]
+
+    west = [0.0, 0.0]
+    west[0], west[1] = getmidpoint(northwest[1], northwest[0], southwest[1], southwest[0])
+    east = [0.0, 0.0]
+    east[0], east[1] = getmidpoint(northeast[1], northeast[0], southeast[1], southeast[0])
+    north = [0.0, 0.0]
+    north[0], north[1] = getmidpoint(northeast[1], northeast[0], northwest[1], northwest[0])
+    south = [0.0, 0.0]
+    south[0], south[1] = getmidpoint(southwest[1], southwest[0], southeast[1], southeast[0])
+
+    center = [0.0, 0.0]
+    center[0], center[1] = getmidpoint(north[0], north[1], south[0], south[1])
+
+    top_left = [0.0, 0.0]
+    top_left[1], top_left[0] = getmidpoint(northwest[1], northwest[0], center[0], center[1])
+    top_right = [0.0, 0.0]
+    top_right[1], top_right[0] = getmidpoint(northeast[1], northeast[0], center[0], center[1])
+    bottom_left = [0.0, 0.0]
+    bottom_left[1], bottom_left[0] = getmidpoint(southwest[1], southwest[0], center[0], center[1])
+    bottom_right = [0.0, 0.0]
+    bottom_right[1], bottom_right[0] = getmidpoint(southeast[1], southeast[0], center[0], center[1])
+
+    outerbound = [southwest, northwest, northeast, southeast]
+    innerbound = [bottom_left, top_left, top_right, bottom_right]
+
+    print('saved inner bound {} {} {} {} with operator {}'.format(top_left, top_right, bottom_left, bottom_right,
+                                                                  feed_name))
+    bbox = str(southwest[1]) + "," + str(southwest[0]) + "," + str(northeast[1]) + "," + str(northeast[0])
+
+    get_stops_query = '''
+                    [out:xml];
+                        (
+                        node(''' + bbox + ''')[highway=bus_stop];
+                        node(''' + bbox + ''')[bus=yes];
+                        node(''' + bbox + ''')[public_transport=stop_position];
+                        node(''' + bbox + ''')[public_transport=platform];
+                    );
+                    out meta;
+                    '''
+    print(get_stops_query)
+    try:
+        result = post("http://overpass-api.de/api/interpreter", get_stops_query)
+    except ConnectionError as ce:
+        context['connection_error'] = "There is a connection error while downloading the OSM data"
+
+    PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+    xmlfiledir = xmlfiledir = os.path.join(os.path.dirname(PROJECT_ROOT), 'osmapp', 'static')
+    xmlfile = xmlfiledir + '/node.osm'
+    with open(xmlfile, 'wb') as fh:
+        fh.write(result.content)
+
+    print("Content has been copied")
+
+    load(xmlfile)
+
+
 def get_bounds(request):
     if request.method == 'POST':
         context = {
@@ -60,7 +129,6 @@ def get_bounds(request):
         outerbound = [southwest, northwest, northeast, southeast]
         innerbound = [bottom_left, top_left, top_right, bottom_right]
 
-
         print('saved inner bound {} {} {} {} with operator {}'.format(top_left, top_right, bottom_left, bottom_right,
                                                                       feed_name))
         bbox = str(southwest[1]) + "," + str(southwest[0]) + "," + str(northeast[1]) + "," + str(northeast[0])
@@ -89,10 +157,9 @@ def get_bounds(request):
 
         print("Content has been copied")
 
-        load(xmlfile)
+        #load(xmlfile)
 
     return render(request, 'gs/load.html', {'context': context})
-
 
 
 def set_bounds(request):
@@ -147,18 +214,6 @@ def set_bounds(request):
         dividemap(east, west, north, south, northeast_lat, northeast_lon, northwest_lat, northwest_lon, southeast_lat,
                   southeast_lon, southwest_lat, southwest_lon, data)
         load(xmlfile)
-
-    return render(request, 'gs/load.html', {'context': context})
-
-
-def get_osm_data(request):
-    context = {
-        'loaded': 'Data has been loaded'
-    }
-
-    api = overpy.Overpass()
-
-    result = api.query("node(50.745,7.17,50.75,7.18);out;")
 
     return render(request, 'gs/load.html', {'context': context})
 

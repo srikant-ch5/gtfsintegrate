@@ -7,7 +7,8 @@ from multigtfs.models import Feed
 from .forms import GTFSInfoForm
 from .models import GTFSForm
 from .tasks import download_feed_task, reset_feed, dividemap
-
+from osmapp.views import get_osm_data
+from osmapp.models import KeyValueString,Tag,Node
 
 def feed_form(request):
     form_entries = GTFSForm.objects.all()
@@ -38,7 +39,8 @@ def feed_form(request):
                 formId = is_feed_present[0].id
                 associated_feed_id = Feed.objects.get(name=is_feed_present[0].name).name
                 context['error'] = reset_feed(formId, associated_feed_id)
-                context['feed_id'] = Feed.objects.get(name=form_entry.name).id
+                feed_id = Feed.objects.get(name=form_entry.name).id
+                context['feed_id'] = feed_id
                 feed_name = Feed.objects.get(name=form_entry.name).name
                 request.session['feed'] = feed_name
                 context['feed_name'] = feed_name
@@ -55,13 +57,25 @@ def feed_form(request):
                         gform = GTFSForm.objects.get(id=gtfs_feed_info.id)
                         feed = Feed.objects.get(name=gform.name)
                         request.session['feed'] = feed.name
-                        context['feed_id'] = feed.id
+                        feed_id = feed.id
+                        context['feed_id'] = feed_id
                         context['feed_name'] = feed.name
                 except Exception as e:
 
                     context['error'] = e
 
-        return render(request, 'gs/load.html', {'form': form, 'context': context})
+        get_osm_data(feed_id)
+
+        key_strings = []
+        tags = Node.objects.all().values('tags').distinct()
+
+        for tag in tags:
+            key = Tag.objects.get(id=tag['tags']).key.value
+            if not key in key_strings:
+                key_strings.append(key)
+
+        context['key_strings'] = key_strings
+        return render(request, 'gs/correspondence.html', {'form': form, 'context': context})
     else:
         form = GTFSInfoForm()
         return render(request, 'gs/form.html', {'form': form, 'context': context})

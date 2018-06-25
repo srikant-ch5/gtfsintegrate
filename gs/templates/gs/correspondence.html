@@ -1,0 +1,95 @@
+{% extends 'gs/home.html' %}
+
+{% block main%}
+<div id="loading">
+    <img id="loading-image" src='http://i.stack.imgur.com/FhHRx.gif' alt="Loading..."/>
+</div>
+<div class="container">
+	<h2 id="feed-name-heading">You are working on {{context.feed_name}}</h2>
+            <h3>{{context.feed_download_status}}</h3>
+            <h3>{{context.error}}</h3>
+            <h3>{{context.connection_error}}</h3>
+
+            <h1>Define Correspondence</h1>
+            <div id="keys" class="container">
+            	{% for key_string in context.key_strings %}
+            		<div id='feeds-box'><h3 id=''><a id='click' >{{key_string}} +</a></h3></div>
+            	{% endfor %}
+            </div>
+
+  
+</div>
+
+<script type="text/javascript">
+	window.onload = function(){ document.getElementById("loading").style.display = "none" }
+	var feed_id = {{context.feed_id}}
+
+	//get all the tags related to nodes
+	function download_using_api(){
+	var nodeurl = "/api/nodedata/"
+	var tag_ids = [];
+	$.ajax({
+		url:nodeurl,
+		type:'GET',
+		dataType:'json',
+		async:false,
+		success:function(data){
+			for(node in data){
+				for(tag in data[node].tags){
+					tag_ids.push(data[node].tags[tag])
+				}
+			}
+		},
+		error:function(xhr,status,e){
+			alert("cannot load the keys");
+		}
+	});
+
+	//get all the tags keys 
+	var tagsurl = '/api/tagdata/';
+	var key_ids = [];
+	$.ajax({
+		url:tagsurl,
+		type:'GET',
+		dataType:'json',
+		async:false,
+		success:function(data){
+			for(node_tag in data){
+				tag = data[node_tag]
+				console.log()
+				if(tag_ids.indexOf(tag.id) > -1){
+					for(var i=0;i<tag.key.length;i++){
+						key_ids.push(tag.key[i])
+					}
+				}
+			}
+		},
+		error:function(xhr,status,e){
+			alert("cannot load the keys");
+		}
+	});
+	console.log(key_ids)
+	var keysurl = "/api/keyvaluestringdata/"
+	var key_strings = [];
+	$.ajax({
+		url:keysurl,
+		type:"GET",
+		dataType:"json",
+		async:false,
+		success:function(keyvaluedata){
+			//get keys with the keyid
+
+			for(key in keyvaluedata){
+				skey = keyvaluedata[key]
+
+				if(key_ids.indexOf(skey.id) > -1){
+					key_strings.push(skey.value);
+				}
+			}
+		}
+	})
+	console.log(key_strings.length)
+
+	}//download using api
+</script>
+{% endblock %}

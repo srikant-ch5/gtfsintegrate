@@ -15,7 +15,7 @@ import compare.views as compview
 urlpatterns = [
     url(r'^$', views.home, name="home"),
     url('^map/mapview/(?P<pk>\d+)/$', views.showmap, name="showmap"),
-    url(r'^osmnodedata/', GeoJSONLayerView.as_view(model=Node, properties=('id','version')), name="osmnodedata"),
+    url(r'^osmnodedata/', GeoJSONLayerView.as_view(model=Node, properties=('id', 'version')), name="osmnodedata"),
     url(r'^stopdata/',
         GeoJSONLayerView.as_view(model=Stop, properties=('stop_id', 'feed', 'name', 'zone', 'description', 'code')),
         name="stopdata"),

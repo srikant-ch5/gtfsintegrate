@@ -48,6 +48,8 @@ class Stop(Base):
     name = models.CharField(
         max_length=255,
         help_text="Name of stop in local vernacular.")
+    normalized_name = models.CharField(
+        max_length=255, blank=True)
     desc = models.CharField(
         "description",
         max_length=255, blank=True,

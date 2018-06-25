@@ -1,7 +1,128 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="Overpass API 0.7.55.3 9da5e7ae">
 <note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
-<meta osm_base="2018-06-24T10:57:02Z"/>
+<meta osm_base="2018-06-25T22:42:02Z"/>
 
+  <node id="416658310" lat="43.7075239" lon="-72.2873758" version="3" timestamp="2015-11-22T02:44:32Z" changeset="35500695" uid="970243" user="ezekielelin">
+    <tag k="bench" v="yes"/>
+    <tag k="covered" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Maynard"/>
+    <tag k="network" v="AT"/>
+    <tag k="operator" v="Advance Transit"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="416658360" lat="43.7001599" lon="-72.2894372" version="2" timestamp="2015-09-30T02:10:55Z" changeset="34338364" uid="1708084" user="debanjum">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Hanover Post Office"/>
+  </node>
+  <node id="416658375" lat="43.7049858" lon="-72.2944103" version="2" timestamp="2015-08-06T05:51:13Z" changeset="33146009" uid="27832" user="Adam Franco">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="surface" v="asphalt"/>
+  </node>
+  <node id="416658382" lat="43.7058140" lon="-72.2896723" version="2" timestamp="2018-05-01T19:39:29Z" changeset="58594593" uid="8204522" user="Geography Fiftythree">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="network" v="Advance Transit"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="717645287" lat="43.6615169" lon="-72.3138844" version="3" timestamp="2015-08-06T05:51:13Z" changeset="33146009" uid="27832" user="Adam Franco">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="shelter" v="yes"/>
+    <tag k="surface" v="asphalt"/>
+  </node>
+  <node id="2943975933" lat="43.6471350" lon="-72.3342850" version="1" timestamp="2014-07-02T17:01:51Z" changeset="23596481" uid="153669" user="dchiles">
+    <tag k="bus" v="yes"/>
+    <tag k="name" v="White River JCT"/>
+    <tag k="public_transport" v="station"/>
+  </node>
+  <node id="2944110633" lat="43.7023865" lon="-72.2881812" version="3" timestamp="2015-11-22T02:44:33Z" changeset="35500695" uid="970243" user="ezekielelin">
+    <tag k="bench" v="yes"/>
+    <tag k="bus" v="yes"/>
+    <tag k="covered" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Hanover Inn"/>
+    <tag k="network" v="AT"/>
+    <tag k="operator" v="Advanced Transit"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="3764723873" lat="43.7015092" lon="-72.2894783" version="1" timestamp="2015-09-30T02:10:54Z" changeset="34338364" uid="1708084" user="debanjum">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Bookstore"/>
+  </node>
+  <node id="3764723874" lat="43.7050989" lon="-72.2877146" version="2" timestamp="2017-06-02T03:04:58Z" changeset="49182327" uid="970243" user="ezekielelin">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Wheeler Hall"/>
+    <tag k="network" v="AT"/>
+    <tag k="operator" v="Advance Transit"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="3764723875" lat="43.6855223" lon="-72.2933680" version="1" timestamp="2015-09-30T02:10:55Z" changeset="34338364" uid="1708084" user="debanjum">
+    <tag k="bench" v="yes"/>
+    <tag k="covered" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Gould Road"/>
+    <tag k="network" v="Advanced Transit"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="3850655609" lat="43.7079585" lon="-72.2845268" version="2" timestamp="2015-11-22T02:44:32Z" changeset="35500695" uid="970243" user="ezekielelin">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Vail/DMS"/>
+    <tag k="network" v="AT"/>
+    <tag k="operator" v="Advance Transit"/>
+  </node>
+  <node id="3850671855" lat="43.7230179" lon="-72.2711144" version="2" timestamp="2017-08-17T19:44:48Z" changeset="51214875" uid="970243" user="ezekielelin">
+    <tag k="bench" v="yes"/>
+    <tag k="covered" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="CRREL (Westbound)"/>
+    <tag k="network" v="AT"/>
+    <tag k="operator" v="Advance Transit"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="3850672182" lat="43.7023865" lon="-72.2881584" version="2" timestamp="2017-05-29T18:45:45Z" changeset="49082023" uid="970243" user="ezekielelin">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Hanover"/>
+    <tag k="operator" v="Dartmouth Coach"/>
+    <tag k="shelter" v="yes"/>
+    <tag k="website" v="https://dartmouthcoach.com"/>
+  </node>
+  <node id="3850672184" lat="43.7144234" lon="-72.3085262" version="1" timestamp="2015-11-22T02:44:32Z" changeset="35500695" uid="970243" user="ezekielelin">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Dan &amp; Whit's"/>
+    <tag k="network" v="AT"/>
+    <tag k="operator" v="Advance Transit"/>
+  </node>
+  <node id="4268776369" lat="43.6429386" lon="-72.2517432" version="1" timestamp="2016-06-27T20:42:09Z" changeset="40330335" uid="2149413" user="garrettdashnelson">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Lebanon City Hall"/>
+    <tag k="network" v="Advance Transit"/>
+    <tag k="operator" v="Advance Transit"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5041741344" lat="43.7218408" lon="-72.2713811" version="1" timestamp="2017-08-17T19:44:48Z" changeset="51214875" uid="970243" user="ezekielelin">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Dresden Rd (Eastbound Dropoff)"/>
+  </node>
+  <node id="5041741345" lat="43.7188012" lon="-72.2733914" version="1" timestamp="2017-08-17T19:44:48Z" changeset="51214875" uid="970243" user="ezekielelin">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="45 Lyme Rd (Eastbound)"/>
+  </node>
+  <node id="5041741346" lat="43.7241826" lon="-72.2701637" version="1" timestamp="2017-08-17T19:44:48Z" changeset="51214875" uid="970243" user="ezekielelin">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Dartmouth Pringing (Eastbound Dropoff)"/>
+  </node>
+  <node id="5041741347" lat="43.7257408" lon="-72.2697521" version="1" timestamp="2017-08-17T19:44:48Z" changeset="51214875" uid="970243" user="ezekielelin">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Rivercrest (Westbound)"/>
+  </node>
+  <node id="5041741348" lat="43.7196156" lon="-72.2730339" version="1" timestamp="2017-08-17T19:44:48Z" changeset="51214875" uid="970243" user="ezekielelin">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Firestation (Westbound)"/>
+  </node>
 
 </osm>

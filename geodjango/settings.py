@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'multigtfs',
     'rest_framework_swagger',
+    'conversionapp',
 ]
 
 MIDDLEWARE = [
