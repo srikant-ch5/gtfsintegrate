@@ -1,31 +1,31 @@
 {% extends 'gs/home.html' %}
 
 {% block main %}
-        <div id="input">
-            <form method="post" enctype="multipart/form-data" action="/gtfs/downloading_page/">
-                {% csrf_token %}
-                <input type="file" name="gtfsfile">
-                <button type="submit">UPLOAD A GTFS FILE</button>
-            </form>
+    <div id="input">
+        <form method="post" enctype="multipart/form-data" action="/gtfs/downloading_page/">
+            {% csrf_token %}
+            <input type="file" name="gtfsfile">
+            <button type="submit">UPLOAD A GTFS FILE</button>
+        </form>
 
-        </div>
-        <div id="gtfs_data">
-            {% if context %}
-                <h2>{{context}}</h2>
-            {% endif %}
-        </div>
+    </div>
+    <div id="gtfs_data">
+        {% if context %}
+            <h2>{{ context }}</h2>
+        {% endif %}
+    </div>
 
-        <div class="container">
+    <div class="container">
         <!-- Here Overpass Api should be used to retrieve data -->
-            <div class="col-xs-12" >
-                <div class="form-group">
+        <div class="col-xs-12">
+            <div class="form-group">
                 <label id="query_label">Enter Overpass query</label>
-                    <textarea class="form-control" rows="3" cols = "50">Upload an XML File to store into database</textarea>
-                    <button class="btn btn-primary" id="query">Execute on Map</button>
+                <textarea class="form-control" rows="3" cols="50">Upload an XML File to store into database</textarea>
+                <button class="btn btn-primary" id="query">Execute on Map</button>
                 <h3 id="location"></h3>
-                </div>
             </div>
         </div>
+    </div>
 
-        <div id="map" ></div>
+    <div id="map"></div>
 {% endblock %}
