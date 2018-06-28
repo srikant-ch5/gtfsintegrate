@@ -68,7 +68,7 @@ def showmap(request, pk=None):
     print(pk)
     request.session['feed'] = feed
     context = {
-        'data': 'data',
+        'data': 'data'
     }
     context['feed_name'] = feed
     context['feed_id'] = pk
@@ -154,26 +154,3 @@ def correspondence_view(request):
     else:
         form = CorrespondenceForm()
         return render(request, 'gs/correspondence.html', {'form': form})
-
-
-def save_correspondence(request):
-    if request.method == 'POST':
-        form = CorrespondenceForm(request.POST)
-
-        if form.is_valid():
-            corr_form = form.save(commit=False)
-            corr_form.save()
-        return render(request, 'gs/correspondence.html')
-
-
-def conversionview(request):
-    if request.method == 'POST':
-        present = request.POST.getlist('present_str[]')
-        replace = request.POST.getlist('replace_str[]')
-        context = {
-            'saved_status': 'Conversions are saved1'
-        }
-
-        print(present)
-        print(replace)
-    return render(request, 'gs/correspondence.html', {'context': context})

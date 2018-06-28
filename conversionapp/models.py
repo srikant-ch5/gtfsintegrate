@@ -54,8 +54,8 @@ class Correspondence(models.Model):
 
 
 class Conversion(models.Model):
-    present_str = JSONField(blank=True)
-    relace_str = JSONField(blank=True)
+    present_str = ArrayField(models.CharField(max_length=100),blank=True)
+    replace_str = ArrayField(models.CharField(max_length=100), blank=True)
 
     def __str__(self):
         return '{}'.format(self.id)

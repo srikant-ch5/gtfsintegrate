@@ -355,6 +355,7 @@ def reset_feed(formId, associated_feed_id):
     frequency = form.frequency
     if int(ts_diff) > frequency:
         status = 'Reseting feed with latest data'
+        print('Reseting Feed')
         form.timestamp = timezone.now()
         form.save()
         Feed.objects.get(name=form_name).delete()

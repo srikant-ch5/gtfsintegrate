@@ -8,9 +8,10 @@ from compare.models import CMP_Stop
 from . import views
 from .views import FeedListView
 from djgeojson.views import GeoJSONLayerView
-
+import conversionapp.views as conv_view
 import osmapp.views as osmview
 import compare.views as compview
+
 
 urlpatterns = [
     url(r'^$', views.home, name="home"),
@@ -25,7 +26,8 @@ urlpatterns = [
     url(r'^feed_form/', views.feed_form, name='feed_form'),
     url(r'^bounds/', osmview.load_osm_data_view, name="load_osm_data"),
     url(r'^correspondence',views.correspondence_view,name="correspondence"),
-    url(r'^save-correspondence', views.save_correspondence, name="save_correspondence"),
-    url(r'^conversionview', views.conversionview, name="conversionview"),
+    url(r'^conversionview', conv_view.conversionview, name="conversionview"),
+    url(r'^conversion/$', conv_view.make_conversion, name="make-conversion"),
+    url(r'^save-correspondence', conv_view.save_correspondence, name="save_correspondence"),
 
 ]
