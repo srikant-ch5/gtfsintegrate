@@ -4,13 +4,87 @@ from django.shortcuts import render
 from django.views.generic import ListView
 from multigtfs.models import Feed
 
-from .forms import GTFSInfoForm
+from .forms import GTFSInfoForm, CorrespondenceForm
 from .models import GTFSForm
-from .tasks import download_feed_task, reset_feed, dividemap
+from .tasks import download_feed_task, reset_feed
 from osmapp.views import get_osm_data
-from osmapp.models import KeyValueString,Tag,Node
+from osmapp.models import KeyValueString, Tag, Node
+import json
+
 
 def feed_form(request):
+    form_entries = GTFSForm.objects.all()
+    forms_list = []
+
+    for form_entry in form_entries:
+        forms_list.append(form_entry.id)
+
+    context = {
+        'feed_id': -1,
+        'forms_list': forms_list,
+    }
+
+    form = GTFSInfoForm()
+    return render(request, 'gs/form.html', {'form': form, 'context': context})
+
+
+def home(request):
+    context = {
+        'feed': 'Please enter some feed',
+        'message': 'Message to be shown ',
+    }
+
+    try:
+        context['feed'] = request.session['feed']
+        context['feed_id'] = Feed.objects.get(name=context['feed']).id
+        print(context['feed_id'])
+        print(request.session['feed'])
+    except Exception as e:
+        request.session['feed'] = "No Feed"
+        print("The session cannot feed be because user have not entered any feed")
+
+    '''Get all the feeds ids and pass to home page'''
+    feeds = Feed.objects.all()
+    feeds_list = []
+
+    for feed in reversed(feeds):
+        feeds_list.append(feed.name)
+
+    context['feeds'] = feeds_list
+
+    '''First get all the valid form entry ids so that iteration is easy'''
+    form_entries = GTFSForm.objects.all()
+    forms_list = []
+
+    for form_entry in form_entries:
+        forms_list.append(form_entry.id)
+
+    context['form_array'] = forms_list
+    return render(request, 'gs/option.html', {'context': context})
+
+
+def showmap(request, pk=None):
+    feed = Feed.objects.get(id=pk).name
+    print(pk)
+    request.session['feed'] = feed
+    context = {
+        'data': 'data',
+    }
+    context['feed_name'] = feed
+    context['feed_id'] = pk
+
+    return render(request, 'gs/load.html', {'context': context})
+
+
+class FeedListView(ListView):
+    model = Feed
+    template_name = 'gs/feeds.html'
+
+    def get_queryset(self):
+        return Feed.objects.all().order_by('id').reverse()
+
+
+def correspondence_view(request):
     form_entries = GTFSForm.objects.all()
     forms_list = []
 
@@ -63,74 +137,43 @@ def feed_form(request):
                 except Exception as e:
 
                     context['error'] = e
-
         get_osm_data(feed_id)
 
         key_strings = []
-        tags = Node.objects.all().values('tags').distinct()
-
+        tags = Node.objects.filter(feed=feed_id).values('tags').distinct()
         for tag in tags:
             key = Tag.objects.get(id=tag['tags']).key.value
             if not key in key_strings:
                 key_strings.append(key)
 
         context['key_strings'] = key_strings
-        return render(request, 'gs/correspondence.html', {'form': form, 'context': context})
+
+        corr_form = CorrespondenceForm()
+
+        return render(request, 'gs/correspondence.html', {'form': corr_form, 'context': context})
     else:
-        form = GTFSInfoForm()
-        return render(request, 'gs/form.html', {'form': form, 'context': context})
+        form = CorrespondenceForm()
+        return render(request, 'gs/correspondence.html', {'form': form})
 
 
-def home(request):
-    context = {
-        'feed': 'Please enter some feed',
-        'message': 'Message to be shown ',
-    }
+def save_correspondence(request):
+    if request.method == 'POST':
+        form = CorrespondenceForm(request.POST)
 
-    try:
-        context['feed'] = request.session['feed']
-        context['feed_id'] = Feed.objects.get(name=context['feed']).id
-        print(context['feed_id'])
-        print(request.session['feed'])
-    except Exception as e:
-        request.session['feed'] = "No Feed"
-        print("The session cannot feed be because user have not entered any feed")
-
-    '''Get all the feeds ids and pass to home page'''
-    feeds = Feed.objects.all()
-    feeds_list = []
-
-    for feed in reversed(feeds):
-        feeds_list.append(feed.name)
-
-    context['feeds'] = feeds_list
-
-    '''First get all the valid form entry ids so that iteration is easy'''
-    form_entries = GTFSForm.objects.all()
-    forms_list = []
-
-    for form_entry in form_entries:
-        forms_list.append(form_entry.id)
-
-    context['form_array'] = forms_list
-    return render(request, 'gs/option.html', {'context': context})
+        if form.is_valid():
+            corr_form = form.save(commit=False)
+            corr_form.save()
+        return render(request, 'gs/correspondence.html')
 
 
-def showmap(request, pk=None):
-    feed = Feed.objects.get(id=pk).name
-    request.session['feed'] = feed
-    context = {
-        'data': 'data',
-    }
-    context['feed_name'] = feed
-    context['feed_id'] = pk
+def conversionview(request):
+    if request.method == 'POST':
+        present = request.POST.getlist('present_str[]')
+        replace = request.POST.getlist('replace_str[]')
+        context = {
+            'saved_status': 'Conversions are saved1'
+        }
 
-    return render(request, 'gs/load.html', {'context': context})
-
-
-class FeedListView(ListView):
-    model = Feed
-    template_name = 'gs/feeds.html'
-
-    def get_queryset(self):
-        return Feed.objects.all().order_by('id').reverse()
+        print(present)
+        print(replace)
+    return render(request, 'gs/correspondence.html', {'context': context})

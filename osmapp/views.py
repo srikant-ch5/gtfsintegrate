@@ -21,7 +21,8 @@ def get_osm_data(feed_id):
     print("Osm data in view")
     feed_name = Feed.objects.get(id=feed_id).name
 
-    query2 = 'SELECT ST_AsGeoJson(ST_Envelope(ST_Union(ST_Envelope(geom)))) AS table_extent FROM gtfs_stop where gtfs_stop.feed_id=' + str(feed_id)
+    query2 = 'SELECT ST_AsGeoJson(ST_Envelope(ST_Union(ST_Envelope(geom)))) AS table_extent FROM gtfs_stop where gtfs_stop.feed_id=' + str(
+        feed_id)
     cursor = connection.cursor()
     cursor.execute(query2)
     result = cursor.fetchall()
@@ -83,137 +84,20 @@ def get_osm_data(feed_id):
 
     print("Content has been copied")
 
-    load(xmlfile)
+    if not Node.objects.filter(feed=feed_id).exists():
+        print("Downloading osm data from overpass to Db")
+        load(xmlfile, feed_id)
+    else:
+        print("Nodes are already downloaded")
 
-
-def get_bounds(request):
+def load_osm_data_view(request):
     if request.method == 'POST':
         context = {
             'feed_id': -1
         }
         feed_id = request.POST.get('feed_id')
-        feed_name = Feed.objects.get(id=feed_id).name
 
-        query = 'SELECT gtfs_stop.geom FROM gtfs_stop where gtfs_stop.feed_id=8'
-        query2 = 'SELECT ST_AsGeoJson(ST_Envelope(ST_Union(ST_Envelope(geom)))) AS table_extent FROM gtfs_stop where gtfs_stop.feed_id=' + feed_id
-        cursor = connection.cursor()
-        cursor.execute(query2)
-        result = cursor.fetchall()
-        bounds_json = json.loads(result[0][0])
-        southwest = bounds_json['coordinates'][0][0]
-        northwest = bounds_json['coordinates'][0][1]
-        northeast = bounds_json['coordinates'][0][2]
-        southeast = bounds_json['coordinates'][0][3]
-
-        west = [0.0, 0.0]
-        west[0], west[1] = getmidpoint(northwest[1], northwest[0], southwest[1], southwest[0])
-        east = [0.0, 0.0]
-        east[0], east[1] = getmidpoint(northeast[1], northeast[0], southeast[1], southeast[0])
-        north = [0.0, 0.0]
-        north[0], north[1] = getmidpoint(northeast[1], northeast[0], northwest[1], northwest[0])
-        south = [0.0, 0.0]
-        south[0], south[1] = getmidpoint(southwest[1], southwest[0], southeast[1], southeast[0])
-
-        center = [0.0, 0.0]
-        center[0], center[1] = getmidpoint(north[0], north[1], south[0], south[1])
-
-        top_left = [0.0, 0.0]
-        top_left[1], top_left[0] = getmidpoint(northwest[1], northwest[0], center[0], center[1])
-        top_right = [0.0, 0.0]
-        top_right[1], top_right[0] = getmidpoint(northeast[1], northeast[0], center[0], center[1])
-        bottom_left = [0.0, 0.0]
-        bottom_left[1], bottom_left[0] = getmidpoint(southwest[1], southwest[0], center[0], center[1])
-        bottom_right = [0.0, 0.0]
-        bottom_right[1], bottom_right[0] = getmidpoint(southeast[1], southeast[0], center[0], center[1])
-
-        outerbound = [southwest, northwest, northeast, southeast]
-        innerbound = [bottom_left, top_left, top_right, bottom_right]
-
-        print('saved inner bound {} {} {} {} with operator {}'.format(top_left, top_right, bottom_left, bottom_right,
-                                                                      feed_name))
-        bbox = str(southwest[1]) + "," + str(southwest[0]) + "," + str(northeast[1]) + "," + str(northeast[0])
-
-        get_stops_query = '''
-                [out:xml];
-                    (
-                    node(''' + bbox + ''')[highway=bus_stop];
-                    node(''' + bbox + ''')[bus=yes];
-                    node(''' + bbox + ''')[public_transport=stop_position];
-                    node(''' + bbox + ''')[public_transport=platform];
-                );
-                out meta;
-                '''
-        print(get_stops_query)
-        try:
-            result = post("http://overpass-api.de/api/interpreter", get_stops_query)
-        except ConnectionError as ce:
-            context['connection_error'] = "There is a connection error while downloading the OSM data"
-
-        PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-        xmlfiledir = xmlfiledir = os.path.join(os.path.dirname(PROJECT_ROOT), 'osmapp', 'static')
-        xmlfile = xmlfiledir + '/node.osm'
-        with open(xmlfile, 'wb') as fh:
-            fh.write(result.content)
-
-        print("Content has been copied")
-
-        #load(xmlfile)
-
-    return render(request, 'gs/load.html', {'context': context})
-
-
-def set_bounds(request):
-    context = {
-        'loaded': ''
-    }
-
-    if request.method == 'POST':
-        east = request.POST.get('east')
-        west = request.POST.get('west')
-        north = request.POST.get('north')
-        south = request.POST.get('south')
-        northeast_lat = request.POST.get('northeast_lat')
-        northeast_lon = request.POST.get('northeast_lon')
-        northwest_lon = request.POST.get('northwest_lon')
-        northwest_lat = request.POST.get('northwest_lat')
-        southeast_lon = request.POST.get('southeast_lon')
-        southeast_lat = request.POST.get('southeast_lat')
-        southwest_lat = request.POST.get('southwest_lat')
-        southwest_lon = request.POST.get('southwest_lon')
-        coordinates_arr = request.POST.get('stopscoordinates_array')
-
-        data = json.loads(coordinates_arr)
-
-        print('{} {} {} {} '.format(type(south), type(west), type(north), type(east)))
-
-        bbox = south + "," + west + "," + north + "," + east
-
-        get_stops_query = '''
-        [out:xml];
-            (
-            node(''' + bbox + ''')[highway=bus_stop];
-            node(''' + bbox + ''')[bus=yes];
-            node(''' + bbox + ''')[public_transport=stop_position];
-            node(''' + bbox + ''')[public_transport=platform];
-        );
-        out meta;
-        '''
-        print(get_stops_query)
-        try:
-            result = post("http://overpass-api.de/api/interpreter", get_stops_query)
-        except ConnectionError as ce:
-            context['connection_error'] = "There is a connection error while downloading the OSM data"
-
-        PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-        xmlfiledir = xmlfiledir = os.path.join(os.path.dirname(PROJECT_ROOT), 'osmapp', 'static')
-        xmlfile = xmlfiledir + '/node.osm'
-        with open(xmlfile, 'wb') as fh:
-            fh.write(result.content)
-
-        print("Content has been copied")
-        dividemap(east, west, north, south, northeast_lat, northeast_lon, northwest_lat, northwest_lon, southeast_lat,
-                  southeast_lon, southwest_lat, southwest_lon, data)
-        load(xmlfile)
+        get_osm_data(feed_id)
 
     return render(request, 'gs/load.html', {'context': context})
 
@@ -320,14 +204,14 @@ def get_route_relations(request):
     return render(request, 'gs/load.html')
 
 
-def load(xmlfile):
-    Node.objects.all().delete()
-    Way.objects.all().delete()
+def load(xmlfile, feed_id):
     print("Downloading the nodes")
     data = open(xmlfile)
 
     tree = cetree.parse(data)
     root = tree.getroot()
+
+    feed = Feed.objects.get(id=feed_id)
 
     for primitive in root:
         if primitive.tag == 'node':
@@ -341,7 +225,8 @@ def load(xmlfile):
                 slat = float(primitive.attrib.get("lat"))
                 slon = float(primitive.attrib.get("lon"))
 
-                node = Node(id=snode_id, timestamp=stimestamp, uid=suid, user=suser, version=sversion, visible=True,
+                node = Node(feed=feed, id=snode_id, timestamp=stimestamp, uid=suid, user=suser, version=sversion,
+                            visible=True,
                             changeset=schangeset, incomplete=False)
                 node.set_cordinates(slon, slat)
                 node.save()
@@ -366,7 +251,8 @@ def load(xmlfile):
                 wversion = int(primitive.attrib.get("version"))
                 wchangeset = int(primitive.attrib.get("changeset"))
 
-                way = Way(id=wway_id, timestamp=wtimestamp, visible=True, incomplete=False, uid=wuid, user=wuser,
+                way = Way(feed=feed, id=wway_id, timestamp=wtimestamp, visible=True, incomplete=False, uid=wuid,
+                          user=wuser,
                           version=wversion, changeset=wchangeset)
                 way.save()
                 way.wn_set.all().delete()
@@ -382,7 +268,7 @@ def load(xmlfile):
                         way.add_node(node)
                     except Exception as e:
                         print("Node does not exist creating dummy node")
-                        dummy_node = Node.objects.create(id=node_reference, visible=False, incomplete=True)
+                        dummy_node = Node.objects.create(feed=feed, id=node_reference, visible=False, incomplete=True)
                         dummy_node.set_cordinates(0, 0)
                         dummy_node.save()
                         way.incomplete = 'True'
@@ -416,7 +302,7 @@ def load(xmlfile):
             rversion = int(primitive.get("version"))
             rchangeset = int(primitive.get("changeset"))
 
-            relation = OSM_Relation(id=rid, timestamp=rtimestamp, uid=ruid, user=ruser, version=rversion,
+            relation = OSM_Relation(feed=feed, id=rid, timestamp=rtimestamp, uid=ruid, user=ruser, version=rversion,
                                     changeset=rchangeset, visible=True, incomplete=False)
             relation.save()
             relation.memberrelation_set.all().delete()

@@ -2,18 +2,20 @@ from django.contrib.gis.db import models
 from django.contrib.gis.geos import Point, LineString
 from django.db.models import Manager as GeoManager
 from typing import Tuple
-from django.contrib.postgres.fields import ArrayField,JSONField
+from django.contrib.postgres.fields import ArrayField, JSONField
 
 
 # model for storing bounds specific to the operator
 class Bounds(models.Model):
-    feed_id = models.IntegerField( blank=True)
+    feed_id = models.IntegerField(blank=True)
     operator_name = models.CharField(max_length=200)
     outer_bound = ArrayField(ArrayField(models.FloatField()), blank=True)
-    inner_bound = models.CharField(max_length=10000000,blank=True)
+    inner_bound = models.CharField(max_length=10000000, blank=True)
 
     def __str__(self):  # __unicode__ on Python 2
         return self.operator_name
+
+
 class KeyValueString(models.Model):
     value = models.TextField(unique=True)
 
@@ -77,6 +79,7 @@ class OSM_Primitive(models.Model):
     changeset = models.IntegerField(null=True)
     tags = models.ManyToManyField('Tag', blank=True)
     incomplete = models.BooleanField(default=False)
+    feed = models.ForeignKey('multigtfs.Feed', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         abstract = True

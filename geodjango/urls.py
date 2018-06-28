@@ -5,8 +5,8 @@ from django.views.generic import TemplateView
 from .views import FormView
 from rest_framework_swagger.views import get_swagger_view
 from geodjango.views import FormView, StopView, FeedView, AgencyView, RouteView, \
-    NodeView, WayView, RelationView, TagView, KeyValueStringView, FeedBoundsView
-
+    NodeView, WayView, RelationView, TagView, KeyValueStringView, FeedBoundsView, \
+    CorrespondenceView, ConversionView
 schema_view = get_swagger_view(title='Gtfsintegrate API')
 
 urlpatterns = [
@@ -27,4 +27,7 @@ urlpatterns = [
     url(r'^api/feeddata/$', FeedView.as_view(), name="feeddata"),
     url(r'^api/agencydata/$', AgencyView.as_view(), name="agencydata"),
     url(r'^api/routedata/$', RouteView.as_view(), name="routedata"),
+
+    url(r'^api/correspondencedata/$', CorrespondenceView.as_view(), name="correspondencedata"),
+    url(r'^api/conversiondata/$', ConversionView.as_view(), name="conversiondata"),
 ]

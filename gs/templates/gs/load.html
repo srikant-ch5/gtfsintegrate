@@ -76,8 +76,7 @@
 
         function loadmapfunction(map, options) {
 
-            feed_id;
-            {{context.feed_id}}
+            const feed_id = {{context.feed_id}}
             let feed_name;
             console.log(feed_id);
             let mapLayer;
@@ -113,11 +112,12 @@
             //get all the stops and show them on map
             $.getJSON(gtfsstopsdata, function (data) {
 
-                let lon, lat;
                 let coordinates_arr = [];
                 const length = data.features.length;
                 for (let i = 0; i < length; i++) {
+
                     if (data.features[i].properties.feed === feed_id) {
+                        let lon, lat;
                         name = data.features[i].properties.name;
                         lat = data.features[i].geometry.coordinates[1];
                         lon = data.features[i].geometry.coordinates[0];
@@ -191,7 +191,7 @@
             });
 
             //call django method get_bounds using post
-            URL = "{% url 'bounds' %}";
+            URL = "{% url 'load_osm_data' %}";
 
             $.ajax({
                 url: URL,
@@ -222,10 +222,11 @@
                     popupAnchor: [1, -34],
                     shadowSize: [41, 41]
                 });
-                let lon, lat;
+                var lat,lon;
                 let coordinates_arr = [];
                 const length = data.features.length;
                 for (let i = 0; i < length; i++) {
+                    if(data.features[i].properties.feed == feed_id){
                     const node_id = data.features[i].properties.id;
                     lat = data.features[i].geometry.coordinates[1];
                     lon = data.features[i].geometry.coordinates[0];
@@ -243,6 +244,10 @@
                         $("#osmstopversion").text("version " + this.nodeversion);
                     }
 
+                    }
+                    else{
+                        console.log("Ignoring node as it belongs to other feed");
+                    }
                 }
             });
 

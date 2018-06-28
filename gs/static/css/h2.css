@@ -71,7 +71,23 @@ table td:first-child { border-left: none; }
     width:  600px;
     height: 500px;
 }
-
+.correspondence-box, .tags-box {
+    overflow-y: auto;
+    border-radius: 25px;
+    border: 10px solid #2778D4;
+    width:  550px;
+    height: 500px;
+}
+.tags-box{
+    padding-left:50px;
+}
+.correspondence-box{
+    padding-left:10px;  
+}
+.corr{
+    padding-left:0px;
+    padding-right:0px;
+}
 #specialbigmap {
     height: 1000px;
 }
@@ -154,10 +170,7 @@ h1 { color: #333333; font-family: 'Bitter', serif; font-size: 50px; font-weight:
 #feed-name-heading{
     padding-top:5px;
 }
-p { color: #333333; font-family: Georgia, serif; font-size: 18px; line-height: 28px; margin: 0 0 28px; }
-
-
-p:first-of-type { font-size: 26px; line-height: 36px; margin: 0 0 28px; }
+p { color: #333333; font-family: Georgia, serif; font-size: 15px; line-height: 28px; margin: 0 0 28px; }
 
 
 a { color: #c73036; font-family: Georgia, serif; text-decoration: underline; }
@@ -172,4 +185,11 @@ a:hover { color: #333333; text-decoration: underline; }
 .author a { color: #c73036; font-family: "Helvetica Neue", sans-serif; font-weight: bold; text-decoration: none; text-transform: uppercase; }
 #form_headging{
     font-size: 20px;
+}
+#add-conv{
+    padding-top:50px;
+    padding-left:50px;
+}
+#replace-conv-box{
+    margin:10px;
 }
