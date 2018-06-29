@@ -6,7 +6,7 @@ from multigtfs.models import Feed
 
 from .forms import GTFSInfoForm, CorrespondenceForm
 from .models import GTFSForm
-from .tasks import download_feed_task, reset_feed
+from .tasks import download_feed_task, reset_feed, get_keys
 from osmapp.views import get_osm_data
 from osmapp.models import KeyValueString, Tag, Node
 import json
@@ -112,12 +112,15 @@ def correspondence_view(request):
                                                   gtfs_tag=request.POST['gtfs_tag'])
                 formId = is_feed_present[0].id
                 associated_feed_id = Feed.objects.get(name=is_feed_present[0].name).name
-                context['error'] = reset_feed(formId, associated_feed_id)
+                context['error'], context['form_reset_'] = reset_feed(formId, associated_feed_id)
                 feed_id = Feed.objects.get(name=form_entry.name).id
                 context['feed_id'] = feed_id
                 feed_name = Feed.objects.get(name=form_entry.name).name
                 request.session['feed'] = feed_name
                 context['feed_name'] = feed_name
+                get_osm_data(feed_id)
+                context['key_strings'] = get_keys(feed_id)
+
             except Exception as e:
                 context['error'] = e
         else:
@@ -134,19 +137,11 @@ def correspondence_view(request):
                         feed_id = feed.id
                         context['feed_id'] = feed_id
                         context['feed_name'] = feed.name
+                        get_osm_data(feed_id)
+                        context['key_strings'] = get_keys(feed_id)
+
                 except Exception as e:
-
                     context['error'] = e
-        get_osm_data(feed_id)
-
-        key_strings = []
-        tags = Node.objects.filter(feed=feed_id).values('tags').distinct()
-        for tag in tags:
-            key = Tag.objects.get(id=tag['tags']).key.value
-            if not key in key_strings:
-                key_strings.append(key)
-
-        context['key_strings'] = key_strings
 
         corr_form = CorrespondenceForm()
 

@@ -9,8 +9,7 @@ class GTFSForm(models.Model):
     gtfs_tag = models.CharField(max_length=20, blank=True)
     frequency = models.IntegerField(blank=True, default=3)
     timestamp = models.DateTimeField(null=True)
-
-    feed = models.OneToOneField('multigtfs.Feed', on_delete=models.CASCADE, null=True)
+    feed = models.IntegerField(blank=True, default= -1)
 
     def __str__(self):
         return self.name

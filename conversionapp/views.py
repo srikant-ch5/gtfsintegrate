@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from gs.forms import CorrespondenceForm
-from .models import Conversion
+from .models import Conversion, Correspondence
 from multigtfs.models import Stop
 import re
 
@@ -11,14 +11,40 @@ def save_correspondence(request):
         form = CorrespondenceForm(request.POST)
         feed_id = -1
         if form.is_valid():
-            corr_form = form.save(commit=False)
-            feed_id = corr_form.feed_id
+            entered_corr_form = form.save(commit=False)
+            form_feed_id = entered_corr_form.feed_id
 
-        context = {
-            'feed_id': feed_id
-        }
+            if Correspondence.objects.filter(feed_id=entered_corr_form.feed_id).exists():
+                corr_form = Correspondence.objects.get(feed_id=entered_corr_form.feed_id)
+                form_feed_id = entered_corr_form.feed_id
+                corr_form.stop_id = entered_corr_form.stop_id
+                corr_form.stop_code = entered_corr_form.stop_code
+                corr_form.stop_name = entered_corr_form.stop_name
+                corr_form.stop_desc = entered_corr_form.stop_desc
+                corr_form.stop_zone = entered_corr_form.stop_zone
+                corr_form.stop_url = entered_corr_form.stop_url
+                corr_form.stop_location_type = entered_corr_form.stop_location_type
+                corr_form.stop_parent_station = entered_corr_form.stop_parent_station
+                corr_form.stop_timezone = entered_corr_form.stop_timezone
 
-        return render(request, 'gs/correspondence.html', {'context': context})
+                corr_form.agency_name = entered_corr_form.agency_name
+                corr_form.agency_id = entered_corr_form.agency_id
+                corr_form.agency_url = entered_corr_form.agency_url
+                corr_form.agency_timezone = entered_corr_form.agency_timezone
+                corr_form.agency_lang = entered_corr_form.agency_lang
+                corr_form.agency_phone = entered_corr_form.agency_phone
+                corr_form.agency_fare_url = entered_corr_form.agency_fare_url
+
+                corr_form.save()
+
+            else:
+                entered_corr_form.save()
+
+    context = {
+        'feed_id': form_feed_id
+    }
+
+    return render(request, 'gs/conversion.html', {'context': context})
 
 
 def conversionview(request):
@@ -32,8 +58,16 @@ def conversionview(request):
         replace_strings = list(filter(None, replace))
         print(present_strings)
         print(replace_strings)
-        from_string = ['St.', 'Rd.', 'St', 'Rd']
-        to_string = ['Street', 'Road', 'Street', 'Road']
+        from_string = [' St. ', ' Rd. ', ' St ', ' Rd ', ' Opp. ', 'Opp.',' Opp.']
+        to_string = [' Street ', ' Road ', ' Street ', ' Road ', ' Opposite ', ' Opposite ',' Opposite ']
+
+        conversion_dict = {
+            ' Street ':[' St. ',' St '],
+            'Street ' : ['St ', 'Opp '],
+            ' Road ': [' Rd. ',' Rd '],
+            ' Opposite ':[' Opp. ',' Opp '],
+            'Opposite ':['Opp. ','Opp ']
+        }
 
         corr_form_id = request.POST.get('corr_form_id')
         feed_id = int(request.POST.get('feed_id'))
@@ -42,19 +76,23 @@ def conversionview(request):
 
         for i in range(0, len(stops)):
             stop_name = stops[i].name
+            normalizedName = stop_name
 
-            for j in range(0, len(from_string)):
-                if re.search(from_string[j], stop_name):
-                    print('Replacing {}'.format(stop_name))
-                    stops[i].normalized_name = stop_name.replace(from_string[j], to_string[j])
-                    stops[i].save()
+            for key,value in conversion_dict.items():
+                for v in value:
+                    if re.search(v,normalizedName):
+                        print('Replacing {} with {}'.format(stop_name,normalizedName))
+                        normalizedName = normalizedName.replace(v, key)
 
             for k in range(0, len(present_strings)):
-                if re.search(present_strings[k], stop_name):
-                    print("Replacing {}".format(stop_name))
-                    stops[i].normalized_name = stop_name.replace(present_strings[k], replace_strings[k])
-                    stops[i].save()
-    return render(request, 'gs/correspondence.html', {'context': context})
+                if re.search(present_strings[k], normalizedName):
+                    print("Replacing {} again".format(stop_name))
+                    normalizedName = normalizedName.replace(present_strings[k], replace_strings[k])
+
+            stops[i].normalized_name = normalizedName
+            stops[i].save()
+
+    return render(request, 'gs/conversion.html', {'context': context})
 
 
 def make_conversion(request):

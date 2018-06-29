@@ -6,6 +6,7 @@ import requests
 from django.utils import timezone
 from multigtfs.models import Feed
 
+from osmapp.models import Node,Tag
 from .models import GTFSForm
 from django.db import connection
 from geographiclib.geodesic import Geodesic
@@ -19,6 +20,15 @@ topright_block_stops = []
 bottomleft_block_stops = []
 bottomright_block_stops = []
 
+def get_keys(feed_id):
+    key_strings = []
+    tags = Node.objects.filter(feed=feed_id).values('tags').distinct()
+    for tag in tags:
+        key = Tag.objects.get(id=tag['tags']).key.value
+        if not key in key_strings:
+            key_strings.append(key)
+
+    return key_strings
 
 def getmidpoint(lat1, lon1, lat2, lon2):
     l = Geodesic.WGS84.InverseLine(lat1, lon1, lat2, lon2)
@@ -350,12 +360,14 @@ def reset_feed(formId, associated_feed_id):
 
     ts_diff = str(current_timestamp - form_timestamp)[0]
     status = 'The Feed is up to date'
-
+    print("Diff is {}".format(ts_diff))
+    form_reset = False
     code = 'present'
     frequency = form.frequency
     if int(ts_diff) > frequency:
         status = 'Reseting feed with latest data'
         print('Reseting Feed')
+        form_reset = True
         form.timestamp = timezone.now()
         form.save()
         Feed.objects.get(name=form_name).delete()
@@ -363,4 +375,4 @@ def reset_feed(formId, associated_feed_id):
 
     '''since form has one to one relationship with every feed so when the feed is renewed form.feed should be updated'''
 
-    return status
+    return status, form_reset

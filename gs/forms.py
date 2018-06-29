@@ -50,6 +50,7 @@ class CorrespondenceForm(forms.ModelForm):
         self.fields['feed_id'].widget.attrs = {
             'id': 'feed_id',
             'name': 'Feed ID(GTFS)',
+
         }
         self.fields['stop_id'].widget.attrs = {
             'id': 'stop_id',

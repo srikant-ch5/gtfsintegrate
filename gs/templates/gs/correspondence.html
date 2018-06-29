@@ -21,7 +21,7 @@
                     <form method="POST" class="feed-form" action="{% url 'save_correspondence' %}">
                         {% csrf_token %}
                         {{ form.as_p }}
-                        <button type="submit" class="save btn btn-default"> Save</button>
+                        <button type="submit" class="save-corr btn btn-primary"> Save Correspondence </button>
                     </form>
                 </div>
             </div>
@@ -35,31 +35,6 @@
             </div>
         </div>
     </div>
-
-    <h1>Define Conversion Rules</h1>
-    <div class="container conv">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="correspondence-box" id="add-conv">
-                    <input type="text" id="present-conv-box-first">
-                    <input type="text" id="replace-conv-box">
-                    <button class="btn btn-primary" id="add-box">+</button>
-                   <button class="btn btn-primary" id="save-btn">save</button>
-                </div>
-            </div>
-            <div class="" col-md-6>
-                <div class="tags-box">
-                    <h2>Some Predfined Conversion Rules</h2>
-                    <h3>St->Street</h3>
-                    <h3>Jn->Junction</h3>
-                    <h3>Rd->Road</h3>
-                </div>
-            </div>
-        </div>
-    </div>
-    <br><br>
-    <button class="btn btn-primary" id="proceed-btn">Proceed</button>
-
 </div>
 
 <script type="text/javascript">
@@ -69,97 +44,20 @@
     
     const feed_id = '{{context.feed_id}}';
    	
-   	$('#proceed-btn').hide();
+   	$('label[0]').hide()
+
+   	$('label').each(function(i){
+   		if(i == 0)
+   	   		$(this).hide()
+   	});
+
    	$('#feed_id').val(feed_id);
     $('#stop_code').val('ref');
     $('#stop_name').val('name');
-    $('stop_zone').val('zone');
+    $('#stop_zone').val('zone');
     $('#stop_url').val('url');
 
-    var url = '/api/correspondencedata/';
-
-   $("#add-box").on("click",function(){
-   		var inputField = $('<input type="text" id = "present-conv-box"><input type="text" id= "replace-conv-box">')
-   		$("#add-conv").append(inputField)
-   });
-
-   $("#save-btn").on("click",function(e){
-   	$("#save-btn").hide();
-   	var corr_form_id = '{{context.corr_form_id}}'
-   	var list = $('#add-conv').find('input').map(function() {
-		  return $(this).val();
-		}).get();
-   	let present_string_arr =[] 
-   	let replace_string_arr = []
-
-   	for (var i=0;i<list.length;i++){
-	    if ((i+2)%2==0) {
-	        present_string_arr.push(list[i]);
-	    }
-	    else {
-	        replace_string_arr.push(list[i]);
-	    }
-	}
-
-	console.log("Posting data to conversion model");
-
-    document.getElementById("loading").style.display = "block";
-	var conversionurl = '{% url "conversionview" %}'
-
-	function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = jQuery.trim(cookies[i]);
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-
-    const csrftoken = getCookie('csrftoken');
-
-    console.log(csrftoken);
-
-    function csrfSafeMethod(method) {
-        // these HTTP methods do not require CSRF protection
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
-
-    $.ajaxSetup({
-        beforeSend: function (xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            }
-        }
-    });
-	$.ajax({
-		url:conversionurl,
-		type:'POST',
-		aysnc:false,
-		data:{
-			'feed_id':feed_id,
-			'corr_form_id':corr_form_id,
-			'present_str[]':present_string_arr,
-			'replace_str[]':replace_string_arr,
-			'csrfmiddlewaretoken': '{{ csrf_token }}'
-		},
-		success:function(data){
-			console.log("Posted data");
-		},
-		error:function(xhr,status,e){
-			alert("Error sending data to conversion model");
-		}
-	})
-	document.getElementById("loading").style.display = "none";
-	$('#proceed-btn').show();
-   });
-
+    $('#feed_id').hide();
 
 </script>
 {% endblock %}

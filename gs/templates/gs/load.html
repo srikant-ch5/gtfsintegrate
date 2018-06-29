@@ -129,6 +129,7 @@
                         marker.stopid = data.features[i].properties.stop_id;
                         marker.stopcode = data.features[i].properties.code;
                         marker.stopzone = data.features[i].properties.zone;
+                        marker.normalized_name = data.features[i].properties.normalized_name;
                         marker.stopname = name;
 
                         function markerOnClick(e) {
@@ -138,7 +139,7 @@
                             } else {
                                 $("#gtfsstopcode").text(this.stopcode);
                             }
-                            $("#gtfsstopname").text(this.stopname);
+                            $("#gtfsstopname").text(this.normalized_name);
                             if (this.stopzone == null) {
                                 $("#gtfsstopzone").text("zone undefined");
                             } else {
@@ -149,7 +150,6 @@
                         markerArray.push(marker);
                     }
                 }
-                console.log(markerArray);
                 const group = new L.featureGroup(markerArray);
                 const bounds = group.getBounds();
                 feed_bounds = bounds;
@@ -244,9 +244,6 @@
                         $("#osmstopversion").text("version " + this.nodeversion);
                     }
 
-                    }
-                    else{
-                        console.log("Ignoring node as it belongs to other feed");
                     }
                 }
             });
