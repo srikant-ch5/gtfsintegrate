@@ -19,10 +19,10 @@
             </div>
             <div class="" col-md-6>
                 <div class="tags-box">
-                    <h2>Some Predfined Conversion Rules</h2>
-                    <h3>St->Street</h3>
-                    <h3>Jn->Junction</h3>
-                    <h3>Rd->Road</h3>
+                	<h2> Stops with Abbrevations in your feed </h2>
+                    {% for stop in context.stops_for_conversion %}
+                    	<h3>-> {{ stop }} </h3>
+                    {% endfor %} 
                 </div>
             </div>
         </div>
@@ -117,7 +117,6 @@
 			console.log("Posted data");
 			document.getElementById("loading").style.display="none";
 			$("#proceed-btn").show();
-			$("#proceed-btn").click();
 		},
 		error:function(xhr,status,e){
 			alert("Error sending data to conversion model");

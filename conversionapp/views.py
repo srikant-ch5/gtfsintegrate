@@ -40,8 +40,17 @@ def save_correspondence(request):
             else:
                 entered_corr_form.save()
 
+    # get stop names with . in it an display it in conversion view
+    stops_of_feed = Stop.objects.filter(feed=form_feed_id)
+    print(stops_of_feed)
+    stops_with_abbr = []
+    for stop in stops_of_feed:
+        if re.search('\.', stop.name):
+            stops_with_abbr.append(stop.name)
+
     context = {
-        'feed_id': form_feed_id
+        'feed_id': form_feed_id,
+        'stops_for_conversion': stops_with_abbr
     }
 
     return render(request, 'gs/conversion.html', {'context': context})
@@ -58,15 +67,14 @@ def conversionview(request):
         replace_strings = list(filter(None, replace))
         print(present_strings)
         print(replace_strings)
-        from_string = [' St. ', ' Rd. ', ' St ', ' Rd ', ' Opp. ', 'Opp.',' Opp.']
-        to_string = [' Street ', ' Road ', ' Street ', ' Road ', ' Opposite ', ' Opposite ',' Opposite ']
 
         conversion_dict = {
-            ' Street ':[' St. ',' St '],
-            'Street ' : ['St ', 'Opp '],
-            ' Road ': [' Rd. ',' Rd '],
-            ' Opposite ':[' Opp. ',' Opp '],
-            'Opposite ':['Opp. ','Opp ']
+            ' Street ': [' St. ', ' St ', ' St.'],
+            ' Street': ['\sSt$', '\sSt.$'],
+            ' Road ': [' Rd. ', ' Rd ', ' Rd.'],
+            ' Road': [' [Rd]$', ' [Rd.]$'],
+            ' Opposite ': ['\sOpp.\s', '\sOpp\s'],
+            'Opposite ': ['Opp.\s', 'Opp\s']
         }
 
         corr_form_id = request.POST.get('corr_form_id')
@@ -78,10 +86,10 @@ def conversionview(request):
             stop_name = stops[i].name
             normalizedName = stop_name
 
-            for key,value in conversion_dict.items():
+            for key, value in conversion_dict.items():
                 for v in value:
-                    if re.search(v,normalizedName):
-                        print('Replacing {} with {}'.format(stop_name,normalizedName))
+                    if re.search(v, normalizedName):
+                        print('Replacing {} with {}'.format(stop_name, normalizedName))
                         normalizedName = normalizedName.replace(v, key)
 
             for k in range(0, len(present_strings)):
