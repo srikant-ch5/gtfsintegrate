@@ -62,19 +62,13 @@ def home(request):
     context['form_array'] = forms_list
     return render(request, 'gs/option.html', {'context': context})
 
-
 def showmap(request, pk=None):
     feed = Feed.objects.get(id=pk).name
     print(pk)
     request.session['feed'] = feed
-    context = {
-        'data': 'data'
-    }
-    context['feed_name'] = feed
-    context['feed_id'] = pk
+    context = {'data': 'data', 'type': 'normal_view', 'feed_name': feed, 'feed_id': pk}
 
     return render(request, 'gs/load.html', {'context': context})
-
 
 class FeedListView(ListView):
     model = Feed
@@ -82,7 +76,6 @@ class FeedListView(ListView):
 
     def get_queryset(self):
         return Feed.objects.all().order_by('id').reverse()
-
 
 def correspondence_view(request):
     form_entries = GTFSForm.objects.all()
