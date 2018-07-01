@@ -2,30 +2,20 @@ from django.contrib.gis.db import models
 from django.db.models import Manager as GeoManager
 from django.contrib.gis.geos import Point, LineString
 
-
 class CMP_Stop(models.Model):
-    stop = models.ForeignKey('multigtfs.Stop',
-                             on_delete=models.CASCADE,
-                             null=True)
-    node = models.ForeignKey('osmapp.Node',
-                             on_delete=models.CASCADE,
-                             null=True)
-    geom = models.PointField(geography=True,
-                             spatial_index=True,
-                             null=True)
-    node_geom = models.PointField(geography=True,
-                                  spatial_index=True,
-                                  null=True)
-    type = models.CharField(max_length=10, null=True)
-    objects = GeoManager()
+    conversion_method = (
+        ('NAME', 'name'),
+        ('LOCATION', 'location')
+    )
 
-    def gtfs_save_geom(self, stop_lat, stop_lon):
-        self.geom = Point(stop_lat, stop_lon)
-        self.save()
+    feed = models.ForeignKey('multigtfs.feed', on_delete=models.CASCADE, blank=True)
+    gtfs_stop = models.ForeignKey('multigtfs.Stop', on_delete=models.CASCADE, null=True)
+    matching_type = models.CharField(max_length=10, choices=conversion_method, blank=True)
+    probable_matched_stops = models.ManyToManyField('osmapp.Node', related_name='by_app', blank=True)
+    fixed_match = models.OneToOneField('multigtfs.stop', related_name='by_user', on_delete=models.CASCADE, blank=True)
 
-    class Meta:
-        db_table = 'cmp_stop'
-        app_label = 'compare'
+    def __str__(self):
+        return '{}'.format(self.feed_id)
 
 class CMP_Line(models.Model):
     pass
@@ -33,3 +23,4 @@ class CMP_Line(models.Model):
 
 class itineraries(models.Model):
     pass
+
