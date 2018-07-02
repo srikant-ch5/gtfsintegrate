@@ -33,6 +33,7 @@ def showmap_with_comp(request, pk):
     # Initially comparision should be done by the user
     try:
         for stop in stops:
+            #osm_nodes_in_bound = get_nodes_within100m(str(stop.lon),str(stop.lat))
             if not CMP_Stop.objects.filter(gtfs_stop=stop).exists():
                 comp_stop = CMP_Stop.objects.create(gtfs_stop=stop)
                 comp_stop.save()
