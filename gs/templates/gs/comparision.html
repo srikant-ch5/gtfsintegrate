@@ -1,0 +1,374 @@
+{% extends 'gs/home.html' %}
+{% load staticfiles %}
+{% load static %}
+{% load leaflet_tags %}
+
+{% block map %}
+    <div id="loading">
+        <img id="loading-image" src='http://i.stack.imgur.com/FhHRx.gif' alt="Loading..."/>
+    </div>
+    <br><br>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="cold-md-12">
+                <h2 id="feed-name-heading">You are working on {{ context.feed_name }}</h2>
+                <h3>{{ context.feed_download_status }}</h3>
+                <h3>{{ context.error }}</h3>
+                <h3>{{ context.connection_error }}</h3>
+                <a clas="btn btn-primary" id="definebox">Define relation box</a>
+            </div>
+        </div>
+    </div>
+    <div id="bbox">
+    </div>
+    <div class="container">
+        <div class="row widgets">
+            <div class="col-md-6">
+
+                <div id="info-div">
+                    <div class="information-box">
+                        <table style="width:100%">
+                            <tr>
+                                <th>GTFS</th>
+                                <th>Result</th>
+                                <th>OSM</th>
+                            </tr>
+                            <tr>
+                                <td id="gtfsstopid"></td>
+                                <td id="resultstopid"></td>
+                                <td id="osmstopid"></td>
+                            </tr>
+                            <tr>
+                                <td id="gtfsstopcode"></td>
+                                <td>--------</td>
+                                <td>--------</td>
+                            </tr>
+                            <tr>
+                                <td id="gtfsstopname"></td>
+                                <td>--------</td>
+                                <td id="osmstopname"></td>
+                            </tr>
+
+                            <tr>
+                                <td id="gtfsstopzone"></td>
+                                <td>--------</td>
+                                <td id="osmstopversion"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="map-box">
+                    <div id="map">{% leaflet_map "osmmap" callback="loadmapfunction" %}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        window.onload = function () {
+            document.getElementById("loading").style.display = "none"
+        };
+
+        let feed_bounds;
+
+        function loadmapfunction(map, options) {
+
+            const feed_id = {{context.feed_id}}
+            let feed_name;
+            console.log(feed_id);
+            let mapLayer;
+            const markerArray = [];
+            const stopscoordinates_array = [];
+            const gtfsstopsdata = '{% url "stopdata" %}';
+
+            $.ajaxSetup({
+                async: false
+            });
+
+            //get the feed name
+            let feedurl = "/api/feeddata/";
+            $.ajax({
+                type: "GET",
+                url: feedurl,
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    for (let i = 0; i < data.length; i++) {
+                        if (data[i].id === feed_id) {
+                            feed_name = data[i].name;
+                            break;
+                        }
+                    }
+                },
+                error: function (xhr, status, e) {
+                    alert("error " + status)
+                }
+            });
+            console.log(feed_name);
+
+            var circlegroup = L.featureGroup();
+            //get all the stops and show them on map
+            $.getJSON(gtfsstopsdata, function (data) {
+
+                let coordinates_arr = [];
+                const length = data.features.length;
+                for (let i = 0; i < length; i++) {
+
+                    if (data.features[i].properties.feed === feed_id) {
+                        let lon, lat;
+                        name = data.features[i].properties.name;
+                        lat = data.features[i].geometry.coordinates[1];
+                        lon = data.features[i].geometry.coordinates[0];
+                        coordinates_arr = [lat, lon];
+                        stopscoordinates_array.push(coordinates_arr);
+                        const marker = L.marker(coordinates_arr).bindTooltip(name + ",lat=" + lat + ",lon=" + lon, {
+                            direction: 'top'
+                        }).on('click', markerOnClick).addTo(map);
+                        marker.lat = lat;
+                        marker.lon = lon;
+                        marker.stopid = data.features[i].properties.stop_id;
+                        marker.stopcode = data.features[i].properties.code;
+                        marker.stopzone = data.features[i].properties.zone;
+                        marker.normalized_name = data.features[i].properties.normalized_name;
+                        marker.stopname = name;
+
+                        var clickcircle;
+
+                        function markerOnClick(e) {
+                            
+                            $("#gtfsstopid").text(this.stopid);
+                            if (this.stopcode === "") {
+                                $("#gtfsstopcode").text("code undefined");
+                            } else {
+                                $("#gtfsstopcode").text(this.stopcode);
+                            }
+                            $("#gtfsstopname").text(this.normalized_name);
+                            if (this.stopzone == null) {
+                                $("#gtfsstopzone").text("zone undefined");
+                            } else {
+                                $("#gtfsstopzone").text(this.stopzone);
+                            }
+
+                            $("#osmstopid").text('');
+                            $("#osmstopversion").text('');
+
+                            if(clickcircle != undefined){
+                                map.removeLayer(clickcircle)
+                            }
+                            clickcircle = L.circle([this.lat, this.lon],{radius:100,color:'red',weight:.5, opacity:10,fillColor: 'red',fillOpacity:10}).addTo(map);
+
+                        }
+
+                        markerArray.push(marker);
+                    }
+                }
+                const group = new L.featureGroup(markerArray);
+                const bounds = group.getBounds();
+                feed_bounds = bounds;
+                map.fitBounds(bounds);
+            });
+
+            //configure ajax to post
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            const csrftoken = getCookie('csrftoken');
+
+            console.log(csrftoken);
+
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+
+            $.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+
+            //call django method get_bounds using post
+            URL = "{% url 'load_osm_data' %}";
+
+            $.ajax({
+                url: URL,
+                method: 'POST',
+                async: false,
+                data: {
+                    'feed_id': feed_id,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function (data) {
+                    alert("OpenStreetMap Data has been loaded loading stop on the map");
+
+                },
+                error: function (xhr, status, e) {
+                    alert("Something went wrong");
+                }
+            });
+
+            console.log('getting all the tags');
+            var tags,keyvaluestrings;
+            $.ajax({
+                url:'/api/tagdata/',
+                type:'GET',
+                async:false,
+                dataType:'json',
+                success:function(tagsdata){
+                    tags = tagsdata;
+                    console.log('Loaded all the tags')
+                },
+                error:function(xhr, status, e){
+                    console.log('Error')
+                }
+            });
+            console.log('Getting keyvaluestrings')
+            $.ajax({
+                url:'/api/keyvaluestringdata/',
+                type:'GET',
+                async:false,
+                dataType:'json',
+                success:function(keyvaluestringdata){
+                    keyvaluestrings = keyvaluestringdata;
+                    console.log('Got key values');
+                },
+                error:function(xhr, status, e){
+                    console.log('Cannot get keyvaluestrings');
+                }
+            });
+
+            const nodedata = '{% url "osmnodedata" %}';
+
+            $.getJSON(nodedata, function (data) {
+
+                const greenIcon = new L.Icon({
+                    iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                });
+                var lat,lon;
+                let coordinates_arr = [];
+                const length = data.features.length;
+                var curr_node_tags = [];
+                for (let i = 0; i < length; i++) {
+                    if(data.features[i].properties.feed == feed_id){
+
+                        //get the tags and assign them
+                        node_tags = data.features[i].properties.tags;
+                        node_tags.forEach(function(tag_element){
+                            node_tag = tags[tag_element];
+                            key_id = node_tag.key;
+                            value_id = node_tag.value;
+                            key = keyvaluestrings[key_id];
+                            value = keyvaluestrings[key_id];
+                            curr_node_tags.push(key.value);
+                            curr_node_tags.push(value.value);
+                        });
+                    console.log(curr_node_tags)
+                    const node_id = data.features[i].properties.id;
+                    lat = data.features[i].geometry.coordinates[1];
+                    lon = data.features[i].geometry.coordinates[0];
+                    coordinates_arr = [lat, lon];
+                    const marker = L.marker(coordinates_arr, {icon: greenIcon}).bindTooltip(
+                        node_id + ",lat=" + lat + ",lon=" + lon, {
+                            direction: 'top'
+                        }
+                    ).on('click', markerClick).addTo(map);
+                    marker.nodeid = node_id;
+                    marker.nodeversion = data.features[i].properties.version;
+
+                    function markerClick(e) {
+                        $("#osmstopid").text(this.nodeid);
+                        $("#osmstopversion").text("version " + this.nodeversion);
+                    }
+
+                    }
+                }
+            });
+
+
+            //var bounds = [[innerbounds[0][1],innerbounds[0][0]],[innerbounds[2][1],innerbounds[2][0]]];
+            const drawnItems = new L.FeatureGroup();
+            map.addLayer(drawnItems);
+            const drawControl = new L.Control.Draw({
+                edit: {
+                    featureGroup: drawnItems
+                }
+            });
+            map.addControl(drawControl);
+
+            let num = 0;
+            let boxbounds = '';
+            map.on('draw:created', function (e) {
+
+                const type = e.layerType,
+                    layer = e.layer;
+
+                if (type === 'rectangle') {
+                    layer.on('mouseover', function () {
+                        if (num === 0) {
+                            alert("After defining the bbox please click on the box to download data in that part");
+
+                            num += 1
+                        }
+                    });
+                    layer.on('click', function () {
+                        const bounds = layer.getLatLngs().toString();
+                        boxbounds = boxbounds + bounds;
+                        console.log("ON click " + boxbounds);
+                        num += 1;
+                        $("#bbox").append("<h3>Included box" + num + "</h3>");
+                    })
+                }
+
+                drawnItems.addLayer(layer);
+            });
+
+            $('#definebox').on("click", function () {
+                const boundurl = '/api/feedbounds/';
+                const innerbounds = JSON.stringify(boxbounds);
+                console.log(innerbounds);
+                $.ajax({
+                    url: boundurl,
+                    type: "POST",
+                    async: false,
+                    data: {
+                        'feed_id': feed_id,
+                        'operator_name': feed_name,
+                        'inner_bound': innerbounds
+                    },
+                    success: function () {
+                        console.log('Posted data to feed bounds')
+                    },
+                    error: function (xhr, status, e) {
+                        console.log("ER " + status)
+                    }
+                });
+            });
+
+        }
+
+    </script>
+
+{% endblock %}
