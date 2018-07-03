@@ -158,7 +158,7 @@
                             if(clickcircle != undefined){
                                 map.removeLayer(clickcircle)
                             }
-                            clickcircle = L.circle([this.lat, this.lon],{radius:100,color:'red',weight:.5, opacity:10,fillColor: 'red',fillOpacity:10}).addTo(map);
+                            clickcircle = L.circle([this.lat, this.lon],{radius:100,color:'red',weight:.6, opacity:1000,fillColor:'#f03',fillOpacity:0.5}).addTo(map);
 
                         }
 
@@ -171,59 +171,6 @@
                 map.fitBounds(bounds);
             });
 
-            //configure ajax to post
-            function getCookie(name) {
-                let cookieValue = null;
-                if (document.cookie && document.cookie !== '') {
-                    const cookies = document.cookie.split(';');
-                    for (let i = 0; i < cookies.length; i++) {
-                        const cookie = jQuery.trim(cookies[i]);
-                        // Does this cookie string begin with the name we want?
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
-                    }
-                }
-                return cookieValue;
-            }
-
-            const csrftoken = getCookie('csrftoken');
-
-            console.log(csrftoken);
-
-            function csrfSafeMethod(method) {
-                // these HTTP methods do not require CSRF protection
-                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-            }
-
-            $.ajaxSetup({
-                beforeSend: function (xhr, settings) {
-                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                    }
-                }
-            });
-
-            //call django method get_bounds using post
-            URL = "{% url 'load_osm_data' %}";
-
-            $.ajax({
-                url: URL,
-                method: 'POST',
-                async: false,
-                data: {
-                    'feed_id': feed_id,
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
-                },
-                success: function (data) {
-                    alert("OpenStreetMap Data has been loaded loading stop on the map");
-
-                },
-                error: function (xhr, status, e) {
-                    alert("Something went wrong");
-                }
-            });
 
             console.log('getting all the tags');
             var tags,keyvaluestrings;
@@ -275,17 +222,31 @@
                     if(data.features[i].properties.feed == feed_id){
 
                         //get the tags and assign them
+                        var key_data =[];
+                        var value_data = [];
                         node_tags = data.features[i].properties.tags;
+                        console.log(node_tags);
                         node_tags.forEach(function(tag_element){
-                            node_tag = tags[tag_element];
-                            key_id = node_tag.key;
-                            value_id = node_tag.value;
-                            key = keyvaluestrings[key_id];
-                            value = keyvaluestrings[key_id];
-                            curr_node_tags.push(key.value);
-                            curr_node_tags.push(value.value);
+                            
+                            for (var tag in tags){
+                                if(tags[tag].id == tag_element){
+                                    try{
+                                        curr_node_tag = tags[tag-1];
+                                    key_id = curr_node_tag.key;
+                                    value_id = curr_node_tag.value;
+                                    console.log(key_id+" "+value_id);
+                                    key_data.push({
+                                        key:key_id,
+                                        value:value_id
+                                    });
+                                    }
+                                    catch(errors) {
+                                        print(errors)
+                                    }
+                                }
+                            }
                         });
-                    console.log(curr_node_tags)
+                        console.log(key_data[0])
                     const node_id = data.features[i].properties.id;
                     lat = data.features[i].geometry.coordinates[1];
                     lon = data.features[i].geometry.coordinates[0];
@@ -307,65 +268,7 @@
                 }
             });
 
-
-            //var bounds = [[innerbounds[0][1],innerbounds[0][0]],[innerbounds[2][1],innerbounds[2][0]]];
-            const drawnItems = new L.FeatureGroup();
-            map.addLayer(drawnItems);
-            const drawControl = new L.Control.Draw({
-                edit: {
-                    featureGroup: drawnItems
-                }
-            });
-            map.addControl(drawControl);
-
-            let num = 0;
-            let boxbounds = '';
-            map.on('draw:created', function (e) {
-
-                const type = e.layerType,
-                    layer = e.layer;
-
-                if (type === 'rectangle') {
-                    layer.on('mouseover', function () {
-                        if (num === 0) {
-                            alert("After defining the bbox please click on the box to download data in that part");
-
-                            num += 1
-                        }
-                    });
-                    layer.on('click', function () {
-                        const bounds = layer.getLatLngs().toString();
-                        boxbounds = boxbounds + bounds;
-                        console.log("ON click " + boxbounds);
-                        num += 1;
-                        $("#bbox").append("<h3>Included box" + num + "</h3>");
-                    })
-                }
-
-                drawnItems.addLayer(layer);
-            });
-
-            $('#definebox').on("click", function () {
-                const boundurl = '/api/feedbounds/';
-                const innerbounds = JSON.stringify(boxbounds);
-                console.log(innerbounds);
-                $.ajax({
-                    url: boundurl,
-                    type: "POST",
-                    async: false,
-                    data: {
-                        'feed_id': feed_id,
-                        'operator_name': feed_name,
-                        'inner_bound': innerbounds
-                    },
-                    success: function () {
-                        console.log('Posted data to feed bounds')
-                    },
-                    error: function (xhr, status, e) {
-                        console.log("ER " + status)
-                    }
-                });
-            });
+            
 
         }
 

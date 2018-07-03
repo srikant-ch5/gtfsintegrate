@@ -108,8 +108,8 @@
             console.log(form_date)
             console.log(current_date)
 
-            if (feed_entry_found > 0 && ((current_date - form_date ) - 1) / 86400000 > formfrequency) {
-                console.log(((current_date - form_date)-1) / 86400000)
+            if (feed_entry_found > 0 && (((current_date - form_date )  / 86400000)-1) > formfrequency) {
+                console.log(((current_date - form_date)) / 86400000)
                 $("#feed-status2").text("Feed in Database is updaing to latest version");
             }
 
