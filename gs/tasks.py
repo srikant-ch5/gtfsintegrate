@@ -4,9 +4,10 @@ import os
 import numpy as np
 import requests
 from django.utils import timezone
-from multigtfs.models import Feed
+from multigtfs.models import Feed,Stop
 
-from osmapp.models import Node,Tag
+from compare.models import CMP_Stop
+from osmapp.models import Node, Tag
 from .models import GTFSForm
 from django.db import connection
 from geographiclib.geodesic import Geodesic
@@ -20,6 +21,44 @@ topright_block_stops = []
 bottomleft_block_stops = []
 bottomright_block_stops = []
 
+
+def save_comp(gtfs_stop_name, osm_stop_id):
+    context = {
+        'match_success': 0,
+        'error': ''
+    }
+
+    print('matching gtfs stop {0} with {1}'.format(gtfs_stop_name, osm_stop_id))
+    try:
+        gtfs_stop_obj = Stop.objects.get(name=gtfs_stop_name)
+        print(gtfs_stop_obj)
+        cmp_stop_obj = CMP_Stop.objects.get(gtfs_stop=gtfs_stop_obj)
+        print(cmp_stop_obj)
+        context['match_success'] = 1
+    except Exception as e:
+        print(e)
+        context['match_success'] = 0
+        context['error'] += 'gtfs stop doesnt exist or is undefined'
+
+    try:
+        osm_stop_obj = Node.objects.get(id=osm_stop_id)
+        context['match_success'] = 1
+    except Exception as e:
+        print(e)
+        context['match_success'] = 0
+        context['error'] += 'osm stop doesnt exist {}'.format(e)
+
+    try:
+        cmp_stop_obj.fixed_match = osm_stop_obj
+        cmp_stop_obj.save()
+    except Exception as e:
+        print("relation already exists")
+
+    print("Match made")
+
+    return context['match_success'], context['error']
+
+
 def get_keys(feed_id):
     key_strings = []
     tags = Node.objects.filter(feed=feed_id).values('tags').distinct()
@@ -29,6 +68,7 @@ def get_keys(feed_id):
             key_strings.append(key)
 
     return key_strings
+
 
 def getmidpoint(lat1, lon1, lat2, lon2):
     l = Geodesic.WGS84.InverseLine(lat1, lon1, lat2, lon2)

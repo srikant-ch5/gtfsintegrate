@@ -5,6 +5,8 @@ from osmapp.models import Tag, KeyValueString, Node, Way, OSM_Relation
 from multigtfs.models import Stop
 from django.db import connection
 from .models import CMP_Stop
+import json
+from gs.tasks import save_comp
 
 
 def get_nodes_within100m(lon, loat):
@@ -70,29 +72,25 @@ def match_stop(request):
         gtfs_stop_name = request.POST.get('gtfs_stop')
         osm_stop_id = request.POST.get('osm_stop')
 
-        print('matching gtfs stop {0} with {1}'.format(gtfs_stop_name, osm_stop_id))
-        try:
-            gtfs_stop_obj = Stop.objects.get(name=gtfs_stop_name)
-            print(gtfs_stop_obj)
-            cmp_stop_obj = CMP_Stop.objects.get(gtfs_stop=gtfs_stop_obj)
-            print(cmp_stop_obj)
-            context['match_success'] = 1
-        except Exception as e:
-            print(e)
-            context['match_success'] = 0
-            context['error'] += 'gtfs stop doesnt exist or is undefined'
-
-        try:
-            osm_stop_obj = Node.objects.get(id=osm_stop_id)
-            context['match_success'] = 1
-        except Exception as e:
-            print(e)
-            context['match_success'] = 0
-            context['error'] += 'osm stop doesnt exist {}'.format(e)
-
-        cmp_stop_obj.fixed_match = osm_stop_obj
-        cmp_stop_obj.save()
-
-        print("Match made")
+        save_comp(gtfs_stop_name, osm_stop_id)
 
     return render(request, 'gs/comparision.html')
+
+
+def match_stops(request):
+    if request.method == 'POST':
+
+        context = {
+            'match_success': 0,
+            'error': ''
+        }
+
+        data_in_string = request.POST.get('match_data')
+        json_data = json.loads(data_in_string)
+        for i in range(0, len(json_data)):
+            gtfs_stop_name = json_data[i]['gtfs_stop']
+            osm_stop_id = json_data[i]['osm_stop']
+
+            context['match_success'], context['error'] = save_comp(gtfs_stop_name, osm_stop_id)
+
+    return render(request, 'gs/comparision.html', {'context': context})

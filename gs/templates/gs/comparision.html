@@ -13,9 +13,13 @@
             <div class="cold-md-12">
                 <h2 id="feed-name-heading">You are working on {{ context.feed_name }}</h2>
                 <h3>{{ context.feed_download_status }}</h3>
+                {% if context.error != 'No errors' %}
                 <h3>{{ context.error }}</h3>
+                {% endif %}
                 <h3>{{ context.connection_error }}</h3>
                 <a class="btn btn-primary" id="export-stop" onclick="match_stop()"></a>
+                <a class="btn btn-primary" id="add_to_list" onclick="add_to_match_list()">Add to Match List</a>
+                <a class="btn btn-primary" id="export_all_stops" onclick="match_stops()">Match All Stops from Match List</a>
             </div>
         </div>
     </div>
@@ -67,7 +71,9 @@
     </div>
 
     <script type="text/javascript">
-
+        window.onload = function () {
+            document.getElementById("loading").style.display = "none"
+        };
         //configure ajax to post
             function getCookie(name) {
                 let cookieValue = null;
@@ -105,9 +111,8 @@
         var osm_stop;
 
         $('#export-stop').hide();
-        window.onload = function () {
-            document.getElementById("loading").style.display = "none"
-        };
+        $('#add_to_list').hide();
+        $('#export_all_stops').hide();
 
         let feed_bounds;
 
@@ -175,6 +180,7 @@
 
                         function markerOnClick(e) {
                             $('#export-stop').hide();
+                            $('#export_all_stops').hide();
                             $("#gtfsstopid").text(this.stopid);
                             if (this.stopcode === "") {
                                 $("#gtfsstopcode").text("code undefined");
@@ -334,34 +340,151 @@
                         }
                         $('#export-stop').show();
                         $('#export-stop').text("Match " + gtfs_stop + " with " + osm_stop);
+                        $('#add_to_list').show();
+
                     }
 
                     }
                 }
+            });
+
+            const drawnItems = new L.FeatureGroup();
+            map.addLayer(drawnItems);
+            const drawControl = new L.Control.Draw({
+                edit: {
+                    featureGroup: drawnItems
+                }
+            });
+            map.addControl(drawControl);
+
+            let num = 0;
+            let boxbounds = '';
+            map.on('draw:created', function (e) {
+
+                const type = e.layerType,
+                    layer = e.layer;
+
+                if (type === 'rectangle') {
+                    layer.on('mouseover', function () {
+                        if (num === 0) {
+                            alert("After defining the bbox please click on the box to download data in that part");
+                            num += 1
+                        }
+                    });
+                    layer.on('click', function () {
+                        const bounds = layer.getLatLngs().toString();
+                        boxbounds = boxbounds + bounds;
+                        console.log("ON click " + boxbounds);
+                        num += 1;
+                        $("#bbox").append("<h3>Included box" + num + "</h3>");
+                    })
+                }
+
+                drawnItems.addLayer(layer);
+            });
+
+            $('#definebox').on("click", function () {
+                const boundurl = '/api/feedbounds/';
+                const innerbounds = JSON.stringify(boxbounds);
+                console.log(innerbounds);
+                $.ajax({
+                    url: boundurl,
+                    type: "POST",
+                    async: false,
+                    data: {
+                        'feed_id': feed_id,
+                        'operator_name': feed_name,
+                        'inner_bound': innerbounds
+                    },
+                    success: function () {
+                        console.log('Posted data to feed bounds')
+                    },
+                    error: function (xhr, status, e) {
+                        console.log("ER " + status)
+                    }
+                });
             });
 
             }
 
             function match_stop(){
+                if(gtfs_stop != undefined && osm_stop != undefined){
                 var match_stop_url = "{% url 'match_stop' %}"
                 
                 $.ajax({
-                url: match_stop_url,
-                method: 'POST',
-                async: false,
-                data: {
-                    'gtfs_stop': gtfs_stop,
-                    'osm_stop': osm_stop,
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
-                },
-                success: function (data) {
-                    alert("Posted data to osm ");
-                    $('#export-stop').hide();
-                },
-                error: function (xhr, status, e) {
-                    alert("Something went wrong");
+                    url: match_stop_url,
+                    method: 'POST',
+                    async: false,
+                    data: {
+                        'gtfs_stop': gtfs_stop,
+                        'osm_stop': osm_stop,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (data) {
+                        alert("Posted data to osm ");
+                        $('#export-stop').hide();
+                    },
+                    error: function (xhr, status, e) {
+                        alert("Something went wrong");
+                    }
+                });
+                }else if(gtfs_stop == undefined && osm_stop != undefined){
+                    alert("Please select a GTFS Stop");
+                }else if(gtfs_stop != undefined && osm_stop == undefined){
+                    alert("Please select an OSM Stop");
+                }else{
+                    alert("No Stop Selected");
                 }
-            });
+            }
+
+            function add_to_match_list(){
+                if(gtfs_stop != undefined && osm_stop != undefined){
+                    data_to_osm.push({
+                        'gtfs_stop':gtfs_stop,
+                        'osm_stop':osm_stop
+                    });
+                }else if(gtfs_stop == undefined && osm_stop != undefined){
+                    alert("Please select a GTFS Stop");
+                }else if(gtfs_stop != undefined && osm_stop == undefined){
+                    alert("Please select an OSM Stop");
+                }else{
+                    alert("No Stop Selected");
+                }
+                $('#add_to_list').hide();
+                $('#export_all_stops').show();
+                console.log(data_to_osm);
+            }
+
+            function match_stops(){
+                if(gtfs_stop != undefined && osm_stop != undefined){
+                var match_stop_url = "{% url 'match_stops' %}"
+
+                json_data_to_osm = JSON.stringify(data_to_osm)
+                
+                $.ajax({
+                    url: match_stop_url,
+                    method: 'POST',
+                    async: false,
+                    data: {
+                        'match_data': json_data_to_osm,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (data) {
+                        alert("Posted data to osm ");
+                        $('#export-stop').hide();
+                    },
+                    error: function (xhr, status, e) {
+                        alert("Something went wrong");
+                    }
+                });
+                }else if(gtfs_stop == undefined && osm_stop != undefined){
+                    alert("Please select a GTFS Stop");
+                }else if(gtfs_stop != undefined && osm_stop == undefined){
+                    alert("Please select an OSM Stop");
+                }else{
+                    alert("No Stop Selected");
+                }
+
             }
 
     </script>
