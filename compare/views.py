@@ -33,7 +33,7 @@ def showmap_with_comp(request, pk):
     # Initially comparision should be done by the user
     try:
         for stop in stops:
-            #osm_nodes_in_bound = get_nodes_within100m(str(stop.lon),str(stop.lat))
+            # osm_nodes_in_bound = get_nodes_within100m(str(stop.lon),str(stop.lat))
             if not CMP_Stop.objects.filter(gtfs_stop=stop).exists():
                 comp_stop = CMP_Stop.objects.create(gtfs_stop=stop)
                 comp_stop.save()
@@ -58,3 +58,41 @@ def showmap_with_comp(request, pk):
             comp_stop.save()'''
 
     return render(request, 'gs/comparision.html', {'context': context})
+
+
+def match_stop(request):
+    if request.method == 'POST':
+        context = {
+            'match_success': 0,
+            'error': ''
+        }
+
+        gtfs_stop_name = request.POST.get('gtfs_stop')
+        osm_stop_id = request.POST.get('osm_stop')
+
+        print('matching gtfs stop {0} with {1}'.format(gtfs_stop_name, osm_stop_id))
+        try:
+            gtfs_stop_obj = Stop.objects.get(name=gtfs_stop_name)
+            print(gtfs_stop_obj)
+            cmp_stop_obj = CMP_Stop.objects.get(gtfs_stop=gtfs_stop_obj)
+            print(cmp_stop_obj)
+            context['match_success'] = 1
+        except Exception as e:
+            print(e)
+            context['match_success'] = 0
+            context['error'] += 'gtfs stop doesnt exist or is undefined'
+
+        try:
+            osm_stop_obj = Node.objects.get(id=osm_stop_id)
+            context['match_success'] = 1
+        except Exception as e:
+            print(e)
+            context['match_success'] = 0
+            context['error'] += 'osm stop doesnt exist {}'.format(e)
+
+        cmp_stop_obj.fixed_match = osm_stop_obj
+        cmp_stop_obj.save()
+
+        print("Match made")
+
+    return render(request, 'gs/comparision.html')

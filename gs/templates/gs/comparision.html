@@ -15,7 +15,7 @@
                 <h3>{{ context.feed_download_status }}</h3>
                 <h3>{{ context.error }}</h3>
                 <h3>{{ context.connection_error }}</h3>
-                <a clas="btn btn-primary" id="definebox">Define relation box</a>
+                <a class="btn btn-primary" id="export-stop" onclick="match_stop()"></a>
             </div>
         </div>
     </div>
@@ -41,7 +41,7 @@
                             <tr>
                                 <td id="gtfsstopcode"></td>
                                 <td>--------</td>
-                                <td>--------</td>
+                                <td id="osmstopref"></td>
                             </tr>
                             <tr>
                                 <td id="gtfsstopname"></td>
@@ -68,6 +68,43 @@
 
     <script type="text/javascript">
 
+        //configure ajax to post
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            const csrftoken = getCookie('csrftoken');
+
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+
+            $.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+
+        var data_to_osm = [];
+        var gtfs_stop;
+        var osm_stop;
+
+        $('#export-stop').hide();
         window.onload = function () {
             document.getElementById("loading").style.display = "none"
         };
@@ -78,7 +115,6 @@
 
             const feed_id = {{context.feed_id}}
             let feed_name;
-            console.log(feed_id);
             let mapLayer;
             const markerArray = [];
             const stopscoordinates_array = [];
@@ -138,7 +174,7 @@
                         var clickcircle;
 
                         function markerOnClick(e) {
-                            
+                            $('#export-stop').hide();
                             $("#gtfsstopid").text(this.stopid);
                             if (this.stopcode === "") {
                                 $("#gtfsstopcode").text("code undefined");
@@ -152,9 +188,12 @@
                                 $("#gtfsstopzone").text(this.stopzone);
                             }
 
+                            gtfs_stop = this.stopid;
+
                             $("#osmstopid").text('');
                             $("#osmstopversion").text('');
-
+                            $("#osmstopname").text('');
+                            $("#osmstopref").text('');
                             if(clickcircle != undefined){
                                 map.removeLayer(clickcircle)
                             }
@@ -222,31 +261,39 @@
                     if(data.features[i].properties.feed == feed_id){
 
                         //get the tags and assign them
-                        var key_data =[];
+                        var node_tags_data =[];
                         var value_data = [];
                         node_tags = data.features[i].properties.tags;
-                        console.log(node_tags);
                         node_tags.forEach(function(tag_element){
-                            
                             for (var tag in tags){
                                 if(tags[tag].id == tag_element){
                                     try{
-                                        curr_node_tag = tags[tag-1];
+                                        curr_node_tag = tags[tag];
                                     key_id = curr_node_tag.key;
                                     value_id = curr_node_tag.value;
-                                    console.log(key_id+" "+value_id);
-                                    key_data.push({
-                                        key:key_id,
-                                        value:value_id
+                                    
+                                    var key_string,value_string;
+
+                                    for(var k =0 ;k< keyvaluestrings.length;k++){
+                                        if(keyvaluestrings[k].id == key_id){
+                                            key_string = keyvaluestrings[k].value;
+                                        }
+                                        else if(keyvaluestrings[k].id == value_id) {
+                                            value_string = keyvaluestrings[k].value;
+                                        }
+                                    }
+
+                                    node_tags_data.push({
+                                        key:key_string,
+                                        value:value_string
                                     });
                                     }
                                     catch(errors) {
-                                        print(errors)
                                     }
                                 }
                             }
                         });
-                        console.log(key_data[0])
+
                     const node_id = data.features[i].properties.id;
                     lat = data.features[i].geometry.coordinates[1];
                     lon = data.features[i].geometry.coordinates[0];
@@ -259,18 +306,63 @@
                     marker.nodeid = node_id;
                     marker.nodeversion = data.features[i].properties.version;
 
+                    for(let s=0;s<node_tags_data.length;s++){
+                        if(node_tags_data[s].key == 'name'){
+                            marker.name = node_tags_data[s].value;
+                        }
+                        else if(node_tags_data[s].key == 'ref'){
+                            marker.ref = node_tags_data[s].value;
+                        }
+                    }
+
                     function markerClick(e) {
+                        osm_stop = this.nodeid;
                         $("#osmstopid").text(this.nodeid);
                         $("#osmstopversion").text("version " + this.nodeversion);
+
+                        try{
+                            $("#osmstopname").text("name: " + this.name);
+                        }
+                        catch(error){
+                            console.log("No name");
+                        }
+                        try{
+                            $("#osmstopref").text("ref: "+ this.ref);
+                        }
+                        catch(error){
+                            console.log("No ref");
+                        }
+                        $('#export-stop').show();
+                        $('#export-stop').text("Match " + gtfs_stop + " with " + osm_stop);
                     }
 
                     }
                 }
             });
 
-            
+            }
 
-        }
+            function match_stop(){
+                var match_stop_url = "{% url 'match_stop' %}"
+                
+                $.ajax({
+                url: match_stop_url,
+                method: 'POST',
+                async: false,
+                data: {
+                    'gtfs_stop': gtfs_stop,
+                    'osm_stop': osm_stop,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function (data) {
+                    alert("Posted data to osm ");
+                    $('#export-stop').hide();
+                },
+                error: function (xhr, status, e) {
+                    alert("Something went wrong");
+                }
+            });
+            }
 
     </script>
 

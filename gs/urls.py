@@ -30,5 +30,6 @@ urlpatterns = [
     url(r'^conversionview', conv_view.conversionview, name="conversionview"),
     url(r'^conversion/$', conv_view.make_conversion, name="make-conversion"),
     url(r'^save-correspondence', conv_view.save_correspondence, name="save_correspondence"),
+    url(r'^match_stop/$', compview.match_stop, name="match_stop"),
 
 ]
