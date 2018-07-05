@@ -4,7 +4,7 @@ import os
 import numpy as np
 import requests
 from django.utils import timezone
-from multigtfs.models import Feed,Stop
+from multigtfs.models import Feed, Stop
 
 from compare.models import CMP_Stop
 from osmapp.models import Node, Tag
@@ -22,7 +22,7 @@ bottomleft_block_stops = []
 bottomright_block_stops = []
 
 
-def save_comp(gtfs_stop_id, osm_stop_id):
+def save_comp(gtfs_feed_id, gtfs_stop_id, osm_stop_id):
     context = {
         'match_success': 0,
         'error': ''
@@ -30,7 +30,7 @@ def save_comp(gtfs_stop_id, osm_stop_id):
 
     print('matching gtfs stop {0} with {1}'.format(gtfs_stop_id, osm_stop_id))
     try:
-        gtfs_stop_obj = Stop.objects.get(stop_id=gtfs_stop_id)
+        gtfs_stop_obj = Stop.objects.get(feed=gtfs_feed_id, stop_id=gtfs_stop_id)
         print(gtfs_stop_obj)
         cmp_stop_obj = CMP_Stop.objects.get(gtfs_stop=gtfs_stop_obj)
         print(cmp_stop_obj)
@@ -49,8 +49,16 @@ def save_comp(gtfs_stop_id, osm_stop_id):
         context['error'] += 'osm stop doesnt exist {}'.format(e)
 
     try:
-        cmp_stop_obj.fixed_match = osm_stop_obj
-        cmp_stop_obj.save()
+        if(cmp_stop_obj.fixed_match == None):
+            print("Creating new match ")
+
+            cmp_stop_obj.fixed_match = osm_stop_obj
+            cmp_stop_obj.save()
+        else:
+            cmp_stop_obj.fixed_match == None
+            cmp_stop_obj.save()
+            cmp_stop_obj.fixed_match = osm_stop_obj
+            cmp_stop_obj.save()
     except Exception as e:
         print("relation already exists")
 
