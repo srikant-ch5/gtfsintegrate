@@ -168,7 +168,8 @@ h1 { color: #333333; font-family: 'Bitter', serif; font-size: 50px; font-weight:
     font-size: 18px;
 }
 #feed-name-heading{
-    padding-top:5px;
+    padding-top:15px;
+    padding-left:110px;
 }
 p { color: #333333; font-family: Georgia, serif; font-size: 15px; line-height: 28px; margin: 0 0 28px; }
 

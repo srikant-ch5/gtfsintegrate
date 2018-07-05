@@ -1,8 +1,6 @@
 from django.shortcuts import render
-from typing import List, Any
 
-from osmapp.models import Tag, KeyValueString, Node, Way, OSM_Relation
-from multigtfs.models import Stop
+from multigtfs.models import Stop,Feed
 from django.db import connection
 from .models import CMP_Stop
 import json
@@ -15,16 +13,18 @@ def get_nodes_within100m(lon, loat):
     cursor.execute(query)
     result = cursor.fetchall()
 
-    returnr
-    result
+    return result
 
 
 def showmap_with_comp(request, pk):
     context = {
         'type': 'conversion_view',
         'feed_id': pk,
+        'feed_name':Feed.objects.get(id=pk).name,
         'error': 'No errors'
     }
+
+
 
     # 1. Load all stops first
     try:
@@ -69,10 +69,10 @@ def match_stop(request):
             'error': ''
         }
 
-        gtfs_stop_name = request.POST.get('gtfs_stop')
+        gtfs_stop_id = request.POST.get('gtfs_stop')
         osm_stop_id = request.POST.get('osm_stop')
 
-        save_comp(gtfs_stop_name, osm_stop_id)
+        save_comp(gtfs_stop_id, osm_stop_id)
 
     return render(request, 'gs/comparision.html')
 
@@ -88,9 +88,9 @@ def match_stops(request):
         data_in_string = request.POST.get('match_data')
         json_data = json.loads(data_in_string)
         for i in range(0, len(json_data)):
-            gtfs_stop_name = json_data[i]['gtfs_stop']
+            gtfs_stop_id = json_data[i]['gtfs_stop']
             osm_stop_id = json_data[i]['osm_stop']
 
-            context['match_success'], context['error'] = save_comp(gtfs_stop_name, osm_stop_id)
+            context['match_success'], context['error'] = save_comp(gtfs_stop_id, osm_stop_id)
 
     return render(request, 'gs/comparision.html', {'context': context})

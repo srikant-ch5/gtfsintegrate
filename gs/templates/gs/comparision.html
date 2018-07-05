@@ -17,6 +17,12 @@
                 <h3>{{ context.error }}</h3>
                 {% endif %}
                 <h3>{{ context.connection_error }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="container buttons">
+        <div class="row">
+            <div class="col-md-5">
                 <a class="btn btn-primary" id="export-stop" onclick="match_stop()"></a>
                 <a class="btn btn-primary" id="add_to_list" onclick="add_to_match_list()">Add to Match List</a>
                 <a class="btn btn-primary" id="export_all_stops" onclick="match_stops()">Match All Stops from Match List</a>

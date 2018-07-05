@@ -22,15 +22,15 @@ bottomleft_block_stops = []
 bottomright_block_stops = []
 
 
-def save_comp(gtfs_stop_name, osm_stop_id):
+def save_comp(gtfs_stop_id, osm_stop_id):
     context = {
         'match_success': 0,
         'error': ''
     }
 
-    print('matching gtfs stop {0} with {1}'.format(gtfs_stop_name, osm_stop_id))
+    print('matching gtfs stop {0} with {1}'.format(gtfs_stop_id, osm_stop_id))
     try:
-        gtfs_stop_obj = Stop.objects.get(name=gtfs_stop_name)
+        gtfs_stop_obj = Stop.objects.get(stop_id=gtfs_stop_id)
         print(gtfs_stop_obj)
         cmp_stop_obj = CMP_Stop.objects.get(gtfs_stop=gtfs_stop_obj)
         print(cmp_stop_obj)
