@@ -55,7 +55,7 @@ def save_comp(gtfs_feed_id, gtfs_stop_id, osm_stop_id):
             cmp_stop_obj.fixed_match = osm_stop_obj
             cmp_stop_obj.save()
         else:
-            cmp_stop_obj.fixed_match == None
+            cmp_stop_obj.fixed_match = None
             cmp_stop_obj.save()
             cmp_stop_obj.fixed_match = osm_stop_obj
             cmp_stop_obj.save()

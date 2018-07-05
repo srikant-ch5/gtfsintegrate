@@ -50,12 +50,12 @@
                         </tr>
                         <tr>
                             <td id="gtfsstopcode"></td>
-                            <td>--------</td>
+                            <td id="resultstopref"></td>
                             <td id="osmstopref"></td>
                         </tr>
                         <tr>
                             <td id="gtfsstopname"></td>
-                            <td>--------</td>
+                            <td id="resultstopname"></td>
                             <td id="osmstopname"></td>
                         </tr>
 
@@ -111,7 +111,7 @@
                 }
             }
         });
-
+        var tags_to_osm = [];
         var data_to_osm = [];
         var gtfs_stop;
         var osm_stop;
@@ -121,6 +121,26 @@
         $('#export_all_stops').hide();
 
         let feed_bounds;
+
+        //get the correspondence form of the feed
+        var corr_feed_id = {{context.feed_id}};
+        var feed_corr_data;
+        console.log('gettings corr');
+        $.ajax({
+            url:'/api/correspondencedata',
+            type:'GET',
+            dataType:'json',
+            async:false,
+            success: function(corr_data){
+                for(var i=0; i< corr_data.length;i++){
+                    if(corr_data[i].feed_id == corr_feed_id){
+                        feed_corr_data = corr_data[i];
+                    }
+                }
+            }
+        });
+
+        console.log(feed_corr_data);
 
         function loadmapfunction(map, options) {
 
@@ -199,8 +219,9 @@
                         } else {
                             $("#gtfsstopzone").text(this.stopzone);
                         }
-
+                        gtfs_stop_id = this.stopid;
                         gtfs_stop = feed_id.toString() + "-" +this.stopid;
+                        gtfs_stop_name = this.normalized_name;
 
                         $("#osmstopid").text('');
                         $("#osmstopversion").text('');
@@ -328,6 +349,7 @@
                     }
 
                     function markerClick(e) {
+
                         osm_stop = this.nodeid;
                         $("#osmstopid").text(this.nodeid);
                         $("#osmstopversion").text("version " + this.nodeversion);
@@ -344,6 +366,43 @@
                         catch(error){
                             console.log("No ref");
                         }
+
+                        if(this.name !== undefined){
+                            t_name = this.name;
+                            console.log(t_name);
+                        }else{
+                            t_name = gtfs_stop_name;
+                            console.log(t_name);
+                        }
+
+                        //check whether the corr form has ref:operator or ref
+                        var ref_oper = true;
+                        var ref_in_gtfs_key;
+                        for(var key in feed_corr_data){
+                            if(feed_corr_data[key] == 'ref'){
+                                ref_in_gtfs_key = key;
+                                ref_oper = false;
+                            }else if(feed_corr_data[key] == "ref:operator"){
+                                ref_in_gtfs_key = key;
+                                ref_oper = true;
+                            }
+                        }
+
+                        var reference;
+                        if(ref_oper){
+                            reference = "ref:"+feed_name+"="+gtfs_stop_id;
+                        }else{
+                            reference = "ref = "+ gtfs_stop_id;
+                        }
+
+                        tags_to_osm.push({
+                            'name':t_name,
+                            'ref': reference
+                        });
+
+                        show_on_result(t_name, reference);
+
+                        console.log(ref_in_gtfs_key);
                         $('#export-stop').show();
                         $('#export-stop').text("Match " + gtfs_stop + " with " + osm_stop);
                         $('#add_to_list').show();
@@ -353,6 +412,8 @@
                 }
             }
         });
+
+console.log(tags_to_osm)
 
     const drawnItems = new L.FeatureGroup();
     map.addLayer(drawnItems);
@@ -491,6 +552,11 @@
             alert("No Stop Selected");
         }
 
+    }
+
+    function show_on_result(name, ref){
+        $("#resultstopname").text(name);
+        $("#resultstopref").text(ref);
     }
 
 </script>
