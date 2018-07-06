@@ -45,17 +45,23 @@
                         </tr>
                         <tr>
                             <td id="gtfsstopid"></td>
+                            <td id="stopidfromgtfs"></td>
                             <td id="resultstopid"></td>
+                            <td id="stopidfromosm"></td>
                             <td id="osmstopid"></td>
                         </tr>
                         <tr>
                             <td id="gtfsstopcode"></td>
+                            <td id="stopreffromgtfs"></td>
                             <td id="resultstopref"></td>
+                            <td id="stopreffromosm"></td>
                             <td id="osmstopref"></td>
                         </tr>
                         <tr>
                             <td id="gtfsstopname"></td>
+                            <td id="stopnamefromgtfs"></td>
                             <td id="resultstopname"></td>
+                            <td id="stopnamefromosm"></td>
                             <td id="osmstopname"></td>
                         </tr>
 
@@ -231,6 +237,10 @@
                         $("#osmstopref").text('');
                         $('#resultstopref').text('');
                         $('#resultstopname').text('');
+                        $("#stopnamefromgtfs").text('');
+                        $("#stopnamefromosm").text('');
+                        $("#stopreffromgtfs").text('');
+                        $("#stopreffromosm").text('');
                         if(clickcircle != undefined){
                             map.removeLayer(clickcircle)
                         }
@@ -571,18 +581,20 @@
 
     function show_on_result(name, ref, name_from, ref_from){
         
+        $("#resultstopname").text(name);
+        $("#resultstopref").text(ref);
+
         if(name_from == 'gtfs'){
-            $("#resultstopname").text("<- " + name);            
-        }else{
-            $("#resultstopname").text( name + " ->");
+            $("#stopnamefromgtfs").text('<-');
+        }else if(name_from == 'osm'){
+            $("#stopnamefromosm").text('->');
         }
 
-        if(ref_from == 'osm'){
-            $("#resultstopref").text(ref + " ->");
-        }else{
-            $("#resultstopref").text( "<- "+ ref);
+        if(ref_from == 'gtfs'){
+            $("#stopreffromgtfs").text('<-');
+        }else if(ref_from == 'osm'){
+            $("#stopreffromosm").text('->');
         }
-
     }
 
 </script>

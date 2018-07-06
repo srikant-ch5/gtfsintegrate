@@ -102,6 +102,33 @@ class Node(OSM_Primitive):
         self.geom = Point(lat, lon)
         self.save()
 
+    def to_xml(self, outputparams=None):
+
+        if outputparams is None:
+            _outputparams = {'newline': '\n', 'indent': ' '}
+        else:
+            _outputparams = outputparams
+
+        self.xml = '{newline}<nd '.format(**_outputparams)
+
+        for attr, value in self.__dict__.items():
+            if attr == '_state':
+                continue
+            elif attr == 'timestamp':
+                ts_value = str(value).replace(' ', 'T') + 'Z'
+                self.xml += "{}='{}' ".format(attr, ts_value, **_outputparams)
+            elif attr == 'geom':
+                lat = str(value[0])
+                self.xml += "{}='{}' ".format('lat',lat)
+                lon = str(value[1])
+                self.xml += "{}='{}' ".format('lon',lon)
+            else:
+                self.xml += "{}='{}' ".format(attr, str(value), **_outputparams)
+
+        self.xml += '>'
+
+        return self.xml
+
 
 class Way(OSM_Primitive):
     nodes = models.ManyToManyField('Node', through='WN', related_name="nodes_in_way")
