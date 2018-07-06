@@ -1,84 +1,1362 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="Overpass API 0.7.55.3 9da5e7ae">
 <note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
-<meta osm_base="2018-07-05T21:28:02Z"/>
+<meta osm_base="2018-07-06T13:32:01Z"/>
 
-  <node id="856138261" lat="-6.6054175" lon="106.8058102" version="4" timestamp="2012-07-16T07:26:00Z" changeset="12240355" uid="538459" user="Alex Rollin">
-    <tag k="bus" v="yes"/>
-    <tag k="name" v="BaranangSiang"/>
-    <tag k="public_transport" v="stop_position"/>
-  </node>
-  <node id="1014211024" lat="-6.5700107" lon="106.7549897" version="1" timestamp="2010-12-01T06:29:56Z" changeset="6500054" uid="377900" user="rawengdri">
+  <node id="500549124" lat="38.7992694" lon="-77.1338248" version="2" timestamp="2011-05-03T17:42:31Z" changeset="8041767" uid="213570" user="JoshD">
     <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Terminal Bubulak"/>
+    <tag k="name" v="Dash Bus"/>
+    <tag k="routes" v="AT1, AT5, AT7, AT8"/>
   </node>
-  <node id="1014211025" lat="-6.5760673" lon="106.7528415" version="2" timestamp="2012-05-01T12:05:14Z" changeset="11468878" uid="538459" user="Alex Rollin">
-    <tag k="amenity" v="bus_station"/>
+  <node id="624189828" lat="38.8156730" lon="-77.1215130" version="2" timestamp="2013-09-02T23:14:49Z" changeset="17645525" uid="1323363" user="kriscarle">
     <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Terminal Laladon"/>
   </node>
-  <node id="1700130565" lat="-6.5517542" lon="106.7456496" version="1" timestamp="2012-03-31T20:13:56Z" changeset="11167986" uid="538459" user="Alex Rollin">
-    <tag k="designation" v="#15"/>
+  <node id="875506940" lat="38.8138085" lon="-77.0536995" version="2" timestamp="2016-11-05T07:26:56Z" changeset="43415571" uid="2913188" user="Sawan Shariar">
     <tag k="highway" v="bus_stop"/>
-    <tag k="local_ref" v="Situe Gedet"/>
   </node>
-  <node id="1700350382" lat="-6.6053314" lon="106.8059492" version="3" timestamp="2012-07-16T03:24:07Z" changeset="12238834" uid="538459" user="Alex Rollin">
+  <node id="875506941" lat="38.8134239" lon="-77.0539651" version="3" timestamp="2017-08-17T00:50:51Z" changeset="51190486" uid="791438" user="OpenBrian">
     <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Kota Angkot Halte BaranangSiang"/>
-  </node>
-  <node id="1734066080" lat="-6.6020812" lon="106.8055579" version="1" timestamp="2012-04-28T12:44:28Z" changeset="11440732" uid="538459" user="Alex Rollin">
-    <tag k="alt_name" v="Terminal Damri"/>
-    <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Botani Square"/>
-  </node>
-  <node id="1738488162" lat="-6.6205139" lon="106.8219101" version="2" timestamp="2012-06-12T06:44:05Z" changeset="11871370" uid="538459" user="Alex Rollin">
-    <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="SKI"/>
-  </node>
-  <node id="1784389102" lat="-6.6249126" lon="106.8280373" version="1" timestamp="2012-06-12T06:42:15Z" changeset="11871370" uid="538459" user="Alex Rollin">
-    <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Bantar-Kemang"/>
-  </node>
-  <node id="3887172570" lat="-6.5965129" lon="106.7923232" version="1" timestamp="2015-12-11T05:51:34Z" changeset="35878223" uid="475560" user="Fidelis Awig Atmoko">
-    <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Halte Katedral"/>
-  </node>
-  <node id="3887172571" lat="-6.5958782" lon="106.7893765" version="1" timestamp="2015-12-11T05:51:34Z" changeset="35878223" uid="475560" user="Fidelis Awig Atmoko">
-    <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Halte Jembatan Merah"/>
-  </node>
-  <node id="3887172572" lat="-6.5961779" lon="106.7907688" version="1" timestamp="2015-12-11T05:51:34Z" changeset="35878223" uid="475560" user="Fidelis Awig Atmoko">
-    <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Halte Taman Topi"/>
-  </node>
-  <node id="3887172573" lat="-6.5961105" lon="106.7912400" version="1" timestamp="2015-12-11T05:51:34Z" changeset="35878223" uid="475560" user="Fidelis Awig Atmoko">
-    <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Halte Taman Topi"/>
-  </node>
-  <node id="3887179940" lat="-6.6301044" lon="106.8106324" version="1" timestamp="2015-12-11T06:10:42Z" changeset="35878393" uid="475560" user="Fidelis Awig Atmoko">
-    <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Pool Bus Damri Bogor"/>
-    <tag k="operator" v="DAMRI"/>
-  </node>
-  <node id="4754561649" lat="-6.5942575" lon="106.7779598" version="1" timestamp="2017-03-25T13:21:03Z" changeset="47151269" uid="475560" user="Fidelis Awig Atmoko">
-    <tag k="bench" v="yes"/>
-    <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Halte Pasar Gunung Batu"/>
-    <tag k="network" v="02, 03, 14, 05"/>
-    <tag k="operator" v="Pemkot Bogor"/>
     <tag k="shelter" v="yes"/>
   </node>
-  <node id="4784677221" lat="-6.6553447" lon="106.8473910" version="1" timestamp="2017-04-09T16:12:52Z" changeset="47596989" uid="3197972" user="ابوادهم">
+  <node id="875506942" lat="38.8139610" lon="-77.0535896" version="2" timestamp="2016-11-05T07:26:56Z" changeset="43415571" uid="2913188" user="Sawan Shariar">
     <tag k="highway" v="bus_stop"/>
-    <tag k="name:ar" v="محطه باصات تشاوي"/>
   </node>
-  <node id="4991557619" lat="-6.5964561" lon="106.7928963" version="1" timestamp="2017-07-25T04:03:52Z" changeset="50544613" uid="475560" user="Fidelis Awig Atmoko">
+  <node id="875506944" lat="38.8141115" lon="-77.0534903" version="2" timestamp="2016-11-05T07:26:57Z" changeset="43415571" uid="2913188" user="Sawan Shariar">
     <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Halte DPRD"/>
   </node>
-  <node id="4994363543" lat="-6.5990361" lon="106.8126228" version="1" timestamp="2017-07-26T09:20:57Z" changeset="50581726" uid="475560" user="Fidelis Awig Atmoko">
+  <node id="875506957" lat="38.8135765" lon="-77.0538578" version="3" timestamp="2017-08-17T00:51:01Z" changeset="51190486" uid="791438" user="OpenBrian">
     <tag k="highway" v="bus_stop"/>
-    <tag k="name" v="Ciheuleut"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="879248675" lat="38.8245456" lon="-77.0513395" version="3" timestamp="2016-11-05T07:13:20Z" changeset="43415571" uid="2913188" user="Sawan Shariar">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="125"/>
+  </node>
+  <node id="1271304490" lat="38.8062662" lon="-77.0621864" version="1" timestamp="2011-05-03T17:41:33Z" changeset="8041767" uid="213570" user="JoshD">
+    <tag k="name" v="Alexandria"/>
+    <tag k="public_transport" v="stop_position"/>
+  </node>
+  <node id="1271304548" lat="38.8062950" lon="-77.0622137" version="1" timestamp="2011-05-03T17:41:34Z" changeset="8041767" uid="213570" user="JoshD">
+    <tag k="name" v="Alexandria"/>
+    <tag k="public_transport" v="stop_position"/>
+  </node>
+  <node id="1476974281" lat="38.8277355" lon="-77.0590202" version="3" timestamp="2016-11-05T07:13:13Z" changeset="43415571" uid="2913188" user="Sawan Shariar">
+    <tag k="bus" v="yes"/>
+    <tag k="description" v="10A, 10B, 10E"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="metrobus"/>
+    <tag k="operator" v="WMATA"/>
+    <tag k="public_transport" v="stop_position"/>
+    <tag k="source" v="Yahoo"/>
+  </node>
+  <node id="1476978225" lat="38.8277231" lon="-77.0590177" version="2" timestamp="2016-11-05T07:12:53Z" changeset="43415571" uid="2913188" user="Sawan Shariar">
+    <tag k="bus" v="yes"/>
+    <tag k="description" v="AT10"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="DASH"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="stop_position"/>
+    <tag k="source" v="Yahoo"/>
+  </node>
+  <node id="1827177608" lat="38.8119470" lon="-77.1089856" version="1" timestamp="2012-07-16T04:47:38Z" changeset="12239471" uid="736220" user="JJediny">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="local_ref" v="29K, 28K, A8"/>
+    <tag k="name" v="29K, 28K, A8"/>
+  </node>
+  <node id="1827178093" lat="38.8121915" lon="-77.1094241" version="3" timestamp="2018-04-29T13:16:27Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="local_ref" v="29K, 28K, A8"/>
+    <tag k="name" v="29K, 28K, A8"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="2203405615" lat="38.8393692" lon="-77.0873201" version="1" timestamp="2013-03-15T15:36:57Z" changeset="15374716" uid="1272927" user="jase700">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="local_ref" v="Shirlington Transit Center"/>
+  </node>
+  <node id="2249646492" lat="38.8063823" lon="-77.0609162" version="4" timestamp="2016-12-17T20:24:36Z" changeset="44474936" uid="290680" user="wheelmap_visitor">
+    <tag k="bench" v="yes"/>
+    <tag k="covered" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="shelter" v="yes"/>
+    <tag k="toilets:wheelchair" v="no"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="2249646493" lat="38.8065070" lon="-77.0607388" version="3" timestamp="2016-12-17T20:24:24Z" changeset="44474936" uid="290680" user="wheelmap_visitor">
+    <tag k="bench" v="yes"/>
+    <tag k="covered" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="shelter" v="yes"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="2249646494" lat="38.8062725" lon="-77.0610873" version="5" timestamp="2018-04-23T08:15:43Z" changeset="58331310" uid="4540953" user="Adamant1">
+    <tag k="bench" v="yes"/>
+    <tag k="covered" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Shelter C"/>
+    <tag k="shelter" v="yes"/>
+    <tag k="toilets:wheelchair" v="no"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="2249646495" lat="38.8061009" lon="-77.0613296" version="4" timestamp="2016-12-17T20:23:24Z" changeset="44474936" uid="290680" user="wheelmap_visitor">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="shelter" v="yes"/>
+    <tag k="toilets:wheelchair" v="no"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="2249646496" lat="38.8058689" lon="-77.0616765" version="5" timestamp="2018-04-23T08:15:43Z" changeset="58331310" uid="4540953" user="Adamant1">
+    <tag k="bench" v="yes"/>
+    <tag k="covered" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="shelter" v="yes"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="2249646497" lat="38.8059898" lon="-77.0615007" version="4" timestamp="2016-12-17T20:23:17Z" changeset="44474936" uid="290680" user="wheelmap_visitor">
+    <tag k="bench" v="yes"/>
+    <tag k="covered" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="shelter" v="yes"/>
+    <tag k="toilets:wheelchair" v="no"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="2269027717" lat="38.8077658" lon="-77.0831365" version="3" timestamp="2018-04-29T13:16:27Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="2270242748" lat="38.8000013" lon="-77.1287068" version="1" timestamp="2013-04-17T05:36:01Z" changeset="15758405" uid="1323363" user="kriscarle">
+    <tag k="highway" v="bus_stop"/>
+  </node>
+  <node id="2270242750" lat="38.7998780" lon="-77.1288731" version="1" timestamp="2013-04-17T05:36:02Z" changeset="15758405" uid="1323363" user="kriscarle">
+    <tag k="highway" v="bus_stop"/>
+  </node>
+  <node id="2270242753" lat="38.7997547" lon="-77.1290421" version="1" timestamp="2013-04-17T05:36:02Z" changeset="15758405" uid="1323363" user="kriscarle">
+    <tag k="highway" v="bus_stop"/>
+  </node>
+  <node id="2270242755" lat="38.7994955" lon="-77.1286639" version="1" timestamp="2013-04-17T05:36:02Z" changeset="15758405" uid="1323363" user="kriscarle">
+    <tag k="highway" v="bus_stop"/>
+  </node>
+  <node id="2270242757" lat="38.7995310" lon="-77.1284252" version="1" timestamp="2013-04-17T05:36:02Z" changeset="15758405" uid="1323363" user="kriscarle">
+    <tag k="highway" v="bus_stop"/>
+  </node>
+  <node id="2270242760" lat="38.7995540" lon="-77.1282508" version="1" timestamp="2013-04-17T05:36:02Z" changeset="15758405" uid="1323363" user="kriscarle">
+    <tag k="highway" v="bus_stop"/>
+  </node>
+  <node id="2414839954" lat="38.8000570" lon="-77.0712703" version="1" timestamp="2013-08-11T17:07:23Z" changeset="17306096" uid="1323363" user="kriscarle">
+    <tag k="highway" v="bus_stop"/>
+  </node>
+  <node id="2414839955" lat="38.8002012" lon="-77.0711121" version="1" timestamp="2013-08-11T17:07:23Z" changeset="17306096" uid="1323363" user="kriscarle">
+    <tag k="highway" v="bus_stop"/>
+  </node>
+  <node id="2414839956" lat="38.8003277" lon="-77.0709579" version="1" timestamp="2013-08-11T17:07:23Z" changeset="17306096" uid="1323363" user="kriscarle">
+    <tag k="highway" v="bus_stop"/>
+  </node>
+  <node id="2414839957" lat="38.8002566" lon="-77.0715453" version="1" timestamp="2013-08-11T17:07:23Z" changeset="17306096" uid="1323363" user="kriscarle">
+    <tag k="highway" v="bus_stop"/>
+  </node>
+  <node id="2458137495" lat="38.7987491" lon="-77.0847318" version="2" timestamp="2013-09-14T15:15:52Z" changeset="17834679" uid="1744836" user="rod156">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="FC Route 310 Bus Stop"/>
+    <tag k="operator" v="Fairfax Connector"/>
+  </node>
+  <node id="3010545508" lat="38.8103374" lon="-77.0982740" version="1" timestamp="2014-08-11T15:43:15Z" changeset="24681502" uid="1722960" user="byronpeebles">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="North Early Street"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="3010545509" lat="38.8103311" lon="-77.0974666" version="3" timestamp="2018-04-29T13:16:28Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="North Donelson Street"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="3289059835" lat="38.8001223" lon="-77.1287927" version="1" timestamp="2015-01-15T00:56:06Z" changeset="28151534" uid="1836606" user="Tbobx">
+    <tag k="highway" v="bus_stop"/>
+  </node>
+  <node id="3454871221" lat="38.8389230" lon="-77.1176745" version="1" timestamp="2015-04-13T22:43:20Z" changeset="30200726" uid="2688339" user="jrh1981">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Fillmore Ave and NVCC Alexandria"/>
+    <tag k="note" v="Metrobus 25A, 25C, 25D, 28A"/>
+    <tag k="operator" v="DASH and WMATA"/>
+    <tag k="website" v="http://www.wmata.com/bus/timetables/va/25a-g.pdf?n"/>
+  </node>
+  <node id="3454879424" lat="38.8406351" lon="-77.1170923" version="1" timestamp="2015-04-13T22:46:42Z" changeset="30200772" uid="2688339" user="jrh1981">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Dawes Ave &amp; NVCC"/>
+    <tag k="note" v="Metrobus 25A-D"/>
+    <tag k="operator" v="WMATA"/>
+    <tag k="source" v="http://www.nvcc.edu/about-nova/maps-directions/alexandria/campusbuses.jpg"/>
+    <tag k="website" v="http://www.wmata.com/bus/timetables/view.cfm?line=211"/>
+  </node>
+  <node id="3454884698" lat="38.8413330" lon="-77.1147951" version="1" timestamp="2015-04-13T22:49:23Z" changeset="30200811" uid="2688339" user="jrh1981">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Dawes Ave &amp; Campus Lane East"/>
+    <tag k="note" v="Metrobus 25A-D DASH AT-6"/>
+    <tag k="operator" v="WMATA and Alexandria Transit Co."/>
+    <tag k="source" v="http://www.nvcc.edu/about-nova/maps-directions/alexandria/campusbuses.jpg"/>
+    <tag k="website" v="http://www.wmata.com/bus/timetables/va/25a-g.pdf?n"/>
+  </node>
+  <node id="3454885297" lat="38.8405515" lon="-77.1162546" version="1" timestamp="2015-04-13T22:52:07Z" changeset="30200839" uid="2688339" user="jrh1981">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Campus Lane West"/>
+    <tag k="note" v="DASH AT-6"/>
+    <tag k="operator" v="Alexandria Transit Co."/>
+    <tag k="source" v="http://www.nvcc.edu/about-nova/maps-directions/alexandria/campusbuses.jpg"/>
+    <tag k="website" v="http://www.dashbus.com/uploadedFiles/DASH-wwwroot/routes/20150222/AT6NBtoKingSt.pdf"/>
+  </node>
+  <node id="3454886393" lat="38.8409567" lon="-77.1160525" version="1" timestamp="2015-04-13T22:54:45Z" changeset="30200869" uid="2688339" user="jrh1981">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Dawes Ave &amp; Campus Lane West"/>
+    <tag k="note" v="Metrobus 25A-B"/>
+    <tag k="operator" v="WMATA"/>
+    <tag k="source" v="http://www.nvcc.edu/about-nova/maps-directions/alexandria/campusbuses.jpg"/>
+    <tag k="website" v="http://www.wmata.com/bus/timetables/va/25a-g.pdf?n"/>
+  </node>
+  <node id="3454889254" lat="38.8405000" lon="-77.1138170" version="1" timestamp="2015-04-13T22:57:46Z" changeset="30200903" uid="2688339" user="jrh1981">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Campus Lane East NB"/>
+    <tag k="note" v="Metrobus 25A-D"/>
+    <tag k="operator" v="WMATA"/>
+    <tag k="source" v="http://www.nvcc.edu/about-nova/maps-directions/alexandria/campusbuses.jpg"/>
+    <tag k="website" v="http://www.wmata.com/bus/timetables/va/25a-g.pdf?n"/>
+  </node>
+  <node id="3454898546" lat="38.8400180" lon="-77.1137560" version="1" timestamp="2015-04-13T23:02:40Z" changeset="30200952" uid="2688339" user="jrh1981">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Campus Lane East SB"/>
+    <tag k="note" v="Metrobus 25A-B DASH AT-6"/>
+    <tag k="operator" v="WMATA and Alexandria Transit Co."/>
+    <tag k="source" v="http://www.nvcc.edu/about-nova/maps-directions/alexandria/campusbuses.jpg"/>
+    <tag k="website" v="http://www.dashbus.com/uploadedFiles/DASH-wwwroot/routes/20150222/AT6NBtoKingSt.pdf"/>
+  </node>
+  <node id="3454903408" lat="38.8394288" lon="-77.1125975" version="1" timestamp="2015-04-13T23:03:58Z" changeset="30200970" uid="2688339" user="jrh1981">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Campus Lane East SB2"/>
+    <tag k="note" v="Metrobus 25A-B DASH AT-6"/>
+    <tag k="operator" v="WMATA and Alexandria Transit Co."/>
+    <tag k="source" v="http://www.nvcc.edu/about-nova/maps-directions/alexandria/campusbuses.jpg"/>
+    <tag k="website" v="http://www.dashbus.com/uploadedFiles/DASH-wwwroot/routes/20150222/AT6NBtoKingSt.pdf"/>
+  </node>
+  <node id="3454904157" lat="38.8390429" lon="-77.1113415" version="3" timestamp="2018-04-29T13:16:28Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Campus Lane East SB3"/>
+    <tag k="note" v="Metrobus 25A-B DASH AT-6"/>
+    <tag k="operator" v="WMATA and Alexandria Transit Co."/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="source" v="http://www.nvcc.edu/about-nova/maps-directions/alexandria/campusbuses.jpg"/>
+    <tag k="website" v="http://www.wmata.com/bus/timetables/va/25a-g.pdf?n"/>
+  </node>
+  <node id="3454906436" lat="38.8395794" lon="-77.1118667" version="1" timestamp="2015-04-13T23:04:59Z" changeset="30200983" uid="2688339" user="jrh1981">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Campus Lane East NB2"/>
+    <tag k="note" v="Metrobus 25A-D"/>
+    <tag k="operator" v="WMATA"/>
+    <tag k="source" v="http://www.nvcc.edu/about-nova/maps-directions/alexandria/campusbuses.jpg"/>
+    <tag k="website" v="http://www.wmata.com/bus/timetables/va/25a-g.pdf?n"/>
+  </node>
+  <node id="3454918193" lat="38.8388369" lon="-77.1116392" version="4" timestamp="2018-04-29T13:16:28Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Braddock Road and Beauregard St"/>
+    <tag k="note" v="Metrobus 7A, 7B, 7F, 7Y"/>
+    <tag k="operator" v="WMATA and Alexandria Transit Co."/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="source" v="http://www.nvcc.edu/about-nova/maps-directions/alexandria/campusbuses.jpg"/>
+    <tag k="website" v="https://www.wmata.com/bus/timetables/VA/7a-y.pdf"/>
+  </node>
+  <node id="3480305322" lat="38.8065952" lon="-77.0739161" version="3" timestamp="2018-02-17T06:38:21Z" changeset="56432638" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="covered" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="3480323836" lat="38.8140262" lon="-77.0766625" version="6" timestamp="2018-02-17T06:38:21Z" changeset="56432638" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="3480323837" lat="38.8141965" lon="-77.0768604" version="5" timestamp="2018-02-17T06:38:21Z" changeset="56432638" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="3505931712" lat="38.8419399" lon="-77.0729360" version="1" timestamp="2015-05-08T20:25:31Z" changeset="30920075" uid="1679" user="andrewpmk">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="3505932357" lat="38.8397858" lon="-77.0671329" version="1" timestamp="2015-05-08T20:27:02Z" changeset="30920102" uid="1679" user="andrewpmk">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="3505934019" lat="38.8363204" lon="-77.0609989" version="2" timestamp="2016-11-05T07:19:32Z" changeset="43415571" uid="2913188" user="Sawan Shariar">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="3505936369" lat="38.8367936" lon="-77.0620499" version="2" timestamp="2016-11-05T07:19:32Z" changeset="43415571" uid="2913188" user="Sawan Shariar">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="3505940666" lat="38.8330303" lon="-77.0599912" version="2" timestamp="2016-11-05T07:19:33Z" changeset="43415571" uid="2913188" user="Sawan Shariar">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="WMATA"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="3665033023" lat="38.8084490" lon="-77.0602195" version="2" timestamp="2015-07-24T20:04:39Z" changeset="32859006" uid="2897520" user="atbro86">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+  </node>
+  <node id="3665034114" lat="38.8136644" lon="-77.0621917" version="2" timestamp="2016-11-05T07:19:56Z" changeset="43415571" uid="2913188" user="Sawan Shariar">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="network" v="DASH Bug"/>
+    <tag k="operator" v="Alexandria"/>
+  </node>
+  <node id="3665034115" lat="38.8135156" lon="-77.0619651" version="2" timestamp="2016-11-05T07:19:56Z" changeset="43415571" uid="2913188" user="Sawan Shariar">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="network" v="DASH Bus"/>
+    <tag k="operator" v="Alexandria"/>
+  </node>
+  <node id="4727069717" lat="38.8120348" lon="-77.1173564" version="3" timestamp="2018-04-29T13:16:29Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+    <tag k="source" v="survey 3/2017"/>
+  </node>
+  <node id="4727069718" lat="38.8115832" lon="-77.1169591" version="1" timestamp="2017-03-10T03:47:29Z" changeset="46727743" uid="3221433" user="RoadWarrier">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="source" v="survey 3/2017"/>
+  </node>
+  <node id="4940711602" lat="38.8074832" lon="-77.1350984" version="1" timestamp="2017-06-28T16:10:31Z" changeset="49895921" uid="3221433" user="RoadWarrier">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="source" v="survey 6/2017"/>
+  </node>
+  <node id="4940711608" lat="38.8076462" lon="-77.1346344" version="1" timestamp="2017-06-28T16:10:31Z" changeset="49895921" uid="3221433" user="RoadWarrier">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="source" v="survey 6/2017"/>
+  </node>
+  <node id="4998778005" lat="38.8070232" lon="-77.1414201" version="1" timestamp="2017-07-28T00:18:20Z" changeset="50634654" uid="3221433" user="RoadWarrier">
+    <tag k="highway" v="bus_stop"/>
+  </node>
+  <node id="4998779931" lat="38.8079011" lon="-77.1379251" version="1" timestamp="2017-07-28T00:18:21Z" changeset="50634654" uid="3221433" user="RoadWarrier">
+    <tag k="highway" v="bus_stop"/>
+  </node>
+  <node id="4998779945" lat="38.8077359" lon="-77.1318955" version="1" timestamp="2017-07-28T00:18:21Z" changeset="50634654" uid="3221433" user="RoadWarrier">
+    <tag k="highway" v="bus_stop"/>
+  </node>
+  <node id="5000018421" lat="38.8322836" lon="-77.0512048" version="1" timestamp="2017-07-28T13:36:34Z" changeset="50649866" uid="791438" user="OpenBrian">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Glebe"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="5001495723" lat="38.8324788" lon="-77.0491125" version="2" timestamp="2017-07-29T14:56:18Z" changeset="50673785" uid="791438" user="OpenBrian">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="4001065"/>
+    <tag k="note" v="garbage, but no can"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="route_ref" v="metroway"/>
+    <tag k="shelter" v="yes"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="5001705655" lat="38.8299370" lon="-77.0594363" version="1" timestamp="2017-07-29T14:56:17Z" changeset="50673785" uid="791438" user="OpenBrian">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="4000331"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="5002163422" lat="38.8292332" lon="-77.0591615" version="1" timestamp="2017-07-29T21:40:03Z" changeset="50681194" uid="791438" user="OpenBrian">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="4000329"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="route_ref" v="10A, 10B, 10E"/>
+    <tag k="shelter" v="no"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="5072564823" lat="38.8411711" lon="-77.0701416" version="2" timestamp="2017-09-01T11:58:39Z" changeset="51641295" uid="6581312" user="Mohammed Tahsin Ahnaf">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Milan Drive"/>
+    <tag k="name:en" v="Milan Drive"/>
+  </node>
+  <node id="5103548967" lat="38.8003820" lon="-77.0711299" version="1" timestamp="2017-09-13T15:35:49Z" changeset="52010876" uid="2944411" user="katycat5e">
+    <tag k="name" v="Eisenhower Avenue"/>
+    <tag k="public_transport" v="stop_position"/>
+    <tag k="subway" v="yes"/>
+  </node>
+  <node id="5103548968" lat="38.8003533" lon="-77.0710953" version="1" timestamp="2017-09-13T15:35:49Z" changeset="52010876" uid="2944411" user="katycat5e">
+    <tag k="name" v="Eisenhower Avenue"/>
+    <tag k="public_transport" v="stop_position"/>
+    <tag k="subway" v="yes"/>
+  </node>
+  <node id="5165097923" lat="38.8026010" lon="-77.0632407" version="1" timestamp="2017-10-13T12:09:46Z" changeset="52889646" uid="242358" user="6XzyYKRzA630bar">
+    <tag k="highway" v="bus_stop"/>
+  </node>
+  <node id="5272967588" lat="38.8383059" lon="-77.0790841" version="2" timestamp="2018-04-29T13:16:29Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5274539592" lat="38.8278269" lon="-77.1108471" version="2" timestamp="2018-04-29T13:16:30Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5274539598" lat="38.8171188" lon="-77.0887436" version="2" timestamp="2018-03-10T06:13:28Z" changeset="57050892" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5274539607" lat="38.8068797" lon="-77.0616314" version="2" timestamp="2018-04-29T13:16:30Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5274663831" lat="38.8081388" lon="-77.0857522" version="2" timestamp="2018-02-22T11:49:28Z" changeset="56577445" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus; DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5274663835" lat="38.8091292" lon="-77.0924884" version="2" timestamp="2018-04-29T13:16:30Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5274663836" lat="38.8108698" lon="-77.1004230" version="2" timestamp="2018-04-29T13:16:30Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5274663837" lat="38.8115133" lon="-77.1031284" version="2" timestamp="2018-04-29T13:16:31Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5274663841" lat="38.8119823" lon="-77.1121019" version="2" timestamp="2018-04-29T13:16:31Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5274678774" lat="38.8122426" lon="-77.1193886" version="2" timestamp="2018-04-29T13:16:31Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5274678775" lat="38.8124516" lon="-77.1212843" version="2" timestamp="2018-04-29T13:16:31Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5274678778" lat="38.8134492" lon="-77.1260481" version="2" timestamp="2018-04-29T13:16:31Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5274678780" lat="38.8187312" lon="-77.1283551" version="2" timestamp="2018-04-29T13:16:31Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5274678784" lat="38.8239996" lon="-77.1230595" version="2" timestamp="2018-04-29T13:16:31Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5274678786" lat="38.8247220" lon="-77.1220093" version="2" timestamp="2018-04-29T13:16:31Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5274678787" lat="38.8260940" lon="-77.1196375" version="2" timestamp="2018-04-29T13:16:31Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5274678789" lat="38.8273417" lon="-77.1173317" version="2" timestamp="2018-04-29T13:16:31Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5335200917" lat="38.8364108" lon="-77.0849329" version="2" timestamp="2018-04-29T13:16:31Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5335205647" lat="38.8297415" lon="-77.0844169" version="2" timestamp="2018-02-17T06:38:22Z" changeset="56432638" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5335214896" lat="38.8283073" lon="-77.0848263" version="2" timestamp="2018-02-17T06:38:22Z" changeset="56432638" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5335263202" lat="38.8232800" lon="-77.0821645" version="3" timestamp="2018-02-23T04:05:32Z" changeset="56597932" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="bin" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5335263203" lat="38.8246467" lon="-77.0843066" version="2" timestamp="2018-02-17T06:38:22Z" changeset="56432638" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus;DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5335263204" lat="38.8264510" lon="-77.0850251" version="2" timestamp="2018-02-17T06:38:22Z" changeset="56432638" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5335277002" lat="38.8206799" lon="-77.0790817" version="2" timestamp="2018-02-17T06:38:22Z" changeset="56432638" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5335297957" lat="38.8191263" lon="-77.0773222" version="2" timestamp="2018-02-17T06:38:23Z" changeset="56432638" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5335307053" lat="38.8139377" lon="-77.0750414" version="2" timestamp="2018-02-17T06:38:23Z" changeset="56432638" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5335307054" lat="38.8138801" lon="-77.0727611" version="2" timestamp="2018-02-17T06:38:23Z" changeset="56432638" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5335307055" lat="38.8154035" lon="-77.0731996" version="2" timestamp="2018-02-17T06:38:23Z" changeset="56432638" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5335457525" lat="38.8021180" lon="-77.0675398" version="2" timestamp="2018-02-17T06:38:23Z" changeset="56432638" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5414248553" lat="38.8020049" lon="-77.0673232" version="2" timestamp="2018-02-17T06:38:23Z" changeset="56432638" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5414660093" lat="38.8067744" lon="-77.1336444" version="1" timestamp="2018-02-15T16:45:01Z" changeset="56389686" uid="3221433" user="RoadWarrier">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="source" v="walking survey 2/2018"/>
+  </node>
+  <node id="5416955341" lat="38.8108585" lon="-77.0674245" version="1" timestamp="2018-02-16T17:43:03Z" changeset="56420680" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5416955342" lat="38.8119866" lon="-77.0686801" version="1" timestamp="2018-02-16T17:43:03Z" changeset="56420680" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5416955344" lat="38.8122405" lon="-77.0692450" version="1" timestamp="2018-02-16T17:43:04Z" changeset="56420680" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5416955345" lat="38.8133838" lon="-77.0707836" version="1" timestamp="2018-02-16T17:43:04Z" changeset="56420680" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5428889332" lat="38.8030963" lon="-77.0657317" version="2" timestamp="2018-04-29T13:16:32Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="bin" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5428889338" lat="38.8062867" lon="-77.0736514" version="1" timestamp="2018-02-22T11:49:15Z" changeset="56577445" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="bin" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5428889339" lat="38.8073549" lon="-77.0817763" version="2" timestamp="2018-04-29T13:16:32Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="bin" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5428889340" lat="38.8079700" lon="-77.0860105" version="1" timestamp="2018-02-22T11:49:16Z" changeset="56577445" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="bin" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5428889341" lat="38.8136074" lon="-77.0893706" version="1" timestamp="2018-02-22T11:49:16Z" changeset="56577445" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5428889343" lat="38.8155055" lon="-77.0896261" version="1" timestamp="2018-02-22T11:49:16Z" changeset="56577445" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5428889344" lat="38.8163948" lon="-77.0894940" version="1" timestamp="2018-02-22T11:49:16Z" changeset="56577445" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5428889346" lat="38.8181988" lon="-77.0893579" version="1" timestamp="2018-02-22T11:49:16Z" changeset="56577445" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5428889347" lat="38.8183457" lon="-77.0895624" version="1" timestamp="2018-02-22T11:49:16Z" changeset="56577445" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5428889349" lat="38.8223324" lon="-77.0888905" version="1" timestamp="2018-02-22T11:49:16Z" changeset="56577445" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5428889350" lat="38.8223475" lon="-77.0890977" version="1" timestamp="2018-02-22T11:49:16Z" changeset="56577445" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5430516262" lat="38.8108805" lon="-77.0672525" version="1" timestamp="2018-02-23T04:05:31Z" changeset="56597932" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5430516263" lat="38.8153640" lon="-77.0729005" version="1" timestamp="2018-02-23T04:05:31Z" changeset="56597932" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5430516264" lat="38.8197072" lon="-77.0776930" version="2" timestamp="2018-04-29T13:16:32Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5430516266" lat="38.8234070" lon="-77.0820563" version="1" timestamp="2018-02-23T04:05:31Z" changeset="56597932" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="bin" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5430516268" lat="38.8251403" lon="-77.0847348" version="2" timestamp="2018-05-14T16:55:44Z" changeset="58958803" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="bin" v="yes"/>
+    <tag k="covered" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="note" v="Metrobus route 28A"/>
+    <tag k="operator" v="Metrobus; DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5449008477" lat="38.8137296" lon="-77.0745897" version="1" timestamp="2018-03-02T20:24:22Z" changeset="56831772" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5458064292" lat="38.8261731" lon="-77.0862512" version="1" timestamp="2018-03-06T02:42:44Z" changeset="56920831" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="bin" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5458064293" lat="38.8262081" lon="-77.0867709" version="1" timestamp="2018-03-06T02:42:44Z" changeset="56920831" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5468563977" lat="38.8249627" lon="-77.1068479" version="1" timestamp="2018-03-10T05:48:33Z" changeset="57050670" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus; DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5468563978" lat="38.8265472" lon="-77.1092904" version="1" timestamp="2018-03-10T05:48:33Z" changeset="57050670" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="bin" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus; DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="route_ref" v="Metrobus 8W; Metrobus 25B; Metrobus 28A"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5468580159" lat="38.8158175" lon="-77.0848826" version="1" timestamp="2018-03-10T06:13:27Z" changeset="57050892" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5468580161" lat="38.8196617" lon="-77.0935341" version="1" timestamp="2018-03-10T06:13:27Z" changeset="57050892" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="bin" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5468580162" lat="38.8196972" lon="-77.0938251" version="1" timestamp="2018-03-10T06:13:27Z" changeset="57050892" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5468580163" lat="38.8219734" lon="-77.0981997" version="1" timestamp="2018-03-10T06:13:27Z" changeset="57050892" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5468580165" lat="38.8231782" lon="-77.1013601" version="1" timestamp="2018-03-10T06:13:27Z" changeset="57050892" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5470080975" lat="38.8075473" lon="-77.0816935" version="2" timestamp="2018-04-29T13:16:32Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="bin" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5470080977" lat="38.8068842" lon="-77.0764866" version="1" timestamp="2018-03-10T23:44:32Z" changeset="57070417" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="bin" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5474426211" lat="38.8319503" lon="-77.0805170" version="1" timestamp="2018-03-13T01:34:05Z" changeset="57129105" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5474426212" lat="38.8320788" lon="-77.0804751" version="1" timestamp="2018-03-13T01:34:05Z" changeset="57129105" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5474426217" lat="38.8332314" lon="-77.0815399" version="1" timestamp="2018-03-13T01:34:05Z" changeset="57129105" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus; DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5474426218" lat="38.8331661" lon="-77.0819295" version="1" timestamp="2018-03-13T01:34:05Z" changeset="57129105" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus; DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5474426219" lat="38.8342238" lon="-77.0833742" version="1" timestamp="2018-03-13T01:34:05Z" changeset="57129105" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus; DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5474426220" lat="38.8342353" lon="-77.0835885" version="1" timestamp="2018-03-13T01:34:05Z" changeset="57129105" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus; DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5474426723" lat="38.8358639" lon="-77.0836247" version="1" timestamp="2018-03-13T01:34:06Z" changeset="57129105" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus; DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5476491863" lat="38.8127441" lon="-77.1236150" version="1" timestamp="2018-03-13T21:06:30Z" changeset="57158294" uid="3221433" user="RoadWarrier">
+    <tag k="highway" v="bus_stop"/>
+  </node>
+  <node id="5476491864" lat="38.8125050" lon="-77.1242846" version="1" timestamp="2018-03-13T21:06:30Z" changeset="57158294" uid="3221433" user="RoadWarrier">
+    <tag k="highway" v="bus_stop"/>
+  </node>
+  <node id="5476491865" lat="38.8119397" lon="-77.1194612" version="1" timestamp="2018-03-13T21:06:30Z" changeset="57158294" uid="3221433" user="RoadWarrier">
+    <tag k="highway" v="bus_stop"/>
+  </node>
+  <node id="5483407931" lat="38.8374372" lon="-77.0955069" version="1" timestamp="2018-03-16T20:09:09Z" changeset="57251930" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5483407933" lat="38.8377464" lon="-77.0937949" version="1" timestamp="2018-03-16T20:09:09Z" changeset="57251930" uid="5046269" user="Rich1234">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5483407935" lat="38.8378357" lon="-77.0935207" version="1" timestamp="2018-03-16T20:09:09Z" changeset="57251930" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5483407938" lat="38.8377432" lon="-77.0926014" version="2" timestamp="2018-04-29T13:16:32Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5483407939" lat="38.8378602" lon="-77.0920146" version="1" timestamp="2018-03-16T20:09:10Z" changeset="57251930" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5483407942" lat="38.8375939" lon="-77.0909216" version="2" timestamp="2018-04-29T13:16:32Z" changeset="58526990" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="bin" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5483407943" lat="38.8377041" lon="-77.0908693" version="1" timestamp="2018-03-16T20:09:10Z" changeset="57251930" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5483456400" lat="38.8343288" lon="-77.0909780" version="1" timestamp="2018-03-16T20:26:31Z" changeset="57252320" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5483456407" lat="38.8342426" lon="-77.0918128" version="1" timestamp="2018-03-16T20:26:32Z" changeset="57252320" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5483485853" lat="38.8293106" lon="-77.0874475" version="1" timestamp="2018-03-16T20:44:40Z" changeset="57252740" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5483485855" lat="38.8309806" lon="-77.0864511" version="1" timestamp="2018-03-16T20:44:40Z" changeset="57252740" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5483485857" lat="38.8311749" lon="-77.0865704" version="1" timestamp="2018-03-16T20:44:40Z" changeset="57252740" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5483485861" lat="38.8332032" lon="-77.0869580" version="1" timestamp="2018-03-16T20:44:40Z" changeset="57252740" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5483485862" lat="38.8333244" lon="-77.0869131" version="1" timestamp="2018-03-16T20:44:40Z" changeset="57252740" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5483496432" lat="38.8300393" lon="-77.0896898" version="1" timestamp="2018-03-16T20:53:03Z" changeset="57252944" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5483496433" lat="38.8300367" lon="-77.0895322" version="1" timestamp="2018-03-16T20:53:03Z" changeset="57252944" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5494164218" lat="38.8115605" lon="-77.1326966" version="1" timestamp="2018-03-21T16:40:21Z" changeset="57391982" uid="3221433" user="RoadWarrier">
+    <tag k="bus" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="source" v="walking survey 3/2018"/>
+  </node>
+  <node id="5494164219" lat="38.8123422" lon="-77.1330613" version="1" timestamp="2018-03-21T16:40:21Z" changeset="57391982" uid="3221433" user="RoadWarrier">
+    <tag k="bus" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="source" v="walking survey 3/2018"/>
+  </node>
+  <node id="5500214485" lat="38.8380728" lon="-77.1043045" version="1" timestamp="2018-03-24T06:45:24Z" changeset="57475989" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus; DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5500214487" lat="38.8395995" lon="-77.1056154" version="1" timestamp="2018-03-24T06:45:24Z" changeset="57475989" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus; DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5500214488" lat="38.8406122" lon="-77.1065857" version="1" timestamp="2018-03-24T06:45:24Z" changeset="57475989" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus; DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5517729135" lat="38.8419738" lon="-77.0634779" version="1" timestamp="2018-03-31T04:48:10Z" changeset="57679380" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5517729155" lat="38.8374601" lon="-77.0649880" version="1" timestamp="2018-03-31T04:48:11Z" changeset="57679380" uid="5046269" user="Rich1234">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+  </node>
+  <node id="5517729157" lat="38.8365362" lon="-77.0662929" version="1" timestamp="2018-03-31T04:48:11Z" changeset="57679380" uid="5046269" user="Rich1234">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+  </node>
+  <node id="5517729158" lat="38.8364458" lon="-77.0661709" version="1" timestamp="2018-03-31T04:48:11Z" changeset="57679380" uid="5046269" user="Rich1234">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+  </node>
+  <node id="5517729167" lat="38.8348350" lon="-77.0673383" version="1" timestamp="2018-03-31T04:48:11Z" changeset="57679380" uid="5046269" user="Rich1234">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+  </node>
+  <node id="5517729169" lat="38.8323251" lon="-77.0669735" version="1" timestamp="2018-03-31T04:48:11Z" changeset="57679380" uid="5046269" user="Rich1234">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+  </node>
+  <node id="5517729177" lat="38.8297948" lon="-77.0662815" version="1" timestamp="2018-03-31T04:48:12Z" changeset="57679380" uid="5046269" user="Rich1234">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+  </node>
+  <node id="5517729180" lat="38.8286660" lon="-77.0659697" version="1" timestamp="2018-03-31T04:48:12Z" changeset="57679380" uid="5046269" user="Rich1234">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+  </node>
+  <node id="5517729181" lat="38.8287161" lon="-77.0661300" version="1" timestamp="2018-03-31T04:48:12Z" changeset="57679380" uid="5046269" user="Rich1234">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+  </node>
+  <node id="5517729183" lat="38.8274739" lon="-77.0659489" version="1" timestamp="2018-03-31T04:48:12Z" changeset="57679380" uid="5046269" user="Rich1234">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+  </node>
+  <node id="5517729185" lat="38.8271390" lon="-77.0657873" version="2" timestamp="2018-04-12T01:29:51Z" changeset="58021278" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5517729193" lat="38.8219944" lon="-77.0661246" version="1" timestamp="2018-03-31T04:48:13Z" changeset="57679380" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5517874192" lat="38.8134893" lon="-77.0554588" version="1" timestamp="2018-03-31T06:55:27Z" changeset="57680714" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus; DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5517909415" lat="38.8220743" lon="-77.0714019" version="1" timestamp="2018-03-31T07:15:57Z" changeset="57681065" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5517909417" lat="38.8208654" lon="-77.0705140" version="1" timestamp="2018-03-31T07:15:57Z" changeset="57681065" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5517909419" lat="38.8201497" lon="-77.0695759" version="1" timestamp="2018-03-31T07:15:57Z" changeset="57681065" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5517911321" lat="38.8196199" lon="-77.0692031" version="1" timestamp="2018-03-31T07:15:57Z" changeset="57681065" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5517911324" lat="38.8162856" lon="-77.0623152" version="1" timestamp="2018-03-31T07:15:57Z" changeset="57681065" uid="5046269" user="Rich1234">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5517911328" lat="38.8155442" lon="-77.0604672" version="1" timestamp="2018-03-31T07:15:58Z" changeset="57681065" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5517911330" lat="38.8140969" lon="-77.0573652" version="1" timestamp="2018-03-31T07:15:58Z" changeset="57681065" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5518843390" lat="38.8272508" lon="-77.0915499" version="1" timestamp="2018-03-31T16:18:17Z" changeset="57692648" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="bin" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5518843405" lat="38.8232544" lon="-77.0727778" version="1" timestamp="2018-03-31T16:18:17Z" changeset="57692648" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5518843406" lat="38.8224421" lon="-77.0720536" version="1" timestamp="2018-03-31T16:18:18Z" changeset="57692648" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5519087941" lat="38.8363716" lon="-77.1093196" version="1" timestamp="2018-03-31T18:40:41Z" changeset="57696307" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus; DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5519148253" lat="38.8412578" lon="-77.1088656" version="1" timestamp="2018-03-31T19:09:54Z" changeset="57697014" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus; DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5519148254" lat="38.8403114" lon="-77.1093109" version="1" timestamp="2018-03-31T19:09:54Z" changeset="57697014" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="Metrobus; DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5546725495" lat="38.8037505" lon="-77.0644757" version="1" timestamp="2018-04-12T01:29:48Z" changeset="58021278" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5546725496" lat="38.8043974" lon="-77.0635691" version="2" timestamp="2018-05-10T23:06:53Z" changeset="58863723" uid="8103326" user="Luis Felipe Argüello">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name:es" v="NH2"/>
+    <tag k="operator" v="Metrobus; DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5546726245" lat="38.8183373" lon="-77.0662212" version="1" timestamp="2018-04-12T01:29:49Z" changeset="58021278" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5546726248" lat="38.8195985" lon="-77.0664022" version="1" timestamp="2018-04-12T01:29:50Z" changeset="58021278" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5546726249" lat="38.8196701" lon="-77.0662560" version="1" timestamp="2018-04-12T01:29:50Z" changeset="58021278" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5546726250" lat="38.8204814" lon="-77.0663888" version="1" timestamp="2018-04-12T01:29:50Z" changeset="58021278" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5546726251" lat="38.8207708" lon="-77.0665558" version="1" timestamp="2018-04-12T01:29:50Z" changeset="58021278" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5546726252" lat="38.8233412" lon="-77.0656659" version="1" timestamp="2018-04-12T01:29:50Z" changeset="58021278" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5546726256" lat="38.8264087" lon="-77.0656599" version="1" timestamp="2018-04-12T01:29:50Z" changeset="58021278" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5546726265" lat="38.8317735" lon="-77.0669775" version="1" timestamp="2018-04-12T01:29:51Z" changeset="58021278" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5546726270" lat="38.8351760" lon="-77.0672947" version="1" timestamp="2018-04-12T01:29:51Z" changeset="58021278" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5567996922" lat="38.8049619" lon="-77.0455424" version="1" timestamp="2018-04-21T02:41:54Z" changeset="58280872" uid="692614" user="seattlefyi">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="King Street Trolley Stop"/>
+  </node>
+  <node id="5567996923" lat="38.8057889" lon="-77.0523330" version="1" timestamp="2018-04-21T02:41:54Z" changeset="58280872" uid="692614" user="seattlefyi">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="King Street Trolley Stop"/>
+  </node>
+  <node id="5567996924" lat="38.8064163" lon="-77.0608489" version="1" timestamp="2018-04-21T02:41:54Z" changeset="58280872" uid="692614" user="seattlefyi">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="King Street Trolley Stop"/>
+  </node>
+  <node id="5567996926" lat="38.8055153" lon="-77.0501666" version="1" timestamp="2018-04-21T02:41:54Z" changeset="58280872" uid="692614" user="seattlefyi">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="King Street Trolley Stop"/>
+  </node>
+  <node id="5567996927" lat="38.8062345" lon="-77.0555771" version="1" timestamp="2018-04-21T02:41:54Z" changeset="58280872" uid="692614" user="seattlefyi">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="King Street Trolley Stop"/>
+  </node>
+  <node id="5567996928" lat="38.8046852" lon="-77.0433566" version="1" timestamp="2018-04-21T02:41:54Z" changeset="58280872" uid="692614" user="seattlefyi">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="King Street Trolley Stop"/>
+  </node>
+  <node id="5567996929" lat="38.8052353" lon="-77.0479742" version="1" timestamp="2018-04-21T02:41:54Z" changeset="58280872" uid="692614" user="seattlefyi">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="King Street Trolley Stop"/>
+  </node>
+  <node id="5567996930" lat="38.8060787" lon="-77.0545386" version="1" timestamp="2018-04-21T02:41:54Z" changeset="58280872" uid="692614" user="seattlefyi">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="King Street Trolley Stop"/>
+  </node>
+  <node id="5610146861" lat="38.8140040" lon="-77.1331887" version="1" timestamp="2018-05-10T19:56:38Z" changeset="58860107" uid="3221433" user="RoadWarrier">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="source" v="survey 5/2017"/>
+  </node>
+  <node id="5651866103" lat="38.8368375" lon="-77.0834438" version="1" timestamp="2018-05-30T14:12:08Z" changeset="59400322" uid="8350174" user="FiftyNiner">
+    <tag k="bench" v="no"/>
+    <tag k="bus" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="lit" v="no"/>
+    <tag k="network" v="Metrobus;DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5651866104" lat="38.8368681" lon="-77.0836267" version="1" timestamp="2018-05-30T14:12:09Z" changeset="59400322" uid="8350174" user="FiftyNiner">
+    <tag k="bench" v="no"/>
+    <tag k="bus" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="lit" v="no"/>
+    <tag k="network" v="Metrobus;DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5691095410" lat="38.8117186" lon="-77.1118315" version="1" timestamp="2018-06-14T15:57:27Z" changeset="59849373" uid="3221433" user="RoadWarrier">
+    <tag k="bench" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="5727192426" lat="38.8297499" lon="-77.0662715" version="1" timestamp="2018-06-29T04:55:27Z" changeset="60265836" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="5728649424" lat="38.8178326" lon="-77.0659516" version="1" timestamp="2018-06-29T15:37:48Z" changeset="60282728" uid="5046269" user="Rich1234">
+    <tag k="bench" v="no"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="operator" v="DASH"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="shelter" v="no"/>
   </node>
 
 </osm>

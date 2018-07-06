@@ -115,6 +115,8 @@
         var data_to_osm = [];
         var gtfs_stop;
         var osm_stop;
+        var name_from ;//gtfs or  osm
+        var ref_from ;//gtfs or osm
 
         $('#export-stop').hide();
         $('#add_to_list').hide();
@@ -227,6 +229,8 @@
                         $("#osmstopversion").text('');
                         $("#osmstopname").text('');
                         $("#osmstopref").text('');
+                        $('#resultstopref').text('');
+                        $('#resultstopname').text('');
                         if(clickcircle != undefined){
                             map.removeLayer(clickcircle)
                         }
@@ -345,11 +349,13 @@
                         }
                         else if(node_tags_data[s].key == 'ref'){
                             marker.ref = node_tags_data[s].value;
+                            ref_from = 'osm';
                         }
                     }
 
                     function markerClick(e) {
-
+                        name_from = '';
+                        ref_from = '';
                         osm_stop = this.nodeid;
                         $("#osmstopid").text(this.nodeid);
                         $("#osmstopversion").text("version " + this.nodeversion);
@@ -369,9 +375,11 @@
 
                         if(this.name !== undefined){
                             t_name = this.name;
+                            name_from = 'osm';
                             console.log(t_name);
                         }else{
                             t_name = gtfs_stop_name;
+                            name_from = 'gtfs';
                             console.log(t_name);
                         }
 
@@ -384,15 +392,22 @@
                                 ref_oper = false;
                             }else if(feed_corr_data[key] == "ref:operator"){
                                 ref_in_gtfs_key = key;
-                                ref_oper = true;
+                                ref_oper = true;    
                             }
                         }
 
                         var reference;
-                        if(ref_oper){
-                            reference = "ref:"+feed_name+"="+gtfs_stop_id;
+                        if(this.ref !== undefined){
+                            reference = this.ref;
+                            ref_from = 'osm';
                         }else{
-                            reference = "ref = "+ gtfs_stop_id;
+                            if(ref_oper){
+                                reference = "ref:"+feed_name+"="+gtfs_stop_id;
+                                ref_from = 'gtfs';
+                            }else{
+                                reference = "ref = "+ gtfs_stop_id;
+                                ref_from = 'gtfs';
+                            }
                         }
 
                         tags_to_osm.push({
@@ -400,7 +415,7 @@
                             'ref': reference
                         });
 
-                        show_on_result(t_name, reference);
+                        show_on_result(t_name, reference, name_from, ref_from);
 
                         console.log(ref_in_gtfs_key);
                         $('#export-stop').show();
@@ -413,7 +428,7 @@
             }
         });
 
-console.log(tags_to_osm)
+    console.log(tags_to_osm)
 
     const drawnItems = new L.FeatureGroup();
     map.addLayer(drawnItems);
@@ -554,9 +569,20 @@ console.log(tags_to_osm)
 
     }
 
-    function show_on_result(name, ref){
-        $("#resultstopname").text(name);
-        $("#resultstopref").text(ref);
+    function show_on_result(name, ref, name_from, ref_from){
+        
+        if(name_from == 'gtfs'){
+            $("#resultstopname").text("<- " + name);            
+        }else{
+            $("#resultstopname").text( name + " ->");
+        }
+
+        if(ref_from == 'osm'){
+            $("#resultstopref").text(ref + " ->");
+        }else{
+            $("#resultstopref").text( "<- "+ ref);
+        }
+
     }
 
 </script>
