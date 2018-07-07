@@ -7,7 +7,7 @@ from django.utils import timezone
 from multigtfs.models import Feed, Stop
 
 from compare.models import CMP_Stop
-from osmapp.models import Node, Tag
+from osmapp.models import Node, Tag, KeyValueString
 from .models import GTFSForm
 from django.db import connection
 from geographiclib.geodesic import Geodesic
@@ -22,7 +22,7 @@ bottomleft_block_stops = []
 bottomright_block_stops = []
 
 
-def save_comp(gtfs_feed_id, gtfs_stop_id, osm_stop_id):
+def save_comp(gtfs_feed_id, gtfs_stop_id, osm_stop_id, tags_data):
     context = {
         'match_success': 0,
         'error': ''
@@ -59,10 +59,17 @@ def save_comp(gtfs_feed_id, gtfs_stop_id, osm_stop_id):
             cmp_stop_obj.save()
             cmp_stop_obj.fixed_match = osm_stop_obj
             cmp_stop_obj.save()
+
+        print("Match made")
     except Exception as e:
         print("relation already exists")
 
-    print("Match made")
+    print("Creating tags in node")
+
+    # get all tags of node
+
+    if KeyValueString.objects.filter(value='name').exists():
+        k = KeyValueString.objects.get(value='name')
 
     return context['match_success'], context['error']
 

@@ -69,11 +69,13 @@ def match_stop(request):
 
         gtfs_stop_data = request.POST.get('gtfs_stop')
         osm_stop_id = request.POST.get('osm_stop')
+        tags_json  = request.POST.get('tags')
+        tags_data = json.loads(tags_json)
 
         str = gtfs_stop_data.split('-')
         gtfs_feed_id = str[0]
         gtfs_stop_id = str[1]
-        save_comp(gtfs_feed_id, gtfs_stop_id, osm_stop_id)
+        save_comp(gtfs_feed_id, gtfs_stop_id, osm_stop_id, tags_data)
 
     return render(request, 'gs/comparision.html')
 
@@ -87,6 +89,9 @@ def match_stops(request):
         }
 
         data_in_string = request.POST.get('match_data')
+        tags_json = request.POST.get('tags')
+        tags_data = json.loads(tags_json)
+        print(tags_data)
         json_data = json.loads(data_in_string)
         for i in range(0, len(json_data)):
             str = json_data[i]['gtfs_stop'].split('-')

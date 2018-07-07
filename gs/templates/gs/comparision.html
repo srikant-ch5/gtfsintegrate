@@ -40,7 +40,9 @@
                     <table style="width:100%">
                         <tr>
                             <th>GTFS</th>
+                            <th>  </th>
                             <th>Result</th>
+                            <th></th>
                             <th>OSM</th>
                         </tr>
                         <tr>
@@ -67,7 +69,9 @@
 
                         <tr>
                             <td id="gtfsstopzone"></td>
-                            <td>--------</td>
+                            <td>-</td>
+                            <td> ------</td>
+                            <td>-</td>
                             <td id="osmstopversion"></td>
                         </tr>
                     </table>
@@ -123,6 +127,7 @@
         var osm_stop;
         var name_from ;//gtfs or  osm
         var ref_from ;//gtfs or osm
+        var t_name, reference;
 
         $('#export-stop').hide();
         $('#add_to_list').hide();
@@ -406,7 +411,6 @@
                             }
                         }
 
-                        var reference;
                         if(this.ref !== undefined){
                             reference = this.ref;
                             ref_from = 'osm';
@@ -419,7 +423,6 @@
                                 ref_from = 'gtfs';
                             }
                         }
-
                         tags_to_osm.push({
                             'name':t_name,
                             'ref': reference
@@ -501,8 +504,12 @@
 
     function match_stop(){
         if(gtfs_stop != undefined && osm_stop != undefined){
-            var match_stop_url = "{% url 'match_stop' %}"
-
+            var match_stop_url = "{% url 'match_stop' %}";
+            var single_node_tags_to_osm = {
+                        'name':t_name,
+                        'ref': reference
+                };
+            tags = JSON.stringify(single_node_tags_to_osm);
             $.ajax({
                 url: match_stop_url,
                 method: 'POST',
@@ -510,6 +517,7 @@
                 data: {
                     'gtfs_stop': gtfs_stop,
                     'osm_stop': osm_stop,
+                    'tags': tags,
                     'csrfmiddlewaretoken': '{{ csrf_token }}'
                 },
                 success: function (data) {
@@ -550,7 +558,7 @@
     function match_stops(){
         if(gtfs_stop != undefined && osm_stop != undefined){
             var match_stop_url = "{% url 'match_stops' %}"
-
+            tags = JSON.stringify(tags_to_osm);
             json_data_to_osm = JSON.stringify(data_to_osm)
 
             $.ajax({
@@ -559,6 +567,7 @@
                 async: false,
                 data: {
                     'match_data': json_data_to_osm,
+                    'tags':tags,
                     'csrfmiddlewaretoken': '{{ csrf_token }}'
                 },
                 success: function (data) {

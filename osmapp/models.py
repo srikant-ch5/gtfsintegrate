@@ -33,6 +33,21 @@ class Tag(models.Model):
     class Meta:
         unique_together = ("key", "value")  # type: Tuple[str, str]
 
+    def to_xml(self, outputparams=None):
+        if outputparams is None:
+            _outputparams = {'newline': '\n', 'indent': ' '}
+        else:
+            _outputparams = outputparams
+
+        key = self.key.value
+        value = self.value.value
+
+        self.xml = ''
+
+        self.xml += "{newline}{indent}<tag k='{key}' v='{value} />'".format(key=key, value=value, **_outputparams)
+
+        return self.xml
+
     def add_tag(self, key, value):
 
         # check if the tag with same key
@@ -109,24 +124,32 @@ class Node(OSM_Primitive):
         else:
             _outputparams = outputparams
 
-        self.xml = '{newline}<nd '.format(**_outputparams)
+        self.xml = '{newline}<node '.format(**_outputparams)
 
         for attr, value in self.__dict__.items():
             if attr == '_state':
+                continue
+            elif attr == 'xml':
                 continue
             elif attr == 'timestamp':
                 ts_value = str(value).replace(' ', 'T') + 'Z'
                 self.xml += "{}='{}' ".format(attr, ts_value, **_outputparams)
             elif attr == 'geom':
                 lat = str(value[0])
-                self.xml += "{}='{}' ".format('lat',lat)
+                self.xml += "{}='{}' ".format('lat', lat)
                 lon = str(value[1])
-                self.xml += "{}='{}' ".format('lon',lon)
+                self.xml += "{}='{}' ".format('lon', lon)
             else:
                 self.xml += "{}='{}' ".format(attr, str(value), **_outputparams)
 
         self.xml += '>'
 
+        tags = self.tags.all()
+
+        for tag in tags:
+            self.xml += tag.to_xml(_outputparams)
+
+        self.xml += '{newline}</node>'.format(**_outputparams)
         return self.xml
 
 

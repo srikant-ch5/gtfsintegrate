@@ -20,6 +20,8 @@ class CMP_Stop(models.Model):
             **outputparams)
 
         xml += self.fixed_match.to_xml(outputparams=outputparams)
+
+        xml += '''{newline}</osm>'''.format(**outputparams)
         print(xml)
 
     def __str__(self):
