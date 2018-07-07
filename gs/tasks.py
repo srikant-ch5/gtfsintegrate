@@ -49,7 +49,7 @@ def save_comp(gtfs_feed_id, gtfs_stop_id, osm_stop_id, tags_data):
         context['error'] += 'osm stop doesnt exist {}'.format(e)
 
     try:
-        if(cmp_stop_obj.fixed_match == None):
+        if cmp_stop_obj.fixed_match == None:
             print("Creating new match ")
 
             cmp_stop_obj.fixed_match = osm_stop_obj
@@ -66,10 +66,44 @@ def save_comp(gtfs_feed_id, gtfs_stop_id, osm_stop_id, tags_data):
 
     print("Creating tags in node")
 
-    # get all tags of node
+    # get tags data
+    name = tags_data['name']
+    ref = tags_data['ref']
 
-    if KeyValueString.objects.filter(value='name').exists():
-        k = KeyValueString.objects.get(value='name')
+    # get all tags of node
+    node_tags = osm_stop_obj.tags.all()
+
+    name_tag_in_node = False
+    ref_tag_in_node = False
+    for node_tag in node_tags:
+        if node_tag.value == 'name':
+            name_tag_in_node = True
+        elif node_tag.value == 'ref':
+            ref_tag_in_node = True
+
+    # create KeyValueString for name and ref if the data in osm table dosent have them
+
+    if not name_tag_in_node:
+        tag = Tag()
+        name_tag = tag.add_tag('name', name)
+        osm_stop_obj.tags.add(name_tag)
+
+    if not ref_tag_in_node:
+        tag = Tag()
+        ref_tag = tag.add_tag('ref', ref)
+        osm_stop_obj.tags.add(ref_tag)
+
+    xml = cmp_stop_obj.to_xml('yes')
+
+    PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+    xmlfiledir = os.path.join(os.path.dirname(PROJECT_ROOT), 'osmapp', 'static')
+    xmlfile = xmlfiledir + '/nodesosm/singlenode.osm'
+
+    with open(xmlfile, 'w') as fh:
+        fh.write(xml)
+
+    print("Opening the node  in josm")
+    resp = requests.get('http://127.0.0.1:8111/open_file?filename=/home/srikant/testwork/env/gtfsapp/gtfsintegrate/osmapp/static/nodesosm/singlenode.osm')
 
     return context['match_success'], context['error']
 

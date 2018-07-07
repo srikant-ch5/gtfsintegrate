@@ -22,7 +22,8 @@ class CMP_Stop(models.Model):
         xml += self.fixed_match.to_xml(outputparams=outputparams)
 
         xml += '''{newline}</osm>'''.format(**outputparams)
-        print(xml)
+
+        return xml
 
     def __str__(self):
         return '{}'.format(self.gtfs_stop)

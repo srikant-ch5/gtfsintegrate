@@ -44,7 +44,7 @@ class Tag(models.Model):
 
         self.xml = ''
 
-        self.xml += "{newline}{indent}<tag k='{key}' v='{value} />'".format(key=key, value=value, **_outputparams)
+        self.xml += "{newline}{indent}<tag k='{key}' v='{value}' />".format(key=key, value=value, **_outputparams)
 
         return self.xml
 
@@ -132,13 +132,14 @@ class Node(OSM_Primitive):
             elif attr == 'xml':
                 continue
             elif attr == 'timestamp':
-                ts_value = str(value).replace(' ', 'T') + 'Z'
+                ts_main = str(value).split('+')
+                ts_value = ts_main[0].replace(' ', 'T') + 'Z'
                 self.xml += "{}='{}' ".format(attr, ts_value, **_outputparams)
             elif attr == 'geom':
-                lat = str(value[0])
-                self.xml += "{}='{}' ".format('lat', lat)
-                lon = str(value[1])
+                lon = str(value[0])
                 self.xml += "{}='{}' ".format('lon', lon)
+                lat = str(value[1])
+                self.xml += "{}='{}' ".format('lat', lat)
             else:
                 self.xml += "{}='{}' ".format(attr, str(value), **_outputparams)
 
