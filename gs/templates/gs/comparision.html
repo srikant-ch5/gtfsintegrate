@@ -8,6 +8,9 @@
     <img id="loading-image" src='http://i.stack.imgur.com/FhHRx.gif' alt="Loading..."/>
 </div>
 <br><br>
+ <!-- Trigger/Open The Modal -->
+<button id="myBtn">Open Modal</button>
+
 <div class="container-fluid">
     <div class="row">
         <div class="cold-md-12">
@@ -28,6 +31,9 @@
             <a class="btn btn-primary" id="export_all_stops" onclick="match_stops()">Match All Stops from Match List</a>
         </div>
     </div>
+</div>
+<!-- The Modal -->
+<div id="myModal" class="modal"> 
 </div>
 <div id="bbox">
 </div>
@@ -289,86 +295,86 @@
         }catch(error){
             alert(error+" osm stops init");
         }
-                    function markerClick(e) {
-                        try{
-                        name_from = '';
-                        ref_from = '';
-                        clicked_osm_stop = [];
+        function markerClick(e) {
+            try{
+            name_from = '';
+            ref_from = '';
+            clicked_osm_stop = [];
 
-                        osm_stop = this.nodeid;
-                        $("#osmstopid").text(this.nodeid);
-                        $("#osmstopversion").text("version " + this.nodeversion);
+            osm_stop = this.nodeid;
+            $("#osmstopid").text(this.nodeid);
+            $("#osmstopversion").text("version " + this.nodeversion);
 
-                        try{
-                            $("#osmstopname").text("name: " + this.name);
-                        }
-                        catch(error){
-                            console.log("No name");
-                        }
-                        try{
-                            $("#osmstopref").text("ref: "+ this.ref);
-                        }
-                        catch(error){
-                            console.log("No ref");
-                        }
+            try{
+                $("#osmstopname").text("name: " + this.name);
+            }
+            catch(error){
+                console.log("No name");
+            }
+            try{
+                $("#osmstopref").text("ref: "+ this.ref);
+            }
+            catch(error){
+                console.log("No ref");
+            }
 
-                        if(this.name !== undefined && this.ref !== undefined){
-                            alert("The stop is already matched");
-                        }else{
-                            if(this.name !== undefined){
-                                t_name = this.name;
-                                name_from = 'osm';
-                                console.log(t_name);
-                            }else{
-                                t_name = gtfs_stop_name;
-                                name_from = 'gtfs';
-                                console.log(t_name);
-                            }
-                            //check whether the corr form has ref:operator or ref
-                            var ref_oper = true;
-                            var ref_in_gtfs_key;
-                            for(var key in feed_corr_data){
-                                if(feed_corr_data[key] == 'ref'){
-                                    ref_in_gtfs_key = key;
-                                    ref_oper = false;
-                                }else if(feed_corr_data[key] == "ref:operator"){
-                                    ref_in_gtfs_key = key;
-                                    ref_oper = true;    
-                                }
-                            }
-
-                            if(this.ref !== undefined){
-                                reference = this.ref;
-                                ref_from = 'osm';
-                            }else{
-                                if(ref_oper){
-                                    reference = "ref:"+feed_name+"="+gtfs_stop_id;
-                                    ref_from = 'gtfs';
-                                }else{
-                                    reference = gtfs_stop_id;
-                                    ref_from = 'gtfs';
-                                }
-                            }
-                        }
-
-                        clicked_osm_stop = {
-                            'node_id': osm_stop,
-                            'osm_name': this.name,
-                            'comp_name':t_name,
-                            'ref':reference
-                        }
-                        
-                        show_on_result(t_name, reference, name_from, ref_from);
-
-                        console.log(ref_in_gtfs_key);
-                        $('#export-stop').show();
-                        $('#export-stop').text("Match " + gtfs_stop + " with " + osm_stop);
-                        $('#add_to_list').show();
-
-                    }catch(error){
-                        alert(error + " in osm stop click");
+            if(this.name !== undefined && this.ref !== undefined){
+                alert("The stop is already matched");
+            }else{
+                if(this.name !== undefined){
+                    t_name = this.name;
+                    name_from = 'osm';
+                    console.log(t_name);
+                }else{
+                    t_name = gtfs_stop_name;
+                    name_from = 'gtfs';
+                    console.log(t_name);
+                }
+                //check whether the corr form has ref:operator or ref
+                var ref_oper = true;
+                var ref_in_gtfs_key;
+                for(var key in feed_corr_data){
+                    if(feed_corr_data[key] == 'ref'){
+                        ref_in_gtfs_key = key;
+                        ref_oper = false;
+                    }else if(feed_corr_data[key] == "ref:operator"){
+                        ref_in_gtfs_key = key;
+                        ref_oper = true;    
                     }
                 }
+
+                if(this.ref !== undefined){
+                    reference = this.ref;
+                    ref_from = 'osm';
+                }else{
+                    if(ref_oper){
+                        reference = "ref:"+feed_name+"="+gtfs_stop_id;
+                        ref_from = 'gtfs';
+                    }else{
+                        reference = gtfs_stop_id;
+                        ref_from = 'gtfs';
+                    }
+                }
+            }
+
+            clicked_osm_stop = {
+                'node_id': osm_stop,
+                'osm_name': this.name,
+                'comp_name':t_name,
+                'ref':reference
+            }
+            
+            show_on_result(t_name, reference, name_from, ref_from);
+
+            console.log(ref_in_gtfs_key);
+            $('#export-stop').show();
+            $('#export-stop').text("Match " + gtfs_stop + " with " + osm_stop);
+            $('#add_to_list').show();
+
+        }catch(error){
+            alert(error + " in osm stop click");
+        }
+    }
         });//osm  get data json 
 
         console.log(tags_to_osm)
@@ -527,6 +533,29 @@ function get_kvstrings(){
 }
 
 function match_stop(){
+
+    modal_html = `   <!-- Modal content -->
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <span class="close">&times;</span>
+                        <h2>Select which tag in selected OSM Stop should have selected GTFS Stop data</h2>
+                      </div>
+                      <div class="modal-body">
+                        <a class="btn btn-primary" id="set-ref">ref</a>
+                        <a class="btn btn-primary" id="set-name">name</a>
+                        <a class="btn btn-primary" id="set-both">both</a>
+                        <p>Some other text...</p>
+                      </div>
+                    </div> 
+
+                    </div>`
+
+    $("#myModal").html(modal_html)
+
+    if(name_from == 'osm' && ref_from == 'osm'){
+        choice = prompt("Please Select which tag in OSM stop should include clicked gtfs stop data");
+
+    }
     data_to_match = [];
     var data = {
         'gtfs':clicked_gtfs_stop,
@@ -604,7 +633,31 @@ function show_on_result(name, ref, name_from, ref_from){
         $("#stopreffromosm").text('->');
     }
 }
+// Get the modal
+var modal = document.getElementById('myModal');
 
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on the button, open the modal
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+} 
 
 </script>
 
