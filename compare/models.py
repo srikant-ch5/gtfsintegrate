@@ -8,20 +8,14 @@ class CMP_Stop(models.Model):
     fixed_match = models.OneToOneField('osmapp.Node', related_name='by_user', on_delete=models.CASCADE, blank=True,
                                        null=True)
 
-    def to_xml(self, is_present, generator='Python Script', **tags):
+    def to_xml(self, is_present, **tags):
         outputparams = {
             'newline': '\n',
             'indent': ' ',
             'upload': '',
-            'generator': " generator='{}'".format(generator)
         }
-
-        xml = '''<?xml version='1.0' encoding='UTF-8' ?>{newline}<osm version='0.6'{upload}{generator}>{newline}'''.format(
-            **outputparams)
-
+        xml = ''
         xml += self.fixed_match.to_xml(outputparams=outputparams)
-
-        xml += '''{newline}</osm>'''.format(**outputparams)
 
         return xml
 

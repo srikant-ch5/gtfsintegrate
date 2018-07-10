@@ -85,111 +85,52 @@
         </div>
     </div>
 </div>
-
+<script type="text/javascript" src="{% static 'js/configureajax.js' %}"></script>
 <script type="text/javascript">
     window.onload = function () {
         document.getElementById("loading").style.display = "none"
     };
-        //configure ajax to post
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = jQuery.trim(cookies[i]);
-                        // Does this cookie string begin with the name we want?
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
-                    }
-                }
-            return cookieValue;
-        }
 
-        const csrftoken = getCookie('csrftoken');
+    $.ajaxSetup({
+            async: false
+    });
 
-        function csrfSafeMethod(method) {
-            // these HTTP methods do not require CSRF protection
-            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-        }
+    var tags_to_osm = [];
+    var data_to_osm = [];
+    var clicked_gtfs_stop = [];
+    var clicked_osm_stop = [];
+    var data_to_match = [];
+    var gtfs_stop;
+    var osm_stop;
+    var name_from ;//gtfs or  osm
+    var ref_from ;//gtfs or osm
+    var t_name, reference;
+    var corr_feed_id = parseInt('{{context.feed_id}}');
+    var feed_corr_data;
+    const feed_id = corr_feed_id;
+    var feed_name;
 
-        $.ajaxSetup({
-            beforeSend: function (xhr, settings) {
-                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                }
-            }
-        });
-        var tags_to_osm = [];
-        var data_to_osm = [];
-        var gtfs_stop;
-        var osm_stop;
-        var name_from ;//gtfs or  osm
-        var ref_from ;//gtfs or osm
-        var t_name, reference;
+    //first hide all the buttons
+    $('#export-stop').hide();
+    $('#add_to_list').hide();
+    $('#export_all_stops').hide();
 
-        $('#export-stop').hide();
-        $('#add_to_list').hide();
-        $('#export_all_stops').hide();
+    let feed_bounds;
 
-        let feed_bounds;
+    //get the correspondence form of the feed
+    get_correspondene_form_data();
 
-        //get the correspondence form of the feed
-        var corr_feed_id = {{context.feed_id}};
-        var feed_corr_data;
-        console.log('gettings corr');
-        $.ajax({
-            url:'/api/correspondencedata',
-            type:'GET',
-            dataType:'json',
-            async:false,
-            success: function(corr_data){
-                for(var i=0; i< corr_data.length;i++){
-                    if(corr_data[i].feed_id == corr_feed_id){
-                        feed_corr_data = corr_data[i];
-                    }
-                }
-            }
-        });
-
-        console.log(feed_corr_data);
-
-        function loadmapfunction(map, options) {
-
-            const feed_id = {{context.feed_id}}
-            let feed_name;
-            let mapLayer;
-            const markerArray = [];
-            const stopscoordinates_array = [];
-            const gtfsstopsdata = '{% url "stopdata" %}';
-
-            $.ajaxSetup({
-                async: false
-            });
+    function loadmapfunction(map, options){
+        let mapLayer;
+        const markerArray = [];
+        const stopscoordinates_array = [];
+        const gtfsstopsdata = '{% url "stopdata" %}';
+        var circlegroup = L.featureGroup();//for 100m coverage
+        var tags,keyvaluestrings;
 
         //get the feed name
-        let feedurl = "/api/feeddata/";
-        $.ajax({
-            type: "GET",
-            url: feedurl,
-            dataType: 'json',
-            async: false,
-            success: function (data) {
-                for (let i = 0; i < data.length; i++) {
-                    if (data[i].id === feed_id) {
-                        feed_name = data[i].name;
-                        break;
-                    }
-                }
-            },
-            error: function (xhr, status, e) {
-                alert("error " + status)
-            }
-        });
-        console.log(feed_name);
+        feed_name = get_feed_name();
 
-        var circlegroup = L.featureGroup();
         //get all the stops and show them on map
         $.getJSON(gtfsstopsdata, function (data) {
 
@@ -216,43 +157,42 @@
                     marker.stopname = name;
 
                     var clickcircle;
-
                     function markerOnClick(e) {
-                        $('#export-stop').hide();
-                        $('#export_all_stops').hide();
-                        $("#gtfsstopid").text(this.stopid);
-                        if (this.stopcode === "") {
-                            $("#gtfsstopcode").text("code undefined");
-                        } else {
-                            $("#gtfsstopcode").text(this.stopcode);
-                        }
-                        $("#gtfsstopname").text(this.normalized_name);
-                        if (this.stopzone == null) {
-                            $("#gtfsstopzone").text("zone undefined");
-                        } else {
-                            $("#gtfsstopzone").text(this.stopzone);
-                        }
-                        gtfs_stop_id = this.stopid;
-                        gtfs_stop = feed_id.toString() + "-" +this.stopid;
-                        gtfs_stop_name = this.normalized_name;
+                        try{
+                            clicked_gtfs_stop = [];
+                            $('#export-stop').hide();
+                            $('#export_all_stops').hide();
+                            $("#gtfsstopid").text(this.stopid);
+                            if (this.stopcode === "") {
+                                $("#gtfsstopcode").text("code undefined");
+                            } else {
+                                $("#gtfsstopcode").text(this.stopcode);
+                            }
+                            $("#gtfsstopname").text(this.normalized_name);
+                            if (this.stopzone == null) {
+                                $("#gtfsstopzone").text("zone undefined");
+                            } else {
+                                $("#gtfsstopzone").text(this.stopzone);
+                            }
+                            gtfs_stop_id = this.stopid;
+                            gtfs_stop = feed_id.toString() + "-" +this.stopid;
+                            gtfs_stop_name = this.normalized_name;
 
-                        $("#osmstopid").text('');
-                        $("#osmstopversion").text('');
-                        $("#osmstopname").text('');
-                        $("#osmstopref").text('');
-                        $('#resultstopref').text('');
-                        $('#resultstopname').text('');
-                        $("#stopnamefromgtfs").text('');
-                        $("#stopnamefromosm").text('');
-                        $("#stopreffromgtfs").text('');
-                        $("#stopreffromosm").text('');
-                        if(clickcircle != undefined){
-                            map.removeLayer(clickcircle)
-                        }
-                        clickcircle = L.circle([this.lat, this.lon],{radius:100,color:'red',weight:.6, opacity:1000,fillColor:'#f03',fillOpacity:0.5}).addTo(map);
+                            clicked_gtfs_stop = {
+                                'name':gtfs_stop_name,
+                                'stop_id':gtfs_stop
+                            };
 
+                            hide_table_elements();
+                            if(clickcircle != undefined){
+                                map.removeLayer(clickcircle)
+                            }
+                            clickcircle = L.circle([this.lat, this.lon],{radius:100,color:'red',weight:.6, opacity:1000,fillColor:'#f03',fillOpacity:0.5}).addTo(map);
+                    }catch(error){
+                        alert(error + "in gtfs stop init");
                     }
 
+                    }
                     markerArray.push(marker);
                 }
             }
@@ -261,41 +201,21 @@
             feed_bounds = bounds;
             map.fitBounds(bounds);
         });
-
-
-        console.log('getting all the tags');
-        var tags,keyvaluestrings;
-        $.ajax({
-            url:'/api/tagdata/',
-            type:'GET',
-            async:false,
-            dataType:'json',
-            success:function(tagsdata){
-                tags = tagsdata;
-                console.log('Loaded all the tags')
-            },
-            error:function(xhr, status, e){
-                console.log('Error')
-            }
-        });
-        console.log('Getting keyvaluestrings')
-        $.ajax({
-            url:'/api/keyvaluestringdata/',
-            type:'GET',
-            async:false,
-            dataType:'json',
-            success:function(keyvaluestringdata){
-                keyvaluestrings = keyvaluestringdata;
-                console.log('Got key values');
-            },
-            error:function(xhr, status, e){
-                console.log('Cannot get keyvaluestrings');
-            }
-        });
-
+        try{
+            tags = get_tags();
+            keyvaluestrings = get_kvstrings();
+        }catch(error){
+            alert(error+' in getting tags and keyvaluestrings');
+        }
+ 
         const nodedata = '{% url "osmnodedata" %}';
-
         $.getJSON(nodedata, function (data) {
+
+            try{
+            var lat,lon;
+            let coordinates_arr = [];
+            const length = data.features.length;
+            var curr_node_tags = [];
 
             const greenIcon = new L.Icon({
                 iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
@@ -305,10 +225,7 @@
                 popupAnchor: [1, -34],
                 shadowSize: [41, 41]
             });
-            var lat,lon;
-            let coordinates_arr = [];
-            const length = data.features.length;
-            var curr_node_tags = [];
+        
             for (let i = 0; i < length; i++) {
                 if(data.features[i].properties.feed == feed_id){
 
@@ -367,10 +284,17 @@
                             ref_from = 'osm';
                         }
                     }
-
+                }
+            }
+        }catch(error){
+            alert(error+" osm stops init");
+        }
                     function markerClick(e) {
+                        try{
                         name_from = '';
                         ref_from = '';
+                        clicked_osm_stop = [];
+
                         osm_stop = this.nodeid;
                         $("#osmstopid").text(this.nodeid);
                         $("#osmstopversion").text("version " + this.nodeversion);
@@ -388,46 +312,52 @@
                             console.log("No ref");
                         }
 
-                        if(this.name !== undefined){
-                            t_name = this.name;
-                            name_from = 'osm';
-                            console.log(t_name);
+                        if(this.name !== undefined && this.ref !== undefined){
+                            alert("The stop is already matched");
                         }else{
-                            t_name = gtfs_stop_name;
-                            name_from = 'gtfs';
-                            console.log(t_name);
-                        }
-
-                        //check whether the corr form has ref:operator or ref
-                        var ref_oper = true;
-                        var ref_in_gtfs_key;
-                        for(var key in feed_corr_data){
-                            if(feed_corr_data[key] == 'ref'){
-                                ref_in_gtfs_key = key;
-                                ref_oper = false;
-                            }else if(feed_corr_data[key] == "ref:operator"){
-                                ref_in_gtfs_key = key;
-                                ref_oper = true;    
-                            }
-                        }
-
-                        if(this.ref !== undefined){
-                            reference = this.ref;
-                            ref_from = 'osm';
-                        }else{
-                            if(ref_oper){
-                                reference = "ref:"+feed_name+"="+gtfs_stop_id;
-                                ref_from = 'gtfs';
+                            if(this.name !== undefined){
+                                t_name = this.name;
+                                name_from = 'osm';
+                                console.log(t_name);
                             }else{
-                                reference = "ref = "+ gtfs_stop_id;
-                                ref_from = 'gtfs';
+                                t_name = gtfs_stop_name;
+                                name_from = 'gtfs';
+                                console.log(t_name);
+                            }
+                            //check whether the corr form has ref:operator or ref
+                            var ref_oper = true;
+                            var ref_in_gtfs_key;
+                            for(var key in feed_corr_data){
+                                if(feed_corr_data[key] == 'ref'){
+                                    ref_in_gtfs_key = key;
+                                    ref_oper = false;
+                                }else if(feed_corr_data[key] == "ref:operator"){
+                                    ref_in_gtfs_key = key;
+                                    ref_oper = true;    
+                                }
+                            }
+
+                            if(this.ref !== undefined){
+                                reference = this.ref;
+                                ref_from = 'osm';
+                            }else{
+                                if(ref_oper){
+                                    reference = "ref:"+feed_name+"="+gtfs_stop_id;
+                                    ref_from = 'gtfs';
+                                }else{
+                                    reference = gtfs_stop_id;
+                                    ref_from = 'gtfs';
+                                }
                             }
                         }
-                        tags_to_osm.push({
-                            'name':t_name,
-                            'ref': reference
-                        });
 
+                        clicked_osm_stop = {
+                            'node_id': osm_stop,
+                            'osm_name': this.name,
+                            'comp_name':t_name,
+                            'ref':reference
+                        }
+                        
                         show_on_result(t_name, reference, name_from, ref_from);
 
                         console.log(ref_in_gtfs_key);
@@ -435,176 +365,246 @@
                         $('#export-stop').text("Match " + gtfs_stop + " with " + osm_stop);
                         $('#add_to_list').show();
 
+                    }catch(error){
+                        alert(error + " in osm stop click");
                     }
-
                 }
+        });//osm  get data json 
+
+        console.log(tags_to_osm)
+
+        try{
+        const drawnItems = new L.FeatureGroup();
+        map.addLayer(drawnItems);
+        const drawControl = new L.Control.Draw({
+            edit: {
+                featureGroup: drawnItems
             }
         });
+        map.addControl(drawControl);
 
-    console.log(tags_to_osm)
+        let num = 0;
+        let boxbounds = '';
+        map.on('draw:created', function (e) {
 
-    const drawnItems = new L.FeatureGroup();
-    map.addLayer(drawnItems);
-    const drawControl = new L.Control.Draw({
-        edit: {
-            featureGroup: drawnItems
-        }
-    });
-    map.addControl(drawControl);
+            const type = e.layerType,
+            layer = e.layer;
 
-    let num = 0;
-    let boxbounds = '';
-    map.on('draw:created', function (e) {
+            if (type === 'rectangle') {
+                layer.on('mouseover', function () {
+                    if (num === 0) {
+                        alert("After defining the bbox please click on the box to download data in that part");
+                        num += 1
+                    }
+                });
+                layer.on('click', function () {
+                    const bounds = layer.getLatLngs().toString();
+                    boxbounds = boxbounds + bounds;
+                    console.log("ON click " + boxbounds);
+                    num += 1;
+                    $("#bbox").append("<h3>Included box" + num + "</h3>");
+                })
+            }
 
-        const type = e.layerType,
-        layer = e.layer;
+            drawnItems.addLayer(layer);
+        });
 
-        if (type === 'rectangle') {
-            layer.on('mouseover', function () {
-                if (num === 0) {
-                    alert("After defining the bbox please click on the box to download data in that part");
-                    num += 1
+        $('#definebox').on("click", function () {
+            const boundurl = '/api/feedbounds/';
+            const innerbounds = JSON.stringify(boxbounds);
+            console.log(innerbounds);
+            $.ajax({
+                url: boundurl,
+                type: "POST",
+                data: {
+                    'feed_id': feed_id,
+                    'operator_name': feed_name,
+                    'inner_bound': innerbounds
+                },
+                success: function () {
+                    console.log('Posted data to feed bounds')
+                },
+                error: function (xhr, status, e) {
+                    console.log("ER " + status)
                 }
             });
-            layer.on('click', function () {
-                const bounds = layer.getLatLngs().toString();
-                boxbounds = boxbounds + bounds;
-                console.log("ON click " + boxbounds);
-                num += 1;
-                $("#bbox").append("<h3>Included box" + num + "</h3>");
-            })
-        }
+        });
+    }catch(error){
+        alert(error+" in relation bounding box");
+    }
 
-        drawnItems.addLayer(layer);
+}
+
+function get_correspondene_form_data(){
+    console.log('gettings corr');
+    $.ajax({
+        url:'/api/correspondencedata',
+        type:'GET',
+        dataType:'json',
+        success: function(corr_data){
+            for(var i=0; i< corr_data.length;i++){
+                if(corr_data[i].feed_id == corr_feed_id){
+                    feed_corr_data = corr_data[i];
+                }
+            }
+        }
+    });
+}
+
+function get_feed_name(){
+    let feedurl = "/api/feeddata/";
+    var feed_name;
+    $.ajax({
+        type: "GET",
+        url: feedurl,
+        dataType: 'json',
+        success: function (data) {
+            for (let i = 0; i < data.length; i++) {
+                if (data[i].id === feed_id) {
+                    feed_name = data[i].name;
+                    break;
+                }
+            }
+        },
+        error: function (xhr, status, e) {
+            alert("error " + status)
+        }
     });
 
-    $('#definebox').on("click", function () {
-        const boundurl = '/api/feedbounds/';
-        const innerbounds = JSON.stringify(boxbounds);
-        console.log(innerbounds);
-        $.ajax({
-            url: boundurl,
-            type: "POST",
-            async: false,
+    console.log(feed_name);
+    return feed_name;
+}
+
+function hide_table_elements(){
+    $("#osmstopid").text('');
+    $("#osmstopversion").text('');
+    $("#osmstopname").text('');
+    $("#osmstopref").text('');
+    $('#resultstopref').text('');
+    $('#resultstopname').text('');
+    $("#stopnamefromgtfs").text('');
+    $("#stopnamefromosm").text('');
+    $("#stopreffromgtfs").text('');
+    $("#stopreffromosm").text('');
+}
+
+function get_tags(){
+    console.log('getting all the tags');
+    var tags;
+    $.ajax({
+        url:'/api/tagdata/',
+        type:'GET',
+        dataType:'json',
+        success:function(tagsdata){
+            tags = tagsdata;
+            console.log('Loaded all the tags')
+        },
+        error:function(xhr, status, e){
+            console.log('Error')
+        }
+    });
+
+    return tags;
+}
+
+function get_kvstrings(){
+    console.log('Getting keyvaluestrings')
+    var kvstrings;
+    $.ajax({
+        url:'/api/keyvaluestringdata/',
+        type:'GET',
+        dataType:'json',
+        success:function(keyvaluestringdata){
+            kvstrings = keyvaluestringdata;
+            console.log('Got key values');
+        },
+        error:function(xhr, status, e){
+            console.log('Cannot get keyvaluestrings');
+        }
+    });
+
+    return kvstrings;
+}
+
+function match_stop(){
+    data_to_match = [];
+    var data = {
+        'gtfs':clicked_gtfs_stop,
+        'osm':clicked_osm_stop        
+    }
+
+    data_to_match.push(data);
+    console.log("Data to match "+data_to_match);
+    var match_stop_url = "{% url 'match_stop' %}";
+    $.ajax({
+            url: match_stop_url,
+            method: 'POST',
             data: {
-                'feed_id': feed_id,
-                'operator_name': feed_name,
-                'inner_bound': innerbounds
+                'data_to_match':JSON.stringify(data_to_match),
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
             },
-            success: function () {
-                console.log('Posted data to feed bounds')
+            success: function (data) {
+                alert("Posted data to osm ");
+                $('#export-stop').hide();
             },
             error: function (xhr, status, e) {
-                console.log("ER " + status)
+                alert("Something went wrong");
             }
-        });
     });
+}
 
+function add_to_match_list(){
+    var data = {
+        'gtfs':clicked_gtfs_stop,
+        'osm':clicked_osm_stop
+    }
+    data_to_match.push(data);
+    $('#add_to_list').hide();
+    $('#export_all_stops').show();
+    console.log(data_to_match);
+}
+
+function match_stops(){
+    var match_stop_url = "{% url 'match_stops' %}"
+    console.log("Sending "+data_to_match.length+" stops to JOSM Editor");
+    data_to_match_JSON = JSON.stringify(data_to_match);
+
+    console.log("Data list to match"+data_to_match_JSON);
+    $.ajax({
+        url: match_stop_url,
+        method: 'POST',
+        data: {
+            'data_to_match': data_to_match_JSON,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        success: function (data) {
+            alert("Posted data to osm ");
+            $('#export-stop').hide();
+        },
+        error: function (xhr, status, e) {
+            alert("Something went wrong");
+        }
+    });
+}
+
+function show_on_result(name, ref, name_from, ref_from){
+    
+    $("#resultstopname").text(name);
+    $("#resultstopref").text(ref);
+
+    if(name_from == 'gtfs'){
+        $("#stopnamefromgtfs").text('<-');
+    }else if(name_from == 'osm'){
+        $("#stopnamefromosm").text('->');
     }
 
-    function match_stop(){
-        if(gtfs_stop != undefined && osm_stop != undefined){
-            var match_stop_url = "{% url 'match_stop' %}";
-            var single_node_tags_to_osm = {
-                        'name':t_name,
-                        'ref': reference
-                };
-            tags = JSON.stringify(single_node_tags_to_osm);
-            $.ajax({
-                url: match_stop_url,
-                method: 'POST',
-                async: false,
-                data: {
-                    'gtfs_stop': gtfs_stop,
-                    'osm_stop': osm_stop,
-                    'tags': tags,
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
-                },
-                success: function (data) {
-                    alert("Posted data to osm ");
-                    $('#export-stop').hide();
-                },
-                error: function (xhr, status, e) {
-                    alert("Something went wrong");
-                }
-            });
-        }else if(gtfs_stop == undefined && osm_stop != undefined){
-            alert("Please select a GTFS Stop");
-        }else if(gtfs_stop != undefined && osm_stop == undefined){
-            alert("Please select an OSM Stop");
-        }else{
-            alert("No Stop Selected");
-        }
+    if(ref_from == 'gtfs'){
+        $("#stopreffromgtfs").text('<-');
+    }else if(ref_from == 'osm'){
+        $("#stopreffromosm").text('->');
     }
+}
 
-    function add_to_match_list(){
-        if(gtfs_stop != undefined && osm_stop != undefined){
-            data_to_osm.push({
-                'gtfs_stop':gtfs_stop,
-                'osm_stop':osm_stop
-            });
-        }else if(gtfs_stop == undefined && osm_stop != undefined){
-            alert("Please select a GTFS Stop");
-        }else if(gtfs_stop != undefined && osm_stop == undefined){
-            alert("Please select an OSM Stop");
-        }else{
-            alert("No Stop Selected");
-        }
-        $('#add_to_list').hide();
-        $('#export_all_stops').show();
-        console.log(data_to_osm);
-    }
-
-    function match_stops(){
-        if(gtfs_stop != undefined && osm_stop != undefined){
-            var match_stop_url = "{% url 'match_stops' %}"
-            tags = JSON.stringify(tags_to_osm);
-            json_data_to_osm = JSON.stringify(data_to_osm)
-
-            $.ajax({
-                url: match_stop_url,
-                method: 'POST',
-                async: false,
-                data: {
-                    'match_data': json_data_to_osm,
-                    'tags':tags,
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
-                },
-                success: function (data) {
-                    alert("Posted data to osm ");
-                    $('#export-stop').hide();
-                },
-                error: function (xhr, status, e) {
-                    alert("Something went wrong");
-                }
-            });
-        }else if(gtfs_stop == undefined && osm_stop != undefined){
-            alert("Please select a GTFS Stop");
-        }else if(gtfs_stop != undefined && osm_stop == undefined){
-            alert("Please select an OSM Stop");
-        }else{
-            alert("No Stop Selected");
-        }
-
-    }
-
-    function show_on_result(name, ref, name_from, ref_from){
-        
-        $("#resultstopname").text(name);
-        $("#resultstopref").text(ref);
-
-        if(name_from == 'gtfs'){
-            $("#stopnamefromgtfs").text('<-');
-        }else if(name_from == 'osm'){
-            $("#stopnamefromosm").text('->');
-        }
-
-        if(ref_from == 'gtfs'){
-            $("#stopreffromgtfs").text('<-');
-        }else if(ref_from == 'osm'){
-            $("#stopreffromosm").text('->');
-        }
-    }
 
 </script>
 

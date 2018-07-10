@@ -22,11 +22,19 @@ bottomleft_block_stops = []
 bottomright_block_stops = []
 
 
-def save_comp(gtfs_feed_id, gtfs_stop_id, osm_stop_id, tags_data):
+def save_comp(gtfs_stop, osm_stop, stops_layer):
     context = {
         'match_success': 0,
         'error': ''
     }
+
+    str = gtfs_stop['stop_id'].split('-')
+    gtfs_feed_id = int(str[0])
+    gtfs_stop_id = str[1]
+
+    osm_stop_id = osm_stop['node_id']
+    osm_stop_name = osm_stop['comp_name']
+    osm_stop_ref = osm_stop['ref']
 
     print('matching gtfs stop {0} with {1}'.format(gtfs_stop_id, osm_stop_id))
     try:
@@ -41,7 +49,7 @@ def save_comp(gtfs_feed_id, gtfs_stop_id, osm_stop_id, tags_data):
         context['error'] += 'gtfs stop doesnt exist or is undefined'
 
     try:
-        osm_stop_obj = Node.objects.get(id=osm_stop_id)
+        osm_stop_obj = Node.objects.get(id=osm_stop_id, feed=gtfs_feed_id)
         context['match_success'] = 1
     except Exception as e:
         print(e)
@@ -67,8 +75,19 @@ def save_comp(gtfs_feed_id, gtfs_stop_id, osm_stop_id, tags_data):
     print("Creating tags in node")
 
     # get tags data
-    name = tags_data['name']
-    ref = tags_data['ref']
+    # if the osm_name is not already then json will not include that as its undefined
+    osm_name_defined = False
+
+    try:
+        osm_name = osm_stop['osm_name']
+        osm_name_defined = True
+    except Exception as e:
+        osm_name_defined = False
+
+    if osm_name_defined:
+        osm_stop_name = osm_stop['osm_name']
+    else:
+        osm_stop_name = osm_stop['comp_name']
 
     # get all tags of node
     node_tags = osm_stop_obj.tags.all()
@@ -85,27 +104,36 @@ def save_comp(gtfs_feed_id, gtfs_stop_id, osm_stop_id, tags_data):
 
     if not name_tag_in_node:
         tag = Tag()
-        name_tag = tag.add_tag('name', name)
+        name_tag = tag.add_tag('name', osm_stop_name)
         osm_stop_obj.tags.add(name_tag)
 
     if not ref_tag_in_node:
         tag = Tag()
-        ref_tag = tag.add_tag('ref', ref)
+        ref_tag = tag.add_tag('ref', osm_stop_ref)
         osm_stop_obj.tags.add(ref_tag)
 
     xml = cmp_stop_obj.to_xml('yes')
 
+    return xml
+
+
+def connect_to_JOSM(xml):
     PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
     xmlfiledir = os.path.join(os.path.dirname(PROJECT_ROOT), 'osmapp', 'static')
     xmlfile = xmlfiledir + '/nodesosm/singlenode.osm'
 
+    context ={
+        'data':'data'
+    }
     with open(xmlfile, 'w') as fh:
         fh.write(xml)
 
     print("Opening the node  in josm")
-    resp = requests.get('http://127.0.0.1:8111/open_file?filename=/home/srikant/testwork/env/gtfsapp/gtfsintegrate/osmapp/static/nodesosm/singlenode.osm')
-
-    return context['match_success'], context['error']
+    try:
+        resp = requests.get(
+            'http://127.0.0.1:8111/open_file?filename=/home/srikant/testwork/env/gtfsapp/gtfsintegrate/osmapp/static/nodesosm/singlenode.osm')
+    except requests.exceptions.RequestException as e:
+        context['error'] += 'JOSM not open {}'.format(e)
 
 
 def get_keys(feed_id):
@@ -328,6 +356,17 @@ def rename_feed(name, formId):
         agname = agency.name.replace(" ", "")
         update_name += agname
     # remove space
+    # get if the feed names already exists
+    update_name += '-'
+    num = 0
+    while True:
+
+        if Feed.objects.filter(name=update_name + str(num)).exists():
+            num = num + 1
+        else:
+            break
+
+    update_name += str(num)
     user_form = GTFSForm.objects.get(id=formId)
     user_form.name = update_name
     user_form.save()
