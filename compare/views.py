@@ -57,7 +57,7 @@ def showmap_with_comp(request, pk):
             comp_stop = CMP_Stop.objects.create(gtfs_stop=stop, matching_type='LOCATION')
             comp_stop.save()'''
 
-    return render(request, 'gs/comparision.html', {'context': context})
+    return render(request, 'gs/comparison.html', {'context': context})
 
 
 def match_stop(request):
