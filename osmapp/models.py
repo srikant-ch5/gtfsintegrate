@@ -124,7 +124,7 @@ class Node(OSM_Primitive):
         else:
             _outputparams = outputparams
 
-        self.xml = '{newline}<node '.format(**_outputparams)
+        self.xml = '{newline}<node action="modify" '.format(**_outputparams)
 
         for attr, value in self.__dict__.items():
             if attr == '_state':

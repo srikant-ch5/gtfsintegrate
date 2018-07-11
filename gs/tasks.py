@@ -22,97 +22,101 @@ bottomleft_block_stops = []
 bottomright_block_stops = []
 
 
-def save_comp(gtfs_stop, osm_stop, stops_layer):
+def save_comp(gtfs_stop, osm_stop, feed_id, stops_layer):
     context = {
         'match_success': 0,
         'error': ''
     }
 
-    str = gtfs_stop['stop_id'].split('-')
-    gtfs_feed_id = int(str[0])
-    gtfs_stop_id = str[1]
+    name_field = gtfs_stop['name_field']
+    ref_field = gtfs_stop['ref_field']
+    print('{} {}'.format(name_field, ref_field))
+    xml = ''
+    if name_field == 'normalized_name' and ref_field == 'stop_id':
+        gtfs_feed_id = int(feed_id)
+        gtfs_stop_id = gtfs_stop['ref_stop_id']
 
-    osm_stop_id = osm_stop['node_id']
-    osm_stop_name = osm_stop['comp_name']
-    osm_stop_ref = osm_stop['ref']
+        osm_stop_id = osm_stop['node_id']
+        osm_stop_name = osm_stop['comp_name']
+        osm_stop_ref = osm_stop['ref']
 
-    print('matching gtfs stop {0} with {1}'.format(gtfs_stop_id, osm_stop_id))
-    try:
-        gtfs_stop_obj = Stop.objects.get(feed=gtfs_feed_id, stop_id=gtfs_stop_id)
-        print(gtfs_stop_obj)
-        cmp_stop_obj = CMP_Stop.objects.get(gtfs_stop=gtfs_stop_obj)
-        print(cmp_stop_obj)
-        context['match_success'] = 1
-    except Exception as e:
-        print(e)
-        context['match_success'] = 0
-        context['error'] += 'gtfs stop doesnt exist or is undefined'
+        print('matching gtfs stop {0} with {1}'.format(gtfs_stop_id, osm_stop_id))
+        try:
+            gtfs_stop_obj = Stop.objects.get(feed=gtfs_feed_id, stop_id=gtfs_stop_id)
+            print(gtfs_stop_obj)
+            cmp_stop_obj = CMP_Stop.objects.get(gtfs_stop=gtfs_stop_obj)
+            print(cmp_stop_obj)
+            context['match_success'] = 1
+        except Exception as e:
+            print(e)
+            context['match_success'] = 0
+            context['error'] += 'gtfs stop doesnt exist or is undefined'
 
-    try:
-        osm_stop_obj = Node.objects.get(id=osm_stop_id, feed=gtfs_feed_id)
-        context['match_success'] = 1
-    except Exception as e:
-        print(e)
-        context['match_success'] = 0
-        context['error'] += 'osm stop doesnt exist {}'.format(e)
+        try:
+            osm_stop_obj = Node.objects.get(id=osm_stop_id, feed=gtfs_feed_id)
+            context['match_success'] = 1
+        except Exception as e:
+            print(e)
+            context['match_success'] = 0
+            context['error'] += 'osm stop doesnt exist {}'.format(e)
 
-    try:
-        if cmp_stop_obj.fixed_match == None:
-            print("Creating new match ")
+        try:
+            if cmp_stop_obj.fixed_match == None:
+                print("Creating new match ")
 
-            cmp_stop_obj.fixed_match = osm_stop_obj
-            cmp_stop_obj.save()
-        else:
-            cmp_stop_obj.fixed_match = None
-            cmp_stop_obj.save()
-            cmp_stop_obj.fixed_match = osm_stop_obj
-            cmp_stop_obj.save()
+                cmp_stop_obj.fixed_match = osm_stop_obj
+                cmp_stop_obj.save()
+            else:
+                cmp_stop_obj.fixed_match = None
+                cmp_stop_obj.save()
+                cmp_stop_obj.fixed_match = osm_stop_obj
+                cmp_stop_obj.save()
 
-        print("Match made")
-    except Exception as e:
-        print("relation already exists")
+            print("Match made")
+        except Exception as e:
+            print("relation already exists")
 
-    print("Creating tags in node")
+        print("Creating tags in node")
 
-    # get tags data
-    # if the osm_name is not already then json will not include that as its undefined
-    osm_name_defined = False
-
-    try:
-        osm_name = osm_stop['osm_name']
-        osm_name_defined = True
-    except Exception as e:
+        # get tags data
+        # if the osm_name is not already then json will not include that as its undefined
         osm_name_defined = False
 
-    if osm_name_defined:
-        osm_stop_name = osm_stop['osm_name']
-    else:
-        osm_stop_name = osm_stop['comp_name']
+        try:
+            osm_name = osm_stop['osm_name']
+            osm_name_defined = True
+        except Exception as e:
+            osm_name_defined = False
 
-    # get all tags of node
-    node_tags = osm_stop_obj.tags.all()
+        if osm_name_defined:
+            osm_stop_name = osm_stop['osm_name']
+        else:
+            osm_stop_name = osm_stop['comp_name']
 
-    name_tag_in_node = False
-    ref_tag_in_node = False
-    for node_tag in node_tags:
-        if node_tag.value == 'name':
-            name_tag_in_node = True
-        elif node_tag.value == 'ref':
-            ref_tag_in_node = True
+        # get all tags of node
+        node_tags = osm_stop_obj.tags.all()
 
-    # create KeyValueString for name and ref if the data in osm table dosent have them
+        name_tag_in_node = False
+        ref_tag_in_node = False
+        for node_tag in node_tags:
+            if node_tag.value == 'name':
+                name_tag_in_node = True
+            elif node_tag.value == 'ref':
+                ref_tag_in_node = True
 
-    if not name_tag_in_node:
-        tag = Tag()
-        name_tag = tag.add_tag('name', osm_stop_name)
-        osm_stop_obj.tags.add(name_tag)
+        # create KeyValueString for name and ref if the data in osm table dosent have them
 
-    if not ref_tag_in_node:
-        tag = Tag()
-        ref_tag = tag.add_tag('ref', osm_stop_ref)
-        osm_stop_obj.tags.add(ref_tag)
+        if not name_tag_in_node:
+            tag = Tag()
+            name_tag = tag.add_tag('name', osm_stop_name)
+            osm_stop_obj.tags.add(name_tag)
 
-    xml = cmp_stop_obj.to_xml('yes')
+        if not ref_tag_in_node:
+            tag = Tag()
+            ref_tag = tag.add_tag('ref', osm_stop_ref)
+            osm_stop_obj.tags.add(ref_tag)
+
+        xml = cmp_stop_obj.to_xml('yes')
 
     return xml
 
@@ -122,8 +126,8 @@ def connect_to_JOSM(xml):
     xmlfiledir = os.path.join(os.path.dirname(PROJECT_ROOT), 'osmapp', 'static')
     xmlfile = xmlfiledir + '/nodesosm/singlenode.osm'
 
-    context ={
-        'data':'data'
+    context = {
+        'data': 'data'
     }
     with open(xmlfile, 'w') as fh:
         fh.write(xml)

@@ -72,6 +72,7 @@ def match_stop(request):
 
         print(data_to_match)
 
+        feed_id = data_to_match[0]['feed_id']
         gtfs_stop_data = data_to_match[0]['gtfs']
         osm_stop_data = data_to_match[0]['osm']
 
@@ -82,9 +83,10 @@ def match_stop(request):
             'upload': '',
             'generator': " generator='{}'".format(generator)
         }
+
         xml = '''<?xml version='1.0' encoding='UTF-8' ?>{newline}<osm version='0.6'{upload}{generator}>{newline}'''.format(
             **outputparams)
-        xml += save_comp(gtfs_stop_data, osm_stop_data, stops_layer=False)
+        xml += save_comp(gtfs_stop_data, osm_stop_data, feed_id, stops_layer=False)
         xml += '''{newline}</osm>'''.format(**outputparams)
         connect_to_JOSM(xml)
 
@@ -113,10 +115,11 @@ def match_stops(request):
         }
         xml = '''<?xml version='1.0' encoding='UTF-8' ?>{newline}<osm version='0.6'{upload}{generator}>{newline}'''.format(
             **outputparams)
-        for i in range(0,len(data_to_match)):
+        for i in range(0, len(data_to_match)):
+            feed_id = data_to_match[i]['feed_id']
             gtfs_stop_data = data_to_match[i]['gtfs']
             osm_stop_data = data_to_match[i]['osm']
-            xml += save_comp(gtfs_stop_data, osm_stop_data, stops_layer=True)
+            xml += save_comp(gtfs_stop_data, osm_stop_data, feed_id, stops_layer=True)
 
         xml += '''{newline}</osm>'''.format(**outputparams)
         print(xml)

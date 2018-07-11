@@ -8,8 +8,6 @@
     <img id="loading-image" src='http://i.stack.imgur.com/FhHRx.gif' alt="Loading..."/>
 </div>
 <br><br>
- <!-- Trigger/Open The Modal -->
-<button id="myBtn">Open Modal</button>
 
 <div class="container-fluid">
     <div class="row">
@@ -115,6 +113,8 @@
     var feed_corr_data;
     const feed_id = corr_feed_id;
     var feed_name;
+    var gtfs_to_osm_stop_name;
+    var gtfs_to_osm_ref;
 
     //first hide all the buttons
     $('#export-stop').hide();
@@ -124,7 +124,15 @@
     let feed_bounds;
 
     //get the correspondence form of the feed
-    get_correspondene_form_data();
+    feed_corr_data = get_correspondene_form_data();
+    [gtfs_to_osm_stop_name_full, gtfs_to_osm_ref_full] = get_tag_resemblence(feed_corr_data)
+    try{
+        gtfs_to_osm_stop_name_arr = gtfs_to_osm_stop_name_full.split('_')
+        gtfs_to_osm_stop_name = gtfs_to_osm_stop_name_arr[1];
+
+    }catch(error){
+        alert(error);
+    }
 
     function loadmapfunction(map, options){
         let mapLayer;
@@ -160,7 +168,11 @@
                     marker.stopcode = data.features[i].properties.code;
                     marker.stopzone = data.features[i].properties.zone;
                     marker.normalized_name = data.features[i].properties.normalized_name;
-                    marker.stopname = name;
+                    if(gtfs_to_osm_stop_name == 'name'){
+                        gtfs_to_osm_stop_name = 'normalized_name';
+                    }
+                    marker.comp_name = data.features[i].properties[gtfs_to_osm_stop_name];
+                    marker.comp_ref = data.features[i].properties[gtfs_to_osm_ref_full];
 
                     var clickcircle;
                     function markerOnClick(e) {
@@ -185,8 +197,11 @@
                             gtfs_stop_name = this.normalized_name;
 
                             clicked_gtfs_stop = {
-                                'name':gtfs_stop_name,
-                                'stop_id':gtfs_stop
+                                'name':this.comp_name,
+                                'ref_stop_id':this.comp_ref,
+                                'stop_id':this.stopid,
+                                'name_field':gtfs_to_osm_stop_name,
+                                'ref_field':gtfs_to_osm_ref_full
                             };
 
                             hide_table_elements();
@@ -319,8 +334,8 @@
             }
 
             if(this.name !== undefined && this.ref !== undefined){
-                alert("The stop is already matched");
-            }else{
+                alert("The stop is already has name and ref");
+            }
                 if(this.name !== undefined){
                     t_name = this.name;
                     name_from = 'osm';
@@ -355,7 +370,7 @@
                         ref_from = 'gtfs';
                     }
                 }
-            }
+            
 
             clicked_osm_stop = {
                 'node_id': osm_stop,
@@ -442,6 +457,7 @@
 }
 
 function get_correspondene_form_data(){
+    var feed_corr_data_result;
     console.log('gettings corr');
     $.ajax({
         url:'/api/correspondencedata',
@@ -450,11 +466,32 @@ function get_correspondene_form_data(){
         success: function(corr_data){
             for(var i=0; i< corr_data.length;i++){
                 if(corr_data[i].feed_id == corr_feed_id){
-                    feed_corr_data = corr_data[i];
+                    feed_corr_data_result = corr_data[i];
                 }
             }
         }
     });
+
+    return feed_corr_data_result;
+}
+
+function get_tag_resemblence(corr_data){
+    corr_form_keys = Object.keys(corr_data);
+    corr_form_values = Object.values(corr_data);
+    console.log(corr_form_keys);
+    console.log(corr_form_values);
+    var name_resem = '';
+    var ref_resem = '';
+
+    corr_form_keys.forEach(function(key){
+        if(corr_data[key] == 'name'){
+            name_resem = key;
+        }else if(corr_data[key] == 'ref'){
+            ref_resem = key;
+        }
+    });
+
+    return [name_resem, ref_resem];
 }
 
 function get_feed_name(){
@@ -534,30 +571,13 @@ function get_kvstrings(){
 
 function match_stop(){
 
-    modal_html = `   <!-- Modal content -->
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <span class="close">&times;</span>
-                        <h2>Select which tag in selected OSM Stop should have selected GTFS Stop data</h2>
-                      </div>
-                      <div class="modal-body">
-                        <a class="btn btn-primary" id="set-ref">ref</a>
-                        <a class="btn btn-primary" id="set-name">name</a>
-                        <a class="btn btn-primary" id="set-both">both</a>
-                        <p>Some other text...</p>
-                      </div>
-                    </div> 
-
-                    </div>`
-
-    $("#myModal").html(modal_html)
-
     if(name_from == 'osm' && ref_from == 'osm'){
         choice = prompt("Please Select which tag in OSM stop should include clicked gtfs stop data");
 
     }
     data_to_match = [];
     var data = {
+        'feed_id':feed_id,
         'gtfs':clicked_gtfs_stop,
         'osm':clicked_osm_stop        
     }
@@ -584,6 +604,7 @@ function match_stop(){
 
 function add_to_match_list(){
     var data = {
+        'feed_id':feed_id,
         'gtfs':clicked_gtfs_stop,
         'osm':clicked_osm_stop
     }
@@ -622,42 +643,18 @@ function show_on_result(name, ref, name_from, ref_from){
     $("#resultstopref").text(ref);
 
     if(name_from == 'gtfs'){
-        $("#stopnamefromgtfs").text('<-');
+        $("#stopnamefromgtfs").text('->');
     }else if(name_from == 'osm'){
-        $("#stopnamefromosm").text('->');
+        $("#stopnamefromosm").text('<-');
     }
 
     if(ref_from == 'gtfs'){
-        $("#stopreffromgtfs").text('<-');
+        $("#stopreffromgtfs").text('->');
     }else if(ref_from == 'osm'){
-        $("#stopreffromosm").text('->');
+        $("#stopreffromosm").text('<-');
     }
 }
-// Get the modal
-var modal = document.getElementById('myModal');
 
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks on the button, open the modal
-btn.onclick = function() {
-    modal.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-    modal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-} 
 
 </script>
 
