@@ -151,14 +151,24 @@ label{
 
     background: #DDE7E3;
 }
+#osm-logo{
+    margin-top:10px;
+    padding-left: 120px;
+    height: 30px;
+    width:160px;
+}
 #title{
-    margin-top: 30px;
-    padding-top:2px;
-    padding-bottom:2px;
-    background:#C9F7B0;
+    margin-top: 45px;
+    padding-left:0px;
+}
+#title-main{
+    background:white;
 }
 #title-text{
-    padding-left:110px;
+    margin-top: 15px;
+    padding-left:60px;
+    font-size: 20px;
+    font-family: "Lucida Console", Monaco, monospace;
 }
 #feeds-box{
 background:#A29D9F;
