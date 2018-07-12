@@ -237,18 +237,6 @@ def queries():
 def dividemap(east=None, west=None, north=None, south=None, northeast_lat=None, northeast_lon=None, northwest_lat=None,
               northwest_lon=None, southeast_lat=None,
               southeast_lon=None, southwest_lat=None, southwest_lon=None, stops_coordinates=None):
-    '''
-    testing to get 1/4th of the bbbox using AdvanceTransit bounds
-
-    northeast_lat = 43.729133606
-    northeast_lon = -72.0132064819
-    northwest_lat = 43.729133606
-    northwest_lon = -72.343421936
-    southeast_lat = 43.6245117188
-    southeast_lon = - 72.0132064819
-    southwest_lat = 43.6245117188
-    southwest_lon = - 72.343421936
-    '''
 
     northeast_lat = float(northeast_lat)
     northeast_lon = float(northeast_lon)
