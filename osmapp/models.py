@@ -117,7 +117,7 @@ class Node(OSM_Primitive):
         self.geom = Point(lat, lon)
         self.save()
 
-    def to_xml(self, outputparams=None):
+    def to_xml(self, version_inc, outputparams=None):
 
         if outputparams is None:
             _outputparams = {'newline': '\n', 'indent': ' '}
@@ -125,10 +125,17 @@ class Node(OSM_Primitive):
             _outputparams = outputparams
 
         self.xml = '{newline}<node action="modify" '.format(**_outputparams)
-
+        print("Version bool in node to xml {}".format(version_inc))
         for attr, value in self.__dict__.items():
             if attr == '_state':
                 continue
+            elif attr == 'version':
+                version_num = int(value)
+                print("Version at first {}".format(version_num))
+                if version_inc:
+                    version_num = version_num + 1
+                    print("Version at first {}".format(version_num))
+                self.xml += "{}='{}' ".format(attr, version_num)
             elif attr == 'xml':
                 continue
             elif attr == 'timestamp':

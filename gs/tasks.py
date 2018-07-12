@@ -32,6 +32,8 @@ def save_comp(gtfs_stop, osm_stop, feed_id, stops_layer):
     ref_field = gtfs_stop['ref_field']
     print('{} {}'.format(name_field, ref_field))
     xml = ''
+    # check if the supplied tags are present
+
     if name_field == 'normalized_name' and ref_field == 'stop_id':
         gtfs_feed_id = int(feed_id)
         gtfs_stop_id = gtfs_stop['ref_stop_id']
@@ -96,27 +98,49 @@ def save_comp(gtfs_stop, osm_stop, feed_id, stops_layer):
         # get all tags of node
         node_tags = osm_stop_obj.tags.all()
 
+        name_changed = False
+        ref_changed = False
         name_tag_in_node = False
         ref_tag_in_node = False
+        version_inc_cond = False
+
         for node_tag in node_tags:
-            if node_tag.value == 'name':
+            key = node_tag.key
+            kvalue = node_tag.value
+
+            if key.value == 'name':
+                if not kvalue.value == osm_stop_name:
+                    name_changed = True
                 name_tag_in_node = True
             elif node_tag.value == 'ref':
+                if not kvalue.value == osm_stop_ref:
+                    ref_changed = True
                 ref_tag_in_node = True
 
+        #Condition 1 if name is not present and ref is not present
+        if not name_tag_in_node and not ref_tag_in_node:
+            version_inc_cond = True
+        print("Version cond at firstcase {}".format(version_inc_cond))
         # create KeyValueString for name and ref if the data in osm table dosent have them
-
-        if not name_tag_in_node:
+        if name_tag_in_node:
+            if name_changed:
+                version_inc_cond = True
+        else:
+            version_inc_cond = True
             tag = Tag()
             name_tag = tag.add_tag('name', osm_stop_name)
             osm_stop_obj.tags.add(name_tag)
 
-        if not ref_tag_in_node:
+        if ref_tag_in_node:
+            if ref_changed:
+                version_inc_cond = True
+        else:
+            version_inc_cond = True
             tag = Tag()
             ref_tag = tag.add_tag('ref', osm_stop_ref)
             osm_stop_obj.tags.add(ref_tag)
 
-        xml = cmp_stop_obj.to_xml('yes')
+        xml = cmp_stop_obj.to_xml('yes', version_inc=version_inc_cond)
 
     return xml
 
@@ -135,7 +159,7 @@ def connect_to_JOSM(xml):
 
     print("Opening the node  in josm")
     try:
-        josm_url = 'http://127.0.0.1:8111/open_file?filename='+xmlfile
+        josm_url = 'http://127.0.0.1:8111/open_file?filename=' + xmlfile
         response = requests.get(josm_url)
     except requests.exceptions.RequestException as e:
         context['error'] += 'JOSM not open {}'.format(e)
