@@ -643,15 +643,15 @@ function show_on_result(name, ref, name_from, ref_from){
     $("#resultstopref").text(ref);
 
     if(name_from == 'gtfs'){
-        $("#stopnamefromgtfs").text('->');
+        $("#stopnamefromgtfs").text('>');
     }else if(name_from == 'osm'){
-        $("#stopnamefromosm").text('<-');
+        $("#stopnamefromosm").text('<');
     }
 
     if(ref_from == 'gtfs'){
-        $("#stopreffromgtfs").text('->');
+        $("#stopreffromgtfs").text('>');
     }else if(ref_from == 'osm'){
-        $("#stopreffromosm").text('<-');
+        $("#stopreffromosm").text('<');
     }
 }
 

@@ -206,7 +206,11 @@ a:hover { color: #333333; text-decoration: underline; }
 #replace-conv-box{
     margin:10px;
 }
+.gtfs-form{
+    margin-top: 50px;
+    margin-left:70px;
  /* The Modal (background) */
+}
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */

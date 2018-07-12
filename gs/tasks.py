@@ -127,15 +127,16 @@ def connect_to_JOSM(xml):
     xmlfile = xmlfiledir + '/nodesosm/singlenode.osm'
 
     context = {
-        'data': 'data'
+        'data': 'data',
+        'error': ''
     }
     with open(xmlfile, 'w') as fh:
         fh.write(xml)
 
     print("Opening the node  in josm")
     try:
-        resp = requests.get(
-            'http://127.0.0.1:8111/open_file?filename=/home/srikant/testwork/env/gtfsapp/gtfsintegrate/osmapp/static/nodesosm/singlenode.osm')
+        josm_url = 'http://127.0.0.1:8111/open_file?filename='+xmlfile
+        response = requests.get(josm_url)
     except requests.exceptions.RequestException as e:
         context['error'] += 'JOSM not open {}'.format(e)
 

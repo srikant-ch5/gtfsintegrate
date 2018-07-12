@@ -30,7 +30,7 @@ def showmap_with_comp(request, pk):
     except Exception as e:
         context['error'] = 'No stops present'
 
-    # Initially comparision should be done by the user
+    # Initially comparison should be done by the user
     try:
         for stop in stops:
             # osm_nodes_in_bound = get_nodes_within100m(str(stop.lon),str(stop.lat))
@@ -92,7 +92,7 @@ def match_stop(request):
 
         print(xml)
 
-    return render(request, 'gs/comparision.html')
+    return render(request, 'gs/comparison.html')
 
 
 def match_stops(request):
@@ -156,4 +156,4 @@ def match_stops(request):
         # xml += '''{newline}</osm>'''.format(**outputparams)
         # connect_to_JOSM(xml)
 
-    return render(request, 'gs/comparision.html', {'context': context})
+    return render(request, 'gs/comparison.html', {'context': context})
