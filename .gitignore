@@ -3,7 +3,6 @@ settings_secret.py
 gs/gtfsfeeds
 *.pyc
 *.xml
-*.osm
 osmapp/static/node.osm
 geodjango/settings.py
 
