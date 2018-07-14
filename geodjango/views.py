@@ -6,8 +6,8 @@ from multigtfs.models import Stop, Feed, Agency, Route
 from osmapp.models import Node, Way, KeyValueString, OSM_Relation, Tag, Bounds
 from .serializers import FormSerializer, StopSerializer, NodeSerializer, WaySerializer, \
     TagSerializer, KeyValueStringSerializer, RelationSerializer, FeedSerializer, AgencySerializer, \
-    RouteSerializer, FeedBoundsSerializer, CorrespondenceSerializer, ConversionSerializer
-from conversionapp.models import Correspondence, Conversion
+    RouteSerializer, FeedBoundsSerializer, CorrespondenceSerializer, ConversionSerializer, ExtraFieldSerializer
+from conversionapp.models import Correspondence, Conversion, ExtraField
 
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -208,6 +208,7 @@ class CorrespondenceView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class ConversionView(APIView):
     def get(self, request):
         feedbound = Conversion.objects.all()
@@ -216,6 +217,21 @@ class ConversionView(APIView):
 
     def post(self, request):
         serializer = ConversionSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ExtraFieldView(APIView):
+    def get(self, request):
+        extrafield = ExtraField.objects.all()
+        serializer = ExtraFieldSerializer(extrafield, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = ExtraFieldSerializer(data=request.data)
 
         if serializer.is_valid():
             serializer.save()

@@ -32,5 +32,5 @@ urlpatterns = [
     url(r'^save-correspondence', conv_view.save_correspondence, name="save_correspondence"),
     url(r'^match_stop/$', compview.match_stop, name="match_stop"),
     url(r'^match_stops/$', compview.match_stops, name="match_stops"),
-
+    url(r'^define_relation/(?P<pk>\d+)/$', compview.define_relation, name="define_relation"),
 ]

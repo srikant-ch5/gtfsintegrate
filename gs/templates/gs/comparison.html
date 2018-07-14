@@ -30,8 +30,11 @@
         </div>
     </div>
 </div>
+<div class="container">
+    <a class="btn btn-primary" id="define-relation" href="/gtfs/define_relation/{{context.feed_id}}">Define Relation</a>
+</div>
 <!-- The Modal -->
-<div id="myModal" class="modal"> 
+<div id="myModal" class="modal">
 </div>
 <div id="bbox">
 </div>
@@ -44,7 +47,7 @@
                     <table style="width:100%">
                         <tr>
                             <th>GTFS</th>
-                            <th>  </th>
+                            <th></th>
                             <th>Result</th>
                             <th></th>
                             <th>OSM</th>
@@ -654,6 +657,7 @@ function show_on_result(name, ref, name_from, ref_from){
         $("#stopreffromosm").text('<');
     }
 }
+
 
 
 </script>

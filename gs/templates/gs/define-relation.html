@@ -1,0 +1,103 @@
+{% extends 'gs/home.html'%}
+{% block relation %}
+<br><br>
+
+<h1>Define relations </h1>
+<div class="container">
+<div class="row">
+<div class="col-xs-4 route-form" id="route_form">
+        <h2 id="form_heading">Enter Routes Correspondence</h2>
+        <form method="POST" class="route-form">
+            {% csrf_token %}
+            {{ route_form.as_p }}
+            <button type="submit" class="save btn btn-default"> Save</button>
+        </form>
+</div>
+
+<div class="col-xs-4 route-form" id="route_form">
+        <h2 id="form_heading">Enter Agency Correspondence</h2>
+        <form method="POST" class="route-form">
+            {% csrf_token %}
+            {{ agency_form.as_p }}
+            <button type="submit" class="save btn btn-default"> Save</button>
+        </form>
+</div>
+</div>
+</div>
+
+<div class="container">
+<div class="row">
+	<div class="col-xs-4" id="extra_fields_form">
+		<h2> Enter Extra Fields </h2>
+		<div id="extrafield"></div>
+	</div>
+	<div class="col-xs-4" id="extra_fields_form">
+		<h2> Sample Data </h2>
+		<div id="sample_data">
+	</div>
+</div>
+</div>
+
+<script type="text/javascript">
+	var data_url = "/api/routedata/"
+	var feed_id = '{{context.feed_id}}';
+	feed_id = parseInt(feed_id);
+
+   	$('label').each(function(i){
+		if(i == 0)
+	   		$(this).hide()
+   	});
+
+   	$('#route_feed_id').val(feed_id);
+    $('#route_feed_id').hide();
+
+    var sample_data = [];
+	var example_data = [];
+	$.ajax({
+		url:data_url,
+		type:"GET",
+		dataType:"json",
+		async:true,
+		success:function(data){
+			var flag = 0;
+			for(let i=0;i<data.length;i++){
+				if(data[i].feed == feed_id){
+					if(flag == 0){
+						for(var key in data[i]){
+							var value = data[i][key]
+							$("#sample_data").html("<h4>"+key+"</h4>   <h4>"+value+"</h4><br>");		
+						}
+					}
+					$("#ex-field-ep").append("<h4>"+data[i].extra_data+"</h4><br>");
+				}
+			}
+		},
+		error:function(status,xhr,e){
+			alert(status + xhr +e)
+		}
+	});
+	var extra_data_url = "/api/extrafielddata/";
+
+	$.ajax({
+		url:extra_data_url,
+		type:"GET",
+		dataType:"json",
+		async:true,
+		success:function(data){
+			for(let i=0;i<data.length;i++){
+				if(data[i].feed_id == feed_id){
+					$("#extrafield").append("<h3>" + data[i].field_name+"<h3>    <input type='textbox'>");
+				}
+			}
+			$("#extrafield").append("<a id='submitextra' class='btn btn-primary'>Submit</a>");		
+		},
+		error:function(status,xhr,e){
+			alert(status + xhr +e)
+		}
+	});
+
+
+
+</script>
+
+{% endblock %}

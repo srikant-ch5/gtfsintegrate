@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.views.generic.edit import CreateView
 from leaflet.forms.widgets import LeafletWidget
 from multigtfs.models import Stop
-from conversionapp.models import Correspondence
+from conversionapp.models import Correspondence, Correspondence_Route, Correspondence_Agency
 
 
 class GTFSInfoForm(forms.ModelForm):
@@ -40,7 +40,7 @@ class GTFSInfoForm(forms.ModelForm):
 class CorrespondenceForm(forms.ModelForm):
     class Meta:
         model = Correspondence
-        fields = ('feed_id','stop_id', 'stop_code', 'stop_name', 'stop_desc', 'stop_zone', 'stop_url', \
+        fields = ('feed_id', 'stop_id', 'stop_code', 'stop_name', 'stop_desc', 'stop_zone', 'stop_url', \
                   'stop_location_type', 'stop_parent_station', 'stop_timezone', \
                   'agency_name', 'agency_id', 'agency_url', 'agency_timezone', \
                   'agency_lang', 'agency_phone', 'agency_fare_url')
@@ -115,4 +115,80 @@ class CorrespondenceForm(forms.ModelForm):
         self.fields['agency_fare_url'].widget.attrs = {
             'id': 'agency_fare_url',
             'name': 'Agency fare url'
+        }
+
+
+class Correspondence_Route_Form(forms.ModelForm):
+    class Meta:
+        model = Correspondence_Route
+        fields = ('feed_id', 'route_id', 'short_name', 'long_name', 'desc', 'rtype', 'url', 'color', 'text_color')
+
+    def __init__(self, *args, **kwargs):
+        super(Correspondence_Route_Form, self).__init__(*args, **kwargs)
+        self.fields['feed_id'].widget.attrs = {
+            'id': 'route_feed_id',
+        }
+        self.fields['route_id'].widget.attrs = {
+            'id': 'route_id',
+            'name': 'Route ID(GTFS)',
+
+        }
+        self.fields['short_name'].widget.attrs = {
+            'id': 'short_name',
+            'name': 'Short name',
+
+        }
+        self.fields['long_name'].widget.attrs = {
+            'id': 'long_name',
+        }
+        self.fields['desc'].widget.attrs = {
+            'id': 'desc'
+        }
+        self.fields['rtype'].widget.attrs = {
+            'id': 'rtype'
+        }
+        self.fields['url'].widget.attrs = {
+            'id': 'url',
+        }
+        self.fields['color'].widget.attrs = {
+            'id': 'color',
+        }
+        self.fields['text_color'].widget.attrs = {
+            'id': 'text_color',
+        }
+
+
+class Correspondence_Agency_Form(forms.ModelForm):
+    class Meta:
+        model = Correspondence_Agency
+        fields = ('agency_name', 'agency_id', 'agency_url', 'agency_timezone', \
+                  'agency_lang', 'agency_phone', 'agency_fare_url')
+
+    def __init__(self, *args, **kwargs):
+        super(Correspondence_Agency_Form, self).__init__(*args, **kwargs)
+        self.fields['agency_name'].widget.attrs = {
+            'id': 'agency_name',
+
+        }
+        self.fields['agency_id'].widget.attrs = {
+            'id': 'agency_id',
+            'name': 'Route ID(GTFS)',
+
+        }
+        self.fields['agency_url'].widget.attrs = {
+            'id': 'agency_url',
+            'name': 'Short name',
+
+        }
+        self.fields['agency_timezone'].widget.attrs = {
+            'id': 'agency_timezone',
+        }
+        self.fields['agency_lang'].widget.attrs = {
+            'id': 'agency_lang'
+        }
+        self.fields['agency_phone'].widget.attrs = {
+            'id': 'agency_phone'
+        }
+        self.fields['agency_fare_url'].widget.attrs = {
+            'id': 'agency_fare_url',
         }

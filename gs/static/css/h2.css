@@ -26,6 +26,21 @@ th{
     width: 550px;
     height: 530px;
 }
+#route_form{
+    border-radius: 25px;
+    border: 10px solid #2778D4;
+    padding: 20px;
+    width: 550px;
+    height: 800px;
+}
+#extra_fields_form{
+    border-radius: 25px;
+    border: 10px solid #2778D4;
+    padding: 20px;
+    width: 550px;
+    height: 800px;
+    
+}
 #form_heading{
     font-family: "Times New Roman", Times, serif
 }

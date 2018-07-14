@@ -22,7 +22,6 @@ class CMP_Stop(models.Model):
     def __str__(self):
         return '{}'.format(self.gtfs_stop)
 
-
 class CMP_Line(models.Model):
     pass
 

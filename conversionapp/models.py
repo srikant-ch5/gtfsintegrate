@@ -5,9 +5,9 @@ from django.contrib.postgres.fields import ArrayField, JSONField
 class Correspondence(models.Model):
     feed_id = models.IntegerField(blank=True, null=True)
     stop_id = models.CharField(max_length=255, blank=True, null=True,
-                                   help_text="Unique identifier for a stop or station.")
+                               help_text="Unique identifier for a stop or station.")
     stop_code = models.CharField(max_length=255, blank=True, null=True,
-                                     help_text="Uniquer identifier (short text or number) for passengers.")
+                                 help_text="Uniquer identifier (short text or number) for passengers.")
     stop_name = models.CharField(
         max_length=255, blank=True, null=True,
         help_text="Name of stop in local vernacular.")
@@ -19,7 +19,7 @@ class Correspondence(models.Model):
         max_length=255, blank=True, null=True,
         help_text="Fare zone for a stop ID.")
     stop_url = models.CharField(max_length=255,
-                                    blank=True, null=True, help_text="URL for the stop")
+                                blank=True, null=True, help_text="URL for the stop")
     stop_location_type = models.CharField(
         max_length=255, blank=True, null=True,
         help_text="Is this a stop or station?")
@@ -31,12 +31,12 @@ class Correspondence(models.Model):
         help_text="Timezone of the stop")
 
     agency_name = models.CharField(max_length=255, blank=True, null=True,
-                                       help_text="Full name of the transit agency")
+                                   help_text="Full name of the transit agency")
     agency_id = models.CharField(
         max_length=255, blank=True, null=True,
         help_text="Unique identifier for transit agency")
     agency_url = models.CharField(max_length=255,
-                                      blank=True, null=True, help_text="URL of the transit agency")
+                                  blank=True, null=True, help_text="URL of the transit agency")
     agency_timezone = models.CharField(
         max_length=255, blank=True, null=True,
         help_text="Timezone of the agency")
@@ -47,16 +47,62 @@ class Correspondence(models.Model):
         max_length=255, blank=True, null=True,
         help_text="Voice telephone number")
     agency_fare_url = models.CharField(max_length=255,
-                                           blank=True, null=True, help_text="URL for purchasing tickets online")
+                                       blank=True, null=True, help_text="URL for purchasing tickets online")
 
     def __str__(self):
         return '{} '.format(self.id)
 
 
+class Correspondence_Agency(models.Model):
+    agency_name = models.CharField(max_length=255, blank=True, null=True)
+    agency_id = models.CharField(
+        max_length=255, blank=True, null=True)
+    agency_url = models.CharField(max_length=255,
+                                  blank=True, null=True)
+    agency_timezone = models.CharField(
+        max_length=255, blank=True, null=True)
+    agency_lang = models.CharField(
+        max_length=2, blank=True, null=True)
+    agency_phone = models.CharField(
+        max_length=255, blank=True, null=True)
+    agency_fare_url = models.CharField(max_length=255,
+                                       blank=True, null=True)
+
+
+class Correspondence_Route(models.Model):
+    feed_id = models.IntegerField(blank=True, null=True)
+    route_id = models.CharField(
+        max_length=255, db_index=True)
+    agency = models.CharField(max_length=50, blank=True)
+    short_name = models.CharField(
+        max_length=63)
+    long_name = models.CharField(
+        max_length=255)
+    desc = models.CharField(
+        max_length=50,
+        blank=True)
+    rtype = models.CharField(max_length=50)
+    url = models.URLField(
+        blank=True)
+    color = models.CharField(
+        max_length=6, blank=True)
+    text_color = models.CharField(
+        max_length=6, blank=True)
+    extra_data = models.ManyToManyField('ExtraField')
+
+
 class Conversion(models.Model):
-    present_str = ArrayField(models.CharField(max_length=100),blank=True)
+    present_str = ArrayField(models.CharField(max_length=100), blank=True)
     replace_str = ArrayField(models.CharField(max_length=100), blank=True)
 
     def __str__(self):
         return '{}'.format(self.id)
 
+
+class ExtraField(models.Model):
+    feed_id = models.IntegerField(blank=True, null=True)
+    field_name = models.CharField(max_length=50, blank=True, null=True)
+    value = models.CharField(max_length=50, blank=True, null=True)
+
+    def __str__(self):
+        return " Extra Field {} ".format(self.field_name, self.value)
