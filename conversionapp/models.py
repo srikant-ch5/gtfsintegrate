@@ -82,12 +82,12 @@ class Correspondence_Route(models.Model):
         max_length=50,
         blank=True)
     rtype = models.CharField(max_length=50)
-    url = models.URLField(
-        blank=True)
+    url = models.CharField(max_length=50,
+        blank=True, null=True)
     color = models.CharField(
-        max_length=6, blank=True)
+        max_length=50, blank=True, null=True)
     text_color = models.CharField(
-        max_length=6, blank=True)
+        max_length=50, blank=True, null=True)
     extra_data = models.ManyToManyField('ExtraField')
 
 

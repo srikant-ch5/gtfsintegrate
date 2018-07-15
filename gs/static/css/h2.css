@@ -38,7 +38,7 @@ th{
     border: 10px solid #2778D4;
     padding: 20px;
     width: 550px;
-    height: 800px;
+    height: 1000px;
     
 }
 #form_heading{
@@ -306,4 +306,8 @@ a:hover { color: #333333; text-decoration: underline; }
 @keyframes animatetop {
     from {top: -300px; opacity: 0}
     to {top: 0; opacity: 1}
-} 
+}
+
+#sample_data,#extra_data{
+    display:inline-block;
+}

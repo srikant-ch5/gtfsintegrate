@@ -161,33 +161,91 @@ def match_stops(request):
     return render(request, 'gs/comparison.html', {'context': context})
 
 
-def define_relation(request, pk):
-    corr_form = Correspondence.objects.get(feed_id=pk)
-    print(corr_form)
+def define_relation(request, pk=None):
+    if request.method == "POST":
+        route_form = Correspondence_Route_Form(request.POST)
 
-    context = {
-        'feed_id': pk,
-        'extra_data': '',
-        'extra_data_ex': ''
-    }
+        if route_form.is_valid():
+            entered_route_corr_form = route_form.save(commit=False)
+            entered_route_corr_form_feed_id = entered_route_corr_form.feed_id
 
-    extra_field_keys = []
-    extra_data_ex = {}
-    feed_routes = Route.objects.filter(feed=pk)
-    print(feed_routes.all()[0].extra_data)
-    for i in range(0, len(feed_routes)):
-        extra_data = feed_routes[i].extra_data
-        for key, value in extra_data.items():
-            if key not in extra_field_keys:
-                extra_field_keys.append(key)
-                if ExtraField.objects.filter(feed_id=pk, field_name=key, value=None).exists():
-                    ef = ExtraField.objects.filter(feed_id=pk, field_name=key, value=None)[0]
-                else:
-                    ef = ExtraField(feed_id=pk, field_name=key)
-                    ef.save()
-    context['extra_field_ex'] = extra_data_ex
-    context['extra_field_keys'] = extra_field_keys
-    route_form = Correspondence_Route_Form()
-    agency_form = Correspondence_Agency_Form()
-    return render(request, 'gs/define-relation.html',
-                  {'context': context, 'route_form': route_form, 'agency_form': agency_form})
+            if Correspondence_Route.objects.filter(feed_id=entered_route_corr_form_feed_id).exists():
+                print("Saving Route form")
+            else:
+                entered_route_corr_form.save()
+    else:
+        corr_form = Correspondence.objects.get(feed_id=pk)
+        print(corr_form)
+
+        context = {
+            'feed_id': pk,
+            'extra_data': '',
+            'extra_data_ex': ''
+        }
+
+        extra_field_keys = []
+        extra_data_ex = {}
+        feed_routes = Route.objects.filter(feed=pk)
+        print(feed_routes.all()[0].extra_data)
+        for i in range(0, len(feed_routes)):
+            extra_data = feed_routes[i].extra_data
+            for key, value in extra_data.items():
+                if key not in extra_field_keys:
+                    extra_field_keys.append(key)
+                    if ExtraField.objects.filter(feed_id=pk, field_name=key, value=None).exists():
+                        ef = ExtraField.objects.filter(feed_id=pk, field_name=key, value=None)[0]
+                    else:
+                        ef = ExtraField(feed_id=pk, field_name=key)
+                        ef.save()
+        context['extra_field_ex'] = extra_data_ex
+        context['extra_field_keys'] = extra_field_keys
+        route_form = Correspondence_Route_Form()
+        return render(request, 'gs/define-relation.html',
+                      {'context': context, 'route_form': route_form})
+
+
+def save_route_corr(request):
+    if request.method == "POST":
+        route_form = Correspondence_Route_Form(request.POST)
+
+        if route_form.is_valid():
+            entered_route_corr_form = route_form.save(commit=False)
+            entered_route_corr_form_feed_id = entered_route_corr_form.feed_id
+
+            if Correspondence_Route.objects.filter(feed_id=entered_route_corr_form_feed_id).exists():
+                route_corr_obj = Correspondence_Route.objects.get(feed_id=entered_route_corr_form_feed_id)
+                route_corr_obj.route_id = entered_route_corr_form.route_id
+                route_corr_obj.agency = entered_route_corr_form.agency
+                route_corr_obj.short_name = entered_route_corr_form.short_name
+                route_corr_obj.long_name = entered_route_corr_form.long_name
+                route_corr_obj.desc = entered_route_corr_form.desc
+                route_corr_obj.rtype = entered_route_corr_form.rtype
+                route_corr_obj.url = entered_route_corr_form.url
+                route_corr_obj.color = entered_route_corr_form.color
+                route_corr_obj.text_color = entered_route_corr_form.text_color
+
+                route_corr_obj.save()
+            else:
+                entered_route_corr_form.save()
+
+        else:
+            print("Route form not valid {}".format(route_form))
+
+        agency_form = Correspondence_Agency_Form()
+        return render(request, 'gs/define-relation.html', {'agency_form': agency_form})
+
+
+def save_ag_corr(request):
+    if request.method == "POST":
+        route_form = Correspondence_Route_Form(request.POST)
+
+        if route_form.is_valid():
+            entered_route_corr_form = route_form.save(commit=False)
+            entered_route_corr_form_feed_id = entered_route_corr_form.feed_id
+
+            if Correspondence_Route.objects.filter(feed_id=entered_route_corr_form_feed_id).exists():
+                print("Saving Route form")
+            else:
+                entered_route_corr_form.save()
+
+        return render(request, 'gs/define-relation.html', {'agency_form': agency_form})

@@ -33,4 +33,6 @@ urlpatterns = [
     url(r'^match_stop/$', compview.match_stop, name="match_stop"),
     url(r'^match_stops/$', compview.match_stops, name="match_stops"),
     url(r'^define_relation/(?P<pk>\d+)/$', compview.define_relation, name="define_relation"),
+    url(r'^save_route_corr/$', compview.save_route_corr, name="save_route_corr"),
+    url(r'^save_ag_corr/$', compview.save_ag_corr, name="save_ag_corr"),
 ]
