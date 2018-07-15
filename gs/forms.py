@@ -136,7 +136,6 @@ class Correspondence_Route_Form(forms.ModelForm):
         self.fields['short_name'].widget.attrs = {
             'id': 'short_name',
             'name': 'Short name',
-
         }
         self.fields['long_name'].widget.attrs = {
             'id': 'long_name',
@@ -161,11 +160,14 @@ class Correspondence_Route_Form(forms.ModelForm):
 class Correspondence_Agency_Form(forms.ModelForm):
     class Meta:
         model = Correspondence_Agency
-        fields = ('agency_name', 'agency_id', 'agency_url', 'agency_timezone', \
+        fields = ('feed_id', 'agency_name', 'agency_id', 'agency_url', 'agency_timezone', \
                   'agency_lang', 'agency_phone', 'agency_fare_url')
 
     def __init__(self, *args, **kwargs):
         super(Correspondence_Agency_Form, self).__init__(*args, **kwargs)
+        self.fields['feed_id'].widget.attrs = {
+            'id': 'agency_feed_id',
+        }
         self.fields['agency_name'].widget.attrs = {
             'id': 'agency_name',
 

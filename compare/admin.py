@@ -1,7 +1,14 @@
 from django.contrib import admin
-from .models import CMP_Stop
+from conversionapp.models import Correspondence_Route, Correspondence_Agency
 
-class CMPStopAdmin(admin.ModelAdmin):
+
+class CorrespondenceRouteAdmin(admin.ModelAdmin):
     display = ('id')
 
-admin.site.register(CMP_Stop, CMPStopAdmin)
+
+class CorrespondenceAgencyAdmin(admin.ModelAdmin):
+    display = ('id')
+
+
+admin.site.register(Correspondence_Route, CorrespondenceRouteAdmin)
+admin.site.register(Correspondence_Agency, CorrespondenceAgencyAdmin)

@@ -207,11 +207,13 @@ def define_relation(request, pk=None):
 def save_route_corr(request):
     if request.method == "POST":
         route_form = Correspondence_Route_Form(request.POST)
-
+        entered_route_corr_form_feed_id = -1
         if route_form.is_valid():
             entered_route_corr_form = route_form.save(commit=False)
             entered_route_corr_form_feed_id = entered_route_corr_form.feed_id
-
+            context = {
+                'feed_id': entered_route_corr_form_feed_id
+            }
             if Correspondence_Route.objects.filter(feed_id=entered_route_corr_form_feed_id).exists():
                 route_corr_obj = Correspondence_Route.objects.get(feed_id=entered_route_corr_form_feed_id)
                 route_corr_obj.route_id = entered_route_corr_form.route_id
@@ -232,20 +234,63 @@ def save_route_corr(request):
             print("Route form not valid {}".format(route_form))
 
         agency_form = Correspondence_Agency_Form()
-        return render(request, 'gs/define-relation.html', {'agency_form': agency_form})
+        return render(request, 'gs/define-relation.html', {'context': context, 'agency_form': agency_form})
 
 
 def save_ag_corr(request):
     if request.method == "POST":
-        route_form = Correspondence_Route_Form(request.POST)
+        agency_form = Correspondence_Agency_Form(request.POST)
 
-        if route_form.is_valid():
-            entered_route_corr_form = route_form.save(commit=False)
-            entered_route_corr_form_feed_id = entered_route_corr_form.feed_id
+        if agency_form.is_valid():
+            entered_agency_corr_form = agency_form.save(commit=False)
+            entered_agency_corr_form_feed_id = entered_agency_corr_form.feed_id
 
-            if Correspondence_Route.objects.filter(feed_id=entered_route_corr_form_feed_id).exists():
-                print("Saving Route form")
+            if Correspondence_Agency.objects.filter(feed_id=entered_agency_corr_form_feed_id).exists():
+                ag_corr_obj = Correspondence_Agency.objects.get(feed_id=entered_agency_corr_form_feed_id)
+                ag_corr_obj.feed_id = entered_agency_corr_form_feed_id
+                ag_corr_obj.agency_name = entered_agency_corr_form.agency_name
+                ag_corr_obj.agency_id = entered_agency_corr_form.agency_id
+                ag_corr_obj.agency_url = entered_agency_corr_form.agency_url
+                ag_corr_obj.agency_timezone = entered_agency_corr_form.agency_timezone
+                ag_corr_obj.agency_lang = entered_agency_corr_form.agency_lang
+                ag_corr_obj.agency_phone = entered_agency_corr_form.agency_phone
+                ag_corr_obj.agency_fare_url = entered_agency_corr_form.agency_fare_url
+
+                ag_corr_obj.save()
             else:
-                entered_route_corr_form.save()
+                entered_agency_corr_form.save()
 
-        return render(request, 'gs/define-relation.html', {'agency_form': agency_form})
+            '''Creating XML File'''
+            # get the routes form with that feed
+            routes_list = Route.objects.filter(feed=entered_agency_corr_form_feed_id)
+            routes_form = Correspondence_Route.objects.get(feed_id=entered_agency_corr_form_feed_id)
+
+            valid_routes_attr_list = {}
+
+            for key, value in routes_form.__dict__.items():
+                if key == '_state':
+                    continue
+                elif key == 'feed_id':
+                    continue
+                elif key == 'id':
+                    continue
+                else:
+                    if value != '':
+                        pair = {key: value}
+                        valid_routes_attr_list.update(pair)
+
+            print(valid_routes_attr_list)
+            xml = ''
+            for route in routes_list:
+                xml += "\n<tag k='type' v='route_master'>\n"
+                for r_key, r_value in route.__dict__.items():
+                    if r_key in valid_routes_attr_list:
+                        tag_key = valid_routes_attr_list[r_key]
+                        tag_val = r_value
+
+                        if tag_val != '':
+                            xml += "<tag k='"+str(tag_key)+"' v='"+str(tag_val)+"' />\n"
+
+            print(xml)
+
+        return render(request, 'gs/saved_relation.html', {'agency_form': agency_form})

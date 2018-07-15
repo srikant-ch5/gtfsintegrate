@@ -54,6 +54,7 @@ class Correspondence(models.Model):
 
 
 class Correspondence_Agency(models.Model):
+    feed_id = models.IntegerField(blank=True, null=True)
     agency_name = models.CharField(max_length=255, blank=True, null=True)
     agency_id = models.CharField(
         max_length=255, blank=True, null=True)
