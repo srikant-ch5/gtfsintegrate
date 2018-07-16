@@ -22,7 +22,7 @@ bottomleft_block_stops = []
 bottomright_block_stops = []
 
 
-def get_lines(short_name, feed_id):
+def get_lines(short_name, feed_id, start):
     short_name = "'" + short_name + "'"
     query = '''
             SELECT 
@@ -53,9 +53,10 @@ def get_lines(short_name, feed_id):
     cursor = connection.cursor()
     cursor.execute(query)
     result = cursor.fetchall()
-
-    if Line_Stop.objects.filter(feed_id=feed_id).exists():
-        Line_Stop.objects.filter(feed_id=feed_id).all().delete()
+    if start:
+        if Line_Stop.objects.filter(feed_id=feed_id).exists():
+            Line_Stop.objects.filter(feed_id=feed_id).all().delete()
+        start = False
 
     for entry in result:
         # get lat and lon

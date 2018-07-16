@@ -1,4 +1,76 @@
 {% extends 'gs/home.html' %}
+{% load staticfiles %}
+{% load static %}
+{% load leaflet_tags %}
+
 {% block main %}
 <h1> The correspondence of route and agency are saved</h1>
+<div class="container">
+<div class="col-md-6">
+    <div class="map-box">
+        <div id="map">{% leaflet_map "osmmap" callback="loadmapfunction" %}</div>
+    </div>
+</div>
+</div>
+
+<script type="text/javascript">
+	function loadmapfunction(map, options) {
+
+            const feed_id = parseInt('{{context.feed_id}}')
+
+            let feed_name;
+            console.log(feed_id);
+            let mapLayer;
+            const markerArray = [];
+            const stopscoordinates_array = [];
+            const gtfsstopsdata = '{% url "linestopdata" %}';
+
+            $.ajaxSetup({
+                async: false
+            });
+
+            //get all the stops and show them on map
+            $.ajax({
+            	url:gtfsstopsdata,
+            	method:'GET',
+            	dataType:'json',
+            	success:function(data){
+            		let coordinates_arr = [];
+            		let line_stops = [];
+                const length = data.length;
+                for (let i = 0; i < length; i++) {
+
+                    if (data[i].feed_id === feed_id) {
+                        let lon, lat;
+                        lat = data[i].lon;
+                        lon = data[i].lat;
+                        var point = new L.LatLng(lat,lon);
+                        var color = "#"+data[i].route_color;
+                        line_stops.push(point);
+                        coordinates_arr = [lat, lon];
+                        stopscoordinates_array.push(coordinates_arr);
+                        const marker = L.marker(coordinates_arr).bindTooltip(name + ",lat=" + lat + ",lon=" + lon, {
+                            direction: 'top'
+                        }).addTo(map);
+                        markerArray.push(marker);
+                    }
+                }
+                const group = new L.featureGroup(markerArray);
+                const bounds = group.getBounds();
+                feed_bounds = bounds;
+                map.fitBounds(bounds);
+                var polyline = new L.Polyline(line_stops, {
+				    color: color,
+				    weight: 3,
+				    opacity: 0.5,
+				    smoothFactor: 1
+				});
+				polyline.addTo(map);
+            	},
+            error:function(status, xhr, e){
+            	alert(status+" "+xhr+ " e"+e)
+            }
+        });
+	}
+</script>
 {% endblock %}
