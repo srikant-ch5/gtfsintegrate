@@ -26,7 +26,18 @@ def get_lines(short_name):
     short_name = "'" + short_name + "'"
     query = '''
             SELECT 
-                gtfs_stop.geom
+                gtfs_stop.stop_id,
+                gtfs_stop.code,
+                gtfs_stop.name,
+                gtfs_stop_time.stop_sequence, 
+                gtfs_trip.extra_data,
+                gtfs_route.id,
+                gtfs_route.route_id,
+                gtfs_route.short_name,
+                gtfs_route.long_name,
+                gtfs_route.desc,
+                gtfs_route.color,
+                gtfs_route.extra_data
             FROM 
                 gtfs_route,
                 gtfs_stop,
