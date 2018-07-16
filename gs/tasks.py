@@ -22,6 +22,30 @@ bottomleft_block_stops = []
 bottomright_block_stops = []
 
 
+def get_lines(short_name):
+    short_name = "'" + short_name + "'"
+    query = '''
+            SELECT 
+                gtfs_stop.geom
+            FROM 
+                gtfs_route,
+                gtfs_stop,
+                gtfs_stop_time,gtfs_trip
+            WHERE 
+                gtfs_stop.id = gtfs_stop_time.stop_id AND 
+                gtfs_stop_time.trip_id = gtfs_trip.id AND 
+                gtfs_trip.route_id = gtfs_route.id AND 
+                gtfs_route.short_name = ''' + short_name + '''
+            ORDER BY 
+                gtfs_trip.id , gtfs_stop_time.stop_sequence;
+            '''
+    cursor = connection.cursor()
+    cursor.execute(query)
+    result = cursor.fetchall()
+
+    print(len(result))
+
+
 def save_comp(gtfs_stop, osm_stop, feed_id, stops_layer):
     context = {
         'match_success': 0,
@@ -117,7 +141,7 @@ def save_comp(gtfs_stop, osm_stop, feed_id, stops_layer):
                     ref_changed = True
                 ref_tag_in_node = True
 
-        #Condition 1 if name is not present and ref is not present
+        # Condition 1 if name is not present and ref is not present
         if not name_tag_in_node and not ref_tag_in_node:
             version_inc_cond = True
         print("Version cond at firstcase {}".format(version_inc_cond))
@@ -237,7 +261,6 @@ def queries():
 def dividemap(east=None, west=None, north=None, south=None, northeast_lat=None, northeast_lon=None, northwest_lat=None,
               northwest_lon=None, southeast_lat=None,
               southeast_lon=None, southwest_lat=None, southwest_lon=None, stops_coordinates=None):
-
     northeast_lat = float(northeast_lat)
     northeast_lon = float(northeast_lon)
     northwest_lat = float(northwest_lat)

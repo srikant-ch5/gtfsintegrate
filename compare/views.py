@@ -4,7 +4,7 @@ from multigtfs.models import Stop, Feed, Route, Agency
 from django.db import connection
 from .models import CMP_Stop
 import json
-from gs.tasks import save_comp, connect_to_JOSM
+from gs.tasks import save_comp, connect_to_JOSM, get_lines
 from conversionapp.models import Correspondence, ExtraField, Correspondence_Route, Correspondence_Agency
 from gs.forms import Correspondence_Route_Form, Correspondence_Agency_Form
 
@@ -266,6 +266,7 @@ def save_ag_corr(request):
             routes_form = Correspondence_Route.objects.get(feed_id=entered_agency_corr_form_feed_id)
 
             valid_routes_attr_list = {}
+            short_names_list = []
 
             for key, value in routes_form.__dict__.items():
                 if key == '_state':
@@ -284,13 +285,19 @@ def save_ag_corr(request):
             for route in routes_list:
                 xml += "\n<tag k='type' v='route_master'>\n"
                 for r_key, r_value in route.__dict__.items():
+                    if r_key == 'short_name':
+                        short_names_list.append(r_value)
                     if r_key in valid_routes_attr_list:
                         tag_key = valid_routes_attr_list[r_key]
                         tag_val = r_value
 
                         if tag_val != '':
-                            xml += "<tag k='"+str(tag_key)+"' v='"+str(tag_val)+"' />\n"
+                            xml += "<tag k='" + str(tag_key) + "' v='" + str(tag_val) + "' />\n"
 
             print(xml)
+
+            for short_name in short_names_list:
+                if short_name != '':
+                    get_lines(short_name)
 
         return render(request, 'gs/saved_relation.html', {'agency_form': agency_form})
