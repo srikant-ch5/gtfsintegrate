@@ -22,9 +22,28 @@ class CMP_Stop(models.Model):
     def __str__(self):
         return '{}'.format(self.gtfs_stop)
 
+
 class CMP_Line(models.Model):
     pass
 
 
 class itineraries(models.Model):
     pass
+
+
+class Line_Stop(models.Model):
+    feed_id = models.IntegerField(blank=True, null=True)
+    lat = models.FloatField(blank=True, null=True)
+    lon = models.FloatField(blank=True, null=True)
+    stop_id = models.CharField(max_length=50,blank=True, null=True)
+    stop_code = models.CharField(max_length=50, blank=True, null=True)
+    stop_name = models.CharField(max_length=100, blank=True, null=True)
+    stop_time_stop_seq = models.IntegerField(blank=True, null=True)
+    trip_extra_data = models.CharField(max_length=500, blank=True, null=True)
+    route_id_db = models.IntegerField(blank=True, null=True)
+    route_id = models.CharField(max_length=50, blank=True, null=True)
+    route_short_name = models.CharField(max_length=500, blank=True, null=True)
+    route_long_name = models.CharField(max_length=50, blank=True, null=True)
+    route_desc = models.CharField(max_length=500, blank=True, null=True)
+    route_color = models.CharField(max_length=50, blank=True, null=True)
+    route_text_color = models.CharField(max_length=50, blank=True, null=True)

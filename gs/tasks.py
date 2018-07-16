@@ -6,7 +6,7 @@ import requests
 from django.utils import timezone
 from multigtfs.models import Feed, Stop
 
-from compare.models import CMP_Stop
+from compare.models import CMP_Stop, Line_Stop
 from osmapp.models import Node, Tag, KeyValueString
 from .models import GTFSForm
 from django.db import connection
@@ -22,7 +22,7 @@ bottomleft_block_stops = []
 bottomright_block_stops = []
 
 
-def get_lines(short_name):
+def get_lines(short_name, feed_id):
     short_name = "'" + short_name + "'"
     query = '''
             SELECT 
@@ -54,7 +54,25 @@ def get_lines(short_name):
     cursor.execute(query)
     result = cursor.fetchall()
 
-    print(len(result))
+    if Line_Stop.objects.filter(feed_id=feed_id).exists():
+        Line_Stop.objects.filter(feed_id=feed_id).all().delete()
+
+    for entry in result:
+        # get lat and lon
+        slat = Stop.objects.get(feed=feed_id, stop_id=entry[0]).geom.x
+        slon = Stop.objects.get(feed=feed_id, stop_id=entry[0]).geom.y
+
+        line_stop = Line_Stop(feed_id=feed_id, lat=slat, lon=slon, stop_id=entry[0], stop_code=entry[1], \
+                              stop_name=entry[2], stop_time_stop_seq=entry[3], trip_extra_data=entry[4],
+                              route_id_db=entry[5], \
+                              route_id=entry[6], route_short_name=entry[7], route_long_name=entry[8],
+                              route_desc=entry[9], route_color=entry[10], \
+                              route_text_color=entry[11])
+        line_stop.save()
+
+
+
+    print('saved')
 
 
 def save_comp(gtfs_stop, osm_stop, feed_id, stops_layer):

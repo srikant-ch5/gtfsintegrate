@@ -3,6 +3,7 @@ from gs.models import GTFSForm
 from multigtfs.models import Stop, Agency, Route, Feed
 from osmapp.models import Node, Way, KeyValueString, OSM_Relation, Tag, Bounds
 from conversionapp.models import Correspondence, Conversion, ExtraField
+from compare.models import Line_Stop
 
 class FormSerializer(serializers.ModelSerializer):
     class Meta:
@@ -85,4 +86,9 @@ class ConversionSerializer(serializers.ModelSerializer):
 class ExtraFieldSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExtraField
+        fields = '__all__'
+
+class LineStopSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Line_Stop
         fields = '__all__'

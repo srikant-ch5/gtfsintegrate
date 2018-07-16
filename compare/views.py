@@ -298,6 +298,6 @@ def save_ag_corr(request):
 
             for short_name in short_names_list:
                 if short_name != '':
-                    get_lines(short_name)
+                    get_lines(short_name, entered_agency_corr_form_feed_id)
 
         return render(request, 'gs/saved_relation.html', {'agency_form': agency_form})
