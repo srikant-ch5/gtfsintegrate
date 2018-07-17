@@ -24,6 +24,7 @@ bottomright_block_stops = []
 
 def get_lines(short_name, feed_id, start):
     short_name = "'" + short_name + "'"
+    qfeed_id = "'" + str(feed_id) + "'"
     query = '''
             SELECT 
                 gtfs_stop.stop_id,
@@ -46,13 +47,18 @@ def get_lines(short_name, feed_id, start):
                 gtfs_stop.id = gtfs_stop_time.stop_id AND 
                 gtfs_stop_time.trip_id = gtfs_trip.id AND 
                 gtfs_trip.route_id = gtfs_route.id AND 
-                gtfs_route.short_name = ''' + short_name + '''
+                gtfs_route.short_name = ''' + short_name + ''' AND 
+                gtfs_route.feed_id = ''' + qfeed_id + '''
             ORDER BY 
                 gtfs_trip.id , gtfs_stop_time.stop_sequence;
             '''
     cursor = connection.cursor()
     cursor.execute(query)
     result = cursor.fetchall()
+
+    for entry in result:
+        print('{} {} {} {} {} {} \n'.format(entry[0], entry[1], entry[2], entry[3], entry[4], entry[5]))
+
     if start:
         if Line_Stop.objects.filter(feed_id=feed_id).exists():
             Line_Stop.objects.filter(feed_id=feed_id).all().delete()
@@ -60,18 +66,20 @@ def get_lines(short_name, feed_id, start):
 
     for entry in result:
         # get lat and lon
-        slat = Stop.objects.get(feed=feed_id, stop_id=entry[0]).geom.x
-        slon = Stop.objects.get(feed=feed_id, stop_id=entry[0]).geom.y
+        try:
+            slat = Stop.objects.get(feed=feed_id, stop_id=entry[0]).geom.x
+            slon = Stop.objects.get(feed=feed_id, stop_id=entry[0]).geom.y
 
-        line_stop = Line_Stop(feed_id=feed_id, lat=slat, lon=slon, stop_id=entry[0], stop_code=entry[1], \
-                              stop_name=entry[2], stop_time_stop_seq=entry[3], trip_extra_data=entry[4],
-                              route_id_db=entry[5], \
-                              route_id=entry[6], route_short_name=entry[7], route_long_name=entry[8],
-                              route_desc=entry[9], route_color=entry[10], \
-                              route_text_color=entry[11])
-        line_stop.save()
-
-
+            line_stop = Line_Stop(feed_id=feed_id, lat=slat, lon=slon, stop_id=entry[0], stop_code=entry[1], \
+                                  stop_name=entry[2], stop_time_stop_seq=entry[3], trip_extra_data=entry[4],
+                                  route_id_db=entry[5], \
+                                  route_id=entry[6], route_short_name=entry[7], route_long_name=entry[8],
+                                  route_desc=entry[9], route_color=entry[10], \
+                                  route_text_color=entry[11])
+            line_stop.save()
+        except Exception as e:
+            print('{} {} '.format(feed_id, entry[0]))
+            print(e)
 
     print('saved')
 

@@ -47,18 +47,8 @@
                         var point = new L.LatLng(lat,lon);
                         var color = "#"+data[i].route_color;
                         line_stops.push(point);
-                        coordinates_arr = [lat, lon];
-                        stopscoordinates_array.push(coordinates_arr);
-                        const marker = L.marker(coordinates_arr).bindTooltip(name + ",lat=" + lat + ",lon=" + lon, {
-                            direction: 'top'
-                        }).addTo(map);
-                        markerArray.push(marker);
                     }
                 }
-                const group = new L.featureGroup(markerArray);
-                const bounds = group.getBounds();
-                feed_bounds = bounds;
-                map.fitBounds(bounds);
                 var polyline = new L.Polyline(line_stops, {
 				    color: color,
 				    weight: 3,
@@ -66,6 +56,9 @@
 				    smoothFactor: 1
 				});
 				polyline.addTo(map);
+
+				bounds = new L.LatLngBounds(line_stops);
+				map.fitBounds(bounds);
             	},
             error:function(status, xhr, e){
             	alert(status+" "+xhr+ " e"+e)

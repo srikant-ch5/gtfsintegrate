@@ -240,7 +240,7 @@ def save_route_corr(request):
 def save_ag_corr(request):
     if request.method == "POST":
         context = {
-            'feed_id':-1
+            'feed_id': -1
         }
         agency_form = Correspondence_Agency_Form(request.POST)
 
@@ -299,7 +299,8 @@ def save_ag_corr(request):
 
             print(xml)
 
-            for i in range(0,len(short_names_list)):
+
+            for i in range(0, len(short_names_list)):
                 if i == 0:
                     if short_names_list[i] != '':
                         get_lines(short_names_list[i], entered_agency_corr_form_feed_id, start=True)
@@ -308,4 +309,4 @@ def save_ag_corr(request):
                         get_lines(short_names_list[i], entered_agency_corr_form_feed_id, start=False)
 
             context['feed_id'] = entered_agency_corr_form_feed_id
-        return render(request, 'gs/saved_relation.html', {'context':context, 'agency_form': agency_form})
+        return render(request, 'gs/saved_relation.html', {'context': context, 'agency_form': agency_form})
