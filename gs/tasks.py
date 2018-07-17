@@ -22,8 +22,8 @@ bottomleft_block_stops = []
 bottomright_block_stops = []
 
 
-def get_lines(short_name, feed_id, start):
-    short_name = "'" + short_name + "'"
+def get_itineraries(route_id_db, feed_id, start):
+    db_route_id = "'" + str(route_id_db) + "'"
     qfeed_id = "'" + str(feed_id) + "'"
     query = '''
             SELECT 
@@ -47,7 +47,7 @@ def get_lines(short_name, feed_id, start):
                 gtfs_stop.id = gtfs_stop_time.stop_id AND 
                 gtfs_stop_time.trip_id = gtfs_trip.id AND 
                 gtfs_trip.route_id = gtfs_route.id AND 
-                gtfs_route.short_name = ''' + short_name + ''' AND 
+                gtfs_route.id = ''' + db_route_id + ''' AND 
                 gtfs_route.feed_id = ''' + qfeed_id + '''
             ORDER BY 
                 gtfs_trip.id , gtfs_stop_time.stop_sequence;
@@ -55,9 +55,6 @@ def get_lines(short_name, feed_id, start):
     cursor = connection.cursor()
     cursor.execute(query)
     result = cursor.fetchall()
-
-    for entry in result:
-        print('{} {} {} {} {} {} \n'.format(entry[0], entry[1], entry[2], entry[3], entry[4], entry[5]))
 
     if start:
         if Line_Stop.objects.filter(feed_id=feed_id).exists():

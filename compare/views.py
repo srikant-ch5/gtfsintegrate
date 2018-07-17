@@ -4,7 +4,7 @@ from multigtfs.models import Stop, Feed, Route, Agency
 from django.db import connection
 from .models import CMP_Stop
 import json
-from gs.tasks import save_comp, connect_to_JOSM, get_lines
+from gs.tasks import save_comp, connect_to_JOSM, get_itineraries
 from conversionapp.models import Correspondence, ExtraField, Correspondence_Route, Correspondence_Agency
 from gs.forms import Correspondence_Route_Form, Correspondence_Agency_Form
 
@@ -270,13 +270,11 @@ def save_ag_corr(request):
 
             valid_routes_attr_list = {}
             short_names_list = []
-
+            route_ids_db = []
             for key, value in routes_form.__dict__.items():
                 if key == '_state':
                     continue
                 elif key == 'feed_id':
-                    continue
-                elif key == 'id':
                     continue
                 else:
                     if value != '':
@@ -288,6 +286,8 @@ def save_ag_corr(request):
             for route in routes_list:
                 xml += "\n<tag k='type' v='route_master'>\n"
                 for r_key, r_value in route.__dict__.items():
+                    if r_key == 'id':
+                        route_ids_db.append(r_value)
                     if r_key == 'short_name':
                         short_names_list.append(r_value)
                     if r_key in valid_routes_attr_list:
@@ -298,15 +298,13 @@ def save_ag_corr(request):
                             xml += "<tag k='" + str(tag_key) + "' v='" + str(tag_val) + "' />\n"
 
             print(xml)
+            print(route_ids_db)
 
-
-            for i in range(0, len(short_names_list)):
+            for i in range(0, len(route_ids_db)):
                 if i == 0:
-                    if short_names_list[i] != '':
-                        get_lines(short_names_list[i], entered_agency_corr_form_feed_id, start=True)
+                    get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=True)
                 else:
-                    if short_names_list[i] != '':
-                        get_lines(short_names_list[i], entered_agency_corr_form_feed_id, start=False)
+                    get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=False)
 
             context['feed_id'] = entered_agency_corr_form_feed_id
         return render(request, 'gs/saved_relation.html', {'context': context, 'agency_form': agency_form})
