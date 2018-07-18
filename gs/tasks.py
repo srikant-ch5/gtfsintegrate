@@ -5,7 +5,7 @@ import numpy as np
 import requests
 from django.utils import timezone
 from multigtfs.models import Feed, Stop
-
+import json
 from compare.models import CMP_Stop, Line_Stop
 from osmapp.models import Node, Tag, KeyValueString
 from .models import GTFSForm
@@ -42,7 +42,8 @@ def get_itineraries(route_id_db, feed_id, start):
             FROM 
                 gtfs_route,
                 gtfs_stop,
-                gtfs_stop_time,gtfs_trip
+                gtfs_stop_time,
+                gtfs_trip
             WHERE 
                 gtfs_stop.id = gtfs_stop_time.stop_id AND 
                 gtfs_stop_time.trip_id = gtfs_trip.id AND 
@@ -56,30 +57,19 @@ def get_itineraries(route_id_db, feed_id, start):
     cursor.execute(query)
     result = cursor.fetchall()
 
-    if start:
-        if Line_Stop.objects.filter(feed_id=feed_id).exists():
-            Line_Stop.objects.filter(feed_id=feed_id).all().delete()
-        start = False
-
+    line = {db_route_id: {}}
+    arr = []
     for entry in result:
-        # get lat and lon
-        try:
-            slat = Stop.objects.get(feed=feed_id, stop_id=entry[0]).geom.x
-            slon = Stop.objects.get(feed=feed_id, stop_id=entry[0]).geom.y
+        itinerary = {
+            'name':entry[2],
+            'seq':entry[3]
+        }
 
-            line_stop = Line_Stop(feed_id=feed_id, lat=slat, lon=slon, stop_id=entry[0], stop_code=entry[1], \
-                                  stop_name=entry[2], stop_time_stop_seq=entry[3], trip_extra_data=entry[4],
-                                  route_id_db=entry[5], \
-                                  route_id=entry[6], route_short_name=entry[7], route_long_name=entry[8],
-                                  route_desc=entry[9], route_color=entry[10], \
-                                  route_text_color=entry[11])
-            line_stop.save()
-        except Exception as e:
-            print('{} {} '.format(feed_id, entry[0]))
-            print(e)
+        arr.append(itinerary)
 
-    print('saved')
+    line[db_route_id] = arr
 
+    return line
 
 def save_comp(gtfs_stop, osm_stop, feed_id, stops_layer):
     context = {

@@ -14,9 +14,12 @@
 </div>
 
 <script type="text/javascript">
-	function loadmapfunction(map, options) {
+	
+	const feed_id = parseInt('{{context.feed_id|safe}}');
+	var routes_data = '{{context.routes_data | safe}}';
+	console.log(routes_data);
 
-            const feed_id = parseInt('{{context.feed_id}}')
+	function loadmapfunction(map, options) {
 
             let feed_name;
             console.log(feed_id);

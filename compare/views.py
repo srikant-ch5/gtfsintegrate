@@ -269,8 +269,9 @@ def save_ag_corr(request):
             routes_form = Correspondence_Route.objects.get(feed_id=entered_agency_corr_form_feed_id)
 
             valid_routes_attr_list = {}
-            short_names_list = []
+            long_names_list = []
             route_ids_db = []
+            routes_data = {}
             for key, value in routes_form.__dict__.items():
                 if key == '_state':
                     continue
@@ -285,11 +286,13 @@ def save_ag_corr(request):
             xml = ''
             for route in routes_list:
                 xml += "\n<tag k='type' v='route_master'>\n"
+                build_route_data = {}
                 for r_key, r_value in route.__dict__.items():
+
                     if r_key == 'id':
                         route_ids_db.append(r_value)
-                    if r_key == 'short_name':
-                        short_names_list.append(r_value)
+                    if r_key == 'long_name':
+                        long_names_list.append(r_value)
                     if r_key in valid_routes_attr_list:
                         tag_key = valid_routes_attr_list[r_key]
                         tag_val = r_value
@@ -298,13 +301,19 @@ def save_ag_corr(request):
                             xml += "<tag k='" + str(tag_key) + "' v='" + str(tag_val) + "' />\n"
 
             print(xml)
-            print(route_ids_db)
+            print(routes_data)
+            complete_data = {}
+            for (route_id, name) in zip(route_ids_db, long_names_list):
+                data = {"id": route_id, "name": name}
+                routes_data[route_id] = name
 
             for i in range(0, len(route_ids_db)):
                 if i == 0:
-                    get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=True)
+                    complete_data.update(get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=True))
                 else:
-                    get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=False)
+                    complete_data.update(get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=False))
 
+            print(complete_data)
             context['feed_id'] = entered_agency_corr_form_feed_id
+            context['routes_data'] = json.dumps(routes_data)
         return render(request, 'gs/saved_relation.html', {'context': context, 'agency_form': agency_form})
