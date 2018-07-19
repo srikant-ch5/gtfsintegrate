@@ -57,19 +57,27 @@ def get_itineraries(route_id_db, feed_id, start):
     cursor.execute(query)
     result = cursor.fetchall()
 
-    line = {db_route_id: {}}
+    str_db_route_id = str(db_route_id)
+    line =[]
     arr = []
+    single_itinerary_names = []
+
     for entry in result:
-        itinerary = {
-            'name':entry[2],
-            'seq':entry[3]
-        }
+        try:
+            slat = Stop.objects.get(feed=feed_id, stop_id=entry[0]).geom.x
+            slon = Stop.objects.get(feed=feed_id, stop_id=entry[0]).geom.y
 
-        arr.append(itinerary)
+            itinerary = [entry[2], entry[3],entry[5], slat, slon]
+            single_itinerary_names.append(entry[2])
 
-    line[db_route_id] = arr
+            arr.append(itinerary)
+        except Exception as e:
+            print(e)
 
+    line.append(arr)
+    print("Done")
     return line
+
 
 def save_comp(gtfs_stop, osm_stop, feed_id, stops_layer):
     context = {
@@ -456,7 +464,7 @@ def download_feed_in_db(file, file_name, code, formId):
         print("{} in  Feed import ".format(successfull_download))
 
     except Exception as e:
-        error = e
+        error = str(e)
         successfull_download = 0
 
     if code == 'not_present':

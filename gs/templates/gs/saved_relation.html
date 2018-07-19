@@ -4,69 +4,74 @@
 {% load leaflet_tags %}
 
 {% block main %}
-<h1> The correspondence of route and agency are saved</h1>
-<div class="container">
-<div class="col-md-6">
-    <div class="map-box">
-        <div id="map">{% leaflet_map "osmmap" callback="loadmapfunction" %}</div>
-    </div>
+<div class="header" id="myHeader">
+  <h2 id="corr-heading">Route Relations</h2>
 </div>
+<div class="container" >
+	<div class="row">
+		<div class="col-xs-6" >
+			<div id="rel-info-box" class="rel-information-box">
+				<h3>Lines from Routes.txt</h3>
+				<div id="route-lines"></div>
+			</div>
+		</div>
+		<div class="col-xs-6 ">
+				<div id="relmap"></div>
+		</div>
+	</div>
 </div>
 
 <script type="text/javascript">
+	var map = L.map('relmap').setView([51.505, -0.09], 13);
+            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
 	
 	const feed_id = parseInt('{{context.feed_id|safe}}');
-	var routes_data = '{{context.routes_data | safe}}';
+	var routes_data_json = '{{context.routes_data | safe}}';
+	var routes_data = JSON.parse(routes_data_json)
+	var complete_data_json = '{{context.complete_data | safe}}';
+	var complete_data = JSON.parse(complete_data_json);
 	console.log(routes_data);
+	$.ajaxSetup({
+        async: false
+    });
+    Object.keys(routes_data).forEach(function(key, index){
+			var html = "<div class='linebtn'><a class='btn btn-primary' onclick='clickfunc(this.id)' id='"+index+"'>"+routes_data[key]+"</a></div><br>";
+			$('#route-lines').append(html);	
+		});
+    function clickfunc(id){
+		    complete_data[id].forEach(function(stopdata){
+		    	var lon =  parseInt(stopdata[3][3]);
+		    	var lat = parseInt(stopdata[4][4])
+		    	var marker = L.marker([lat, lon]).addTo(map);
+		    });
 
-	function loadmapfunction(map, options) {
+		    /*var polyline = new L.Polyline(line_stops, {
+			    color: 'red',
+			    weight: 3,
+			    opacity: 0.5,
+			    smoothFactor: 1
+			});
+			polyline.addTo(map);
 
-            let feed_name;
-            console.log(feed_id);
-            let mapLayer;
-            const markerArray = [];
-            const stopscoordinates_array = [];
-            const gtfsstopsdata = '{% url "linestopdata" %}';
-
-            $.ajaxSetup({
-                async: false
-            });
-
-            //get all the stops and show them on map
-            $.ajax({
-            	url:gtfsstopsdata,
-            	method:'GET',
-            	dataType:'json',
-            	success:function(data){
-            		let coordinates_arr = [];
-            		let line_stops = [];
-                const length = data.length;
-                for (let i = 0; i < length; i++) {
-
-                    if (data[i].feed_id === feed_id) {
-                        let lon, lat;
-                        lat = data[i].lon;
-                        lon = data[i].lat;
-                        var point = new L.LatLng(lat,lon);
-                        var color = "#"+data[i].route_color;
-                        line_stops.push(point);
-                    }
-                }
-                var polyline = new L.Polyline(line_stops, {
-				    color: color,
-				    weight: 3,
-				    opacity: 0.5,
-				    smoothFactor: 1
-				});
-				polyline.addTo(map);
-
-				bounds = new L.LatLngBounds(line_stops);
-				map.fitBounds(bounds);
-            	},
-            error:function(status, xhr, e){
-            	alert(status+" "+xhr+ " e"+e)
-            }
-        });
+			bounds = new L.LatLngBounds(line_stops);
+			map.fitBounds(bounds);*/
 	}
+
+
+			/*var point = new L.LatLng(lat,lon);
+			var polyline = new L.Polyline(line_stops, {
+			    color: color,
+			    weight: 3,
+			    opacity: 0.5,
+			    smoothFactor: 1
+			});
+			polyline.addTo(map);
+
+			bounds = new L.LatLngBounds(line_stops);
+			map.fitBounds(bounds);*/
+		
+        
 </script>
 {% endblock %}

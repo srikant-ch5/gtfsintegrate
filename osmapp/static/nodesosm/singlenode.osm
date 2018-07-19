@@ -1,16 +1,17 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <osm version='0.6' generator='Python Script'>
 
-<node action="modify" id='469759902' timestamp='2016-02-19T21:51:27Z' uid='2969887' user='eastender' visible='True' version='5' changeset='37319112' incomplete='False' feed_id='61' lon='-0.0723131' lat='51.5156946' >
+<node action="modify" id='469769413' timestamp='2016-03-13T00:46:15Z' uid='232386' user='_yog' visible='True' version='5' changeset='37793035' incomplete='False' feed_id='61' lon='-0.0759552' lat='51.5442441' >
  <tag k='highway' v='bus_stop' />
- <tag k='local_ref' v='F' />
- <tag k='name' v='Aldgate East Station' />
- <tag k='naptan:AtcoCode' v='490000004N' />
+ <tag k='local_ref' v='D' />
+ <tag k='name' v='Kingsland Road / Forest Road' />
+ <tag k='naptan:AtcoCode' v='490006929D' />
  <tag k='naptan:Bearing' v='N' />
- <tag k='naptan:CommonName' v='Aldgate East' />
- <tag k='naptan:Indicator' v='Stop F' />
+ <tag k='naptan:CommonName' v='Forest Road Kingsland Road' />
+ <tag k='naptan:Indicator' v='Stop D' />
+ <tag k='naptan:Street' v='KINGSLAND ROAD' />
  <tag k='naptan:verified' v='no' />
  <tag k='public_transport' v='platform' />
- <tag k='ref' v='52999' />
+ <tag k='ref' v='57136' />
 </node>
 </osm>

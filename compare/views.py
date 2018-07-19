@@ -301,19 +301,18 @@ def save_ag_corr(request):
                             xml += "<tag k='" + str(tag_key) + "' v='" + str(tag_val) + "' />\n"
 
             print(xml)
-            print(routes_data)
-            complete_data = {}
+            complete_data = []
             for (route_id, name) in zip(route_ids_db, long_names_list):
                 data = {"id": route_id, "name": name}
                 routes_data[route_id] = name
 
             for i in range(0, len(route_ids_db)):
                 if i == 0:
-                    complete_data.update(get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=True))
+                    complete_data.append(get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=True))
                 else:
-                    complete_data.update(get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=False))
-
-            print(complete_data)
+                    complete_data.append(get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=False))
+            print(len(routes_data))
+            context['complete_data'] = json.dumps(complete_data)
             context['feed_id'] = entered_agency_corr_form_feed_id
             context['routes_data'] = json.dumps(routes_data)
         return render(request, 'gs/saved_relation.html', {'context': context, 'agency_form': agency_form})
