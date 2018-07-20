@@ -58,7 +58,7 @@ def get_itineraries(route_id_db, feed_id, start):
     result = cursor.fetchall()
 
     str_db_route_id = str(db_route_id)
-    line =[]
+    line = []
     arr = []
     single_itinerary_names = []
 
@@ -66,8 +66,8 @@ def get_itineraries(route_id_db, feed_id, start):
         try:
             slat = Stop.objects.get(feed=feed_id, stop_id=entry[0]).geom.x
             slon = Stop.objects.get(feed=feed_id, stop_id=entry[0]).geom.y
-
-            itinerary = [entry[2], entry[3],entry[5], slat, slon]
+            colour = '#' + str(entry[10])
+            itinerary = [entry[2], entry[3], entry[5], colour, slat, slon]
             single_itinerary_names.append(entry[2])
 
             arr.append(itinerary)

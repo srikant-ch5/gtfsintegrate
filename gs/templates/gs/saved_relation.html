@@ -55,41 +55,30 @@
 		L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 	        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 	    }).addTo(map);
+
     	var stopsarr = [];
+    	var colour;
 	    complete_data[id].forEach(function(linestopsdata){
 	    	linestopsdata.forEach(function(stopdata){
-	    		var lon = parseFloat(stopdata[3]);
-	    		var lat = parseFloat(stopdata[4]);
+	    		var lon = parseFloat(stopdata[4]);
+	    		var lat = parseFloat(stopdata[5]);
 	    		var point = new L.LatLng(lat,lon);
 	    		stopsarr.push(point);
+	    		colour = stopdata[3];
 	    		console.log(typeof lon + " "+typeof lat)
 	    	});
 	    });
 		var polyline = new L.Polyline(stopsarr, {
-			    color: 'red',
+			    color: colour,
 			    weight: 3,
 			    opacity: 0.5,
 			    smoothFactor: 1
 			});
-			polyline.addTo(map);
+		polyline.addTo(map);
 
-			bounds = new L.LatLngBounds(stopsarr);
-			map.fitBounds(bounds);
+		bounds = new L.LatLngBounds(stopsarr);
+		map.fitBounds(bounds);
 	}
 
-
-			/*var point = new L.LatLng(lat,lon);
-			var polyline = new L.Polyline(line_stops, {
-			    color: color,
-			    weight: 3,
-			    opacity: 0.5,
-			    smoothFactor: 1
-			});
-			polyline.addTo(map);
-
-			bounds = new L.LatLngBounds(line_stops);
-			map.fitBounds(bounds);*/
-		
-        
 </script>
 {% endblock %}

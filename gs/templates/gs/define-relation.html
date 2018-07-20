@@ -2,7 +2,7 @@
 {% block relation %}
 <br><br>
 
-<h1>Define relations </h1>
+<h1 id="relheading">Define relations </h1>
 <div class="container">
 <div class="row">
 <div class="col-xs-4 route-form" id="route_form">
@@ -53,14 +53,14 @@
     $('#agency_feed_id').val(feed_id);
     $('#agency_feed_id').hide();
 
-    $("#route_id").val('route_id');
-    $("#short_name").val('route_short_name');
-    $("#long_name").val('route_long_name');
-    $("#desc").val('route_desc');
-    $("#rtype").val('route_type');
-    $("#url").val('route_url');
-    $("#color").val('ref:colour');
- 	$("#text_color").val('ref:colour_tx');	
+    
+    $("#short_name").val('ref');
+    $("#long_name").val('name');
+    $("#desc").val('description');
+    $("#rtype").val('route_master');
+    $("#url").val('url');
+    $("#color").val('colour');
+ 	$("#text_color").val('text_colour');	
     
     var sample_data = [];
 	var example_data = [];

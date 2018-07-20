@@ -284,6 +284,18 @@ def save_ag_corr(request):
 
             print(valid_routes_attr_list)
             xml = ''
+
+            choices = {
+                '0': 'Tram, Streetcar, or Light rail',
+                '1' : 'Subway or Metro',
+                '2' : 'rail',
+                '3' : 'bus',
+                '4' : 'ferry',
+                '5' : 'Cable Car',
+                '6' : 'Godola or Suspended cable car',
+                '7' : 'Funicular'
+             }
+
             for route in routes_list:
                 xml += "\n<tag k='type' v='route_master'>\n"
                 build_route_data = {}
@@ -295,9 +307,14 @@ def save_ag_corr(request):
                         long_names_list.append(r_value)
                     if r_key in valid_routes_attr_list:
                         tag_key = valid_routes_attr_list[r_key]
-                        tag_val = r_value
+                        if tag_key == 'colour' or tag_key == 'text_colour':
+                            tag_val = '#'+r_value
+                        elif r_key == 'rtype':
+                            tag_val = choices[str(r_value)]
+                        else:
+                            tag_val = r_value
 
-                        if tag_val != '':
+                        if tag_val != '' and str(tag_key) != 'None' and r_key != 'id':
                             xml += "<tag k='" + str(tag_key) + "' v='" + str(tag_val) + "' />\n"
 
             print(xml)
@@ -311,7 +328,6 @@ def save_ag_corr(request):
                     complete_data.append(get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=True))
                 else:
                     complete_data.append(get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=False))
-            print(complete_data[0])
             context['complete_data'] = json.dumps(complete_data)
             context['feed_id'] = entered_agency_corr_form_feed_id
             context['routes_data'] = json.dumps(routes_data)

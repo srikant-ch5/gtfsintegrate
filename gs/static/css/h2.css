@@ -19,13 +19,22 @@ th{
     padding-top:15px;
     font-size: 20px;
 }
+#relheading{
+    margin-top: 50px;
+    margin-left: 100px;
+}
 #feed_form {
     border-radius: 25px;
     border: 10px solid #2778D4;
     padding: 20px;
     width: 550px;
     height: 530px;
+    margin-top: 100px;
 }
+#form_download_inform{
+    margin-top: 70px;
+}
+
 #route_form{
     border-radius: 25px;
     border: 10px solid #2778D4;
@@ -126,7 +135,9 @@ table td:first-child { border-left: none; }
     width:  550px;
     height: 500px;
 }
-
+#mainbox{
+    margin-top: 100px;
+}
 .tags-box{
     padding-left:50px;
 }
@@ -348,7 +359,9 @@ a:hover { color: #333333; text-decoration: underline; }
     from {top: -300px; opacity: 0}
     to {top: 0; opacity: 1}
 }
-
+#extra-fields-form{
+    overflow: auto;
+}
 #sample_data,#extra_data{
     display:inline-block;
 }
