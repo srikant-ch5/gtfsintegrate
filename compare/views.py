@@ -311,7 +311,7 @@ def save_ag_corr(request):
                     complete_data.append(get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=True))
                 else:
                     complete_data.append(get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=False))
-            print(len(routes_data))
+            print(complete_data[0])
             context['complete_data'] = json.dumps(complete_data)
             context['feed_id'] = entered_agency_corr_form_feed_id
             context['routes_data'] = json.dumps(routes_data)

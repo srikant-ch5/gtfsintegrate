@@ -23,7 +23,7 @@
 
 <script type="text/javascript">
 	var map = L.map('relmap').setView([51.505, -0.09], 13);
-            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 	
@@ -32,22 +32,40 @@
 	var routes_data = JSON.parse(routes_data_json)
 	var complete_data_json = '{{context.complete_data | safe}}';
 	var complete_data = JSON.parse(complete_data_json);
+
 	console.log(routes_data);
 	$.ajaxSetup({
         async: false
     });
     Object.keys(routes_data).forEach(function(key, index){
-			var html = "<div class='linebtn'><a class='btn btn-primary' onclick='clickfunc(this.id)' id='"+index+"'>"+routes_data[key]+"</a></div><br>";
-			$('#route-lines').append(html);	
-		});
+		var html = "<div class='linebtn'><a class='btn btn-primary' onclick='clickfunc(this.id)' id='"+index+"'>"+routes_data[key]+"</a></div><br>";
+		$('#route-lines').append(html);	
+	});
     function clickfunc(id){
-		    complete_data[id].forEach(function(stopdata){
-		    	var lon =  parseInt(stopdata[3][3]);
-		    	var lat = parseInt(stopdata[4][4])
-		    	var marker = L.marker([lat, lon]).addTo(map);
-		    });
+    	for (i in map._layers) {
+		    if (map._layers[i].options.format == undefined) {
+		        try {
+		            map.removeLayer(map._layers[i]);
+		        } catch (e) {
+		            console.log("problem with " + e + map._layers[i]);
+		        }
+		    }
+		}
 
-		    /*var polyline = new L.Polyline(line_stops, {
+		L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+	        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+	    }).addTo(map);
+    	var stopsarr = [];
+	    complete_data[id].forEach(function(linestopsdata){
+	    	linestopsdata.forEach(function(stopdata){
+	    		var lon = parseFloat(stopdata[3]);
+	    		var lat = parseFloat(stopdata[4]);
+	    		var point = new L.LatLng(lat,lon);
+	    		stopsarr.push(point);
+	    		console.log(typeof lon + " "+typeof lat)
+	    	});
+	    });
+		var polyline = new L.Polyline(stopsarr, {
 			    color: 'red',
 			    weight: 3,
 			    opacity: 0.5,
@@ -55,8 +73,8 @@
 			});
 			polyline.addTo(map);
 
-			bounds = new L.LatLngBounds(line_stops);
-			map.fitBounds(bounds);*/
+			bounds = new L.LatLngBounds(stopsarr);
+			map.fitBounds(bounds);
 	}
 
 
