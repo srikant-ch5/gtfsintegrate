@@ -270,6 +270,7 @@ def save_ag_corr(request):
 
             valid_routes_attr_list = {}
             long_names_list = []
+            short_names_list = []
             route_ids_db = []
             routes_data = {}
             for key, value in routes_form.__dict__.items():
@@ -305,6 +306,8 @@ def save_ag_corr(request):
                         route_ids_db.append(r_value)
                     if r_key == 'long_name':
                         long_names_list.append(r_value)
+                    elif r_key == 'short_name':
+                        short_names_list.append(r_value)
                     if r_key in valid_routes_attr_list:
                         tag_key = valid_routes_attr_list[r_key]
                         if tag_key == 'colour' or tag_key == 'text_colour':
