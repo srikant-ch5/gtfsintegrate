@@ -41,6 +41,7 @@ th{
     padding: 20px;
     width: 550px;
     height: 800px;
+    overflow: auto;
 }
 #extra_fields_form{
     border-radius: 25px;

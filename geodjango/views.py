@@ -7,7 +7,7 @@ from osmapp.models import Node, Way, KeyValueString, OSM_Relation, Tag, Bounds
 from .serializers import FormSerializer, StopSerializer, NodeSerializer, WaySerializer, \
     TagSerializer, KeyValueStringSerializer, RelationSerializer, FeedSerializer, AgencySerializer, \
     RouteSerializer, FeedBoundsSerializer, CorrespondenceSerializer, ConversionSerializer, ExtraFieldSerializer, LineStopSerializer
-from conversionapp.models import Correspondence, Conversion, ExtraField
+from conversionapp.models import Correspondence, Conversion, ExtraField, Correspondence_Route
 from compare.models import Line_Stop
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -223,6 +223,19 @@ class ConversionView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class LineStopView(APIView):
+    def get(self, request):
+        linestop = Line_Stop.objects.all()
+        serializer = LineStopSerializer(linestop, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = LineStopSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ExtraFieldView(APIView):
     def get(self, request):

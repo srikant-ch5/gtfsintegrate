@@ -35,4 +35,5 @@ urlpatterns = [
     url(r'^define_relation/(?P<pk>\d+)/$', compview.define_relation, name="define_relation"),
     url(r'^save_route_corr/$', compview.save_route_corr, name="save_route_corr"),
     url(r'^save_ag_corr/$', compview.save_ag_corr, name="save_ag_corr"),
+    url(r'^saveextra/$', compview.saveextra, name="saveextra"),
 ]

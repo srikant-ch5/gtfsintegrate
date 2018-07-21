@@ -187,6 +187,7 @@ def define_relation(request, pk=None):
         extra_data_ex = {}
         feed_routes = Route.objects.filter(feed=pk)
         print(feed_routes.all()[0].extra_data)
+        ExtraField.objects.filter(feed_id=pk).all().delete()
         for i in range(0, len(feed_routes)):
             extra_data = feed_routes[i].extra_data
             for key, value in extra_data.items():
@@ -273,6 +274,17 @@ def save_ag_corr(request):
             short_names_list = []
             route_ids_db = []
             routes_data = {}
+            extra_data_present = False
+            extra_data = routes_form.extra_data.all()
+            form_extra_data = {}
+            form_extra_data_values = []
+            if extra_data.count() > 0:
+                extra_data_present = True
+
+            if extra_data_present:
+                for key in extra_data:
+                    form_extra_data.update({key.field_name : key.value})
+            print(form_extra_data)
             for key, value in routes_form.__dict__.items():
                 if key == '_state':
                     continue
@@ -288,14 +300,14 @@ def save_ag_corr(request):
 
             choices = {
                 '0': 'Tram, Streetcar, or Light rail',
-                '1' : 'Subway or Metro',
-                '2' : 'rail',
-                '3' : 'bus',
-                '4' : 'ferry',
-                '5' : 'Cable Car',
-                '6' : 'Godola or Suspended cable car',
-                '7' : 'Funicular'
-             }
+                '1': 'Subway or Metro',
+                '2': 'rail',
+                '3': 'bus',
+                '4': 'ferry',
+                '5': 'Cable Car',
+                '6': 'Godola or Suspended cable car',
+                '7': 'Funicular'
+            }
 
             for route in routes_list:
                 xml += "\n<tag k='type' v='route_master'>\n"
@@ -305,13 +317,21 @@ def save_ag_corr(request):
                     if r_key == 'id':
                         route_ids_db.append(r_value)
                     if r_key == 'long_name':
-                        long_names_list.append(r_value)
+                        val = r_value.replace('"', '')
+                        long_names_list.append(val)
                     elif r_key == 'short_name':
-                        short_names_list.append(r_value)
+                        sval = r_value.replace('"', '')
+                        short_names_list.append(sval)
+                    elif r_key == 'extra_data':
+                        extra_data_json = r_value
+
+                        for ekey,evalue in extra_data_json.items():
+
+                            xml += "<tag k='" + str(form_extra_data[ekey]) + "' v='" + str(evalue) + "' />\n"
                     if r_key in valid_routes_attr_list:
                         tag_key = valid_routes_attr_list[r_key]
                         if tag_key == 'colour' or tag_key == 'text_colour':
-                            tag_val = '#'+r_value
+                            tag_val = '#' + r_value
                         elif r_key == 'rtype':
                             tag_val = choices[str(r_value)]
                         else:
@@ -322,6 +342,16 @@ def save_ag_corr(request):
 
             print(xml)
             complete_data = []
+
+            if '' in long_names_list:
+                if '' in short_names_list:
+                    for i in range(0, long_names_list):
+                        long_names_list[i] = 'line ' + str(i)
+                else:
+                    long_names_list = short_names_list
+
+            print(long_names_list)
+
             for (route_id, name) in zip(route_ids_db, long_names_list):
                 data = {"id": route_id, "name": name}
                 routes_data[route_id] = name
@@ -330,8 +360,28 @@ def save_ag_corr(request):
                 if i == 0:
                     complete_data.append(get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=True))
                 else:
-                    complete_data.append(get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=False))
+                    complete_data.append(
+                        get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=False))
+
             context['complete_data'] = json.dumps(complete_data)
             context['feed_id'] = entered_agency_corr_form_feed_id
             context['routes_data'] = json.dumps(routes_data)
         return render(request, 'gs/saved_relation.html', {'context': context, 'agency_form': agency_form})
+
+
+def saveextra(request):
+    if request.method == 'POST':
+        in_feed_id = request.POST['feed_id']
+        key = request.POST['key']
+        val = request.POST['val']
+
+        extrafield = ExtraField.objects.get(feed_id=in_feed_id, field_name=key, value=None)
+        extrafield.value = val
+        extrafield.save()
+
+        route_form = Correspondence_Route.objects.get(feed_id=in_feed_id)
+        route_form.extra_data.add(extrafield)
+
+        print('{} {} {}'.format(in_feed_id, key, val))
+        print(ExtraField.objects.filter(feed_id=in_feed_id, field_name=key).count())
+    return render(request, 'gs/define-relation.html')

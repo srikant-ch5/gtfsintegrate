@@ -67,7 +67,9 @@ def get_itineraries(route_id_db, feed_id, start):
             slat = Stop.objects.get(feed=feed_id, stop_id=entry[0]).geom.x
             slon = Stop.objects.get(feed=feed_id, stop_id=entry[0]).geom.y
             colour = '#' + str(entry[10])
-            itinerary = [entry[2], entry[3], entry[5], colour, slat, slon]
+            stop_name = entry[2].replace('"', '')
+            stop_name_safe = stop_name.replace("'","")
+            itinerary = [stop_name_safe, entry[3], entry[5], colour, slat, slon]
             single_itinerary_names.append(entry[2])
 
             arr.append(itinerary)

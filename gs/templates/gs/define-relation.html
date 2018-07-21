@@ -10,7 +10,9 @@
         <form method="POST" class="route-form" action="{% url 'save_route_corr' %}">
             {% csrf_token %}
             {{ route_form.as_p }}
-            <button type="submit" class="save btn btn-default"> Save</button>
+			<h2> Enter Extra Fields </h2>
+			<div id="extrafield"></div>
+            <button type="submit" class="save btn btn-primary"> Save</button>
         </form>
 </div>
 
@@ -37,7 +39,6 @@
 	</div>
 </div>
 </div>
-
 <script type="text/javascript">
 	var data_url = "/api/routedata/"
 	var feed_id = '{{context.feed_id}}';
@@ -92,23 +93,78 @@
 	});
 	var extra_data_url = "/api/extrafielddata/";
 
+	console.log("Configuring ajaxSetup")
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$.ajaxSetup({
+    beforeSend: function (xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
 	$.ajax({
 		url:extra_data_url,
 		type:"GET",
 		dataType:"json",
 		async:true,
 		success:function(data){
+			var count = 0;
 			for(let i=0;i<data.length;i++){
 				if(data[i].feed_id == feed_id){
-					$("#extrafield").append("<h3>" + data[i].field_name+"<h3>    <input type='textbox'>");
+					count++;
+					$("#extrafield").append("<h3>" + data[i].field_name+"<h3>    <input type='textbox' id='"+data[i].field_name+"'><a class='btn btn-primary' id='"+data[i].field_name+"' onclick='saveextrafunc(this.id)'>store</a>");
 				}
 			}
-			$("#extrafield").append("<a id='submitextra' class='btn btn-primary'>Submit</a>");		
+			if(count == 0){
+				$("#extrafield").append("<h3>No extra data</h3>");
+			}
 		},
 		error:function(status,xhr,e){
 			alert(status + xhr +e)
 		}
 	});
+
+	function saveextrafunc(id){
+		var v = $("#"+id).val();
+		$.ajax({
+                url: '/gtfs/saveextra/',
+                type: "POST",
+                data: {
+                    'feed_id': feed_id,
+                    'key':id,
+                    'val':v,
+               		'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function () {
+                    console.log('Posted data to view')
+                },
+                error: function (xhr, status, e) {
+                    console.log("ER " + status)
+                }
+            });
+	}
 
 </script>
 
