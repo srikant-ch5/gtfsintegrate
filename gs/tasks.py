@@ -22,6 +22,22 @@ bottomleft_block_stops = []
 bottomright_block_stops = []
 
 
+def check_stop_in_itineraries(all_itineraries, stop, index):
+    stop_found = False
+    for i in range(0, len(all_itineraries)):
+        if len(all_itineraries[i]) - 1 >= index:
+            if all_itineraries[i][index] == stop:
+                stop_found = True
+            else:
+                stop_found = False
+
+    return stop_found
+
+
+def it_seq(ar):
+    print('yes')
+
+
 def get_itineraries(route_id_db, feed_id, start):
     db_route_id = "'" + str(route_id_db) + "'"
     qfeed_id = "'" + str(feed_id) + "'"
@@ -38,7 +54,8 @@ def get_itineraries(route_id_db, feed_id, start):
                 gtfs_route.long_name,
                 gtfs_route.desc,
                 gtfs_route.color,
-                gtfs_route.extra_data
+                gtfs_route.extra_data,
+                gtfs_stop.id
             FROM 
                 gtfs_route,
                 gtfs_stop,
@@ -62,6 +79,40 @@ def get_itineraries(route_id_db, feed_id, start):
     arr = []
     single_itinerary_names = []
 
+    unique_itineraries = []
+    count = 0
+    i = 0
+    while i <= len(result) - 1:
+        itinerary_seq = []
+        stopseq = result[i][3]
+        if stopseq == 1:
+            itinerary_seq.append(stopseq)
+            for j in range(i + 1, len(result)):
+                if result[j][3] != 1:
+                    itinerary_seq.append(result[j][3])
+                else:
+                    break
+            print("new df itinerary")
+        i = j
+
+
+    '''
+    while i <= len(result):
+        single_itinerary = []
+        if str(result[i][3]) == '1':
+            stopid = result[i][12]
+            print(type(stopid))
+            single_itinerary.append(stopid)
+            stop_id_in_single_it = len(single_itinerary)-1
+            stop_present = check_stop_in_itineraries(unique_itineraries, stopid, stop_id_in_single_it)
+
+        if not stop_present:
+            unique_itineraries.append(single_itinerary)
+            count = count+1
+    '''
+    print(unique_itineraries)
+
+    '''
     for entry in result:
         try:
             slat = Stop.objects.get(feed=feed_id, stop_id=entry[0]).geom.x
@@ -77,7 +128,7 @@ def get_itineraries(route_id_db, feed_id, start):
             print(e)
 
     line.append(arr)
-    print("Done")
+    print("Done")'''
     return line
 
 
