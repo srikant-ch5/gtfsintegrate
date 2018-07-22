@@ -70,19 +70,16 @@ def get_itineraries(route_id_db, feed_id, start):
     cursor.execute(query)
     result = cursor.fetchall()
 
-    str_db_route_id = str(db_route_id)
-    line = []
-    arr = []
-    single_itinerary_names = []
+    route_names = []
+
+    line = [result[0][8], result[0][5]]
 
     unique_itineraries = []
-    count = 0
     i = 0
     all_itineraries = []
-
+    all_long_names = []
     while i < len(result):
         it = []
-
         if result[i][3] == 1:
             j = i + 1
             it.append(result[i][3])
@@ -102,39 +99,19 @@ def get_itineraries(route_id_db, feed_id, start):
         if not single_itinerary in unique_itineraries:
             unique_itineraries.append(single_itinerary)
 
-    print(unique_itineraries)
-    '''
-    while i <= len(result):
-        single_itinerary = []
-        if str(result[i][3]) == '1':
-            stopid = result[i][12]
-            print(type(stopid))
-            single_itinerary.append(stopid)
-            stop_id_in_single_it = len(single_itinerary)-1
-            stop_present = check_stop_in_itineraries(unique_itineraries, stopid, stop_id_in_single_it)
+    merged_itineraries = []
+    final_unique_array = unique_itineraries
+    for single_itinerary in unique_itineraries:
 
-        if not stop_present:
-            unique_itineraries.append(single_itinerary)
-            count = count+1
+        for compare_it in unique_itineraries:
 
-    print(unique_itineraries)
+            if single_itinerary in compare_it:
+                final_unique_array.remove(single_itinerary)
 
-    for entry in result:
-        try:
-            slat = Stop.objects.get(feed=feed_id, stop_id=entry[0]).geom.x
-            slon = Stop.objects.get(feed=feed_id, stop_id=entry[0]).geom.y
-            colour = '#' + str(entry[10])
-            stop_name = entry[2].replace('"', '')
-            stop_name_safe = stop_name.replace("'","")
-            itinerary = [stop_name_safe, entry[3], entry[5], colour, slat, slon]
-            single_itinerary_names.append(entry[2])
+    line.append(final_unique_array)
 
-            arr.append(itinerary)
-        except Exception as e:
-            print(e)
+    print(line)
 
-    line.append(arr)
-    print("Done")'''
     return line
 
 
