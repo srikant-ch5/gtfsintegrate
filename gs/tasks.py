@@ -34,10 +34,6 @@ def check_stop_in_itineraries(all_itineraries, stop, index):
     return stop_found
 
 
-def it_seq(ar):
-    print('yes')
-
-
 def get_itineraries(route_id_db, feed_id, start):
     db_route_id = "'" + str(route_id_db) + "'"
     qfeed_id = "'" + str(feed_id) + "'"
@@ -82,20 +78,31 @@ def get_itineraries(route_id_db, feed_id, start):
     unique_itineraries = []
     count = 0
     i = 0
-    while i <= len(result) - 1:
-        itinerary_seq = []
-        stopseq = result[i][3]
-        if stopseq == 1:
-            itinerary_seq.append(stopseq)
-            for j in range(i + 1, len(result)):
-                if result[j][3] != 1:
-                    itinerary_seq.append(result[j][3])
-                else:
+    all_itineraries = []
+
+    while i < len(result):
+        it = []
+
+        if result[i][3] == 1:
+            j = i + 1
+            it.append(result[i][3])
+
+            while result[j][3] != 1 and j < len(result):
+                it.append(result[j][3])
+                j = j + 1
+
+                if j >= len(result):
                     break
-            print("new df itinerary")
+        all_itineraries.append(it)
         i = j
 
+    for k in range(0, len(all_itineraries)):
+        single_itinerary = all_itineraries[k]
 
+        if not single_itinerary in unique_itineraries:
+            unique_itineraries.append(single_itinerary)
+
+    print(unique_itineraries)
     '''
     while i <= len(result):
         single_itinerary = []
@@ -109,10 +116,9 @@ def get_itineraries(route_id_db, feed_id, start):
         if not stop_present:
             unique_itineraries.append(single_itinerary)
             count = count+1
-    '''
+
     print(unique_itineraries)
 
-    '''
     for entry in result:
         try:
             slat = Stop.objects.get(feed=feed_id, stop_id=entry[0]).geom.x
@@ -472,9 +478,9 @@ def dividemap(east=None, west=None, north=None, south=None, northeast_lat=None, 
     '''
 
 
-def rename_feed(name, formId):
-    present_name = name
-    feed = Feed.objects.get(name=name)
+def rename_feed(feed_id, formId):
+    feed = Feed.objects.get(id=feed_id)
+    name = feed.name
     agencies = feed.agency_set.all()
     update_name = ''
 
@@ -508,23 +514,20 @@ def download_feed_in_db(file, file_name, code, formId):
     successfull_download = 0  # 0 = False
     error = 'No error while downloading the file'
     print("{} in down Feed init ".format(successfull_download))
-    try:
-        feeds.import_gtfs(file)
-        feed = Feed.objects.latest('id')
-        form = GTFSForm.objects.get(id=formId)
-        print(form)
-        successfull_download = 1  # 1 =True
-        print("{} in  Feed import ".format(successfull_download))
 
-    except Exception as e:
-        error = str(e)
-        successfull_download = 0
+    feeds.import_gtfs(file)
+    feed_id = feeds.id
+
+    form = GTFSForm.objects.get(id=formId)
+    print(form)
+    successfull_download = 1  # 1 =True
+    print("{} in  Feed import ".format(successfull_download))
 
     if code == 'not_present':
-        rename_feed(file_name, formId)
+        rename_feed(feed_id, formId)
 
     print("{} in down Feed end ".format(successfull_download))
-    return successfull_download, error
+    return successfull_download, error, feed_id
 
 
 def download_feed_with_url(download_url, save_feed_name, code, formId):
@@ -539,9 +542,9 @@ def download_feed_with_url(download_url, save_feed_name, code, formId):
 
     open(feed_file, 'wb').write(r.content)
 
-    feed_download_status, error = download_feed_in_db(feed_file, save_feed_name, code, formId)
+    feed_download_status, error, feed_id = download_feed_in_db(feed_file, save_feed_name, code, formId)
 
-    return feed_download_status, error
+    return feed_download_status, error, feed_id
 
 
 def download_feed_task(formId):
@@ -551,24 +554,23 @@ def download_feed_task(formId):
     entered_osm_tag = user_form.osm_tag
     entered_gtfs_tag = user_form.gtfs_tag
     entered_name = user_form.name
-    user_form.timestamp = timezone.now()
-    user_form.save()
 
     feed_name = ((lambda: entered_name, lambda: entered_osm_tag)[entered_name == '']())
 
     code = 'not_present'
-    feed_download_status, error = download_feed_with_url(entered_url, feed_name, code, formId)
+    feed_download_status, error, feed_id = download_feed_with_url(entered_url, feed_name, code, formId)
 
     print(feed_download_status)
 
     if feed_download_status == 0:
+        print("Inside Feed download failed")
         form_to_delete = GTFSForm.objects.latest('id')
         feed_to_delete = Feed.objects.latest('id')
 
         form_to_delete.delete()
         feed_to_delete.delete()
 
-    return error
+    return error, feed_id
 
 
 def check_feeds_task():

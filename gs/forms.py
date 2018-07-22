@@ -17,7 +17,6 @@ class GTFSInfoForm(forms.ModelForm):
         self.fields['name'].widget.attrs = {
             'id': 'formname',
             'name': 'feedname',
-            'label': 'formname'
         }
         self.fields['url'].widget.attrs = {
             'id': 'formurl',

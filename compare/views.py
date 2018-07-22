@@ -325,9 +325,10 @@ def save_ag_corr(request):
                     elif r_key == 'extra_data':
                         extra_data_json = r_value
 
-                        for ekey,evalue in extra_data_json.items():
+                        if extra_data_present:
+                            for ekey,evalue in extra_data_json.items():
+                                xml += "<tag k='" + str(form_extra_data[ekey]) + "' v='" + str(evalue) + "' />\n"
 
-                            xml += "<tag k='" + str(form_extra_data[ekey]) + "' v='" + str(evalue) + "' />\n"
                     if r_key in valid_routes_attr_list:
                         tag_key = valid_routes_attr_list[r_key]
                         if tag_key == 'colour' or tag_key == 'text_colour':
