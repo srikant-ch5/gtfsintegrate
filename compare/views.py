@@ -1,12 +1,13 @@
+import json
+
+from django.db import connection
 from django.shortcuts import render
 
-from multigtfs.models import Stop, Feed, Route, Agency
-from django.db import connection
-from .models import CMP_Stop
-import json
-from gs.tasks import save_comp, connect_to_JOSM, get_itineraries
 from conversionapp.models import Correspondence, ExtraField, Correspondence_Route, Correspondence_Agency
 from gs.forms import Correspondence_Route_Form, Correspondence_Agency_Form
+from gs.tasks import save_comp, connect_to_JOSM, get_itineraries
+from multigtfs.models import Stop, Feed, Route
+from .models import CMP_Stop
 
 
 def get_nodes_within100m(lon, loat):

@@ -1,6 +1,4 @@
 from django.contrib.gis.db import models
-from django.db.models import Manager as GeoManager
-from django.contrib.gis.geos import Point, LineString
 
 
 class CMP_Stop(models.Model):

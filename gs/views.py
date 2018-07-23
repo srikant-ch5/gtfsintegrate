@@ -1,17 +1,14 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from django.views.generic import ListView
 from django.utils import timezone
+from django.views.generic import ListView
 
 from multigtfs.models import Feed
+from osmapp.views import get_osm_data
 from .forms import GTFSInfoForm, CorrespondenceForm
 from .models import GTFSForm
 from .tasks import download_feed_task, reset_feed, get_keys
-from osmapp.views import get_osm_data
-
-from osmapp.models import KeyValueString, Tag, Node
-import json
 
 
 def feed_form(request):

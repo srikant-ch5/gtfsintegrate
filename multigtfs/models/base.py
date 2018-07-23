@@ -13,21 +13,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from __future__ import unicode_literals
+
 import codecs
 import csv
 import re
 from codecs import BOM_UTF8
 from collections import defaultdict
+from csv import reader, writer
 from datetime import datetime, date
 from io import StringIO
 from logging import getLogger
-from csv import reader, writer
+
 from django.contrib.gis.db import models
 from django.db.models.fields.related import ManyToManyField
 from django.utils.six import StringIO, text_type, PY3
+
 from multigtfs.compat import (
     get_blank_value, write_text_rows, Manager, QuerySet)
-
 
 logger = getLogger(__name__)
 re_geom = re.compile(r'(?P<name>geom)\[(?P<index>\d)\]')
@@ -253,7 +255,7 @@ class Base(models.Model):
             def __iter__(self):
                 return self
 
-        csv_reader = reader(txt_file, skipinitialspace=True) 
+        csv_reader = reader(txt_file, skipinitialspace=True)
         unique_line = dict()
         count = 0
         first = True

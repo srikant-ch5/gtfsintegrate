@@ -1,5 +1,5 @@
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
-from django.contrib.postgres.fields import ArrayField, JSONField
 
 
 class Correspondence(models.Model):

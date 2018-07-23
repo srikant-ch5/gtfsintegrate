@@ -1,6 +1,12 @@
 from __future__ import unicode_literals
+
 from django.shortcuts import render
-from rest_framework import generics
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from compare.models import Line_Stop
+from conversionapp.models import Correspondence, Conversion, ExtraField
 from gs.models import GTFSForm
 from multigtfs.models import Stop, Feed, Agency, Route
 from osmapp.models import Node, Way, KeyValueString, OSM_Relation, Tag, Bounds
@@ -8,13 +14,6 @@ from .serializers import FormSerializer, StopSerializer, NodeSerializer, WaySeri
     TagSerializer, KeyValueStringSerializer, RelationSerializer, FeedSerializer, AgencySerializer, \
     RouteSerializer, FeedBoundsSerializer, CorrespondenceSerializer, ConversionSerializer, ExtraFieldSerializer, \
     LineStopSerializer
-from conversionapp.models import Correspondence, Conversion, ExtraField, Correspondence_Route
-from compare.models import Line_Stop
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
-from rest_framework.views import APIView
-from rest_framework import status
-from rest_framework.response import Response
 
 
 def main(request):

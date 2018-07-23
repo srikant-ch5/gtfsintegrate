@@ -18,9 +18,9 @@ from django.utils.encoding import python_2_unicode_compatible
 from jsonfield import JSONField
 
 from multigtfs.models.base import models, Base
+from multigtfs.models.fields import SecondsField
 from multigtfs.models.stop import Stop
 from multigtfs.models.trip import Trip
-from multigtfs.models.fields import SecondsField
 
 
 @python_2_unicode_compatible

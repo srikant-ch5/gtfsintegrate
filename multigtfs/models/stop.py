@@ -13,18 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from __future__ import unicode_literals
-from logging import getLogger
+
 import warnings
+from logging import getLogger
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.six import StringIO
 from jsonfield import JSONField
-
-from django.contrib.gis.db.models import PointField, LineStringField
-from django.contrib.gis.geos import Point, LineString
-from django.db.models import Manager as GeoManager
 
 from multigtfs.models.base import models, Base
 
@@ -178,4 +175,3 @@ class Stop(Base):
 @receiver(post_save, sender=Stop, dispatch_uid="post_save_stop")
 def post_save_stop(sender, instance, **kwargs):
     """Update related objects when the Stop is updated"""
-    from multigtfs.models.trip import Trip

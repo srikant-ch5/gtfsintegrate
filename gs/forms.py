@@ -1,10 +1,7 @@
 from django import forms
-from .models import GTFSForm
-from django.http import JsonResponse
-from django.views.generic.edit import CreateView
-from leaflet.forms.widgets import LeafletWidget
-from multigtfs.models import Stop
+
 from conversionapp.models import Correspondence, Correspondence_Route, Correspondence_Agency
+from .models import GTFSForm
 
 
 class GTFSInfoForm(forms.ModelForm):

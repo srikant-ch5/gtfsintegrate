@@ -1,8 +1,9 @@
+from typing import Tuple
+
 from django.contrib.gis.db import models
 from django.contrib.gis.geos import Point, LineString
+from django.contrib.postgres.fields import ArrayField
 from django.db.models import Manager as GeoManager
-from typing import Tuple
-from django.contrib.postgres.fields import ArrayField, JSONField
 
 
 # model for storing bounds specific to the operator

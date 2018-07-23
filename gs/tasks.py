@@ -1,20 +1,19 @@
 from __future__ import unicode_literals
 
 import os
+
 import numpy as np
 import requests
-from django.utils import timezone
-from multigtfs.models import Feed, Stop
-import json
-from compare.models import CMP_Stop, Line_Stop
-from osmapp.models import Node, Tag, KeyValueString
-from .models import GTFSForm
 from django.db import connection
+from django.utils import timezone
 from geographiclib.geodesic import Geodesic
 from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
-import pdb
-import operator
+
+from compare.models import CMP_Stop
+from multigtfs.models import Feed, Stop
+from osmapp.models import Node, Tag
+from .models import GTFSForm
 
 topleft_block_stops = []
 topright_block_stops = []

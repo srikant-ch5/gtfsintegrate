@@ -1,15 +1,14 @@
-from django.conf.urls import url, include
-
-from multigtfs.models import Feed
-from osmapp.models import Node
-from multigtfs.models import Stop
-
-from . import views
-from .views import FeedListView
+from django.conf.urls import url
 from djgeojson.views import GeoJSONLayerView
+
+import compare.views as compview
 import conversionapp.views as conv_view
 import osmapp.views as osmview
-import compare.views as compview
+from multigtfs.models import Feed
+from multigtfs.models import Stop
+from osmapp.models import Node
+from . import views
+from .views import FeedListView
 
 urlpatterns = [
     url(r'^$', views.home, name="home"),

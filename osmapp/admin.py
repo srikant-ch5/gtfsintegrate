@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import Tag, Node, KeyValueString, Way, OSM_Relation, Bounds
 from leaflet.admin import LeafletGeoAdmin
+
+from .models import Tag, Node, KeyValueString, Way, OSM_Relation, Bounds
 
 
 class FeedBoundsAdmin(admin.ModelAdmin):

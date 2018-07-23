@@ -1,8 +1,10 @@
-from django.shortcuts import render
-from gs.forms import CorrespondenceForm
-from .models import Conversion, Correspondence
-from multigtfs.models import Stop
 import re
+
+from django.shortcuts import render
+
+from gs.forms import CorrespondenceForm
+from multigtfs.models import Stop
+from .models import Correspondence
 
 
 def save_correspondence(request):

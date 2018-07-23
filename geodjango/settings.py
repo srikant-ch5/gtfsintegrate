@@ -1,5 +1,7 @@
 import os
+
 import raven
+
 from geodjango.settings_secret import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
