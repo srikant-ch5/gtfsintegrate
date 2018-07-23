@@ -41,14 +41,13 @@
     window.onload = function () {
         document.getElementById("loading").style.display = "none"
     };
-    
+
     const feed_id = '{{context.feed_id}}';
-   	
-   	$('label[0]').hide()
+
+   	$('label[0]').hide();
 
    	$('label').each(function(i){
-   		if(i == 0)
-   	   		$(this).hide()
+   		if(i === 0) { $(this).hide(); }
    	});
 
    	$('#feed_id').val(feed_id);

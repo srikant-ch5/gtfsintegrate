@@ -17,12 +17,12 @@
                    <button class="btn btn-primary" id="save-btn">save</button>
                 </div>
             </div>
-            <div class="" col-md-6>
+            <div class="col-md-6">
                 <div class="tags-box">
                 	<h2> Stops with Abbrevations in your feed </h2>
                     {% for stop in context.stops_for_conversion %}
                     	<h3>-> {{ stop }} </h3>
-                    {% endfor %} 
+                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -35,7 +35,7 @@
 	window.onload = function () {
         document.getElementById("loading").style.display = "none"
     };
-    
+
     const feed_id = '{{context.feed_id}}';
     $('#proceed-btn').hide()
    $("#add-box").on("click",function(){
@@ -49,8 +49,8 @@
    	var list = $('#add-conv').find('input').map(function() {
 		  return $(this).val();
 		}).get();
-   	let present_string_arr =[] 
-   	let replace_string_arr = []
+   	let present_string_arr =[];
+   	let replace_string_arr = [];
 
    	for (var i=0;i<list.length;i++){
 	    if ((i+2)%2==0) {
