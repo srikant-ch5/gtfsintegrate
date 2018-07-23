@@ -121,20 +121,20 @@ class Base(models.Model):
             return datetime.strptime(value, '%Y%m%d')
 
         def bool_convert(value):
-            return (value == '1')
+            return value == '1'
 
         def char_convert(value):
-            return (value or '')
+            return value or ''
 
         def null_convert(value):
-            return (value or None)
+            return value or None
 
         def geom_convert(value):
             """Convert latitude / longitude, strip leading +."""
             if value.startswith('+'):
                 return value[1:]
             else:
-                return (value or 0.0)
+                return value or 0.0
 
         cache = {}
 
@@ -253,7 +253,7 @@ class Base(models.Model):
             def __iter__(self):
                 return self
 
-        csv_reader = reader(txt_file, skipinitialspace=True)
+        csv_reader = reader(txt_file, skipinitialspace=True) 
         unique_line = dict()
         count = 0
         first = True

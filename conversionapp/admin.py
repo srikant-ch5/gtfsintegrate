@@ -3,11 +3,11 @@ from .models import Correspondence, Conversion
 
 
 class CorrespondenceAdmin(admin.ModelAdmin):
-    display = ('id')
+    display = 'id'
 
 
 class ConversionAdmin(admin.ModelAdmin):
-    display = ('id')
+    display = 'id'
 
 
 admin.site.register(Correspondence, CorrespondenceAdmin)

@@ -95,4 +95,4 @@ class Command(BaseCommand):
                 feed.name = name
                 feed.save()
 
-        self.stdout.write("Successfully imported Feed %s\n" % (feed))
+        self.stdout.write("Successfully imported Feed %s\n" % feed)

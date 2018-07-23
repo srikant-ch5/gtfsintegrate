@@ -4,15 +4,15 @@ from leaflet.admin import LeafletGeoAdmin
 
 
 class FeedBoundsAdmin(admin.ModelAdmin):
-    display = ('operator_name')
+    display = 'operator_name'
 
 
 class TagAdmin(admin.ModelAdmin):
-    display = ('tag.id')
+    display = 'tag.id'
 
 
 class KeyValueStringAdmin(admin.ModelAdmin):
-    display = ('value')
+    display = 'value'
 
 
 class RelationAdmin(admin.ModelAdmin):
