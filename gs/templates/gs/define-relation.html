@@ -40,7 +40,7 @@
 </div>
 </div>
 <script type="text/javascript">
-	var data_url = "/api/routedata/"
+	var data_url = "/api/routedata/";
 	var feed_id = '{{context.feed_id}}';
 	feed_id = parseInt(feed_id);
 
@@ -54,15 +54,15 @@
     $('#agency_feed_id').val(feed_id);
     $('#agency_feed_id').hide();
 
-    
+
     $("#short_name").val('ref');
     $("#long_name").val('name');
     $("#desc").val('description');
     $("#rtype").val('route_master');
     $("#url").val('url');
     $("#color").val('colour');
- 	$("#text_color").val('text_colour');	
-    
+ 	$("#text_color").val('text_colour');
+
     var sample_data = [];
 	var example_data = [];
 	$.ajax({
@@ -93,7 +93,7 @@
 	});
 	var extra_data_url = "/api/extrafielddata/";
 
-	console.log("Configuring ajaxSetup")
+	console.log("Configuring ajaxSetup");
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {

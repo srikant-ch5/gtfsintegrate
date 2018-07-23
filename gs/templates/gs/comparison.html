@@ -128,9 +128,9 @@
 
     //get the correspondence form of the feed
     feed_corr_data = get_correspondene_form_data();
-    [gtfs_to_osm_stop_name_full, gtfs_to_osm_ref_full] = get_tag_resemblence(feed_corr_data)
+    [gtfs_to_osm_stop_name_full, gtfs_to_osm_ref_full] = get_tag_resemblence(feed_corr_data);
     try{
-        gtfs_to_osm_stop_name_arr = gtfs_to_osm_stop_name_full.split('_')
+        gtfs_to_osm_stop_name_arr = gtfs_to_osm_stop_name_full.split('_');
         gtfs_to_osm_stop_name = gtfs_to_osm_stop_name_arr[1];
 
     }catch(error){
@@ -231,7 +231,7 @@
         }catch(error){
             alert(error+' in getting tags and keyvaluestrings');
         }
- 
+
         const nodedata = '{% url "osmnodedata" %}';
         $.getJSON(nodedata, function (data) {
 
@@ -249,7 +249,7 @@
                 popupAnchor: [1, -34],
                 shadowSize: [41, 41]
             });
-        
+
             for (let i = 0; i < length; i++) {
                 if(data.features[i].properties.feed == feed_id){
 
@@ -357,7 +357,7 @@
                         ref_oper = false;
                     }else if(feed_corr_data[key] == "ref:operator"){
                         ref_in_gtfs_key = key;
-                        ref_oper = true;    
+                        ref_oper = true;
                     }
                 }
 
@@ -373,15 +373,15 @@
                         ref_from = 'gtfs';
                     }
                 }
-            
+
 
             clicked_osm_stop = {
                 'node_id': osm_stop,
                 'osm_name': this.name,
                 'comp_name':t_name,
                 'ref':reference
-            }
-            
+            };
+
             show_on_result(t_name, reference, name_from, ref_from);
 
             console.log(ref_in_gtfs_key);
@@ -393,9 +393,9 @@
             alert(error + " in osm stop click");
         }
     }
-        });//osm  get data json 
+        });//osm  get data json
 
-        console.log(tags_to_osm)
+        console.log(tags_to_osm);
 
         try{
         const drawnItems = new L.FeatureGroup();
@@ -554,7 +554,7 @@ function get_tags(){
 }
 
 function get_kvstrings(){
-    console.log('Getting keyvaluestrings')
+    console.log('Getting keyvaluestrings');
     var kvstrings;
     $.ajax({
         url:'/api/keyvaluestringdata/',
@@ -582,8 +582,8 @@ function match_stop(){
     var data = {
         'feed_id':feed_id,
         'gtfs':clicked_gtfs_stop,
-        'osm':clicked_osm_stop        
-    }
+        'osm':clicked_osm_stop
+    };
 
     data_to_match.push(data);
     console.log("Data to match "+data_to_match);
@@ -610,7 +610,7 @@ function add_to_match_list(){
         'feed_id':feed_id,
         'gtfs':clicked_gtfs_stop,
         'osm':clicked_osm_stop
-    }
+    };
     data_to_match.push(data);
     $('#add_to_list').hide();
     $('#export_all_stops').show();
@@ -618,7 +618,7 @@ function add_to_match_list(){
 }
 
 function match_stops(){
-    var match_stop_url = "{% url 'match_stops' %}"
+    var match_stop_url = "{% url 'match_stops' %}";
     console.log("Sending "+data_to_match.length+" stops to JOSM Editor");
     data_to_match_JSON = JSON.stringify(data_to_match);
 
@@ -641,7 +641,7 @@ function match_stops(){
 }
 
 function show_on_result(name, ref, name_from, ref_from){
-    
+
     $("#resultstopname").text(name);
     $("#resultstopref").text(ref);
 

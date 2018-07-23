@@ -37,15 +37,15 @@
     };
 
     const feed_id = '{{context.feed_id}}';
-    $('#proceed-btn').hide()
+    $('#proceed-btn').hide();
    $("#add-box").on("click",function(){
-   		var inputField = $('<input type="text" id = "present-conv-box"><input type="text" id= "replace-conv-box">')
+   		var inputField = $('<input type="text" id = "present-conv-box"><input type="text" id= "replace-conv-box">');
    		$("#add-conv").append(inputField)
    });
 
    $("#save-btn").on("click",function(e){
    	$("#save-btn").hide();
-   	var corr_form_id = '{{context.corr_form_id}}'
+   	var corr_form_id = '{{context.corr_form_id}}';
    	var list = $('#add-conv').find('input').map(function() {
 		  return $(this).val();
 		}).get();
@@ -63,7 +63,7 @@
 
 	console.log("Posting data to conversion model");
 
-   	var conversionurl = '{% url "conversionview" %}'
+   	var conversionurl = '{% url "conversionview" %}';
 
 	function getCookie(name) {
         let cookieValue = null;

@@ -1,4 +1,4 @@
-console.log("Configuring ajaxSetup")
+console.log("Configuring ajaxSetup");
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {

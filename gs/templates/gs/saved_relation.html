@@ -26,10 +26,10 @@
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
-	
+
 	const feed_id = parseInt('{{context.feed_id|safe}}');
 	var routes_data_json = '{{context.routes_data | safe}}';
-	var routes_data = JSON.parse(routes_data_json)
+	var routes_data = JSON.parse(routes_data_json);
 	var complete_data_json = '{{context.complete_data | safe}}';
 	var complete_data = JSON.parse(complete_data_json);
 
@@ -39,7 +39,7 @@
     });
     Object.keys(routes_data).forEach(function(key, index){
 		var html = "<div class='linebtn'><a class='btn btn-primary' onclick='clickfunc(this.id)' id='"+index+"'>"+routes_data[key]+"</a></div><br>";
-		$('#route-lines').append(html);	
+		$('#route-lines').append(html);
 	});
     function clickfunc(id){
     	for (i in map._layers) {
