@@ -153,7 +153,7 @@ class Stop(Base):
         txt = txt_file.read()
 
         def is_station(pairs):
-            '''Does the row represent a station?'''
+            """Does the row represent a station?"""
             for name, val in pairs:
                 if name == 'location_type':
                     return val == '1'
@@ -164,7 +164,7 @@ class Stop(Base):
         print("Imported %d station stops", stations)
 
         def is_stop(pairs):
-            '''Does the row represent a stop?'''
+            """Does the row represent a stop?"""
             for name, val in pairs:
                 if name == 'location_type':
                     return val != '1'
@@ -178,5 +178,5 @@ class Stop(Base):
 
 @receiver(post_save, sender=Stop, dispatch_uid="post_save_stop")
 def post_save_stop(sender, instance, **kwargs):
-    '''Update related objects when the Stop is updated'''
+    """Update related objects when the Stop is updated"""
     from multigtfs.models.trip import Trip

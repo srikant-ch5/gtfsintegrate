@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"Define model and field to represent time of day in GTFS feeds"
+"""Define model and field to represent time of day in GTFS feeds"""
 
 from __future__ import unicode_literals
 
@@ -23,7 +23,7 @@ from django.utils.encoding import python_2_unicode_compatible
 
 @python_2_unicode_compatible
 class Seconds(object):
-    '''A GTFS seconds value, formatted as HH:MM:SS in the GTFS feed'''
+    """A GTFS seconds value, formatted as HH:MM:SS in the GTFS feed"""
 
     def __init__(self, seconds=0):
         self.seconds = int(seconds)
@@ -65,18 +65,18 @@ class Seconds(object):
 
 
 class SecondsField(Field):
-    '''A Model Field for storing Seconds'''
+    """A Model Field for storing Seconds"""
 
     description = 'Seconds since start of the day'
 
     def from_db_value(self, value, expression, connection, context):
-        '''Handle data loaded from database.'''
+        """Handle data loaded from database."""
         if value is None:
             return value
         return self.parse_seconds(value)
 
     def to_python(self, value):
-        '''Handle data from serialization and form clean() methods.'''
+        """Handle data from serialization and form clean() methods."""
         if isinstance(value, Seconds):
             return value
         if value in self.empty_values:
@@ -85,14 +85,14 @@ class SecondsField(Field):
 
     @staticmethod
     def parse_seconds(value):
-        '''
+        """
         Parse string into Seconds instances.
 
         Handled formats:
         HH:MM:SS
         HH:MM
         SS
-        '''
+        """
         svalue = str(value)
         colons = svalue.count(':')
         if colons == 2:
@@ -109,7 +109,7 @@ class SecondsField(Field):
         return Seconds.from_hms(hours, minutes, seconds)
 
     def get_prep_value(self, value):
-        '''Prepare value for database storage.'''
+        """Prepare value for database storage."""
         if isinstance(value, Seconds):
             return value.seconds
         elif value:
@@ -118,10 +118,10 @@ class SecondsField(Field):
             return None
 
     def get_internal_type(self):
-        '''Seconds are stored in the database like nullable Integers.'''
+        """Seconds are stored in the database like nullable Integers."""
         return 'IntegerField'
 
     def value_to_string(self, obj):
-        '''Convert to HH:MM:SS format.'''
+        """Convert to HH:MM:SS format."""
         value = self.value_from_object(obj)
         return value.__str__

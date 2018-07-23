@@ -45,7 +45,7 @@ class FeedTest(TestCase):
             shutil.rmtree(self.temp_dir)
 
     def normalize(self, feed):
-        '''Normalize a feed - line seperators, etc.'''
+        """Normalize a feed - line seperators, etc."""
         feed = feed.replace(b'\r\n', b'\n').strip()
         lines = feed.split(b'\n')
         header = lines.pop(0)
@@ -59,7 +59,7 @@ class FeedTest(TestCase):
         self.assertEqual(str(feed), '%d Test' % feed.id)
 
     def test_import_gtfs_test1(self, gtfs_obj=None):
-        '''Try importing test1.zip
+        """Try importing test1.zip
 
         test1.zip was downloaded from
         http://timetablepublisher.googlecode.com/files/GTFS%20Test%20Data.zip
@@ -77,7 +77,7 @@ class FeedTest(TestCase):
         Before 0.4.0, these were imported with a many-to-many relation to
         services table.  After 0.4.0, the service ID was changed to a single
         foriegn key, so only the 'W' service is recorded.
-        '''
+        """
         gtfs_obj = gtfs_obj or os.path.abspath(
             os.path.join(fixtures_dir, 'test1.zip'))
         feed = Feed.objects.create()
@@ -106,7 +106,7 @@ class FeedTest(TestCase):
         self.assertEqual(Zone.objects.count(), 0)
 
     def test_import_gtfs_test1_extracted(self):
-        '''Import test1.zip as an extracted folder'''
+        """Import test1.zip as an extracted folder"""
         test_path = os.path.abspath(os.path.join(fixtures_dir, 'test1.zip'))
         self.temp_dir = tempfile.mkdtemp()
         z = zipfile.ZipFile(test_path)
@@ -114,12 +114,12 @@ class FeedTest(TestCase):
         self.test_import_gtfs_test1(self.temp_dir)
 
     def test_import_gtfs_test2(self):
-        '''Try importing test2.zip
+        """Try importing test2.zip
 
         test2.zip was downloaded from
         https://developers.google.com/transit/gtfs/examples/sample-feed.zip
         on April 14th, 2012
-        '''
+        """
         test_path = os.path.abspath(os.path.join(fixtures_dir, 'test2.zip'))
         feed = Feed.objects.create()
         feed.import_gtfs(test_path)
@@ -142,13 +142,13 @@ class FeedTest(TestCase):
         self.assertEqual(Zone.objects.count(), 0)
 
     def test_import_gtfs_test3(self):
-        '''Try importing test3.zip
+        """Try importing test3.zip
 
         test3.zip is a version of the GTFS feed from
         http://www.tulsatransit.org/gtfs/google_transit.zip
         as it was around February 2013.  It has been reduced to one route,
         trip, and shape, along with associated stops and other records.
-        '''
+        """
         test_path = os.path.abspath(os.path.join(fixtures_dir, 'test3.zip'))
         feed = Feed.objects.create()
         feed.import_gtfs(test_path)
@@ -171,13 +171,13 @@ class FeedTest(TestCase):
         self.assertEqual(Zone.objects.count(), 0)
 
     def test_import_gtfs_test4(self):
-        '''Try importing test4.zip
+        """Try importing test4.zip
 
         test4.zip is a version of the GTFS feed from TriMet in Portland
         from February 2015.  It omits calendar.txt in favor of specifying
         all dates in calendar_dates.txt, and includes additional files not
         in the GTFS spec.
-        '''
+        """
         test_path = os.path.abspath(os.path.join(fixtures_dir, 'test4.zip'))
         feed = Feed.objects.create()
         feed.import_gtfs(test_path)
@@ -200,7 +200,7 @@ class FeedTest(TestCase):
         self.assertEqual(Zone.objects.count(), 1)
 
     def test_export_gtfs_test1(self):
-        '''Try exporting test1.zip'''
+        """Try exporting test1.zip"""
         test_path = os.path.abspath(os.path.join(fixtures_dir, 'test1.zip'))
         feed = Feed.objects.create()
         feed.import_gtfs(test_path)
@@ -405,7 +405,7 @@ STBA,W,STBA,Shuttle,1,2
 """)
 
     def test_export_gtfs_test2(self):
-        '''Try exporting test2.zip'''
+        """Try exporting test2.zip"""
         test_path = os.path.abspath(os.path.join(fixtures_dir, 'test2.zip'))
         feed = Feed.objects.create()
         feed.import_gtfs(test_path)
@@ -679,7 +679,7 @@ STBA,FULLW,STBA,Shuttle,,
 """)
 
     def test_export_gtfs_test3(self):
-        '''Try exporting test3.zip'''
+        """Try exporting test3.zip"""
         test_path = os.path.abspath(os.path.join(fixtures_dir, 'test3.zip'))
         feed = Feed.objects.create()
         feed.import_gtfs(test_path)
@@ -777,7 +777,7 @@ adult,''' + s_fare_a + b''',USD,0,,7200
         self.assertEqual(trips_in, trips_out)
 
     def test_export_gtfs_test4(self):
-        '''Try exporting test4.zip'''
+        """Try exporting test4.zip"""
         test_path = os.path.abspath(os.path.join(fixtures_dir, 'test4.zip'))
         feed = Feed.objects.create()
         feed.import_gtfs(test_path)

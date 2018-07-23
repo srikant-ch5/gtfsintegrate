@@ -82,7 +82,7 @@ class Service(Base):
 
     @classmethod
     def export_txt(cls, feed):
-        '''Export records as calendar.txt'''
+        """Export records as calendar.txt"""
 
         # If no records with start/end dates, skip calendar.txt
         objects = cls.objects.in_feed(feed)

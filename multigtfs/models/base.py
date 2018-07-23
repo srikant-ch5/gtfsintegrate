@@ -39,7 +39,7 @@ CSV_BOM = BOM_UTF8.decode('utf-8') if PY3 else BOM_UTF8
 
 class BaseQuerySet(QuerySet):
     def populated_column_map(self):
-        '''Return the _column_map without unused optional fields'''
+        """Return the _column_map without unused optional fields"""
         column_map = []
         cls = self.model
         for csv_name, field_pattern in cls._column_map:
@@ -68,11 +68,11 @@ class BaseQuerySet(QuerySet):
 
 class BaseManager(Manager):
     def get_queryset(self):
-        '''Return the custom queryset.'''
+        """Return the custom queryset."""
         return BaseQuerySet(self.model)
 
     def in_feed(self, feed):
-        '''Return the objects in the target feed'''
+        """Return the objects in the target feed"""
         kwargs = {self.model._rel_to_feed: feed}
         return self.filter(**kwargs)
 
@@ -110,7 +110,7 @@ class Base(models.Model):
 
     @classmethod
     def import_txt(cls, txt_file, feed, filter_func=None):
-        '''Import from the GTFS text file'''
+        """Import from the GTFS text file"""
 
         # Setup the conversion from GTFS to Django Format
         # Conversion functions
@@ -244,9 +244,9 @@ class Base(models.Model):
                 self.reader = csv.reader(f, dialect=dialect, **kwds)
 
             def next(self):
-                '''next() -> unicode
+                """next() -> unicode
                 This function reads and returns the next line as a Unicode string.
-                '''
+                """
                 row = self.reader.next()
                 return [unicode(s, "utf-8") for s in row]
 
@@ -338,7 +338,7 @@ class Base(models.Model):
 
     @classmethod
     def export_txt(cls, feed):
-        '''Export records as a GTFS comma-separated file'''
+        """Export records as a GTFS comma-separated file"""
         objects = cls.objects.in_feed(feed)
 
         # If no records, return None

@@ -191,10 +191,10 @@ S1,36.425288,-117.133162,1,1.1
         self.assertIsNone(trip.geometry, None)
 
     def test_shape_geometry_is_ordered(self):
-        '''Shape geometry is ordered by ShapePoint sequence
+        """Shape geometry is ordered by ShapePoint sequence
 
         See issue #24
-        '''
+        """
         shape = Shape.objects.create(feed=self.feed)
         shape.points.create(point="POINT(-117.2 36.42)", sequence=2)
         shape.points.create(point="POINT(-117.6 36.42)", sequence=6)
