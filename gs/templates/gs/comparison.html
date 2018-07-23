@@ -385,8 +385,9 @@
             show_on_result(t_name, reference, name_from, ref_from);
 
             console.log(ref_in_gtfs_key);
-            $('#export-stop').show();
-            $('#export-stop').text("Match " + gtfs_stop + " with " + osm_stop);
+            let jqDiv = $('#export-stop');
+            jqDiv.show();
+            jqDiv.text("Match " + gtfs_stop + " with " + osm_stop);
             $('#add_to_list').show();
 
         }catch(error){

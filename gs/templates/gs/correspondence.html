@@ -49,14 +49,14 @@
    	$('label').each(function(i){
    		if(i === 0) { $(this).hide(); }
    	});
-
-   	$('#feed_id').val(feed_id);
+    let jqDiv = $('#feed_id');
+   	jqDiv.val(feed_id);
     $('#stop_id').val('ref');
     $('#stop_name').val('name');
     $('#stop_zone').val('zone');
     $('#stop_url').val('url');
 
-    $('#feed_id').hide();
+    jqDiv.hide();
 
 </script>
 {% block relation %}
