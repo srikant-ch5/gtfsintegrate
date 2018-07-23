@@ -171,7 +171,7 @@
                     marker.stopcode = data.features[i].properties.code;
                     marker.stopzone = data.features[i].properties.zone;
                     marker.normalized_name = data.features[i].properties.normalized_name;
-                    if(gtfs_to_osm_stop_name == 'name'){
+                    if(gtfs_to_osm_stop_name === 'name'){
                         gtfs_to_osm_stop_name = 'normalized_name';
                     }
                     marker.comp_name = data.features[i].properties[gtfs_to_osm_stop_name];
@@ -208,7 +208,7 @@
                             };
 
                             hide_table_elements();
-                            if(clickcircle != undefined){
+                            if(clickcircle !== undefined){
                                 map.removeLayer(clickcircle)
                             }
                             clickcircle = L.circle([this.lat, this.lon],{radius:100,color:'red',weight:.6, opacity:1000,fillColor:'#f03',fillOpacity:0.5}).addTo(map);
@@ -251,7 +251,7 @@
             });
 
             for (let i = 0; i < length; i++) {
-                if(data.features[i].properties.feed == feed_id){
+                if(data.features[i].properties.feed === feed_id){
 
                     //get the tags and assign them
                     var node_tags_data =[];
@@ -259,7 +259,7 @@
                     let node_tags = data.features[i].properties.tags;
                     node_tags.forEach(function(tag_element){
                         for (let tag in tags){
-                            if(tags[tag].id == tag_element){
+                            if(tags[tag].id === tag_element){
                                 try{
                                     let curr_node_tag = tags[tag];
                                     let key_id = curr_node_tag.key;
@@ -268,10 +268,10 @@
                                     var key_string,value_string;
 
                                     for(let k =0 ; k< keyvaluestrings.length; k++){
-                                        if(keyvaluestrings[k].id == key_id){
+                                        if(keyvaluestrings[k].id === key_id){
                                             key_string = keyvaluestrings[k].value;
                                         }
-                                        else if(keyvaluestrings[k].id == value_id) {
+                                        else if(keyvaluestrings[k].id === value_id) {
                                             value_string = keyvaluestrings[k].value;
                                         }
                                     }
@@ -300,10 +300,10 @@
                     marker.nodeversion = data.features[i].properties.version;
 
                     for(let s=0;s<node_tags_data.length;s++){
-                        if(node_tags_data[s].key == 'name'){
+                        if(node_tags_data[s].key === 'name'){
                             marker.name = node_tags_data[s].value;
                         }
-                        else if(node_tags_data[s].key == 'ref'){
+                        else if(node_tags_data[s].key === 'ref'){
                             marker.ref = node_tags_data[s].value;
                             ref_from = 'osm';
                         }
@@ -352,10 +352,10 @@
                 var ref_oper = true;
                 var ref_in_gtfs_key;
                 for(let key in feed_corr_data){
-                    if(feed_corr_data[key] == 'ref'){
+                    if(feed_corr_data[key] === 'ref'){
                         ref_in_gtfs_key = key;
                         ref_oper = false;
-                    }else if(feed_corr_data[key] == "ref:operator"){
+                    }else if(feed_corr_data[key] === "ref:operator"){
                         ref_in_gtfs_key = key;
                         ref_oper = true;
                     }
@@ -469,7 +469,7 @@ function get_correspondene_form_data(){
         dataType:'json',
         success: function(corr_data){
             for(let i=0; i< corr_data.length; i++){
-                if(corr_data[i].feed_id == corr_feed_id){
+                if(corr_data[i].feed_id === corr_feed_id){
                     feed_corr_data_result = corr_data[i];
                 }
             }
@@ -488,9 +488,9 @@ function get_tag_resemblence(corr_data){
     var ref_resem = '';
 
     corr_form_keys.forEach(function(key){
-        if(corr_data[key] == 'name'){
+        if(corr_data[key] === 'name'){
             name_resem = key;
-        }else if(corr_data[key] == 'ref'){
+        }else if(corr_data[key] === 'ref'){
             ref_resem = key;
         }
     });
@@ -575,7 +575,7 @@ function get_kvstrings(){
 
 function match_stop(){
 
-    if(name_from == 'osm' && ref_from == 'osm'){
+    if(name_from === 'osm' && ref_from === 'osm'){
         let choice = prompt("Please Select which tag in OSM stop should include clicked gtfs stop data");
 
     }
@@ -646,15 +646,15 @@ function show_on_result(name, ref, name_from, ref_from){
     $("#resultstopname").text(name);
     $("#resultstopref").text(ref);
 
-    if(name_from == 'gtfs'){
+    if(name_from === 'gtfs'){
         $("#stopnamefromgtfs").text('>');
-    }else if(name_from == 'osm'){
+    }else if(name_from === 'osm'){
         $("#stopnamefromosm").text('<');
     }
 
-    if(ref_from == 'gtfs'){
+    if(ref_from === 'gtfs'){
         $("#stopreffromgtfs").text('>');
-    }else if(ref_from == 'osm'){
+    }else if(ref_from === 'osm'){
         $("#stopreffromosm").text('<');
     }
 }

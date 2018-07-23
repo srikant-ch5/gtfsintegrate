@@ -45,7 +45,7 @@
     feed_id = parseInt(feed_id);
 
    	$('label').each(function(i){
-		if(i == 0)
+		if(i === 0)
 	   		$(this).hide()
    	});
 
@@ -71,8 +71,8 @@
 		success:function(data){
             let flag = 0;
             for(let i=0;i<data.length;i++){
-				if(data[i].feed == feed_id){
-					if(flag == 0){
+				if(data[i].feed === feed_id){
+					if(flag === 0){
 						for(key in data[i]){
 							console.log(data[i][key])
 						}
@@ -130,12 +130,12 @@ $.ajaxSetup({
 		success:function(data){
             let count = 0;
             for(let i=0;i<data.length;i++){
-				if(data[i].feed_id == feed_id){
+				if(data[i].feed_id === feed_id){
 					count++;
 					$("#extrafield").append("<h3>" + data[i].field_name+"<h3>    <input type='textbox' id='"+data[i].field_name+"'><a class='btn btn-primary' id='"+data[i].field_name+"' onclick='saveextrafunc(this.id)'>store</a>");
 				}
 			}
-			if(count == 0){
+			if(count === 0){
 				$("#extrafield").append("<h3>No extra data</h3>");
 			}
 		},

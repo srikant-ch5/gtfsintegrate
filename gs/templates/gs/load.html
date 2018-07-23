@@ -228,7 +228,7 @@
                 let coordinates_arr = [];
                 const length = data.features.length;
                 for (let i = 0; i < length; i++) {
-                    if(data.features[i].properties.feed == feed_id){
+                    if(data.features[i].properties.feed === feed_id){
                     const node_id = data.features[i].properties.id;
                     lat = data.features[i].geometry.coordinates[1];
                     lon = data.features[i].geometry.coordinates[0];
