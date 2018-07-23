@@ -195,9 +195,9 @@
                             } else {
                                 $("#gtfsstopzone").text(this.stopzone);
                             }
-                            gtfs_stop_id = this.stopid;
+                            let gtfs_stop_id = this.stopid;
                             gtfs_stop = feed_id.toString() + "-" +this.stopid;
-                            gtfs_stop_name = this.normalized_name;
+                            let gtfs_stop_name = this.normalized_name;
 
                             clicked_gtfs_stop = {
                                 'name':this.comp_name,
@@ -256,14 +256,14 @@
                     //get the tags and assign them
                     var node_tags_data =[];
                     var value_data = [];
-                    node_tags = data.features[i].properties.tags;
+                    let node_tags = data.features[i].properties.tags;
                     node_tags.forEach(function(tag_element){
                         for (let tag in tags){
                             if(tags[tag].id == tag_element){
                                 try{
-                                    curr_node_tag = tags[tag];
-                                    key_id = curr_node_tag.key;
-                                    value_id = curr_node_tag.value;
+                                    let curr_node_tag = tags[tag];
+                                    let key_id = curr_node_tag.key;
+                                    let value_id = curr_node_tag.value;
 
                                     var key_string,value_string;
 
@@ -479,8 +479,8 @@ function get_correspondene_form_data(){
 }
 
 function get_tag_resemblence(corr_data){
-    corr_form_keys = Object.keys(corr_data);
-    corr_form_values = Object.values(corr_data);
+    let corr_form_keys = Object.keys(corr_data);
+    let corr_form_values = Object.values(corr_data);
     console.log(corr_form_keys);
     console.log(corr_form_values);
     var name_resem = '';
@@ -575,7 +575,7 @@ function get_kvstrings(){
 function match_stop(){
 
     if(name_from == 'osm' && ref_from == 'osm'){
-        choice = prompt("Please Select which tag in OSM stop should include clicked gtfs stop data");
+        let choice = prompt("Please Select which tag in OSM stop should include clicked gtfs stop data");
 
     }
     data_to_match = [];
@@ -620,7 +620,7 @@ function add_to_match_list(){
 function match_stops(){
     var match_stop_url = "{% url 'match_stops' %}";
     console.log("Sending "+data_to_match.length+" stops to JOSM Editor");
-    data_to_match_JSON = JSON.stringify(data_to_match);
+    let data_to_match_JSON = JSON.stringify(data_to_match);
 
     console.log("Data list to match"+data_to_match_JSON);
     $.ajax({

@@ -42,7 +42,7 @@
         $('#route-lines').append(html);
 	});
     function clickfunc(id){
-    	for (i in map._layers) {
+    	for (let i in map._layers) {
 		    if (map._layers[i].options.format == undefined) {
 		        try {
 		            map.removeLayer(map._layers[i]);
@@ -75,7 +75,7 @@
         });
         polyline.addTo(map);
 
-		bounds = new L.LatLngBounds(stopsarr);
+		let bounds = new L.LatLngBounds(stopsarr);
 		map.fitBounds(bounds);
 	}
 
