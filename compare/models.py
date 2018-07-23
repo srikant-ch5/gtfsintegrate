@@ -35,7 +35,7 @@ class Line_Stop(models.Model):
     feed_id = models.IntegerField(blank=True, null=True)
     lat = models.FloatField(blank=True, null=True)
     lon = models.FloatField(blank=True, null=True)
-    stop_id = models.CharField(max_length=500,blank=True, null=True)
+    stop_id = models.CharField(max_length=500, blank=True, null=True)
     stop_code = models.CharField(max_length=500, blank=True, null=True)
     stop_name = models.CharField(max_length=100, blank=True, null=True)
     stop_time_stop_seq = models.IntegerField(blank=True, null=True)

@@ -283,7 +283,7 @@ def save_ag_corr(request):
 
             if extra_data_present:
                 for key in extra_data:
-                    form_extra_data.update({key.field_name : key.value})
+                    form_extra_data.update({key.field_name: key.value})
             print(form_extra_data)
             for key, value in routes_form.__dict__.items():
                 if key == '_state':
@@ -326,7 +326,7 @@ def save_ag_corr(request):
                         extra_data_json = r_value
 
                         if extra_data_present:
-                            for ekey,evalue in extra_data_json.items():
+                            for ekey, evalue in extra_data_json.items():
                                 xml += "<tag k='" + str(form_extra_data[ekey]) + "' v='" + str(evalue) + "' />\n"
 
                     if r_key in valid_routes_attr_list:
@@ -361,7 +361,8 @@ def save_ag_corr(request):
                 if i == 0:
                     complete_data.append(get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=True))
                 else:
-                    complete_data.append(get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=False))
+                    complete_data.append(
+                        get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=False))
 
             context['complete_data'] = json.dumps(complete_data)
             context['feed_id'] = entered_agency_corr_form_feed_id

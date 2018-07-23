@@ -156,7 +156,7 @@ def save_comp(gtfs_stop, osm_stop, feed_id, stops_layer):
             context['error'] += 'osm stop doesnt exist {}'.format(e)
 
         try:
-            if cmp_stop_obj.fixed_match == None:
+            if cmp_stop_obj.fixed_match is None:
                 print("Creating new match ")
 
                 cmp_stop_obj.fixed_match = osm_stop_obj
@@ -263,7 +263,7 @@ def get_keys(feed_id):
     tags = Node.objects.filter(feed=feed_id).values('tags').distinct()
     for tag in tags:
         key = Tag.objects.get(id=tag['tags']).key.value
-        if not key in key_strings:
+        if key not in key_strings:
             key_strings.append(key)
 
     return key_strings

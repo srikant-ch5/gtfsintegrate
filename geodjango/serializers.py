@@ -5,6 +5,7 @@ from osmapp.models import Node, Way, KeyValueString, OSM_Relation, Tag, Bounds
 from conversionapp.models import Correspondence, Conversion, ExtraField
 from compare.models import Line_Stop
 
+
 class FormSerializer(serializers.ModelSerializer):
     class Meta:
         model = GTFSForm
@@ -77,16 +78,17 @@ class CorrespondenceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
 class ConversionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Conversion
         fields = '__all__'
 
+
 class ExtraFieldSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExtraField
         fields = '__all__'
+
 
 class LineStopSerializer(serializers.ModelSerializer):
     class Meta:

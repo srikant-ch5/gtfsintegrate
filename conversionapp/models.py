@@ -72,8 +72,8 @@ class Correspondence_Agency(models.Model):
 
 class Correspondence_Route(models.Model):
     feed_id = models.IntegerField(blank=True, null=True)
-    route_id = models.CharField(blank=True,null=True,
-        max_length=255, db_index=True)
+    route_id = models.CharField(blank=True, null=True,
+                                max_length=255, db_index=True)
     agency = models.CharField(max_length=50, blank=True)
     short_name = models.CharField(
         blank=True, null=True,
@@ -84,9 +84,9 @@ class Correspondence_Route(models.Model):
     desc = models.CharField(
         blank=True, null=True,
         max_length=50)
-    rtype = models.CharField(blank=True, null=True,max_length=50)
+    rtype = models.CharField(blank=True, null=True, max_length=50)
     url = models.CharField(max_length=50,
-        blank=True, null=True)
+                           blank=True, null=True)
     color = models.CharField(
         max_length=50, blank=True, null=True)
     text_color = models.CharField(

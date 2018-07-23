@@ -90,6 +90,7 @@ def get_osm_data(feed_id):
     else:
         print("Nodes are already downloaded")
 
+
 def load_osm_data_view(request):
     if request.method == 'POST':
         context = {
