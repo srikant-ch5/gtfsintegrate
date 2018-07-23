@@ -22,24 +22,24 @@
 </div>
 
 <script type="text/javascript">
-	var map = L.map('relmap').setView([51.505, -0.09], 13);
+    const map = L.map('relmap').setView([51.505, -0.09], 13);
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
 	const feed_id = parseInt('{{context.feed_id|safe}}');
-	var routes_data_json = '{{context.routes_data | safe}}';
-	var routes_data = JSON.parse(routes_data_json);
-	var complete_data_json = '{{context.complete_data | safe}}';
-	var complete_data = JSON.parse(complete_data_json);
+    const routes_data_json = '{{context.routes_data | safe}}';
+    let routes_data = JSON.parse(routes_data_json);
+    const complete_data_json = '{{context.complete_data | safe}}';
+    const complete_data = JSON.parse(complete_data_json);
 
-	console.log(routes_data);
+    console.log(routes_data);
 	$.ajaxSetup({
         async: false
     });
     Object.keys(routes_data).forEach(function(key, index){
-		var html = "<div class='linebtn'><a class='btn btn-primary' onclick='clickfunc(this.id)' id='"+index+"'>"+routes_data[key]+"</a></div><br>";
-		$('#route-lines').append(html);
+        const html = "<div class='linebtn'><a class='btn btn-primary' onclick='clickfunc(this.id)' id='" + index + "'>" + routes_data[key] + "</a></div><br>";
+        $('#route-lines').append(html);
 	});
     function clickfunc(id){
     	for (i in map._layers) {
@@ -56,24 +56,24 @@
 	        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 	    }).addTo(map);
 
-    	var stopsarr = [];
-    	var colour;
-	    complete_data[id].forEach(function(linestopsdata){
+        const stopsarr = [];
+        let colour;
+        complete_data[id].forEach(function(linestopsdata){
 	    	linestopsdata.forEach(function(stopdata){
-	    		var lon = parseFloat(stopdata[4]);
-	    		var lat = parseFloat(stopdata[5]);
-	    		var point = new L.LatLng(lat,lon);
-	    		stopsarr.push(point);
+                const lon = parseFloat(stopdata[4]);
+                const lat = parseFloat(stopdata[5]);
+                const point = new L.LatLng(lat, lon);
+                stopsarr.push(point);
 	    		colour = stopdata[3];
 	    	});
 	    });
-		var polyline = new L.Polyline(stopsarr, {
-			    color: colour,
-			    weight: 3,
-			    opacity: 0.5,
-			    smoothFactor: 1
-			});
-		polyline.addTo(map);
+        const polyline = new L.Polyline(stopsarr, {
+            color: colour,
+            weight: 3,
+            opacity: 0.5,
+            smoothFactor: 1
+        });
+        polyline.addTo(map);
 
 		bounds = new L.LatLngBounds(stopsarr);
 		map.fitBounds(bounds);

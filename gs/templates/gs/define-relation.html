@@ -41,8 +41,8 @@
 </div>
 <script type="text/javascript">
 	var data_url = "/api/routedata/";
-	var feed_id = '{{context.feed_id}}';
-	feed_id = parseInt(feed_id);
+    let feed_id = '{{context.feed_id}}';
+    feed_id = parseInt(feed_id);
 
    	$('label').each(function(i){
 		if(i == 0)
@@ -63,16 +63,16 @@
     $("#color").val('colour');
  	$("#text_color").val('text_colour');
 
-    var sample_data = [];
-	var example_data = [];
-	$.ajax({
+    const sample_data = [];
+    const example_data = [];
+    $.ajax({
 		url:data_url,
 		type:"GET",
 		dataType:"json",
 		async:true,
 		success:function(data){
-			var flag = 0;
-			for(let i=0;i<data.length;i++){
+            let flag = 0;
+            for(let i=0;i<data.length;i++){
 				if(data[i].feed == feed_id){
 					if(flag == 0){
 						for(key in data[i]){
@@ -80,8 +80,8 @@
 						}
 						flag++;
 						for (var key in data[i]){
-							var value = data[i][key];
-							$("#sample_data").append("<h4>"+key+" : "+value+"</h4><br>")}
+                            const value = data[i][key];
+                            $("#sample_data").append("<h4>"+key+" : "+value+"</h4><br>")}
 					}
 					$("#ex-field-ep").append("<h4>"+data[i].extra_data+"</h4><br>");
 				}
@@ -91,9 +91,9 @@
 			alert(status + xhr +e)
 		}
 	});
-	var extra_data_url = "/api/extrafielddata/";
+    const extra_data_url = "/api/extrafielddata/";
 
-	console.log("Configuring ajaxSetup");
+    console.log("Configuring ajaxSetup");
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -130,8 +130,8 @@ $.ajaxSetup({
 		dataType:"json",
 		async:true,
 		success:function(data){
-			var count = 0;
-			for(let i=0;i<data.length;i++){
+            let count = 0;
+            for(let i=0;i<data.length;i++){
 				if(data[i].feed_id == feed_id){
 					count++;
 					$("#extrafield").append("<h3>" + data[i].field_name+"<h3>    <input type='textbox' id='"+data[i].field_name+"'><a class='btn btn-primary' id='"+data[i].field_name+"' onclick='saveextrafunc(this.id)'>store</a>");
@@ -147,8 +147,8 @@ $.ajaxSetup({
 	});
 
 	function saveextrafunc(id){
-		var v = $("#"+id).val();
-		$.ajax({
+        const v = $("#" + id).val();
+        $.ajax({
                 url: '/gtfs/saveextra/',
                 type: "POST",
                 data: {

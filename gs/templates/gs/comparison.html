@@ -258,7 +258,7 @@
                     var value_data = [];
                     node_tags = data.features[i].properties.tags;
                     node_tags.forEach(function(tag_element){
-                        for (var tag in tags){
+                        for (let tag in tags){
                             if(tags[tag].id == tag_element){
                                 try{
                                     curr_node_tag = tags[tag];
@@ -267,7 +267,7 @@
 
                                     var key_string,value_string;
 
-                                    for(var k =0 ;k< keyvaluestrings.length;k++){
+                                    for(let k =0 ; k< keyvaluestrings.length; k++){
                                         if(keyvaluestrings[k].id == key_id){
                                             key_string = keyvaluestrings[k].value;
                                         }
@@ -351,7 +351,7 @@
                 //check whether the corr form has ref:operator or ref
                 var ref_oper = true;
                 var ref_in_gtfs_key;
-                for(var key in feed_corr_data){
+                for(let key in feed_corr_data){
                     if(feed_corr_data[key] == 'ref'){
                         ref_in_gtfs_key = key;
                         ref_oper = false;
@@ -467,7 +467,7 @@ function get_correspondene_form_data(){
         type:'GET',
         dataType:'json',
         success: function(corr_data){
-            for(var i=0; i< corr_data.length;i++){
+            for(let i=0; i< corr_data.length; i++){
                 if(corr_data[i].feed_id == corr_feed_id){
                     feed_corr_data_result = corr_data[i];
                 }
