@@ -37,11 +37,11 @@ def get_itineraries(route_id_db, feed_id, start):
     db_route_id = "'" + str(route_id_db) + "'"
     qfeed_id = "'" + str(feed_id) + "'"
     query = '''
-            SELECT 
+            SELECT
                 gtfs_stop.stop_id,
                 gtfs_stop.code,
                 gtfs_stop.name,
-                gtfs_stop_time.stop_sequence, 
+                gtfs_stop_time.stop_sequence,
                 gtfs_trip.extra_data,
                 gtfs_route.id,
                 gtfs_route.route_id,
@@ -51,18 +51,18 @@ def get_itineraries(route_id_db, feed_id, start):
                 gtfs_route.color,
                 gtfs_route.extra_data,
                 gtfs_stop.id
-            FROM 
+            FROM
                 gtfs_route,
                 gtfs_stop,
                 gtfs_stop_time,
                 gtfs_trip
-            WHERE 
-                gtfs_stop.id = gtfs_stop_time.stop_id AND 
-                gtfs_stop_time.trip_id = gtfs_trip.id AND 
-                gtfs_trip.route_id = gtfs_route.id AND 
-                gtfs_route.id = ''' + db_route_id + ''' AND 
+            WHERE
+                gtfs_stop.id = gtfs_stop_time.stop_id AND
+                gtfs_stop_time.trip_id = gtfs_trip.id AND
+                gtfs_trip.route_id = gtfs_route.id AND
+                gtfs_route.id = ''' + db_route_id + ''' AND
                 gtfs_route.feed_id = ''' + qfeed_id + '''
-            ORDER BY 
+            ORDER BY
                 gtfs_trip.id , gtfs_stop_time.stop_sequence;
             '''
     cursor = connection.cursor()
@@ -316,7 +316,7 @@ def plotblock(v0, v1, v2, v3, stops_coordinates, block=None):
              markersize=8)
 
     plt.show()
-    
+
     '''
 
     return block
@@ -374,7 +374,7 @@ def dividemap(east=None, west=None, north=None, south=None, northeast_lat=None, 
     center[0], center[1] = getmidpoint(north[0], north[1], south[0], south[1])
 
 
-    # whole block 
+    # whole block
 
     v0 = [northwest_lat, northwest_lon]
     v1 = [northeast_lat, northeast_lon]
@@ -383,7 +383,7 @@ def dividemap(east=None, west=None, north=None, south=None, northeast_lat=None, 
 
     plotblock(v0, v1, v2, v3, stops_coordinates)
 
-    #top-left block 
+    #top-left block
     v0 = [northwest_lat, northwest_lon]
     v1 = north
     v2 = center

@@ -43,7 +43,7 @@ def showmap_with_comp(request, pk):
     except Exception as e:
         context['error'] = e
 
-    '''                
+    '''
     #to be executed if the matching needs to be done by the app
     for stop in stops:
         nodes = get_nodes_within100m(str(stop.lon),str(stop.lat))

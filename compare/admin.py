@@ -13,4 +13,3 @@ class CorrespondenceAgencyAdmin(admin.ModelAdmin):
 
 admin.site.register(Correspondence_Route, CorrespondenceRouteAdmin)
 admin.site.register(Correspondence_Agency, CorrespondenceAgencyAdmin)
-
