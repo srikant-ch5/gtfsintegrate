@@ -22,12 +22,11 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.six import StringIO
 from jsonfield import JSONField
 
-from django.contrib.gis.db.models import PointField,LineStringField
-from django.contrib.gis.geos import Point,LineString
+from django.contrib.gis.db.models import PointField, LineStringField
+from django.contrib.gis.geos import Point, LineString
 from django.db.models import Manager as GeoManager
 
 from multigtfs.models.base import models, Base
-
 
 logger = getLogger(__name__)
 
@@ -119,7 +118,7 @@ class Stop(Base):
             kwargs['geom'] = "geom(%s %s)" % (lon or 0.0, lat or 0.0)
 
         super(Stop, self).__init__(*args, **kwargs)
-        #print('{}  {}',format(lat,lon))
+        # print('{}  {}',format(lat,lon))
 
     class Meta:
         db_table = 'gtfs_stop'

@@ -39,9 +39,8 @@ class GTFSInfoForm(forms.ModelForm):
 class CorrespondenceForm(forms.ModelForm):
     class Meta:
         model = Correspondence
-        fields = ('feed_id', 'stop_id', 'stop_code', 'stop_name', 'stop_desc', 'stop_zone', 'stop_url', \
-                  'stop_location_type', 'stop_parent_station', 'stop_timezone', \
-                  'agency_name', 'agency_id', 'agency_url', 'agency_timezone', \
+        fields = ('feed_id', 'stop_id', 'stop_code', 'stop_name', 'stop_desc', 'stop_zone', 'stop_url',
+                  'stop_location_type', 'stop_parent_station', 'stop_timezone', 'agency_name', 'agency_id', 'agency_url', 'agency_timezone',
                   'agency_lang', 'agency_phone', 'agency_fare_url')
 
     def __init__(self, *args, **kwargs):
@@ -159,8 +158,7 @@ class Correspondence_Route_Form(forms.ModelForm):
 class Correspondence_Agency_Form(forms.ModelForm):
     class Meta:
         model = Correspondence_Agency
-        fields = ('feed_id', 'agency_name', 'agency_id', 'agency_url', 'agency_timezone', \
-                  'agency_lang', 'agency_phone', 'agency_fare_url')
+        fields = ('feed_id', 'agency_name', 'agency_id', 'agency_url', 'agency_timezone', 'agency_lang', 'agency_phone', 'agency_fare_url')
 
     def __init__(self, *args, **kwargs):
         super(Correspondence_Agency_Form, self).__init__(*args, **kwargs)

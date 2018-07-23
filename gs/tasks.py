@@ -96,7 +96,7 @@ def get_itineraries(route_id_db, feed_id, start):
     for k in range(0, len(all_itineraries)):
         single_itinerary = all_itineraries[k]
 
-        if not single_itinerary in unique_itineraries:
+        if single_itinerary not in unique_itineraries:
             unique_itineraries.append(single_itinerary)
 
     merged_itineraries = []
