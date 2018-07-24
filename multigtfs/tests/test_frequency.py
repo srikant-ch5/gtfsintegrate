@@ -14,6 +14,7 @@
 # limitations under the License.
 
 from __future__ import unicode_literals
+
 from datetime import date
 from json import loads
 
@@ -124,7 +125,7 @@ STBA,05:00:00,25:00:00,1800
 """)
 
     def test_serialize(self):
-        '''Test serialization of Frequency, which has a SecondsField'''
+        """Test serialization of Frequency, which has a SecondsField"""
         f = Frequency.objects.create(
             trip=self.trip, start_time='05:00', end_time='25:00',
             headway_secs=1800)

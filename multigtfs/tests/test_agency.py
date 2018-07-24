@@ -18,8 +18,8 @@ from __future__ import unicode_literals
 from django.test import TestCase
 from django.utils.six import StringIO
 
-from multigtfs.models import Agency, Feed
 from multigtfs.compat import bom_prefix_csv
+from multigtfs.models import Agency, Feed
 
 
 class AgencyTest(TestCase):

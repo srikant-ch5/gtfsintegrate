@@ -14,6 +14,7 @@
 # limitations under the License.
 
 from __future__ import unicode_literals
+
 from datetime import time
 
 from django.test import TestCase

@@ -1,9 +1,8 @@
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.generic import RedirectView
-from django.views.generic import TemplateView
-from .views import FormView
 from rest_framework_swagger.views import get_swagger_view
+
 from geodjango.views import FormView, StopView, FeedView, AgencyView, RouteView, \
     NodeView, WayView, RelationView, TagView, KeyValueStringView, FeedBoundsView, \
     CorrespondenceView, ConversionView, ExtraFieldView, LineStopView

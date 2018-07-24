@@ -17,7 +17,7 @@
                 <h3>{{ context.error }}</h3>
                 {% endif %}
                 <h3>{{ context.connection_error }}</h3>
-                <a clas="btn btn-primary" id="definebox">Define relation box</a>
+                <a class="btn btn-primary" id="definebox">Define relation box</a>
             </div>
         </div>
     </div>
@@ -78,7 +78,7 @@
 
         function loadmapfunction(map, options) {
 
-            const feed_id = {{context.feed_id}}
+            let feed_id = {{context.feed_id}};
             let feed_name;
             console.log(feed_id);
             let mapLayer;
@@ -224,11 +224,11 @@
                     popupAnchor: [1, -34],
                     shadowSize: [41, 41]
                 });
-                var lat,lon;
+                let lat, lon;
                 let coordinates_arr = [];
                 const length = data.features.length;
                 for (let i = 0; i < length; i++) {
-                    if(data.features[i].properties.feed == feed_id){
+                    if(data.features[i].properties.feed === feed_id){
                     const node_id = data.features[i].properties.id;
                     lat = data.features[i].geometry.coordinates[1];
                     lon = data.features[i].geometry.coordinates[0];

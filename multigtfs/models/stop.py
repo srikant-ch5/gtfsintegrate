@@ -13,8 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from __future__ import unicode_literals
-from logging import getLogger
+
 import warnings
+from logging import getLogger
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -22,12 +23,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.six import StringIO
 from jsonfield import JSONField
 
-from django.contrib.gis.db.models import PointField,LineStringField
-from django.contrib.gis.geos import Point,LineString
-from django.db.models import Manager as GeoManager
-
 from multigtfs.models.base import models, Base
-
 
 logger = getLogger(__name__)
 
@@ -119,7 +115,7 @@ class Stop(Base):
             kwargs['geom'] = "geom(%s %s)" % (lon or 0.0, lat or 0.0)
 
         super(Stop, self).__init__(*args, **kwargs)
-        #print('{}  {}',format(lat,lon))
+        # print('{}  {}',format(lat,lon))
 
     class Meta:
         db_table = 'gtfs_stop'
@@ -153,7 +149,7 @@ class Stop(Base):
         txt = txt_file.read()
 
         def is_station(pairs):
-            '''Does the row represent a station?'''
+            """Does the row represent a station?"""
             for name, val in pairs:
                 if name == 'location_type':
                     return val == '1'
@@ -164,7 +160,7 @@ class Stop(Base):
         print("Imported %d station stops", stations)
 
         def is_stop(pairs):
-            '''Does the row represent a stop?'''
+            """Does the row represent a stop?"""
             for name, val in pairs:
                 if name == 'location_type':
                     return val != '1'
@@ -178,5 +174,4 @@ class Stop(Base):
 
 @receiver(post_save, sender=Stop, dispatch_uid="post_save_stop")
 def post_save_stop(sender, instance, **kwargs):
-    '''Update related objects when the Stop is updated'''
-    from multigtfs.models.trip import Trip
+    """Update related objects when the Stop is updated"""

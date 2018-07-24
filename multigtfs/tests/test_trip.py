@@ -14,6 +14,7 @@
 # limitations under the License.
 
 from __future__ import unicode_literals
+
 from datetime import date, time
 
 from django.test import TestCase
@@ -92,12 +93,12 @@ R1,S1,T1,Headsign,HS,0,B1,S1,1,2
         self.assertEqual(trip.bikes_allowed, '2')
 
     def test_import_trips_txt_multiple_services(self):
-        '''
+        """
         If a trip is associated with several services, only one is created
 
         Before 0.4.0, the trip was related to both services
         After 0.4.0, the trip is related to only the first service
-        '''
+        """
         trips_txt = StringIO("""\
 route_id,service_id,trip_id
 R1,S1,T1
@@ -117,11 +118,11 @@ R1,S2,T1
         self.assertFalse(service2.trip_set.exists())
 
     def test_import_trips_txt_quoted_direction_id(self):
-        '''
+        """
         A direction_id should be stripped of quotation marks
 
         Issue 64
-        '''
+        """
         trips_txt = StringIO("""\
 route_id,service_id,trip_id,shape_id,trip_headsign,direction_id
 R1,"S1","T3","46-860-y11-1.2.I","Aston Quay", "1"

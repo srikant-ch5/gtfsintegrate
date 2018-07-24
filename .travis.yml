@@ -1,0 +1,44 @@
+language: python
+python:
+  - "3.6"
+
+addons:
+  apt:
+    update: true
+    packages:
+      - libxmlsec1-dev
+      - libgeoip-dev
+      - binutils
+      - libproj-dev
+      - gdal-bin
+      - libgeoip1
+      - python-gdal
+      - postgresql
+      - postgresql-contrib
+      - postgis
+      - libpq-dev
+      - libgeos-dev
+      - redis-server
+      - libffi6
+      - libffi-dev
+
+env:
+  global:
+    - DJANGO_VERSION=">=2.0.6"
+
+services:
+  - postgresql
+
+# command to install dependencies
+install:
+  - pip install --upgrade pip
+  - pip install -r requirements.txt
+
+before_script:
+  - psql -c 'create database travis_ci_test;' -U postgres
+  - psql -U postgres -c "create extension postgis"
+  - cp geodjango/settings_secret_TEMPLATE.py geodjango/settings/settings_secret.py
+
+# command to run tests
+script:
+  - pytest # or py.test for Python versions 3.5 and below

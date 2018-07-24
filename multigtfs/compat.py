@@ -89,7 +89,7 @@ def opener_from_zipfile(zipfile):
 
 
 def write_text_rows(writer, rows):
-    '''Write CSV row data which may include text.'''
+    """Write CSV row data which may include text."""
     for row in rows:
         try:
             writer.writerow(row)

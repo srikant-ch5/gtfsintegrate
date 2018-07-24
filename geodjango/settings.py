@@ -1,5 +1,7 @@
 import os
+
 import raven
+
 from geodjango.settings_secret import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -14,6 +16,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.staticfiles',
     'djgeojson',
+    'django_nose',
     'gs',
     'leaflet',
     'multigtfs',
@@ -68,6 +71,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 LANGUAGE_CODE = 'en-us'
 

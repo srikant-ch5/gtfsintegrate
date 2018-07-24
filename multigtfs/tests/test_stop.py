@@ -183,7 +183,7 @@ http://example.com/fcr,0,FEZ_CREEK_STA,
         self.assertEqual(stop2.parent_station.stop_id, 'FEZ_CREEK_STA')
 
     def test_import_stops_txt_stop_before_station(self):
-        '''parent_station is set when the stop comes first'''
+        """parent_station is set when the stop comes first"""
         stops_txt = StringIO("""\
 stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,\
 location_type,parent_station,stop_timezone

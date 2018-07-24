@@ -13,21 +13,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from __future__ import unicode_literals
+
 import codecs
 import csv
 import re
 from codecs import BOM_UTF8
 from collections import defaultdict
+from csv import reader, writer
 from datetime import datetime, date
 from io import StringIO
 from logging import getLogger
-from csv import reader, writer
+
 from django.contrib.gis.db import models
 from django.db.models.fields.related import ManyToManyField
 from django.utils.six import StringIO, text_type, PY3
+
 from multigtfs.compat import (
     get_blank_value, write_text_rows, Manager, QuerySet)
-
 
 logger = getLogger(__name__)
 re_geom = re.compile(r'(?P<name>geom)\[(?P<index>\d)\]')
@@ -39,7 +41,7 @@ CSV_BOM = BOM_UTF8.decode('utf-8') if PY3 else BOM_UTF8
 
 class BaseQuerySet(QuerySet):
     def populated_column_map(self):
-        '''Return the _column_map without unused optional fields'''
+        """Return the _column_map without unused optional fields"""
         column_map = []
         cls = self.model
         for csv_name, field_pattern in cls._column_map:
@@ -68,11 +70,11 @@ class BaseQuerySet(QuerySet):
 
 class BaseManager(Manager):
     def get_queryset(self):
-        '''Return the custom queryset.'''
+        """Return the custom queryset."""
         return BaseQuerySet(self.model)
 
     def in_feed(self, feed):
-        '''Return the objects in the target feed'''
+        """Return the objects in the target feed"""
         kwargs = {self.model._rel_to_feed: feed}
         return self.filter(**kwargs)
 
@@ -110,7 +112,7 @@ class Base(models.Model):
 
     @classmethod
     def import_txt(cls, txt_file, feed, filter_func=None):
-        '''Import from the GTFS text file'''
+        """Import from the GTFS text file"""
 
         # Setup the conversion from GTFS to Django Format
         # Conversion functions
@@ -121,20 +123,20 @@ class Base(models.Model):
             return datetime.strptime(value, '%Y%m%d')
 
         def bool_convert(value):
-            return (value == '1')
+            return value == '1'
 
         def char_convert(value):
-            return (value or '')
+            return value or ''
 
         def null_convert(value):
-            return (value or None)
+            return value or None
 
         def geom_convert(value):
             """Convert latitude / longitude, strip leading +."""
             if value.startswith('+'):
                 return value[1:]
             else:
-                return (value or 0.0)
+                return value or 0.0
 
         cache = {}
 
@@ -244,9 +246,9 @@ class Base(models.Model):
                 self.reader = csv.reader(f, dialect=dialect, **kwds)
 
             def next(self):
-                '''next() -> unicode
+                """next() -> unicode
                 This function reads and returns the next line as a Unicode string.
-                '''
+                """
                 row = self.reader.next()
                 return [unicode(s, "utf-8") for s in row]
 
@@ -338,7 +340,7 @@ class Base(models.Model):
 
     @classmethod
     def export_txt(cls, feed):
-        '''Export records as a GTFS comma-separated file'''
+        """Export records as a GTFS comma-separated file"""
         objects = cls.objects.in_feed(feed)
 
         # If no records, return None

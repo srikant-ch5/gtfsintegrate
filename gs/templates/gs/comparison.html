@@ -102,22 +102,22 @@
             async: false
     });
 
-    var tags_to_osm = [];
-    var data_to_osm = [];
-    var clicked_gtfs_stop = [];
-    var clicked_osm_stop = [];
-    var data_to_match = [];
-    var gtfs_stop;
-    var osm_stop;
-    var name_from ;//gtfs or  osm
-    var ref_from ;//gtfs or osm
-    var t_name, reference;
-    var corr_feed_id = parseInt('{{context.feed_id}}');
-    var feed_corr_data;
+    const tags_to_osm = [];
+    const data_to_osm = [];
+    let clicked_gtfs_stop = [];
+    let clicked_osm_stop = [];
+    let data_to_match = [];
+    let gtfs_stop;
+    let osm_stop;
+    let name_from;//gtfs or  osm
+    let ref_from;//gtfs or osm
+    let t_name, reference;
+    const corr_feed_id = parseInt('{{context.feed_id}}');
+    let feed_corr_data;
     const feed_id = corr_feed_id;
-    var feed_name;
-    var gtfs_to_osm_stop_name;
-    var gtfs_to_osm_ref;
+    let feed_name;
+    let gtfs_to_osm_stop_name;
+    let gtfs_to_osm_ref;
 
     //first hide all the buttons
     $('#export-stop').hide();
@@ -128,9 +128,9 @@
 
     //get the correspondence form of the feed
     feed_corr_data = get_correspondene_form_data();
-    [gtfs_to_osm_stop_name_full, gtfs_to_osm_ref_full] = get_tag_resemblence(feed_corr_data)
+    [gtfs_to_osm_stop_name_full, gtfs_to_osm_ref_full] = get_tag_resemblence(feed_corr_data);
     try{
-        gtfs_to_osm_stop_name_arr = gtfs_to_osm_stop_name_full.split('_')
+        gtfs_to_osm_stop_name_arr = gtfs_to_osm_stop_name_full.split('_');
         gtfs_to_osm_stop_name = gtfs_to_osm_stop_name_arr[1];
 
     }catch(error){
@@ -142,8 +142,8 @@
         const markerArray = [];
         const stopscoordinates_array = [];
         const gtfsstopsdata = '{% url "stopdata" %}';
-        var circlegroup = L.featureGroup();//for 100m coverage
-        var tags,keyvaluestrings;
+        const circlegroup = L.featureGroup();//for 100m coverage
+        let tags, keyvaluestrings;
 
         //get the feed name
         feed_name = get_feed_name();
@@ -171,13 +171,14 @@
                     marker.stopcode = data.features[i].properties.code;
                     marker.stopzone = data.features[i].properties.zone;
                     marker.normalized_name = data.features[i].properties.normalized_name;
-                    if(gtfs_to_osm_stop_name == 'name'){
+                    if(gtfs_to_osm_stop_name === 'name'){
                         gtfs_to_osm_stop_name = 'normalized_name';
                     }
                     marker.comp_name = data.features[i].properties[gtfs_to_osm_stop_name];
                     marker.comp_ref = data.features[i].properties[gtfs_to_osm_ref_full];
 
-                    var clickcircle;
+                    let clickcircle;
+
                     function markerOnClick(e) {
                         try{
                             clicked_gtfs_stop = [];
@@ -195,9 +196,9 @@
                             } else {
                                 $("#gtfsstopzone").text(this.stopzone);
                             }
-                            gtfs_stop_id = this.stopid;
+                            let gtfs_stop_id = this.stopid;
                             gtfs_stop = feed_id.toString() + "-" +this.stopid;
-                            gtfs_stop_name = this.normalized_name;
+                            let gtfs_stop_name = this.normalized_name;
 
                             clicked_gtfs_stop = {
                                 'name':this.comp_name,
@@ -208,7 +209,7 @@
                             };
 
                             hide_table_elements();
-                            if(clickcircle != undefined){
+                            if(clickcircle !== undefined){
                                 map.removeLayer(clickcircle)
                             }
                             clickcircle = L.circle([this.lat, this.lon],{radius:100,color:'red',weight:.6, opacity:1000,fillColor:'#f03',fillOpacity:0.5}).addTo(map);
@@ -231,17 +232,17 @@
         }catch(error){
             alert(error+' in getting tags and keyvaluestrings');
         }
- 
+
         const nodedata = '{% url "osmnodedata" %}';
         $.getJSON(nodedata, function (data) {
 
             try{
-            var lat,lon;
-            let coordinates_arr = [];
-            const length = data.features.length;
-            var curr_node_tags = [];
+                let lat, lon;
+                let coordinates_arr = [];
+                const length = data.features.length;
+                const curr_node_tags = [];
 
-            const greenIcon = new L.Icon({
+                const greenIcon = new L.Icon({
                 iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
                 shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
                 iconSize: [25, 41],
@@ -249,29 +250,29 @@
                 popupAnchor: [1, -34],
                 shadowSize: [41, 41]
             });
-        
+
             for (let i = 0; i < length; i++) {
-                if(data.features[i].properties.feed == feed_id){
+                if(data.features[i].properties.feed === feed_id){
 
                     //get the tags and assign them
-                    var node_tags_data =[];
-                    var value_data = [];
-                    node_tags = data.features[i].properties.tags;
+                    const node_tags_data = [];
+                    const value_data = [];
+                    let node_tags = data.features[i].properties.tags;
                     node_tags.forEach(function(tag_element){
-                        for (var tag in tags){
-                            if(tags[tag].id == tag_element){
+                        for (let tag in tags){
+                            if(tags[tag].id === tag_element){
                                 try{
-                                    curr_node_tag = tags[tag];
-                                    key_id = curr_node_tag.key;
-                                    value_id = curr_node_tag.value;
+                                    let curr_node_tag = tags[tag];
+                                    let key_id = curr_node_tag.key;
+                                    let value_id = curr_node_tag.value;
 
-                                    var key_string,value_string;
+                                    let key_string, value_string;
 
-                                    for(var k =0 ;k< keyvaluestrings.length;k++){
-                                        if(keyvaluestrings[k].id == key_id){
+                                    for(let k =0 ; k< keyvaluestrings.length; k++){
+                                        if(keyvaluestrings[k].id === key_id){
                                             key_string = keyvaluestrings[k].value;
                                         }
-                                        else if(keyvaluestrings[k].id == value_id) {
+                                        else if(keyvaluestrings[k].id === value_id) {
                                             value_string = keyvaluestrings[k].value;
                                         }
                                     }
@@ -300,10 +301,10 @@
                     marker.nodeversion = data.features[i].properties.version;
 
                     for(let s=0;s<node_tags_data.length;s++){
-                        if(node_tags_data[s].key == 'name'){
+                        if(node_tags_data[s].key === 'name'){
                             marker.name = node_tags_data[s].value;
                         }
-                        else if(node_tags_data[s].key == 'ref'){
+                        else if(node_tags_data[s].key === 'ref'){
                             marker.ref = node_tags_data[s].value;
                             ref_from = 'osm';
                         }
@@ -349,15 +350,15 @@
                     console.log(t_name);
                 }
                 //check whether the corr form has ref:operator or ref
-                var ref_oper = true;
-                var ref_in_gtfs_key;
-                for(var key in feed_corr_data){
-                    if(feed_corr_data[key] == 'ref'){
+                let ref_oper = true;
+                let ref_in_gtfs_key;
+                for(let key in feed_corr_data){
+                    if(feed_corr_data[key] === 'ref'){
                         ref_in_gtfs_key = key;
                         ref_oper = false;
-                    }else if(feed_corr_data[key] == "ref:operator"){
+                    }else if(feed_corr_data[key] === "ref:operator"){
                         ref_in_gtfs_key = key;
-                        ref_oper = true;    
+                        ref_oper = true;
                     }
                 }
 
@@ -373,29 +374,30 @@
                         ref_from = 'gtfs';
                     }
                 }
-            
+
 
             clicked_osm_stop = {
                 'node_id': osm_stop,
                 'osm_name': this.name,
                 'comp_name':t_name,
                 'ref':reference
-            }
-            
+            };
+
             show_on_result(t_name, reference, name_from, ref_from);
 
             console.log(ref_in_gtfs_key);
-            $('#export-stop').show();
-            $('#export-stop').text("Match " + gtfs_stop + " with " + osm_stop);
+            let jqDiv = $('#export-stop');
+            jqDiv.show();
+            jqDiv.text("Match " + gtfs_stop + " with " + osm_stop);
             $('#add_to_list').show();
 
         }catch(error){
             alert(error + " in osm stop click");
         }
     }
-        });//osm  get data json 
+        });//osm  get data json
 
-        console.log(tags_to_osm)
+        console.log(tags_to_osm);
 
         try{
         const drawnItems = new L.FeatureGroup();
@@ -460,15 +462,15 @@
 }
 
 function get_correspondene_form_data(){
-    var feed_corr_data_result;
+    let feed_corr_data_result;
     console.log('gettings corr');
     $.ajax({
         url:'/api/correspondencedata',
         type:'GET',
         dataType:'json',
         success: function(corr_data){
-            for(var i=0; i< corr_data.length;i++){
-                if(corr_data[i].feed_id == corr_feed_id){
+            for(let i=0; i< corr_data.length; i++){
+                if(corr_data[i].feed_id === corr_feed_id){
                     feed_corr_data_result = corr_data[i];
                 }
             }
@@ -479,17 +481,17 @@ function get_correspondene_form_data(){
 }
 
 function get_tag_resemblence(corr_data){
-    corr_form_keys = Object.keys(corr_data);
-    corr_form_values = Object.values(corr_data);
+    let corr_form_keys = Object.keys(corr_data);
+    let corr_form_values = Object.values(corr_data);
     console.log(corr_form_keys);
     console.log(corr_form_values);
-    var name_resem = '';
-    var ref_resem = '';
+    let name_resem = '';
+    let ref_resem = '';
 
     corr_form_keys.forEach(function(key){
-        if(corr_data[key] == 'name'){
+        if(corr_data[key] === 'name'){
             name_resem = key;
-        }else if(corr_data[key] == 'ref'){
+        }else if(corr_data[key] === 'ref'){
             ref_resem = key;
         }
     });
@@ -499,7 +501,7 @@ function get_tag_resemblence(corr_data){
 
 function get_feed_name(){
     let feedurl = "/api/feeddata/";
-    var feed_name;
+    let feed_name;
     $.ajax({
         type: "GET",
         url: feedurl,
@@ -536,7 +538,7 @@ function hide_table_elements(){
 
 function get_tags(){
     console.log('getting all the tags');
-    var tags;
+    let tags;
     $.ajax({
         url:'/api/tagdata/',
         type:'GET',
@@ -554,8 +556,8 @@ function get_tags(){
 }
 
 function get_kvstrings(){
-    console.log('Getting keyvaluestrings')
-    var kvstrings;
+    console.log('Getting keyvaluestrings');
+    let kvstrings;
     $.ajax({
         url:'/api/keyvaluestringdata/',
         type:'GET',
@@ -574,20 +576,20 @@ function get_kvstrings(){
 
 function match_stop(){
 
-    if(name_from == 'osm' && ref_from == 'osm'){
-        choice = prompt("Please Select which tag in OSM stop should include clicked gtfs stop data");
+    if(name_from === 'osm' && ref_from === 'osm'){
+        let choice = prompt("Please Select which tag in OSM stop should include clicked gtfs stop data");
 
     }
     data_to_match = [];
-    var data = {
-        'feed_id':feed_id,
-        'gtfs':clicked_gtfs_stop,
-        'osm':clicked_osm_stop        
-    }
+    const data = {
+        'feed_id': feed_id,
+        'gtfs': clicked_gtfs_stop,
+        'osm': clicked_osm_stop
+    };
 
     data_to_match.push(data);
     console.log("Data to match "+data_to_match);
-    var match_stop_url = "{% url 'match_stop' %}";
+    const match_stop_url = "{% url 'match_stop' %}";
     $.ajax({
             url: match_stop_url,
             method: 'POST',
@@ -606,11 +608,11 @@ function match_stop(){
 }
 
 function add_to_match_list(){
-    var data = {
-        'feed_id':feed_id,
-        'gtfs':clicked_gtfs_stop,
-        'osm':clicked_osm_stop
-    }
+    const data = {
+        'feed_id': feed_id,
+        'gtfs': clicked_gtfs_stop,
+        'osm': clicked_osm_stop
+    };
     data_to_match.push(data);
     $('#add_to_list').hide();
     $('#export_all_stops').show();
@@ -618,9 +620,9 @@ function add_to_match_list(){
 }
 
 function match_stops(){
-    var match_stop_url = "{% url 'match_stops' %}"
+    const match_stop_url = "{% url 'match_stops' %}";
     console.log("Sending "+data_to_match.length+" stops to JOSM Editor");
-    data_to_match_JSON = JSON.stringify(data_to_match);
+    let data_to_match_JSON = JSON.stringify(data_to_match);
 
     console.log("Data list to match"+data_to_match_JSON);
     $.ajax({
@@ -641,19 +643,19 @@ function match_stops(){
 }
 
 function show_on_result(name, ref, name_from, ref_from){
-    
+
     $("#resultstopname").text(name);
     $("#resultstopref").text(ref);
 
-    if(name_from == 'gtfs'){
+    if(name_from === 'gtfs'){
         $("#stopnamefromgtfs").text('>');
-    }else if(name_from == 'osm'){
+    }else if(name_from === 'osm'){
         $("#stopnamefromosm").text('<');
     }
 
-    if(ref_from == 'gtfs'){
+    if(ref_from === 'gtfs'){
         $("#stopreffromgtfs").text('>');
-    }else if(ref_from == 'osm'){
+    }else if(ref_from === 'osm'){
         $("#stopreffromosm").text('<');
     }
 }

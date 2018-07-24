@@ -1,6 +1,4 @@
 from django.contrib.gis.db import models
-from django.db.models import Manager as GeoManager
-from django.contrib.gis.geos import Point, LineString
 
 
 class CMP_Stop(models.Model):
@@ -35,7 +33,7 @@ class Line_Stop(models.Model):
     feed_id = models.IntegerField(blank=True, null=True)
     lat = models.FloatField(blank=True, null=True)
     lon = models.FloatField(blank=True, null=True)
-    stop_id = models.CharField(max_length=500,blank=True, null=True)
+    stop_id = models.CharField(max_length=500, blank=True, null=True)
     stop_code = models.CharField(max_length=500, blank=True, null=True)
     stop_name = models.CharField(max_length=100, blank=True, null=True)
     stop_time_stop_seq = models.IntegerField(blank=True, null=True)

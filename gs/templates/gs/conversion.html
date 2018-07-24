@@ -17,12 +17,12 @@
                    <button class="btn btn-primary" id="save-btn">save</button>
                 </div>
             </div>
-            <div class="" col-md-6>
+            <div class="col-md-6">
                 <div class="tags-box">
                 	<h2> Stops with Abbrevations in your feed </h2>
                     {% for stop in context.stops_for_conversion %}
                     	<h3>-> {{ stop }} </h3>
-                    {% endfor %} 
+                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -35,25 +35,25 @@
 	window.onload = function () {
         document.getElementById("loading").style.display = "none"
     };
-    
+
     const feed_id = '{{context.feed_id}}';
-    $('#proceed-btn').hide()
+    $('#proceed-btn').hide();
    $("#add-box").on("click",function(){
-   		var inputField = $('<input type="text" id = "present-conv-box"><input type="text" id= "replace-conv-box">')
-   		$("#add-conv").append(inputField)
+       const inputField = $('<input type="text" id = "present-conv-box"><input type="text" id= "replace-conv-box">');
+       $("#add-conv").append(inputField)
    });
 
    $("#save-btn").on("click",function(e){
    	$("#save-btn").hide();
-   	var corr_form_id = '{{context.corr_form_id}}'
-   	var list = $('#add-conv').find('input').map(function() {
-		  return $(this).val();
-		}).get();
-   	let present_string_arr =[] 
-   	let replace_string_arr = []
+       const corr_form_id = '{{context.corr_form_id}}';
+       const list = $('#add-conv').find('input').map(function () {
+           return $(this).val();
+       }).get();
+       let present_string_arr =[];
+   	let replace_string_arr = [];
 
    	for (var i=0;i<list.length;i++){
-	    if ((i+2)%2==0) {
+	    if ((i+2)%2===0) {
 	        present_string_arr.push(list[i]);
 	    }
 	    else {
@@ -63,9 +63,9 @@
 
 	console.log("Posting data to conversion model");
 
-   	var conversionurl = '{% url "conversionview" %}'
+       const conversionurl = '{% url "conversionview" %}';
 
-	function getCookie(name) {
+       function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
             const cookies = document.cookie.split(';');

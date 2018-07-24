@@ -13,11 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from __future__ import unicode_literals
-from zipfile import ZipFile
+
 import logging
 import os
 import os.path
 import time
+from zipfile import ZipFile
 
 from django.contrib.gis.db import models
 from django.db.models.signals import post_save

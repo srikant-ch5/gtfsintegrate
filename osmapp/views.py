@@ -1,20 +1,17 @@
+import json
 import os
-import overpy
 import xml.etree.cElementTree as cetree
-import pdb
-from requests import post
+from typing import List, Any
 
-from django.contrib.gis.geos import Point, LineString
 from django.contrib.gis.geos import LineString
+from django.db import connection
 from django.shortcuts import render
 from ordered_set import OrderedSet
-from typing import List, Any
-from django.db import connection
+from requests import post
 
-from multigtfs.models import Feed, Stop
-from .models import Tag, KeyValueString, Node, Way, OSM_Relation, Bounds
-from gs.tasks import dividemap, getmidpoint
-import json
+from gs.tasks import getmidpoint
+from multigtfs.models import Feed
+from .models import Tag, KeyValueString, Node, Way, OSM_Relation
 
 
 def get_osm_data(feed_id):
@@ -89,6 +86,7 @@ def get_osm_data(feed_id):
         load(xmlfile, feed_id)
     else:
         print("Nodes are already downloaded")
+
 
 def load_osm_data_view(request):
     if request.method == 'POST':

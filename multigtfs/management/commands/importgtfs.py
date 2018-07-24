@@ -13,14 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from __future__ import unicode_literals
-from datetime import datetime
-import logging
 
-from django.db import connection
+import logging
+from datetime import datetime
+
 from django.conf import settings
 from django.core.management.base import BaseCommand
+from django.db import connection
 
-from multigtfs.models import Agency, Feed, Service
+from multigtfs.models import Agency, Service
 
 
 class Command(BaseCommand):
@@ -95,4 +96,4 @@ class Command(BaseCommand):
                 feed.name = name
                 feed.save()
 
-        self.stdout.write("Successfully imported Feed %s\n" % (feed))
+        self.stdout.write("Successfully imported Feed %s\n" % feed)
