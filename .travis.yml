@@ -27,7 +27,10 @@ env:
     - DJANGO_VERSION=">=2.0.6"
 
 services:
-  - postgresql
+  - postgresql: "9.6"
+
+# Allow the sudo command
+sudo: true
 
 # command to install dependencies
 install:
@@ -35,6 +38,7 @@ install:
   - pip install -r requirements.txt
 
 before_script:
+  - sudo apt-get install postgresql-9.6-postgis-2.3 postgis -y -q
   - psql -c 'create database travis_ci_test;' -U postgres
   - psql -U postgres -c "create extension postgis"
   - cp geodjango/settings_secret_TEMPLATE.py geodjango/settings/settings_secret.py

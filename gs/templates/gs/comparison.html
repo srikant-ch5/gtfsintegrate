@@ -118,6 +118,8 @@
     let feed_name;
     let gtfs_to_osm_stop_name;
     let gtfs_to_osm_ref;
+    let gtfs_stop_id;
+    let gtfs_stop_name;
 
     //first hide all the buttons
     $('#export-stop').hide();
@@ -196,9 +198,9 @@
                             } else {
                                 $("#gtfsstopzone").text(this.stopzone);
                             }
-                            let gtfs_stop_id = this.stopid;
+                            gtfs_stop_id = this.stopid;
                             gtfs_stop = feed_id.toString() + "-" +this.stopid;
-                            let gtfs_stop_name = this.normalized_name;
+                            gtfs_stop_name = this.normalized_name;
 
                             clicked_gtfs_stop = {
                                 'name':this.comp_name,
