@@ -33,7 +33,7 @@ services:
   - postgresql
 
 addons:
-  postgresql: "10"
+  postgresql: "10.0"
 
 # command to install dependencies
 install:
@@ -42,6 +42,7 @@ install:
 
 before_script:
   - sudo apt-get install postgresql-10-postgis-2.4 postgis -y -q
+  - cp app/config/parameters.yml.travis app/config/parameters.yml
   - psql -c 'create database travis_ci_test;' -U postgres
   - psql -U postgres -c "create extension postgis" -d travis_ci_test
   - cp geodjango/settings_secret_TEMPLATE.py geodjango/settings/settings_secret.py
