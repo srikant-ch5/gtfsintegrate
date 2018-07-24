@@ -35,8 +35,6 @@
             document.getElementById("loading").style.display = "block";
             const formurl = $("#formurl").val();
             const formname = $("#formname").val();
-            const formosmtag = $("#formosmtag").val();
-            const formgtfstag = $("#formgtfstag").val();
             const formfrequency = $("#formfrequency").val();
 
             let feed_entry_found = 0;
@@ -56,7 +54,7 @@
                     const num_of_forms = data.length;
                     for (let i = 0; i < num_of_forms; i++) {
 
-                        if (data[i].url === formurl && data[i].osm_tag === formosmtag && data[i].gtfs_tag === formgtfstag) {
+                        if (data[i].url === formurl) {
                             feed_entry_found = 1;
                             feed_instances_in_db += 1;
                             feed_name = data[i].name;

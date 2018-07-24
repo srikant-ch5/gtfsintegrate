@@ -529,14 +529,12 @@ def download_feed_task(formId):
     # get url osm_tag gtfs_tag of the user entered form
     user_form = GTFSForm.objects.get(id=formId)
     entered_url = user_form.url
-    entered_osm_tag = user_form.osm_tag
-    entered_gtfs_tag = user_form.gtfs_tag
     entered_name = user_form.name
 
-    feed_name = ((lambda: entered_name, lambda: entered_osm_tag)[entered_name == '']())
-
+    if entered_name == '':
+        entered_name = 'samplename'
     code = 'not_present'
-    feed_download_status, error, feed_id = download_feed_with_url(entered_url, feed_name, code, formId)
+    feed_download_status, error, feed_id = download_feed_with_url(entered_url, entered_name, code, formId)
 
     print(feed_download_status)
 

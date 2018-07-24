@@ -79,7 +79,7 @@ class FeedListView(ListView):
         return Feed.objects.all().order_by('id').reverse()
 
 
-def correspondence_view(request):
+def correspondence_view_prev(request):
     context = {
         'feed_downloaded_status': '',
         'feed_id': -1,
@@ -149,14 +149,12 @@ def correspondence_view(request):
     if request.method == 'POST':
         form = GTFSInfoForm(request.POST)
 
-        is_feed_present = GTFSForm.objects.filter(url=request.POST['url'], osm_tag=request.POST['osm_tag'],
-                                                  gtfs_tag=request.POST['gtfs_tag'])
+        is_feed_present = GTFSForm.objects.filter(url=request.POST['url'])
 
         if is_feed_present.exists():
             print('Feed already exists with name trying to renew the feed in DB')
             context['feed_download_status'] = 'Feed already exists'
-            form_entry = GTFSForm.objects.get(url=request.POST['url'], osm_tag=request.POST['osm_tag'],
-                                              gtfs_tag=request.POST['gtfs_tag'])
+            form_entry = GTFSForm.objects.get(url=request.POST['url'])
             associated_feed_id = form_entry.feed_id
             formId = form_entry.id
             context['error'], context['form_reset_'] = reset_feed(formId, associated_feed_id)
@@ -172,8 +170,7 @@ def correspondence_view(request):
             if form.is_valid():
                 gtfs_feed_info = form.save()
 
-                gtfs_form_obj = GTFSForm.objects.get(url=request.POST['url'], osm_tag=request.POST['osm_tag'],
-                                                     gtfs_tag=request.POST['gtfs_tag'])
+                gtfs_form_obj = GTFSForm.objects.get(url=request.POST['url'])
 
                 print("Feed ID at creation {}".format(gtfs_form_obj.id))
 

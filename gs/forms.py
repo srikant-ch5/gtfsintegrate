@@ -7,7 +7,7 @@ from .models import GTFSForm
 class GTFSInfoForm(forms.ModelForm):
     class Meta:
         model = GTFSForm
-        fields = ('url', 'name', 'osm_tag', 'gtfs_tag', 'frequency')
+        fields = ('url', 'name', 'frequency')
 
     def __init__(self, *args, **kwargs):
         super(GTFSInfoForm, self).__init__(*args, **kwargs)
@@ -18,14 +18,6 @@ class GTFSInfoForm(forms.ModelForm):
         self.fields['url'].widget.attrs = {
             'id': 'formurl',
             'name': 'feedurl'
-        }
-        self.fields['gtfs_tag'].widget.attrs = {
-            'id': 'formgtfstag',
-            'name': 'feedgtfstag'
-        }
-        self.fields['osm_tag'].widget.attrs = {
-            'id': 'formosmtag',
-            'name': 'feedosmtag'
         }
         self.fields['frequency'].widget.attrs = {
             'id': 'formfrequency',
