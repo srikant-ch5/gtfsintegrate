@@ -27,7 +27,10 @@ env:
     - DJANGO_VERSION=">=2.0.6"
 
 services:
-  - postgresql: "9.6"
+  - postgresql
+
+addons:
+  postgresql: "9.6"
 
 # Allow the sudo command
 sudo: true
