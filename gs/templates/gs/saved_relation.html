@@ -26,21 +26,88 @@
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
-	
+
+
+    const drawnItems = new L.FeatureGroup();
+    map.addLayer(drawnItems);
+    const drawControl = new L.Control.Draw({
+        edit: {
+            featureGroup: drawnItems
+        }
+    });
+    map.addControl(drawControl);
+
 	const feed_id = parseInt('{{context.feed_id|safe}}');
 	var routes_data_json = '{{context.routes_data | safe}}';
 	var routes_data = JSON.parse(routes_data_json)
 	var complete_data_json = '{{context.complete_data | safe}}';
 	var complete_data = JSON.parse(complete_data_json);
 
-	console.log(routes_data);
 	$.ajaxSetup({
         async: false
     });
-    Object.keys(routes_data).forEach(function(key, index){
-		var html = "<div class='linebtn'><a class='btn btn-primary' onclick='clickfunc(this.id)' id='"+index+"'>"+routes_data[key]+"</a></div><br>";
-		$('#route-lines').append(html);	
-	});
+
+	arr = []
+	console.log(complete_data)
+	for(var it=0;it < complete_data.length;it++){
+		for(var j=0;j<complete_data[it].length;j++){
+			a = [it,complete_data[it][0],j]
+			arr.push(a);
+		}
+	}
+
+	console.log(arr);
+
+	for(let i=0;i<arr.length;i++){
+		if( arr[i][2] == 0){
+			let html = "<div class='linebtn'><a class='btn btn-primary' id='"+arr[i][0]+"'>"+arr[i][1]+"</a><br><br><a class='btn btn-success singlelinebtn' onclick='showrelfunc(this.id)' id='"+arr[i][0]+"-"+arr[i][1]+"-"+arr[i][2]+"'>Line-"+arr[i][2].toString()+"</a></div><br>";
+			$('#route-lines').append(html);
+		}else{
+			let html = "<a class='btn btn-success singlelinebtn' onclick='showrelfunc(this.id)' id='"+arr[i][0]+"-"+arr[i][1]+"-"+arr[i][2]+"'>Line-"+arr[i][2].toString()+"</a><br><br>";
+			$('#route-lines').append(html);
+		}
+	}
+
+	function showrelfunc(id){
+		for (i in map._layers) {
+		    if (map._layers[i].options.format == undefined) {
+		        try {
+		            map.removeLayer(map._layers[i]);
+		        } catch (e) {
+		            console.log("problem with " + e + map._layers[i]);
+		        }
+		    }
+		}
+
+		L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+	        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+	    }).addTo(map);
+
+		var stopsarr = [];
+    	var colour;
+
+    	var ident = parseInt(id.split('-')[0]);
+    	var itid = parseInt(id.split('-')[2])
+	    complete_data[ident][2][itid].forEach(function(linestopsdata){
+   
+	    		var lat = parseFloat(linestopsdata[3]);
+	    		var lon = parseFloat(linestopsdata[2]);
+	    		var point = new L.LatLng(lat,lon);
+	    		stopsarr.push(point);
+        });
+
+	    var polyline = new L.Polyline(stopsarr, {
+			    color: 'red',
+			    weight: 3,
+			    opacity: 0.5,
+			    smoothFactor: 1
+			});
+		polyline.addTo(map);
+
+		bounds = new L.LatLngBounds(stopsarr);
+		map.fitBounds(bounds);
+
+	}
     function clickfunc(id){
     	for (i in map._layers) {
 		    if (map._layers[i].options.format == undefined) {
@@ -58,6 +125,7 @@
 
     	var stopsarr = [];
     	var colour;
+    	console.log(complete_data[id])
 	    complete_data[id].forEach(function(linestopsdata){
 	    	linestopsdata.forEach(function(stopdata){
 	    		var lon = parseFloat(stopdata[4]);

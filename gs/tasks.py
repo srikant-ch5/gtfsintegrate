@@ -70,48 +70,50 @@ def get_itineraries(route_id_db, feed_id, start):
     cursor.execute(query)
     result = cursor.fetchall()
 
-    route_names = []
-
-    line = [result[0][8], result[0][5]]
-
-    unique_itineraries = []
-    i = 0
-    all_itineraries = []
-    all_long_names = []
+    data_all_itineraries = []
+    i=0
     while i < len(result):
         it = []
         if result[i][3] == 1:
             j = i + 1
-            it.append(result[i][3])
+            slat = Stop.objects.get(feed=feed_id, stop_id=result[i][0]).geom.x
+            slon  = Stop.objects.get(feed=feed_id, stop_id=result[i][0]).geom.y
+
+            data = [result[i][3], result[i][2], slat, slon]
+            it.append(data)
 
             while result[j][3] != 1 and j < len(result):
-                it.append(result[j][3])
+                slat = Stop.objects.get(feed=feed_id, stop_id=result[j][0]).geom.x
+                slon = Stop.objects.get(feed=feed_id, stop_id=result[j][0]).geom.y
+                dnormal_name = result[j][2].replace('"','')
+                snormal_name = result[j][2].replace("'","")
+
+                data = [result[j][3], snormal_name, slat, slon]
+                it.append(data)
                 j = j + 1
 
                 if j >= len(result):
                     break
-        all_itineraries.append(it)
+        data_all_itineraries.append(it)
         i = j
 
-    for k in range(0, len(all_itineraries)):
-        single_itinerary = all_itineraries[k]
+    data_unique_itineraries= []
+    for k in range(0, len(data_all_itineraries)):
+        single_itinerary = data_all_itineraries[k]
 
-        if not single_itinerary in unique_itineraries:
-            unique_itineraries.append(single_itinerary)
+        if not single_itinerary in data_unique_itineraries:
+            data_unique_itineraries.append(single_itinerary)
 
-    merged_itineraries = []
-    final_unique_array = unique_itineraries
-    for single_itinerary in unique_itineraries:
+    data_final_unique_array = data_unique_itineraries
+    for data_single_itinerary in data_unique_itineraries:
 
-        for compare_it in unique_itineraries:
+        for compare_it in data_unique_itineraries:
 
-            if single_itinerary in compare_it:
-                final_unique_array.remove(single_itinerary)
+            if data_single_itinerary in compare_it:
+                data_final_unique_array.remove(data_single_itinerary)
 
-    line.append(final_unique_array)
-
-    print(line)
-
+    print(data_final_unique_array)
+    line = [result[0][8], result[0][5], data_final_unique_array]
     return line
 
 

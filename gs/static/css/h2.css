@@ -366,3 +366,7 @@ a:hover { color: #333333; text-decoration: underline; }
 #sample_data,#extra_data{
     display:inline-block;
 }
+
+.singlelinebtn{
+    margin-left:50px;
+}
