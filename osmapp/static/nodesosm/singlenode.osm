@@ -1,9 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <osm version='0.6' generator='Python Script'>
 
-<node action="modify" id='616852847' timestamp='2015-04-29T04:20:38Z' uid='2872644' user='l84tahoe' visible='True' version='6' changeset='30604510' incomplete='False' feed_id='2' lon='-121.471175' lat='38.5791982' >
- <tag k='highway' v='bus_stop' />
- <tag k='name' v='SacRT 34' />
- <tag k='ref' v='20471' />
+<node action="modify" id='2277945528' timestamp='2013-04-23T05:33:57Z' uid='28923' user='California Bear' visible='True' version='2' changeset='15832248' incomplete='False' feed_id='2' lon='-120.9353243' lat='38.348919' >
+ <tag k='public_transport' v='platform' />
+ <tag k='train' v='yes' />
+ <tag k='name' v='Ione Methodist Church' />
+ <tag k='ref' v='2436345' />
 </node>
 </osm>

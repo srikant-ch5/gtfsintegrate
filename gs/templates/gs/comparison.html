@@ -25,6 +25,7 @@
     <div class="row">
         <div class="col-md-5">
             <a class="btn btn-primary" id="export-stop" onclick="match_stop()"></a>
+            <a class="btn btn-success" id="export-new-stop" onclick="match_new_stop()"></a>
             <a class="btn btn-primary" id="add_to_list" onclick="add_to_match_list()">Add to Match List</a>
             <a class="btn btn-primary" id="export_all_stops" onclick="match_stops()">Match All Stops from Match List</a>
         </div>
@@ -120,9 +121,12 @@
     let gtfs_to_osm_ref;
     let gtfs_stop_id;
     let gtfs_stop_name;
+    let new_marker_lat=0;
+    let new_marker_lon=0;
 
     //first hide all the buttons
     $('#export-stop').hide();
+    $('#export-new-stop').hide();
     $('#add_to_list').hide();
     $('#export_all_stops').hide();
 
@@ -179,12 +183,13 @@
                     marker.comp_name = data.features[i].properties[gtfs_to_osm_stop_name];
                     marker.comp_ref = data.features[i].properties[gtfs_to_osm_ref_full];
 
-                    let clickcircle;
+                    var clickcircle;
 
                     function markerOnClick(e) {
                         try{
                             clicked_gtfs_stop = [];
                             $('#export-stop').hide();
+                            $('#export-new-stop').hide();
                             $('#export_all_stops').hide();
                             $("#gtfsstopid").text(this.stopid);
                             if (this.stopcode === "") {
@@ -404,7 +409,25 @@
         try{
         const drawnItems = new L.FeatureGroup();
         map.addLayer(drawnItems);
+
+        var customMarker= L.Icon.extend({
+            options: {
+                shadowUrl: null,
+                iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png',
+                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            }
+        });
         const drawControl = new L.Control.Draw({
+            draw : {
+                marker : {
+                    icon : new customMarker()
+                }
+            },
+
             edit: {
                 featureGroup: drawnItems
             }
@@ -433,6 +456,23 @@
                     $("#bbox").append("<h3>Included box" + num + "</h3>");
                 })
             }
+            if (type === 'marker'){
+                if(gtfs_stop_id !== undefined && gtfs_stop_name !== undefined){
+                    
+                let coordinates = layer.getLatLng();
+                new_marker_lat = coordinates.lat;
+                new_marker_lon = coordinates.lng;
+                alert(new_marker_lon)
+                $('#stopreffromgtfs').text('>');
+                $('#stopnamefromgtfs').text('>');
+                $('#resultstopref').text(gtfs_stop_id);
+                $('#resultstopname').text(gtfs_stop_name);
+                $('#export-new-stop').show();
+                $("#export-new-stop").text("Match "+gtfs_stop_id+"with newly created stop");
+                }else{
+                    alert("Click on any gtfs stop(blue marker) first");
+                }
+            }
 
             drawnItems.addLayer(layer);
         });
@@ -460,6 +500,8 @@
     }catch(error){
         alert(error+" in relation bounding box");
     }
+
+
 
 }
 
@@ -592,6 +634,35 @@ function match_stop(){
     data_to_match.push(data);
     console.log("Data to match "+data_to_match);
     const match_stop_url = "{% url 'match_stop' %}";
+    $.ajax({
+            url: match_stop_url,
+            method: 'POST',
+            data: {
+                'data_to_match':JSON.stringify(data_to_match),
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function (data) {
+                alert("Posted data to osm ");
+                $('#export-stop').hide();
+            },
+            error: function (xhr, status, e) {
+                alert("Something went wrong");
+            }
+    });
+}
+
+function match_new_stop(){
+    data_to_match = [];
+
+    let data = {
+        'feed_id':feed_id,
+        'gtfs':clicked_gtfs_stop,
+        'lat':new_marker_lat,
+        'lon':new_marker_lon
+    }
+    data_to_match.push(data);
+    console.log("Data to match "+data_to_match);
+    const match_stop_url = "{% url 'create_stop' %}";
     $.ajax({
             url: match_stop_url,
             method: 'POST',

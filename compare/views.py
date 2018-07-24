@@ -1,5 +1,7 @@
 import json
+import requests
 
+from urllib.parse import urlencode
 from django.db import connection
 from django.shortcuts import render
 
@@ -61,6 +63,31 @@ def showmap_with_comp(request, pk):
             comp_stop.save()'''
 
     return render(request, 'gs/comparison.html', {'context': context})
+
+
+def create_stop(request):
+    if request.method == 'POST':
+        data_json = request.POST.get('data_to_match')
+        data = json.loads(data_json)
+        feed_id = data[0]['feed_id']
+        gtfs_stop_data = data[0]['gtfs']
+        lat = data[0]['lat']
+        lon = data[0]['lon']
+        print(" {}  {}".format(lat, lon))
+        print(gtfs_stop_data)
+
+        outputparams = {'newline':'','ident':'','generator':'Python script','upload':True}
+
+        xml = "<?xml version='1.0' encoding='UTF-8'?>{newline}<osm version='0.6'{upload}{generator}>{newline}".format(**outputparams)
+
+        xml += '''<nd action="modify" id='-1' timestamp='2013-04-23T05:33:57Z' uid='28923' user='testuser' visible='True' version='1' changeset='15832248' incomplete='False' feed_id='2' lon="''' + str(lon) + '''" lat="''' + str(lat) + '''" ><tag k='public_transport' v='platform' /><tag k='bus' v='yes' /><tag k='name' v="''' + gtfs_stop_data['name'] + '''" /><tag k='ref' v="''' + str(gtfs_stop_data['stop_id']) + '''" /></node></osm></xml>'''
+        values = {'data': xml, 'new_layer': True}
+        link = "http://localhost:8111/add_node?lon="+str(lon)+"&lat="+str(lat)+"&addtags=name="+gtfs_stop_data['name']+"|ref="+str(gtfs_stop_data['stop_id'])
+        response = requests.get(link)
+
+        print(xml)
+
+        return render(request, 'gs/comparison.html')
 
 
 def match_stop(request):
