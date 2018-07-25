@@ -76,13 +76,19 @@ def create_stop(request):
         print(" {}  {}".format(lat, lon))
         print(gtfs_stop_data)
 
-        outputparams = {'newline':'','ident':'','generator':'Python script','upload':True}
+        outputparams = {'newline': '', 'ident': '', 'generator': 'Python script', 'upload': True}
 
-        xml = "<?xml version='1.0' encoding='UTF-8'?>{newline}<osm version='0.6'{upload}{generator}>{newline}".format(**outputparams)
+        xml = "<?xml version='1.0' encoding='UTF-8'?>{newline}<osm version='0.6'{upload}{generator}>{newline}".format(
+            **outputparams)
 
-        xml += '''<nd action="modify" id='-1' timestamp='2013-04-23T05:33:57Z' uid='28923' user='testuser' visible='True' version='1' changeset='15832248' incomplete='False' feed_id='2' lon="''' + str(lon) + '''" lat="''' + str(lat) + '''" ><tag k='public_transport' v='platform' /><tag k='bus' v='yes' /><tag k='name' v="''' + gtfs_stop_data['name'] + '''" /><tag k='ref' v="''' + str(gtfs_stop_data['stop_id']) + '''" /></node></osm></xml>'''
+        xml += '''<nd action="modify" id='-1' timestamp='2013-04-23T05:33:57Z' uid='28923' user='testuser' visible='True' version='1' changeset='15832248' incomplete='False' feed_id='2' lon="''' + str(
+            lon) + '''" lat="''' + str(
+            lat) + '''" ><tag k='public_transport' v='platform' /><tag k='bus' v='yes' /><tag k='name' v="''' + \
+               gtfs_stop_data['name'] + '''" /><tag k='ref' v="''' + str(
+            gtfs_stop_data['stop_id']) + '''" /></node></osm></xml>'''
         values = {'data': xml, 'new_layer': True}
-        link = "http://localhost:8111/add_node?lon="+str(lon)+"&lat="+str(lat)+"&addtags=name="+gtfs_stop_data['name']+"|ref="+str(gtfs_stop_data['stop_id'])
+        link = "http://localhost:8111/add_node?lon=" + str(lon) + "&lat=" + str(lat) + "&addtags=name=" + \
+               gtfs_stop_data['name'] + "|ref=" + str(gtfs_stop_data['stop_id'])
         response = requests.get(link)
 
         print(xml)
@@ -414,3 +420,20 @@ def saveextra(request):
         print('{} {} {}'.format(in_feed_id, key, val))
         print(ExtraField.objects.filter(feed_id=in_feed_id, field_name=key).count())
     return render(request, 'gs/define-relation.html')
+
+
+def download_relation(request):
+    if request.method == 'POST':
+        top_right = [float(request.POST.get('northeast_lon')), float(request.POST.get('northeast_lat'))]
+        bottom_left = [float(request.POST.get('southwest_lon')), float(request.POST.get('southwest_lat'))]
+        bbox = [bottom_left[1], bottom_left[0], top_right[1], top_right[0]]
+        bbox_query = "bbox: " + bottom_left[1] + ", " + bottom_left[0] + ", " + top_right[1] + ", " + top_right[0]
+        query = '''
+        [out:xml][timeout:100][''' + bbox_query + '''];
+        (
+         relation["route"="bus"];
+        );
+        (._;>;);
+        out meta;
+        '''
+    return render(request, 'gs/saved_relation.html')

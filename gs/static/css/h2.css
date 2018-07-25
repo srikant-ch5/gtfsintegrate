@@ -137,7 +137,7 @@ table td:first-child {
     border: 0;
 }
 
-.rel-information-box {
+.rel-information-box, .routes-stops-info {
     padding-left: 10px;
     padding: 40px;
     margin-left: 0px;
@@ -145,13 +145,31 @@ table td:first-child {
     overflow: auto;
 }
 
-.rel-information-box, .leaflet-container {
+.rel-information-box, .leaflet-container, .it-div, #osm-stops-list {
     border-radius: 25px;
     border: 10px solid #2778D4;
     width: 600px;
     height: 500px;
+    overflow: auto;
 }
-
+#gtfsheading{
+    margin-left:80px;
+}
+.it-div{
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+    padding-left:20px;
+    margin-left:60px;
+}
+#osm-stops-list{
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    padding-left:20px;
+}
 #relmap {
     border-radius: 25px;
     border: 10px solid #2778D4;

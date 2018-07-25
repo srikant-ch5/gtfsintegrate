@@ -11,7 +11,7 @@
 	<div class="row">
 		<div class="col-xs-6" >
 			<div id="rel-info-box" class="rel-information-box">
-				<h3>Lines from Routes.txt</h3>
+				<h2>Lines from Routes.txt</h2>
 				<div id="route-lines"></div>
 			</div>
 		</div>
@@ -20,8 +20,25 @@
 		</div>
 	</div>
 </div>
+<div class="container">
+	<div class="row">
+		<div class="col-xs-6 ">
+			<h2>OSM Route Stops</h2>
+			<div id="osm-stops-list">
+			</div>
+		</div>
+		<div class="col-xs-6">
+			<h2 id='gtfsheading'>GTFS Route Stops</h2>
+			<div id="rel-stops-info-list-box">
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src="{% static 'js/configureajax.js' %}"></script>
 
 <script type="text/javascript">
+	
     const map = L.map('relmap').setView([51.505, -0.09], 13);
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -59,7 +76,7 @@
 
 	for(let i=0;i<arr.length;i++){
 		if( arr[i][2] == 0){
-			let html = "<div class='linebtn'><a class='btn btn-primary' id='"+arr[i][0]+"'>"+arr[i][1]+"</a><br><br><a class='btn btn-success singlelinebtn' onclick='showrelfunc(this.id)' id='"+arr[i][0]+"-"+arr[i][1]+"-"+arr[i][2]+"'>Line-"+arr[i][2].toString()+"</a></div><br>";
+			let html = "<div class='linebtn'><a class='btn btn-primary' onclick='linefunc(this.id)' id='"+arr[i][1]+"-"+arr[i][0]+"'>"+arr[i][1]+"</a><br><br><a class='btn btn-success singlelinebtn' onclick='showrelfunc(this.id)' id='"+arr[i][0]+"-"+arr[i][1]+"-"+arr[i][2]+"'>Line-"+arr[i][2].toString()+"</a></div><br>";
 			$('#route-lines').append(html);
 		}else{
 			let html = "<a class='btn btn-success singlelinebtn' onclick='showrelfunc(this.id)' id='"+arr[i][0]+"-"+arr[i][1]+"-"+arr[i][2]+"'>Line-"+arr[i][2].toString()+"</a><br><br>";
@@ -83,12 +100,10 @@
 	    }).addTo(map);
 
 		var stopsarr = [];
-    	var colour;
-
-    	var ident = parseInt(id.split('-')[0]);
-    	var itid = parseInt(id.split('-')[2])
+    	let ident = parseInt(id.split('-')[0]);
+    	let itid = parseInt(id.split('-')[2]);
+		let colour;
 	    complete_data[ident][2][itid].forEach(function(linestopsdata){
-   
 	    		var lat = parseFloat(linestopsdata[3]);
 	    		var lon = parseFloat(linestopsdata[2]);
 	    		var point = new L.LatLng(lat,lon);
@@ -106,6 +121,105 @@
 		bounds = new L.LatLngBounds(stopsarr);
 		map.fitBounds(bounds);
 
+	}
+
+	function linefunc(lineid){
+
+		let line_rep = lineid.split('-')
+		let line_name = line_rep[0];
+		let line_index_in_arr = line_rep[1];
+		
+		let line_data = complete_data[line_index_in_arr];
+
+		for (i in map._layers) {
+		    if (map._layers[i].options.format == undefined) {
+		        try {
+		            map.removeLayer(map._layers[i]);
+		        } catch (e) {
+		            console.log("problem with " + e + map._layers[i]);
+		        }
+		    }
+		}
+
+		L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+	        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+	    }).addTo(map);
+
+		var stopsarr = [];
+	    complete_data[line_index_in_arr][2].forEach(function(linestopsdata){
+			linestopsdata.forEach(function(singlelinestop){
+	    		var lat = parseFloat(singlelinestop[3]);
+	    		var lon = parseFloat(singlelinestop[2]);
+	    		var point = new L.LatLng(lat,lon);
+	    		stopsarr.push(point);
+			});
+        });
+
+	    var polyline = new L.Polyline(stopsarr, {
+			    color: 'red',
+			    weight: 3,
+			    opacity: 0.5,
+			    smoothFactor: 1
+			});
+		polyline.addTo(map);
+
+		bounds = new L.LatLngBounds(stopsarr);
+		map.fitBounds(bounds);
+
+		let html = '';
+		for(let i=0;i<line_data[2].length;i++){
+			let it = i+1;
+			html += "<div class='it-div'><h4>Itinerary	 " + it + "</h4>";
+
+			for(let j=0;j<line_data[2][i].length;j++){
+				html += "<h4>"+ line_data[2][i][j][1] + "</h4>";
+			}
+			html += "</div><br>";
+		}
+		$("#rel-stops-info-list-box").html(html);
+
+
+		//BOUNDS
+		var east_bound = bounds.getEast();
+        var west_bound = bounds.getWest();
+        var north_bound = bounds.getNorth();
+        var south_bound = bounds.getSouth();
+        var northeast_bound = [];
+        northeast_bound[0] = bounds.getNorthEast().lng;
+        northeast_bound[1] = bounds.getNorthEast().lat;
+        var northwest_bound = []
+        northwest_bound[0] = bounds.getNorthWest().lng;
+        northwest_bound[1] = bounds.getNorthWest().lat;
+        var southeast_bound = [];
+        southeast_bound[0] = bounds.getSouthEast().lng;
+        southeast_bound[1] = bounds.getSouthEast().lat;
+        var southwest_bound = [];
+        southwest_bound[0] = bounds.getSouthWest().lng;
+        southwest_bound[1] = bounds.getSouthWest().lat;
+
+		$.ajax({
+           url:'{% url "download_relation" %}',
+           method:'POST',
+           data: {'east':east_bound,
+               'west':west_bound,
+               'north':north_bound,
+               'south':south_bound,
+               'northeast_lon':northeast_bound[0],
+               'northeast_lat':northeast_bound[1],
+               'northwest_lon':northwest_bound[0],
+               'northwest_lat':northwest_bound[1],
+               'southeast_lon':southeast_bound[0],
+               'southeast_lat':southeast_bound[1],
+               'southwest_lon':southwest_bound[0],
+               'southwest_lat':southwest_bound[1],
+               'csrfmiddlewaretoken': '{{ csrf_token }}'},
+           success: function(data){
+                console.log("happy!")
+           },
+           error : function(xhr,status,e){
+               alert("You should not be happy");
+           }
+        });
 	}
 
 </script>
