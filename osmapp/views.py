@@ -202,14 +202,19 @@ def get_route_relations(request):
     return render(request, 'gs/load.html')
 
 
-def load(xmlfile, feed_id):
+def load(xmlfile, feed_id, purpose):
+    node_ids = []
+    way_ids = []
+    relation_ids = []
+
     print("Downloading the nodes")
     data = open(xmlfile)
 
     tree = cetree.parse(data)
     root = tree.getroot()
-
+    print(feed_id)
     feed = Feed.objects.get(id=feed_id)
+
 
     for primitive in root:
         if primitive.tag == 'node':
@@ -225,9 +230,10 @@ def load(xmlfile, feed_id):
 
                 node = Node(feed=feed, id=snode_id, timestamp=stimestamp, uid=suid, user=suser, version=sversion,
                             visible=True,
-                            changeset=schangeset, incomplete=False)
+                            changeset=schangeset, incomplete=False, purpose=purpose)
                 node.set_cordinates(slon, slat)
                 node.save()
+                node_ids.append(snode_id)
             except Exception as e:
                 print(e)
 
@@ -251,8 +257,9 @@ def load(xmlfile, feed_id):
 
                 way = Way(feed=feed, id=wway_id, timestamp=wtimestamp, visible=True, incomplete=False, uid=wuid,
                           user=wuser,
-                          version=wversion, changeset=wchangeset)
+                          version=wversion, changeset=wchangeset, purpose=purpose)
                 way.save()
+                way_ids.append(wway_id)
                 way.wn_set.all().delete()
 
             except Exception as e:
@@ -261,12 +268,12 @@ def load(xmlfile, feed_id):
             for xmlTag in primitive:
                 if xmlTag.tag == "nd":
                     node_reference = int(xmlTag.get('ref'))
-                    try:
+                    if Node.objects.filter(id=node_reference).exists():
                         node = Node.objects.get(id=node_reference)
                         way.add_node(node)
-                    except Exception as e:
+                    else:
                         print("Node does not exist creating dummy node")
-                        dummy_node = Node.objects.create(feed=feed, id=node_reference, visible=False, incomplete=True)
+                        dummy_node = Node.objects.create(feed=feed, id=node_reference, visible=False, incomplete=True, purpose=purpose)
                         dummy_node.set_cordinates(0, 0)
                         dummy_node.save()
                         way.incomplete = 'True'
@@ -301,8 +308,9 @@ def load(xmlfile, feed_id):
             rchangeset = int(primitive.get("changeset"))
 
             relation = OSM_Relation(feed=feed, id=rid, timestamp=rtimestamp, uid=ruid, user=ruser, version=rversion,
-                                    changeset=rchangeset, visible=True, incomplete=False)
+                                    changeset=rchangeset, visible=True, incomplete=False, purpose=purpose)
             relation.save()
+            relation_ids.append(rid)
             relation.memberrelation_set.all().delete()
 
             for xmlTag in primitive:
@@ -332,23 +340,26 @@ def load(xmlfile, feed_id):
                             rm = relation.add_member(rel_child_relation, type, role)
 
                     except Exception as e:
+                        print("************** {} *****************".format(e))
                         if type == 'node':
-                            dummy_rel_node = Node.objects.create(id=ref, visible=False, incomplete=True)
+                            dummy_rel_node = Node.objects.create(id=ref, visible=False, incomplete=True, purpose=purpose)
                             dummy_rel_node.set_cordinates(0, 0)
                             dummy_rel_node.save()
 
                             rm = relation.add_member(dummy_rel_node, type, role)
 
                         elif type == 'way':
-                            dummy_rel_way = Way.objects.create(id=ref, visible=False, incomplete=True)
+                            dummy_rel_way = Way.objects.create(id=ref, visible=False, incomplete=True, purpose=purpose)
                             dummy_rel_way.save()
 
                             rm = relation.add_member(dummy_rel_way, type, role)
 
                         elif type == 'relation':
-                            dummy_rel_relation = OSM_Relation.objects.create(id=ref, visible=False, incomplete=True)
+                            dummy_rel_relation = OSM_Relation.objects.create(id=ref, visible=False, incomplete=True, purpose=purpose)
                             dummy_rel_relation.save()
 
                             rm = relation.add_member(dummy_rel_relation, type, role)
 
     print("The data has been downloaded")
+
+    return node_ids,way_ids, relation_ids

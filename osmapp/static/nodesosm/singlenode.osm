@@ -1,10 +1,11 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <osm version='0.6' generator='Python Script'>
 
-<node action="modify" id='2277945528' timestamp='2013-04-23T05:33:57Z' uid='28923' user='California Bear' visible='True' version='2' changeset='15832248' incomplete='False' feed_id='2' lon='-120.9353243' lat='38.348919' >
- <tag k='public_transport' v='platform' />
- <tag k='train' v='yes' />
- <tag k='name' v='Ione Methodist Church' />
- <tag k='ref' v='2436345' />
+<node action="modify" id='416658382' timestamp='2018-05-01T19:39:29Z' uid='8204522' user='Geography Fiftythree' visible='True' version='3' changeset='58594593' incomplete='False' feed_id='4' lon='-72.2896723' lat='43.705814' >
+ <tag k='highway' v='bus_stop' />
+ <tag k='shelter' v='yes' />
+ <tag k='network' v='Advance Transit' />
+ <tag k='name' v='Webster SB' />
+ <tag k='ref' v='25' />
 </node>
 </osm>

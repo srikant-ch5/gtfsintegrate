@@ -1,6 +1,6 @@
 import json
 import requests
-
+import os
 from urllib.parse import urlencode
 from django.db import connection
 from django.shortcuts import render
@@ -10,6 +10,8 @@ from gs.forms import Correspondence_Route_Form, Correspondence_Agency_Form
 from gs.tasks import save_comp, connect_to_JOSM, get_itineraries
 from multigtfs.models import Stop, Feed, Route
 from .models import CMP_Stop
+from requests import post
+from osmapp.views import load
 
 
 def get_nodes_within100m(lon, loat):
@@ -73,25 +75,24 @@ def create_stop(request):
         gtfs_stop_data = data[0]['gtfs']
         lat = data[0]['lat']
         lon = data[0]['lon']
-        print(" {}  {}".format(lat, lon))
         print(gtfs_stop_data)
 
         outputparams = {'newline': '', 'ident': '', 'generator': 'Python script', 'upload': True}
 
         xml = "<?xml version='1.0' encoding='UTF-8'?>{newline}<osm version='0.6'{upload}{generator}>{newline}".format(
             **outputparams)
-
+        name = gtfs_stop_data['name'].replace('&', '&amp;').replace("'", "&apos;").replace("<", "&lt;").replace(">",
+                                                                                                                "&gt;").replace(
+            '"', "&quot;")
         xml += '''<nd action="modify" id='-1' timestamp='2013-04-23T05:33:57Z' uid='28923' user='testuser' visible='True' version='1' changeset='15832248' incomplete='False' feed_id='2' lon="''' + str(
             lon) + '''" lat="''' + str(
             lat) + '''" ><tag k='public_transport' v='platform' /><tag k='bus' v='yes' /><tag k='name' v="''' + \
-               gtfs_stop_data['name'] + '''" /><tag k='ref' v="''' + str(
+               name + '''" /><tag k='ref' v="''' + str(
             gtfs_stop_data['stop_id']) + '''" /></node></osm></xml>'''
         values = {'data': xml, 'new_layer': True}
         link = "http://localhost:8111/add_node?lon=" + str(lon) + "&lat=" + str(lat) + "&addtags=name=" + \
-               gtfs_stop_data['name'] + "|ref=" + str(gtfs_stop_data['stop_id'])
+               name + "|ref=" + str(gtfs_stop_data['stop_id'])
         response = requests.get(link)
-
-        print(xml)
 
         return render(request, 'gs/comparison.html')
 
@@ -424,16 +425,36 @@ def saveextra(request):
 
 def download_relation(request):
     if request.method == 'POST':
+        feed_id = request.POST.get('feed_id')
+        context = {
+            'feed_id': feed_id
+        }
         top_right = [float(request.POST.get('northeast_lon')), float(request.POST.get('northeast_lat'))]
         bottom_left = [float(request.POST.get('southwest_lon')), float(request.POST.get('southwest_lat'))]
         bbox = [bottom_left[1], bottom_left[0], top_right[1], top_right[0]]
-        bbox_query = "bbox: " + bottom_left[1] + ", " + bottom_left[0] + ", " + top_right[1] + ", " + top_right[0]
+        bbox_query = "bbox: " + str(bottom_left[1]) + ", " + str(bottom_left[0]) + ", " + str(
+            top_right[1]) + ", " + str(top_right[0])
         query = '''
-        [out:xml][timeout:100][''' + bbox_query + '''];
-        (
-         relation["route"="bus"];
-        );
-        (._;>;);
-        out meta;
+            [out:xml][timeout:100][''' + bbox_query + '''];
+            (
+             relation["route"="bus"];
+            );
+            (._;>;);
+            out meta;
         '''
-    return render(request, 'gs/saved_relation.html')
+
+        try:
+            result = post("http://overpass-api.de/api/interpreter", query)
+        except ConnectionError as ce:
+            context['connection_error'] = "There is a connection error while downloading the OSM data"
+
+        PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+        xmlfiledir = xmlfiledir = os.path.join(os.path.dirname(PROJECT_ROOT), 'osmapp', 'static')
+        xmlfile = xmlfiledir + '/relation.osm'
+        with open(xmlfile, 'wb') as fh:
+            fh.write(result.content)
+
+        nodes, ways, relations = load(xmlfile, feed_id, 'comp_relation')
+        print('{} {} {}'.format(len(nodes), len(ways), len(relations)))
+
+    return render(request, 'gs/saved_relation.html', {'context': context})

@@ -155,7 +155,7 @@ table td:first-child {
 #gtfsheading{
     margin-left:80px;
 }
-.it-div{
+#osm-stops-list{
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
     border-top-left-radius: 50px;
@@ -163,7 +163,7 @@ table td:first-child {
     padding-left:20px;
     margin-left:60px;
 }
-#osm-stops-list{
+.it-div{
     border-top-right-radius: 50px;
     border-bottom-right-radius: 50px;
     border-top-left-radius: 0px;

@@ -41,7 +41,9 @@ class Tag(models.Model):
             _outputparams = outputparams
 
         key = self.key.value
-        value = self.value.value
+        value = self.value.value.replace('&', '&amp;').replace("'", "&apos;").replace("<", "&lt;").replace(">",
+                                                                                                           "&gt;").replace(
+            '"', "&quot;")
 
         self.xml = ''
 
@@ -96,6 +98,7 @@ class OSM_Primitive(models.Model):
     tags = models.ManyToManyField('Tag', blank=True)
     incomplete = models.BooleanField(default=False)
     feed = models.ForeignKey('multigtfs.Feed', on_delete=models.CASCADE, blank=True, null=True)
+    purpose = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
         abstract = True
@@ -246,7 +249,7 @@ class OSM_Relation(OSM_Primitive):
             if memtype == 'node':
                 rm = MemberRelation(parent=self, member_node=member, type='n', role=role, sequence=1)
             elif memtype == 'way':
-                rm - MemberRelation(parent=self, member_way=member, type='w', role=role, sequence=1)
+                rm = MemberRelation(parent=self, member_way=member, type='w', role=role, sequence=1)
             elif memtype == 'relation':
                 rm = MemberRelation(parent=self, member_relation=member, type='r', role=role, sequence=1)
 

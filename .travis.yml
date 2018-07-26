@@ -46,7 +46,7 @@ install:
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
   - psql -U postgres -c "create extension postgis" -d travis_ci_test
-  - cp geodjango/settings_secret_TEMPLATE.py
+  - cp geodjango/settings_secret_TEMPLATE.py sample_settings_secret.py
 
 # command to run tests
 script:

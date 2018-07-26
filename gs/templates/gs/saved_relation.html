@@ -4,6 +4,10 @@
 {% load leaflet_tags %}
 
 {% block main %}
+<div id="loading">
+	<img id="loading-image" src='http://i.stack.imgur.com/FhHRx.gif' alt="Loading..."/>
+</div>
+
 <div class="header" id="myHeader">
   <h2 id="corr-heading">Route Relations</h2>
 </div>
@@ -22,14 +26,14 @@
 </div>
 <div class="container">
 	<div class="row">
-		<div class="col-xs-6 ">
-			<h2>OSM Route Stops</h2>
-			<div id="osm-stops-list">
-			</div>
-		</div>
 		<div class="col-xs-6">
 			<h2 id='gtfsheading'>GTFS Route Stops</h2>
 			<div id="rel-stops-info-list-box">
+			</div>
+		</div>
+		<div class="col-xs-6 ">
+			<h2>OSM Route Stops</h2>
+			<div id="osm-stops-list">
 			</div>
 		</div>
 	</div>
@@ -38,6 +42,14 @@
 <script type="text/javascript" src="{% static 'js/configureajax.js' %}"></script>
 
 <script type="text/javascript">
+
+	window.onload = function () {
+        document.getElementById("loading").style.display = "none"
+    };
+
+	$(document).ajaxStart(function(){
+		document.getElementById("loading").style.display = "block";
+	});
 	
     const map = L.map('relmap').setView([51.505, -0.09], 13);
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -200,7 +212,9 @@
 		$.ajax({
            url:'{% url "download_relation" %}',
            method:'POST',
-           data: {'east':east_bound,
+           data: {
+			   'feed_id':feed_id,
+			   'east':east_bound,
                'west':west_bound,
                'north':north_bound,
                'south':south_bound,
@@ -214,9 +228,11 @@
                'southwest_lat':southwest_bound[1],
                'csrfmiddlewaretoken': '{{ csrf_token }}'},
            success: function(data){
-                console.log("happy!")
+				document.getElementById("loading").style.display="none";
+                console.log("happy!");
            },
            error : function(xhr,status,e){
+			   document.getElementById("loading").style.display="none";
                alert("You should not be happy");
            }
         });
