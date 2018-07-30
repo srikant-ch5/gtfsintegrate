@@ -30624,3 +30624,62 @@
     <tag k='name:nl' v='Leuvense stadsbus' />
   </relation>
 </osm>
+  <way id="606460626" version="1" timestamp="2018-07-09T18:17:56Z" changeset="60548934" uid="81676" user="Peter Dobratz">
+    <nd ref="2681754930"/>
+    <nd ref="2681753018"/>
+    <tag k="NHS" v="yes"/>
+    <tag k="cycleway" v="lane"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="hgv:national_network" v="yes"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lanes:backward" v="3"/>
+    <tag k="lanes:forward" v="2"/>
+    <tag k="name" v="Carver Road"/>
+    <tag k="name_1" v="State Highway 212"/>
+    <tag k="name_2" v="State Highway 224"/>
+    <tag k="name_3" v="Southeast Highway 212"/>
+    <tag k="ref" v="OR 212;OR 224"/>
+    <tag k="sidewalk" v="no"/>
+    <tag k="source:hgv:national_network" v="Title 23: Highways Part 658 http://ecfr.gpoaccess.gov/cgi/t/text/text-idx?c=ecfr&amp;rgn=div5&amp;view=text&amp;node=23:1.0.1.7.33&amp;idno=23"/>
+    <tag k="turn:lanes:backward" v="left|none|none"/>
+  </way>
+  <way id="606460632" version="1" timestamp="2018-07-09T18:17:57Z" changeset="60548934" uid="81676" user="Peter Dobratz">
+    <nd ref="1728225656"/>
+    <nd ref="1696759037"/>
+    <tag k="bicycle" v="designated"/>
+    <tag k="cycleway" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lanes:backward" v="1"/>
+    <tag k="lanes:forward" v="3"/>
+    <tag k="maxspeed" v="45 mph"/>
+    <tag k="name" v="Clackamas Highway"/>
+    <tag k="name_1" v="Southeast Highway 224"/>
+    <tag k="name_2" v="State Highway 224"/>
+    <tag k="ref" v="OR 224"/>
+    <tag k="sidewalk" v="right"/>
+    <tag k="source:maxspeed" v="sign"/>
+    <tag k="turn:lanes:forward" v="left|none|right"/>
+  </way>
+  <way id="606460633" version="1" timestamp="2018-07-09T18:17:57Z" changeset="60548934" uid="81676" user="Peter Dobratz">
+    <nd ref="454100852"/>
+    <nd ref="1568707534"/>
+    <nd ref="1538826498"/>
+    <tag k="bicycle" v="designated"/>
+    <tag k="cycleway" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="lanes:backward" v="2"/>
+    <tag k="lanes:forward" v="1"/>
+    <tag k="maxspeed" v="45 mph"/>
+    <tag k="name" v="Clackamas Highway"/>
+    <tag k="name_1" v="Southeast Highway 224"/>
+    <tag k="name_2" v="State Highway 224"/>
+    <tag k="ref" v="OR 224"/>
+    <tag k="sidewalk" v="both"/>
+    <tag k="source:maxspeed" v="sign"/>
+    <tag k="turn:lanes:backward" v="left|none"/>
+    <tag k="zip_left" v="97089"/>
+    <tag k="zip_right" v="97089"/>
+  </way>

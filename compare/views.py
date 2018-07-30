@@ -1,17 +1,18 @@
 import json
-import requests
 import os
-from urllib.parse import urlencode
+
+import requests
+from conversionapp.models import Correspondence, ExtraField, Correspondence_Route, Correspondence_Agency
 from django.db import connection
 from django.shortcuts import render
-
-from conversionapp.models import Correspondence, ExtraField, Correspondence_Route, Correspondence_Agency
 from gs.forms import Correspondence_Route_Form, Correspondence_Agency_Form
 from gs.tasks import save_comp, connect_to_JOSM, get_itineraries
 from multigtfs.models import Stop, Feed, Route
-from .models import CMP_Stop
-from requests import post
 from osmapp.views import load
+from requests import post
+
+from .models import CMP_Stop
+from .models import Relation_data
 
 
 def get_nodes_within100m(lon, loat):
@@ -426,6 +427,8 @@ def saveextra(request):
 def download_relation(request):
     if request.method == 'POST':
         feed_id = request.POST.get('feed_id')
+        token = request.POST.get('token')
+
         context = {
             'feed_id': feed_id
         }
@@ -443,6 +446,7 @@ def download_relation(request):
             out meta;
         '''
 
+        print("Relation Query {}".format(query))
         try:
             result = post("http://overpass-api.de/api/interpreter", query)
         except ConnectionError as ce:
@@ -451,10 +455,13 @@ def download_relation(request):
         PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
         xmlfiledir = xmlfiledir = os.path.join(os.path.dirname(PROJECT_ROOT), 'osmapp', 'static')
         xmlfile = xmlfiledir + '/relation.osm'
-        with open(xmlfile, 'wb') as fh:
-            fh.write(result.content)
 
-        nodes, ways, relations = load(xmlfile, feed_id, 'comp_relation')
-        print('{} {} {}'.format(len(nodes), len(ways), len(relations)))
+        nodes_info, relation_ids, relations_info = load(xmlfile, feed_id, 'comp_relation')
+        print(' {}\n\n {}\n\n {}'.format(nodes_info, relation_ids, relations_info))
+
+        Relation_data.objects.create(token=token, all_node_info=nodes_info, relation_ids=relation_ids,
+                                     relation_info=relations_info)
+
+        print('{} {}'.format(len(relations_info), len(relation_ids)))
 
     return render(request, 'gs/saved_relation.html', {'context': context})

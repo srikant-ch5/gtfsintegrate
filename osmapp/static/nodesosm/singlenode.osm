@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <osm version='0.6' generator='Python Script'>
 
-<node action="modify" id='416658382' timestamp='2018-05-01T19:39:29Z' uid='8204522' user='Geography Fiftythree' visible='True' version='3' changeset='58594593' incomplete='False' feed_id='4' lon='-72.2896723' lat='43.705814' >
+<node action="modify" id='4214685182' timestamp='2016-05-30T01:51:03Z' uid='4018842' user='Stephen214' visible='True' version='2' changeset='39653800' incomplete='False' lon='-96.6843812' lat='32.7183521' >
+ <tag k='bus' v='yes' />
  <tag k='highway' v='bus_stop' />
- <tag k='shelter' v='yes' />
- <tag k='network' v='Advance Transit' />
- <tag k='name' v='Webster SB' />
- <tag k='ref' v='25' />
+ <tag k='public_transport' v='stop_position' />
+ <tag k='name' v='Peachtree Park Shopping Center' />
+ <tag k='ref' v='2382404' />
 </node>
 </osm>

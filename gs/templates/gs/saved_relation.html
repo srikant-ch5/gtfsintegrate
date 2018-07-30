@@ -39,10 +39,13 @@
 	</div>
 </div>
 
+	<div id="bbox"></div>
+
 <script type="text/javascript" src="{% static 'js/configureajax.js' %}"></script>
 
 <script type="text/javascript">
 
+	let token;
 	window.onload = function () {
         document.getElementById("loading").style.display = "none"
     };
@@ -56,14 +59,47 @@
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    const drawnItems = new L.FeatureGroup();
-    map.addLayer(drawnItems);
-    const drawControl = new L.Control.Draw({
-        edit: {
-            featureGroup: drawnItems
-        }
-    });
-    map.addControl(drawControl);
+    try{
+        const drawnItems = new L.FeatureGroup();
+        map.addLayer(drawnItems);
+        const drawControl = new L.Control.Draw({
+            edit: {
+                featureGroup: drawnItems
+            }
+        });
+        map.addControl(drawControl);
+
+        let num = 0;
+        let boxbounds = '';
+        map.on('draw:created', function (e) {
+			
+            const type = e.layerType;
+            var  layer = e.layer;
+			alert(layer)
+            if (type === 'rectangle') {
+				
+                layer.on('mouseover', function () {
+					alert("draw created");
+                    if (num === 0) {
+                        alert("After defining the bbox please click on the box to download data in that part");
+                        num += 1
+                    }
+                });
+                layer.on('click', function () {
+                    const bounds = layer.getLatLngs().toString();
+                    boxbounds = boxbounds + bounds;
+                    console.log("ON click " + boxbounds);
+                    num += 1;
+                    $("#bbox").append("<h3>Included box" + num-1 + "</h3>");
+                })
+            }
+            
+            drawnItems.addLayer(layer);
+        });
+	}catch(error){
+        alert(error+" in relation bounding box");
+    }
+
 	
 	const feed_id = parseInt('{{context.feed_id|safe}}');
     const routes_data_json = '{{context.routes_data | safe}}';
@@ -135,6 +171,13 @@
 
 	}
 
+	function uuidv4() {
+	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+		var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+		return v.toString(16);
+	});
+	}
+
 	function linefunc(lineid){
 
 		let line_rep = lineid.split('-')
@@ -190,7 +233,6 @@
 		}
 		$("#rel-stops-info-list-box").html(html);
 
-
 		//BOUNDS
 		var east_bound = bounds.getEast();
         var west_bound = bounds.getWest();
@@ -208,12 +250,15 @@
         var southwest_bound = [];
         southwest_bound[0] = bounds.getSouthWest().lng;
         southwest_bound[1] = bounds.getSouthWest().lat;
-
+		
+		token = uuidv4();
+		console.log(north_bound[0])
 		$.ajax({
            url:'{% url "download_relation" %}',
            method:'POST',
            data: {
 			   'feed_id':feed_id,
+			   'token':token,
 			   'east':east_bound,
                'west':west_bound,
                'north':north_bound,
@@ -228,6 +273,7 @@
                'southwest_lat':southwest_bound[1],
                'csrfmiddlewaretoken': '{{ csrf_token }}'},
            success: function(data){
+
 				document.getElementById("loading").style.display="none";
                 console.log("happy!");
            },
@@ -236,6 +282,39 @@
                alert("You should not be happy");
            }
         });
+
+		let relurl = '/api/reldata';
+		let nodes, relations;
+		$.ajax({
+			url:relurl,
+			method:'GET',
+			dataType:'json',
+			success : function(data){
+				document.getElementById("loading").style.display="none";
+				for(var i=0;i<data.length;i++)
+				 if(data[i].token == 'd2691a58-3f3a-4b03-a29e-ecfa671f790d'){
+					 console.log(data[i]);
+					 console.log(data[i].relations);
+					 console.log(data[i].nodes);
+					 nodes = data[i].nodes;
+					 relations = data[i].relations;
+				 }
+			},
+			error: function(status, xhr, e){
+				document.getElementById("loading").style.display="none";
+				alert(status);
+			}
+		});
+		var osmhtml = '';
+		var arr = [];
+		nodes.forEach(function(e){
+			if( arr.indexOf(e[0]) === -1){
+				arr.push(e[0])
+			osmhtml +=  "<h4>"+e[1]+"</h4>";
+		}
+		});
+		$("#osm-stops-list").html(osmhtml);
+
 	}
 
 </script>

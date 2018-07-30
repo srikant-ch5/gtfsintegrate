@@ -9,7 +9,7 @@ from django.shortcuts import render
 from ordered_set import OrderedSet
 from requests import post
 
-from gs.tasks import getmidpoint
+from gs.tasks import getmidpoint, reduce_bounds
 from multigtfs.models import Feed
 from .models import Tag, KeyValueString, Node, Way, OSM_Relation
 
@@ -18,43 +18,21 @@ def get_osm_data(feed_id):
     print("Osm data in view")
     feed_name = Feed.objects.get(id=feed_id).name
 
-    query2 = 'SELECT ST_AsGeoJson(ST_Envelope(ST_Union(ST_Envelope(geom)))) AS table_extent FROM gtfs_stop where gtfs_stop.feed_id=' + str(
+    get_bound_query = 'SELECT ST_AsGeoJson(ST_Envelope(ST_Union(ST_Envelope(geom)))) AS table_extent FROM gtfs_stop where gtfs_stop.feed_id=' + str(
         feed_id)
     cursor = connection.cursor()
-    cursor.execute(query2)
+    cursor.execute(get_bound_query)
     result = cursor.fetchall()
     bounds_json = json.loads(result[0][0])
+
+    # bounds required by overpass query is two points left min and right max
     southwest = bounds_json['coordinates'][0][0]
     northwest = bounds_json['coordinates'][0][1]
     northeast = bounds_json['coordinates'][0][2]
     southeast = bounds_json['coordinates'][0][3]
 
-    west = [0.0, 0.0]
-    west[0], west[1] = getmidpoint(northwest[1], northwest[0], southwest[1], southwest[0])
-    east = [0.0, 0.0]
-    east[0], east[1] = getmidpoint(northeast[1], northeast[0], southeast[1], southeast[0])
-    north = [0.0, 0.0]
-    north[0], north[1] = getmidpoint(northeast[1], northeast[0], northwest[1], northwest[0])
-    south = [0.0, 0.0]
-    south[0], south[1] = getmidpoint(southwest[1], southwest[0], southeast[1], southeast[0])
+    # reduce_bounds(southeast,southwest,northeast,northwest)
 
-    center = [0.0, 0.0]
-    center[0], center[1] = getmidpoint(north[0], north[1], south[0], south[1])
-
-    top_left = [0.0, 0.0]
-    top_left[1], top_left[0] = getmidpoint(northwest[1], northwest[0], center[0], center[1])
-    top_right = [0.0, 0.0]
-    top_right[1], top_right[0] = getmidpoint(northeast[1], northeast[0], center[0], center[1])
-    bottom_left = [0.0, 0.0]
-    bottom_left[1], bottom_left[0] = getmidpoint(southwest[1], southwest[0], center[0], center[1])
-    bottom_right = [0.0, 0.0]
-    bottom_right[1], bottom_right[0] = getmidpoint(southeast[1], southeast[0], center[0], center[1])
-
-    outerbound = [southwest, northwest, northeast, southeast]
-    innerbound = [bottom_left, top_left, top_right, bottom_right]
-
-    print('saved inner bound {} {} {} {} with operator {}'.format(top_left, top_right, bottom_left, bottom_right,
-                                                                  feed_name))
     bbox = str(southwest[1]) + "," + str(southwest[0]) + "," + str(northeast[1]) + "," + str(northeast[0])
 
     get_stops_query = '''
@@ -83,7 +61,7 @@ def get_osm_data(feed_id):
 
     if not Node.objects.filter(feed=feed_id).exists():
         print("Downloading osm data from overpass to Db")
-        load(xmlfile, feed_id)
+        load(xmlfile, feed_id, 'cmp_nodes')
     else:
         print("Nodes are already downloaded")
 
@@ -203,9 +181,9 @@ def get_route_relations(request):
 
 
 def load(xmlfile, feed_id, purpose):
-    node_ids = []
-    way_ids = []
     relation_ids = []
+    relations_info = []
+    all_nodes_info = []
 
     print("Downloading the nodes")
     data = open(xmlfile)
@@ -215,10 +193,10 @@ def load(xmlfile, feed_id, purpose):
     print(feed_id)
     feed = Feed.objects.get(id=feed_id)
 
-
     for primitive in root:
         if primitive.tag == 'node':
             try:
+                single_node = []
                 snode_id = int(primitive.attrib.get("id"))
                 stimestamp = primitive.attrib.get("timestamp")
                 suid = int(primitive.attrib.get("uid"))
@@ -233,13 +211,22 @@ def load(xmlfile, feed_id, purpose):
                             changeset=schangeset, incomplete=False, purpose=purpose)
                 node.set_cordinates(slon, slat)
                 node.save()
-                node_ids.append(snode_id)
+                single_node.append(str(snode_id))
             except Exception as e:
                 print(e)
 
             for xmlTag in primitive:
                 getkey_fromxml = xmlTag.get("k")
                 getvalue_fromxml = xmlTag.get("v")
+
+                if getkey_fromxml == 'name':
+                    single_node.append(getkey_fromxml)
+                    single_node.append(getvalue_fromxml)
+                elif getkey_fromxml == 'ref':
+                    single_node.append(getkey_fromxml)
+                    single_node.append(getvalue_fromxml)
+                if len(single_node) > 1:
+                    all_nodes_info.append(single_node)
 
                 tag = Tag()
                 tag = tag.add_tag(getkey_fromxml, getvalue_fromxml)
@@ -259,7 +246,6 @@ def load(xmlfile, feed_id, purpose):
                           user=wuser,
                           version=wversion, changeset=wchangeset, purpose=purpose)
                 way.save()
-                way_ids.append(wway_id)
                 way.wn_set.all().delete()
 
             except Exception as e:
@@ -273,7 +259,8 @@ def load(xmlfile, feed_id, purpose):
                         way.add_node(node)
                     else:
                         print("Node does not exist creating dummy node")
-                        dummy_node = Node.objects.create(feed=feed, id=node_reference, visible=False, incomplete=True, purpose=purpose)
+                        dummy_node = Node.objects.create(feed=feed, id=node_reference, visible=False, incomplete=True,
+                                                         purpose=purpose)
                         dummy_node.set_cordinates(0, 0)
                         dummy_node.save()
                         way.incomplete = 'True'
@@ -300,6 +287,7 @@ def load(xmlfile, feed_id, purpose):
             way.save()
 
         elif primitive.tag == "relation":
+            relation_ar = []
             rid = int(primitive.get("id"))
             rtimestamp = primitive.get("timestamp")
             ruid = int(primitive.get("uid"))
@@ -309,9 +297,11 @@ def load(xmlfile, feed_id, purpose):
 
             relation = OSM_Relation(feed=feed, id=rid, timestamp=rtimestamp, uid=ruid, user=ruser, version=rversion,
                                     changeset=rchangeset, visible=True, incomplete=False, purpose=purpose)
+
             relation.save()
-            relation_ids.append(rid)
             relation.memberrelation_set.all().delete()
+            relation_ids.append(rid)
+            relation_ar.append(str(rid))
 
             for xmlTag in primitive:
 
@@ -332,6 +322,17 @@ def load(xmlfile, feed_id, purpose):
                         if type == 'node':
                             rel_node = Node.objects.get(id=ref)
                             rm = relation.add_member(rel_node, type, role)
+                            node_tags = rel_node.tags.all()
+                            ar = []
+                            print("{} node tags counts is {}".format(rel_node.id,node_tags.count()))
+                            for it in range(0, node_tags.count()):
+                                if node_tags[it].key.value == 'name' or node_tags[it].key.value == 'ref':
+                                    print(node_tags[it].key.value)
+                                    ar.append(node_tags[it].key.value)
+                                    ar.append(node_tags[it].value.value)
+                            print("{} is len of ar".format(len(ar)))
+                            if len(ar) > 1:
+                                relations_info.append(ar)
                         elif type == 'way':
                             rel_way = Way.objects.get(id=ref)
                             rm = relation.add_member(rel_way, type, role)
@@ -342,7 +343,8 @@ def load(xmlfile, feed_id, purpose):
                     except Exception as e:
                         print("************** {} *****************".format(e))
                         if type == 'node':
-                            dummy_rel_node = Node.objects.create(id=ref, visible=False, incomplete=True, purpose=purpose)
+                            dummy_rel_node = Node.objects.create(id=ref, visible=False, incomplete=True,
+                                                                 purpose=purpose)
                             dummy_rel_node.set_cordinates(0, 0)
                             dummy_rel_node.save()
 
@@ -355,11 +357,12 @@ def load(xmlfile, feed_id, purpose):
                             rm = relation.add_member(dummy_rel_way, type, role)
 
                         elif type == 'relation':
-                            dummy_rel_relation = OSM_Relation.objects.create(id=ref, visible=False, incomplete=True, purpose=purpose)
+                            dummy_rel_relation = OSM_Relation.objects.create(id=ref, visible=False, incomplete=True,
+                                                                             purpose=purpose)
                             dummy_rel_relation.save()
 
                             rm = relation.add_member(dummy_rel_relation, type, role)
 
     print("The data has been downloaded")
 
-    return node_ids,way_ids, relation_ids
+    return all_nodes_info, relation_ids, relations_info

@@ -1,4 +1,5 @@
 from django.contrib.gis.db import models
+from django.contrib.postgres.fields import ArrayField
 
 
 class CMP_Stop(models.Model):
@@ -45,3 +46,15 @@ class Line_Stop(models.Model):
     route_desc = models.CharField(max_length=500, blank=True, null=True)
     route_color = models.CharField(max_length=500, blank=True, null=True)
     route_text_color = models.CharField(max_length=500, blank=True, null=True)
+
+
+class Relation_data(models.Model):
+    token = models.CharField(max_length=200, blank=True, null=True)
+    all_node_info = ArrayField(ArrayField(models.CharField(max_length=200), blank=True, null=True), blank=True,
+                              null=True)
+    relation_ids = models.BigIntegerField(blank=True, null=True)
+    relation_info = ArrayField(ArrayField(models.CharField(max_length=200, blank=True, null=True)), blank=True,
+                               null=True)
+
+    def __str__(self):
+        return '{} '.format(self.token)

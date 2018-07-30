@@ -40,7 +40,7 @@ def get_itineraries(route_id_db, feed_id, start):
             SELECT
                 gtfs_stop.stop_id,
                 gtfs_stop.code,
-                gtfs_stop.name,
+                gtfs_stop.normalized_name,
                 gtfs_stop_time.stop_sequence,
                 gtfs_trip.extra_data,
                 gtfs_route.id,
@@ -84,10 +84,9 @@ def get_itineraries(route_id_db, feed_id, start):
             while result[j][3] != 1 and j < len(result):
                 slat = Stop.objects.get(feed=feed_id, stop_id=result[j][0]).geom.x
                 slon = Stop.objects.get(feed=feed_id, stop_id=result[j][0]).geom.y
-                dnormal_name = result[j][2].replace('"', '')
-                snormal_name = result[j][2].replace("'", "")
+                dnormal_name = result[j][2].replace("'", "").replace('"', '')
 
-                data = [result[j][3], snormal_name, slat, slon]
+                data = [result[j][3], dnormal_name, slat, slon]
                 it.append(data)
                 j = j + 1
 
@@ -111,7 +110,6 @@ def get_itineraries(route_id_db, feed_id, start):
             if data_single_itinerary in compare_it:
                 data_final_unique_array.remove(data_single_itinerary)
 
-    print(data_final_unique_array)
     line = [result[0][8], result[0][5], data_final_unique_array]
     return line
 
@@ -258,74 +256,194 @@ def connect_to_JOSM(xml):
     except requests.exceptions.RequestException as e:
         context['error'] += 'JOSM not open {}'.format(e)
 
-
-def get_keys(feed_id):
-    key_strings = []
-    tags = Node.objects.filter(feed=feed_id).values('tags').distinct()
-    for tag in tags:
-        key = Tag.objects.get(id=tag['tags']).key.value
-        if key not in key_strings:
-            key_strings.append(key)
-
-    return key_strings
+'''Methods for downloading and reseting feeds'''
 
 
-def getmidpoint(lat1, lon1, lat2, lon2):
-    l = Geodesic.WGS84.InverseLine(lat1, lon1, lat2, lon2)
+def rename_feed(feed_id, formId):
+    feed = Feed.objects.get(id=feed_id)
+    name = feed.name
+    agencies = feed.agency_set.all()
+    update_name = ''
 
-    m = l.Position(0.5 * l.s13)
+    for agency in agencies:
+        agname = agency.name.replace(" ", "")
+        update_name += agname
+    # remove space
+    # get if the feed names already exists
+    update_name += '-'
+    num = 0
+    while True:
 
-    return m['lat2'], m['lon2']
-
-
-def plotblock(v0, v1, v2, v3, stops_coordinates, block=None):
-    lats_vect = np.array([v0[0], v1[0], v2[0], v3[0]])
-    lons_vect = np.array([v0[1], v1[1], v2[1], v3[1]])
-
-    lats_lon_vect = np.column_stack((lats_vect, lons_vect))
-    polygon = Polygon(lats_lon_vect)
-
-    points_in_bound = []
-    points_not_in_bound = []
-
-    for i in range(0, len(stops_coordinates)):
-        x, y = stops_coordinates[i][0], stops_coordinates[i][1]
-        point = Point(x, y)
-        p = [x, y]
-        if polygon.contains(point):
-            block.append(point)
+        if Feed.objects.filter(name=update_name + str(num)).exists():
+            num = num + 1
         else:
-            points_not_in_bound.append(point)
+            break
 
-    # print(len(points_not_in_bound))#includes points ne,nw,se,sw
-
-    '''
-    Display bound and a stop using matlpotlib
-    ax = plt.axes(projection=ccrs.PlateCarree())
-    ax.stock_img()
-
-    # Append first vertex to end of vector to close polygon when plotting
-    lats_vect = np.append(lats_vect, lats_vect[0])
-    lons_vect = np.append(lons_vect, lons_vect[0])
-    plt.plot([lons_vect[0:-1], lons_vect[1:]], [lats_vect[0:-1], lats_vect[1:]],
-             color='black', linewidth=1,
-             transform=ccrs.Geodetic(),
-             )
-
-    plt.plot(-72.343421936, 43.729133606,
-             '*',
-             color='blue',
-             markersize=8)
-
-    plt.show()
-
-    '''
-
-    return block
+    update_name += str(num)
+    user_form = GTFSForm.objects.get(id=formId)
+    user_form.name = update_name
+    user_form.save()
+    feed.name = update_name
+    feed.save()
+    to_change = os.path.join(os.path.dirname(os.path.abspath(__file__)), "gtfsfeeds/") + name + '.zip'
+    update_name = os.path.join(os.path.dirname(os.path.abspath(__file__)), "gtfsfeeds/") + update_name + '.zip'
+    os.rename(to_change, update_name)
 
 
-def queries():
-    query = ''
+def download_feed_in_db(file, feed_name_in_form, code, formId):
+    new_feed = Feed.objects.create(name=feed_name_in_form)
+    successfull_download = 0  # 0 = False
+    error = 'No error while downloading the file'
+
+    new_feed.import_gtfs(file)
+    feed_id = new_feed.id
+
+    form = GTFSForm.objects.get(id=formId)
+    print('{} is the form that was created '.format(form))
+    successfull_download = 1  # 1 =True
+
+    if code == 'not_present':
+        rename_feed(feed_id, formId)
+
+    return successfull_download, error, feed_id
+
+
+def download_feed_with_url(download_url, save_feed_name_in_form, code, formId):
+    print("Downloading with url")
+    r = requests.get(download_url, allow_redirects=True)
+
+    feed_file = 'gs/gtfsfeeds/' + save_feed_name_in_form + '.zip'
+    # temporary name for file
+    if code == 'present':
+        os.remove(feed_file)
+        print("removed feed file {}", format(feed_file))
+
+    open(feed_file, 'wb').write(r.content)
+
+    feed_download_status, error, feed_id = download_feed_in_db(feed_file, save_feed_name_in_form, code, formId)
+
+    return feed_download_status, error, feed_id
+
+
+def download_feed_task(formId):
+    # get url osm_tag gtfs_tag of the user entered form
+    user_form = GTFSForm.objects.get(id=formId)
+    entered_url = user_form.url
+    entered_name = user_form.name
+
+    if entered_name == '':
+        entered_name = 'samplename'
+    code = 'not_present'
+    feed_download_status, error, feed_id = download_feed_with_url(entered_url, entered_name, code, formId)
+
+    print(feed_download_status)
+
+    if feed_download_status == 0:
+        print("Inside Feed download failed")
+        form_to_delete = GTFSForm.objects.latest('id')
+        feed_to_delete = Feed.objects.latest('id')
+
+        form_to_delete.delete()
+        feed_to_delete.delete()
+
+    return error, feed_id
+
+
+def check_feeds_task():
+    # keep on checking the feeds for every five days all the feeds are downloaded again into the database
+    # 1. get all the feeds
+    all_feeds = Feed.objects.all()
+
+    feed_form_not_found = ''
+    for feed in all_feeds:
+        # get the name of the feed
+        feed_name = feed.name
+        print(feed_name)
+        try:
+            feed_form = GTFSForm.objects.get(name=feed_name)
+            feed_url = feed_form.url
+            feed_timestamp = feed_form.timestamp
+            current_timestamp = timezone.now()
+            print("{}  {}".format(feed_timestamp, current_timestamp))
+
+            ts_diff = str(current_timestamp - feed_timestamp)[0]
+
+            print(ts_diff)
+            frequency = feed_form.frequency
+            if int(ts_diff) > frequency:
+                feed_form_not_found = "Downloading the feed again"
+                print(feed_form_not_found)
+                code = 'present'
+                download_feed_with_url(feed_url, feed_name, code, feed_form.id)
+
+            feed.delete()
+        except Exception as e:
+            feed_form_not_found = 'Form not found with present feed'
+
+        print(feed_form_not_found)
+
+
+def reset_feed(formId, associated_feed_id):
+    form = GTFSForm.objects.get(id=formId)
+    form_timestamp = form.timestamp
+    print(form_timestamp)
+    current_timestamp = timezone.now()
+
+    ts_diff = str(current_timestamp - form_timestamp)[0]
+    status = 'The Feed is up to date'
+    print("Diff is {}".format(ts_diff))
+    form_reset = False
+    code = 'present'
+    frequency = form.frequency
+    feed_id = associated_feed_id
+
+    if int(ts_diff) > frequency:
+        status = 'Reset feed with latest data'
+        print('Reseting Feed')
+        form_reset = True
+
+        Feed.objects.get(id=feed_id).delete()
+        download_status, error, new_feed_id = download_feed_with_url(form.url, form.name, code, formId)
+
+        form.timestamp = timezone.now()
+        form.feed_id = new_feed_id
+        form.save()
+
+        feed_id = new_feed_id
+
+    return status, form_reset, feed_id
+
+
+'''Method for reducing the map into 1/4th part'''
+
+
+def reduce_bounds(southeast, southwest, northeast, northwest):
+    west = [0.0, 0.0]
+    west[0], west[1] = getmidpoint(northwest[1], northwest[0], southwest[1], southwest[0])
+    east = [0.0, 0.0]
+    east[0], east[1] = getmidpoint(northeast[1], northeast[0], southeast[1], southeast[0])
+    north = [0.0, 0.0]
+    north[0], north[1] = getmidpoint(northeast[1], northeast[0], northwest[1], northwest[0])
+    south = [0.0, 0.0]
+    south[0], south[1] = getmidpoint(southwest[1], southwest[0], southeast[1], southeast[0])
+
+    center = [0.0, 0.0]
+    center[0], center[1] = getmidpoint(north[0], north[1], south[0], south[1])
+
+    top_left = [0.0, 0.0]
+    top_left[1], top_left[0] = getmidpoint(northwest[1], northwest[0], center[0], center[1])
+    top_right = [0.0, 0.0]
+    top_right[1], top_right[0] = getmidpoint(northeast[1], northeast[0], center[0], center[1])
+    bottom_left = [0.0, 0.0]
+    bottom_left[1], bottom_left[0] = getmidpoint(southwest[1], southwest[0], center[0], center[1])
+    bottom_right = [0.0, 0.0]
+    bottom_right[1], bottom_right[0] = getmidpoint(southeast[1], southeast[0], center[0], center[1])
+
+    outerbound = [southwest, northwest, northeast, southeast]
+    innerbound = [bottom_left, top_left, top_right, bottom_right]
+
+    print('saved inner bound {} {} {} {} with operator {}'.format(top_left, top_right, bottom_left, bottom_right,
+                                                                  feed_name))
 
 
 def dividemap(east=None, west=None, north=None, south=None, northeast_lat=None, northeast_lon=None, northwest_lat=None,
@@ -456,155 +574,55 @@ def dividemap(east=None, west=None, north=None, south=None, northeast_lat=None, 
     '''
 
 
-def rename_feed(feed_id, formId):
-    feed = Feed.objects.get(id=feed_id)
-    name = feed.name
-    agencies = feed.agency_set.all()
-    update_name = ''
+def getmidpoint(lat1, lon1, lat2, lon2):
+    l = Geodesic.WGS84.InverseLine(lat1, lon1, lat2, lon2)
 
-    for agency in agencies:
-        agname = agency.name.replace(" ", "")
-        update_name += agname
-    # remove space
-    # get if the feed names already exists
-    update_name += '-'
-    num = 0
-    while True:
+    m = l.Position(0.5 * l.s13)
 
-        if Feed.objects.filter(name=update_name + str(num)).exists():
-            num = num + 1
+    return m['lat2'], m['lon2']
+
+
+def plotblock(v0, v1, v2, v3, stops_coordinates, block=None):
+    lats_vect = np.array([v0[0], v1[0], v2[0], v3[0]])
+    lons_vect = np.array([v0[1], v1[1], v2[1], v3[1]])
+
+    lats_lon_vect = np.column_stack((lats_vect, lons_vect))
+    polygon = Polygon(lats_lon_vect)
+
+    points_in_bound = []
+    points_not_in_bound = []
+
+    for i in range(0, len(stops_coordinates)):
+        x, y = stops_coordinates[i][0], stops_coordinates[i][1]
+        point = Point(x, y)
+        p = [x, y]
+        if polygon.contains(point):
+            block.append(point)
         else:
-            break
+            points_not_in_bound.append(point)
 
-    update_name += str(num)
-    user_form = GTFSForm.objects.get(id=formId)
-    user_form.name = update_name
-    user_form.save()
-    feed.name = update_name
-    feed.save()
-    to_change = os.path.join(os.path.dirname(os.path.abspath(__file__)), "gtfsfeeds/") + name + '.zip'
-    update_name = os.path.join(os.path.dirname(os.path.abspath(__file__)), "gtfsfeeds/") + update_name + '.zip'
-    os.rename(to_change, update_name)
+    # print(len(points_not_in_bound))#includes points ne,nw,se,sw
 
+    '''
+    Display bound and a stop using matlpotlib
+    ax = plt.axes(projection=ccrs.PlateCarree())
+    ax.stock_img()
 
-def download_feed_in_db(file, file_name, code, formId):
-    feeds = Feed.objects.create(name=file_name)
-    successfull_download = 0  # 0 = False
-    error = 'No error while downloading the file'
-    print("{} in down Feed init ".format(successfull_download))
+    # Append first vertex to end of vector to close polygon when plotting
+    lats_vect = np.append(lats_vect, lats_vect[0])
+    lons_vect = np.append(lons_vect, lons_vect[0])
+    plt.plot([lons_vect[0:-1], lons_vect[1:]], [lats_vect[0:-1], lats_vect[1:]],
+             color='black', linewidth=1,
+             transform=ccrs.Geodetic(),
+             )
 
-    feeds.import_gtfs(file)
-    feed_id = feeds.id
+    plt.plot(-72.343421936, 43.729133606,
+             '*',
+             color='blue',
+             markersize=8)
 
-    form = GTFSForm.objects.get(id=formId)
-    print(form)
-    successfull_download = 1  # 1 =True
-    print("{} in  Feed import ".format(successfull_download))
+    plt.show()
 
-    if code == 'not_present':
-        rename_feed(feed_id, formId)
+    '''
 
-    print("{} in down Feed end ".format(successfull_download))
-    return successfull_download, error, feed_id
-
-
-def download_feed_with_url(download_url, save_feed_name, code, formId):
-    print("Downloading with url")
-    r = requests.get(download_url, allow_redirects=True)
-
-    feed_file = 'gs/gtfsfeeds/' + save_feed_name + '.zip'
-    # temporary name for file
-    if code == 'present':
-        os.remove(feed_file)
-        print("renewing feed file")
-
-    open(feed_file, 'wb').write(r.content)
-
-    feed_download_status, error, feed_id = download_feed_in_db(feed_file, save_feed_name, code, formId)
-
-    return feed_download_status, error, feed_id
-
-
-def download_feed_task(formId):
-    # get url osm_tag gtfs_tag of the user entered form
-    user_form = GTFSForm.objects.get(id=formId)
-    entered_url = user_form.url
-    entered_name = user_form.name
-
-    if entered_name == '':
-        entered_name = 'samplename'
-    code = 'not_present'
-    feed_download_status, error, feed_id = download_feed_with_url(entered_url, entered_name, code, formId)
-
-    print(feed_download_status)
-
-    if feed_download_status == 0:
-        print("Inside Feed download failed")
-        form_to_delete = GTFSForm.objects.latest('id')
-        feed_to_delete = Feed.objects.latest('id')
-
-        form_to_delete.delete()
-        feed_to_delete.delete()
-
-    return error, feed_id
-
-
-def check_feeds_task():
-    # keep on checking the feeds for every five days all the feeds are downloaded again into the database
-    # 1. get all the feeds
-    all_feeds = Feed.objects.all()
-
-    feed_form_not_found = ''
-    for feed in all_feeds:
-        # get the name of the feed
-        feed_name = feed.name
-        print(feed_name)
-        try:
-            feed_form = GTFSForm.objects.get(name=feed_name)
-            feed_url = feed_form.url
-            feed_timestamp = feed_form.timestamp
-            current_timestamp = timezone.now()
-            print("{}  {}".format(feed_timestamp, current_timestamp))
-
-            ts_diff = str(current_timestamp - feed_timestamp)[0]
-
-            print(ts_diff)
-            frequency = feed_form.frequency
-            if int(ts_diff) > frequency:
-                feed_form_not_found = "Downloading the feed again"
-                print(feed_form_not_found)
-                code = 'present'
-                download_feed_with_url(feed_url, feed_name, code, feed_form.id)
-
-            feed.delete()
-        except Exception as e:
-            feed_form_not_found = 'Form not found with present feed'
-
-        print(feed_form_not_found)
-
-
-def reset_feed(formId, associated_feed_id):
-    form = GTFSForm.objects.get(id=formId)
-    form_timestamp = form.timestamp
-    print(form_timestamp)
-    current_timestamp = timezone.now()
-    form_name = form.name
-
-    ts_diff = str(current_timestamp - form_timestamp)[0]
-    status = 'The Feed is up to date'
-    print("Diff is {}".format(ts_diff))
-    form_reset = False
-    code = 'present'
-    frequency = form.frequency
-    if int(ts_diff) > frequency:
-        status = 'Reseting feed with latest data'
-        print('Reseting Feed')
-        form_reset = True
-        form.timestamp = timezone.now()
-        form.save()
-        Feed.objects.get(name=form_name).delete()
-        download_feed_with_url(form.url, form.name, code, formId)
-
-    '''since form has one to one relationship with every feed so when the feed is renewed form.feed should be updated'''
-
-    return status, form_reset
+    return block

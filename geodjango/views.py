@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from compare.models import Line_Stop
+from compare.models import Line_Stop, Relation_data
 from conversionapp.models import Correspondence, Conversion, ExtraField
 from gs.models import GTFSForm
 from multigtfs.models import Stop, Feed, Agency, Route
@@ -13,7 +13,7 @@ from osmapp.models import Node, Way, KeyValueString, OSM_Relation, Tag, Bounds
 from .serializers import FormSerializer, StopSerializer, NodeSerializer, WaySerializer, \
     TagSerializer, KeyValueStringSerializer, RelationSerializer, FeedSerializer, AgencySerializer, \
     RouteSerializer, FeedBoundsSerializer, CorrespondenceSerializer, ConversionSerializer, ExtraFieldSerializer, \
-    LineStopSerializer
+    LineStopSerializer, RelDataSerializer
 
 
 def main(request):
@@ -267,3 +267,9 @@ class LineStopView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class RelDataView(APIView):
+    def get(selfself, request):
+        reldata = Relation_data.objects.all()
+        serializer = RelDataSerializer(reldata, many=True)
+        return Response(serializer.data)

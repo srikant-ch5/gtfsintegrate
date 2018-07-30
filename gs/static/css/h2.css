@@ -155,6 +155,14 @@ table td:first-child {
 #gtfsheading{
     margin-left:80px;
 }
+
+.it-div{
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    padding-left:20px;
+}
 #osm-stops-list{
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
@@ -162,13 +170,6 @@ table td:first-child {
     border-bottom-left-radius: 50px;
     padding-left:20px;
     margin-left:60px;
-}
-.it-div{
-    border-top-right-radius: 50px;
-    border-bottom-right-radius: 50px;
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
-    padding-left:20px;
 }
 #relmap {
     border-radius: 25px;

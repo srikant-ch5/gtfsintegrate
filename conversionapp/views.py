@@ -86,7 +86,7 @@ def conversionview(request):
 
         for i in range(0, len(stops)):
             stop_name = stops[i].name
-            normalizedName = stop_name
+            normalizedName = str(stop_name).replace('&','&amp;').replace("'","&apos;").replace("<","&lt;").replace(">","&gt;").replace('"',"&quot;")
 
             for key, value in conversion_dict.items():
                 for v in value:

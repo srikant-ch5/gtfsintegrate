@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from compare.models import Line_Stop
+from compare.models import Line_Stop, Relation_data
 from conversionapp.models import Correspondence, Conversion, ExtraField
 from gs.models import GTFSForm
 from multigtfs.models import Stop, Agency, Route, Feed
@@ -94,4 +94,9 @@ class ExtraFieldSerializer(serializers.ModelSerializer):
 class LineStopSerializer(serializers.ModelSerializer):
     class Meta:
         model = Line_Stop
+        fields = '__all__'
+
+class RelDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Relation_data
         fields = '__all__'

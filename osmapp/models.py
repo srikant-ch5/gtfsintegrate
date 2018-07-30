@@ -133,6 +133,10 @@ class Node(OSM_Primitive):
         for attr, value in self.__dict__.items():
             if attr == '_state':
                 continue
+            elif attr == 'feed_id':
+                continue
+            elif attr == 'purpose':
+                continue
             elif attr == 'version':
                 version_num = int(value)
                 print("Version at first {}".format(version_num))
