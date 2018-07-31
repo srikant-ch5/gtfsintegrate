@@ -327,7 +327,12 @@
 			relhtml += "<a onclick='relation_div(this.id)' id='"+relation+"'><div class='single-rel' id='"+relation+"'>";
 
 			rel_arr.forEach(function(rel_el){
-				relhtml += '<h4>'+rel_el[2]+'</h4>';
+				if(rel_el[1] == 'ref'){
+					relhtml += '<h4>ref :'+ rel_el[2]+'</h4>';
+				}
+				else{
+					relhtml += '<h4>'+rel_el[2]+'</h4>';
+				}
 			});
 			relhtml += '</div></a>';
 		});
