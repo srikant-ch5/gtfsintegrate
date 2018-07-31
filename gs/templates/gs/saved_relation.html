@@ -318,23 +318,28 @@
 		//Seperate all the nodes based on relation
 		relation_ids.forEach(function(relation){
 			//filter the relations_info based on relation_id
+			let index = relation_ids.indexOf(relation) + 1;
 			let rel_arr = [];
 			relations_info.forEach(function(el){
 				if(el[0] == relation){
 					rel_arr.push(el)
 				}
 			});	
-			relhtml += "<a onclick='relation_div(this.id)' id='"+relation+"'><div class='single-rel' id='"+relation+"'>";
-
-			rel_arr.forEach(function(rel_el){
-				if(rel_el[1] == 'ref'){
-					relhtml += '<h4>ref :'+ rel_el[2]+'</h4>';
-				}
-				else{
-					relhtml += '<h4>'+rel_el[2]+'</h4>';
-				}
-			});
-			relhtml += '</div></a>';
+			relhtml += "<a onclick='relation_div(this.id)' id='"+relation+"'><div class='single-rel' id='"+relation+"'><h2>Relation "+ index +"</h2>";
+			
+			if(rel_arr.length == 0){
+				relhtml += "<h4>There are no nodes in this relation</h4>"+"</div></a>";
+			}else{
+				rel_arr.forEach(function(rel_el){
+					if(rel_el[1] == 'ref'){
+						relhtml += '<h4>ref :'+ rel_el[2]+'</h4>';
+					}
+					else{
+						relhtml += '<h4>'+rel_el[2]+'</h4>';
+					}
+				});
+				relhtml += '</div></a>';
+			}
 		});
 		
 		$("#osm-stops-list").html(osmhtml);

@@ -373,11 +373,7 @@ p {
     margin: 0 0 28px;
 }
 
-a {
-    color: #c73036;
-    font-family: Georgia, serif;
-    text-decoration: underline;
-}
+
 
 a:hover {
     color: #333333;
