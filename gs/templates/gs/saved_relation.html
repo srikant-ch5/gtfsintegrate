@@ -34,7 +34,7 @@
 		<div class="col-xs-6 ">
 			<h2 id="osmrelheading">OSM Route Stops</h2>
 			<div id="osm-stops-list">
-			</div>
+			</div><br>
 			<div id="single-rel">
 			</div>
 		</div>
@@ -47,7 +47,8 @@
 
 <script type="text/javascript">
 
-	let token;
+	let token,clicked_gtfsitinerary;
+	let all_nodes_info, relations_info,relation_ids;
 	window.onload = function () {
         document.getElementById("loading").style.display = "none"
     };
@@ -108,7 +109,7 @@
     let routes_data = JSON.parse(routes_data_json);
     const complete_data_json = '{{context.complete_data | safe}}';
     const complete_data = JSON.parse(complete_data_json);
-	
+	console.log("Routes data"+routes_data);
 	$.ajaxSetup({
         async: false
     });
@@ -226,12 +227,15 @@
 		let html = '';
 		for(let i=0;i<line_data[2].length;i++){
 			let it = i+1;
-			html += "<div class='it-div'><h4>Itinerary	 " + it + "</h4>";
+			let idname = line_name+'-'+it;
+			clicked_gtfsitinerary = idname;
+			console.log("gtfs div id "+idname+"-div");
+			html += "<a onclick='gtfsdivclick(this.id)' id='"+idname+"'><div class='it-div' id='"+idname+"-div'><h2>Itinerary	 " + it + "</h2>";
 
 			for(let j=0;j<line_data[2][i].length;j++){
 				html += "<h4>"+ line_data[2][i][j][1] + "</h4>";
 			}
-			html += "</div><br>";
+			html += "</div></a><br>";
 		}
 		$("#rel-stops-info-list-box").html(html);
 
@@ -286,7 +290,6 @@
         });
 
 		let relurl = '/api/reldata';
-		let all_nodes_info, relations_info,relation_ids;
 		$.ajax({
 			url:relurl,
 			method:'GET',
@@ -324,11 +327,12 @@
 				if(el[0] == relation){
 					rel_arr.push(el)
 				}
-			});	
-			relhtml += "<a onclick='relation_div(this.id)' id='"+relation+"'><div class='single-rel' id='"+relation+"'><h2>Relation "+ index +"</h2>";
+			});
+			let divid = relation+"-div";	
+			relhtml += "<a onclick='relation_div(this.id)' id='"+relation+"'><div class='single-rel' id='"+divid+"'><h2>Relation "+ index +"</h2>";
 			
 			if(rel_arr.length == 0){
-				relhtml += "<h4>There are no nodes in this relation</h4>"+"</div></a>";
+				relhtml += "<h4>There are no nodes in this relation</h4>"+"</div></a><br>";
 			}else{
 				rel_arr.forEach(function(rel_el){
 					if(rel_el[1] == 'ref'){
@@ -338,7 +342,7 @@
 						relhtml += '<h4>'+rel_el[2]+'</h4>';
 					}
 				});
-				relhtml += '</div></a>';
+				relhtml += '</div></a><br>';
 			}
 		});
 		
@@ -347,7 +351,36 @@
 	}
 
 	function relation_div(id){
-		alert(id);
+	
+		relation_ids.forEach(function(relation) {
+			let divid = relation+'-div';
+			console.log(divid);
+			document.getElementById(divid).style.background = ""
+		});
+		let ide = id+"-div";
+		console.log(ide);
+		if(clicked_gtfsitinerary !== undefined){
+		document.getElementById(ide).style.background = "#93F09E"
+		}
+	}
+
+	function gtfsdivclick(divid){
+
+		let linename = divid.split('-')[0]
+		console.log(divid);
+		for(let i=0;i<complete_data.length;i++){
+			if(complete_data[i][0] == linename){
+				for(let ident =1;ident <= complete_data[i][2].length;ident++){
+					let idh = linename+"-"+ident+"-div";
+					console.log(idh)
+					document.getElementById(idh).style.background = "";
+				}
+			}
+		}
+		let ide = divid+"-div";
+		if(clicked_gtfsitinerary !== undefined){
+			document.getElementById(ide).style.background = "#93F09E";
+		}
 	}
 
 </script>
