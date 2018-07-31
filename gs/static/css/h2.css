@@ -145,7 +145,7 @@ table td:first-child {
     overflow: auto;
 }
 
-.rel-information-box, .leaflet-container, .it-div, #osm-stops-list {
+.rel-information-box, .leaflet-container, .it-div, #osm-stops-list,.single-rel {
     border-radius: 25px;
     border: 10px solid #2778D4;
     width: 600px;
@@ -163,7 +163,7 @@ table td:first-child {
     border-bottom-left-radius: 0px;
     padding-left:20px;
 }
-#osm-stops-list{
+#osm-stops-list,.single-rel{
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
     border-top-left-radius: 50px;
@@ -331,7 +331,7 @@ label {
 h3 {
     font-style: italic;
     font-size: 1.5em;
-    color: green;
+    color:  green;
 }
 
 h1 {

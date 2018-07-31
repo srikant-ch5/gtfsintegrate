@@ -35,6 +35,8 @@
 			<h2>OSM Route Stops</h2>
 			<div id="osm-stops-list">
 			</div>
+			<div id="single-rel">
+			</div>
 		</div>
 	</div>
 </div>
@@ -284,7 +286,7 @@
         });
 
 		let relurl = '/api/reldata';
-		let nodes, relations;
+		let all_nodes_info, relations_info,relation_ids;
 		$.ajax({
 			url:relurl,
 			method:'GET',
@@ -292,12 +294,11 @@
 			success : function(data){
 				document.getElementById("loading").style.display="none";
 				for(var i=0;i<data.length;i++)
-				 if(data[i].token == 'd2691a58-3f3a-4b03-a29e-ecfa671f790d'){
-					 console.log(data[i]);
-					 console.log(data[i].relations);
-					 console.log(data[i].nodes);
-					 nodes = data[i].nodes;
-					 relations = data[i].relations;
+				 if(data[i].token == 'f4d04bdf-b8c0-4069-b78c-995e474921d1'){
+				
+					all_nodes_info = data[i].all_node_info;
+					relations_info = data[i].relation_info;
+					relation_ids = data[i].rel_ids;
 				 }
 			},
 			error: function(status, xhr, e){
@@ -305,16 +306,38 @@
 				alert(status);
 			}
 		});
-		var osmhtml = '';
-		var arr = [];
-		nodes.forEach(function(e){
+		let osmhtml = '';
+		let arr = [];
+		all_nodes_info.forEach(function(e){
 			if( arr.indexOf(e[0]) === -1){
 				arr.push(e[0])
-			osmhtml +=  "<h4>"+e[1]+"</h4>";
-		}
+				osmhtml +=  "<h4>"+e[2]+"</h4>"
+			}
 		});
-		$("#osm-stops-list").html(osmhtml);
+		let relhtml='';
+		//Seperate all the nodes based on relation
+		relation_ids.forEach(function(relation){
+			//filter the relations_info based on relation_id
+			let rel_arr = [];
+			relations_info.forEach(function(el){
+				if(el[0] == relation){
+					rel_arr.push(el)
+				}
+			});	
+			relhtml += "<a onclick='relation_div(this.id)' id='"+relation+"'><div class='single-rel' id='"+relation+"'>";
 
+			rel_arr.forEach(function(rel_el){
+				relhtml += '<h4>'+rel_el[2]+'</h4>';
+			});
+			relhtml += '</div></a>';
+		});
+		
+		$("#osm-stops-list").html(osmhtml);
+		$("#single-rel").html(relhtml);
+	}
+
+	function relation_div(id){
+		alert(id);
 	}
 
 </script>

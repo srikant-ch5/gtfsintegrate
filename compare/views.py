@@ -14,6 +14,64 @@ from requests import post
 from .models import CMP_Stop
 from .models import Relation_data
 
+nodes_info = [['37008337', 'ref', '13'], ['1525729024', 'name', 'Southwest 6th & West Burnside', 'ref', '7751'],
+              ['1525729024', 'name', 'Southwest 6th & West Burnside', 'ref', '7751'],
+              ['1525729024', 'name', 'Southwest 6th & West Burnside', 'ref', '7751'],
+              ['1525729024', 'name', 'Southwest 6th & West Burnside', 'ref', '7751'],
+              ['1525737720', 'name', 'Southwest 5th & Pine', 'ref', '7631'],
+              ['1525737720', 'name', 'Southwest 5th & Pine', 'ref', '7631'],
+              ['1525737720', 'name', 'Southwest 5th & Pine', 'ref', '7631'],
+              ['1525737720', 'name', 'Southwest 5th & Pine', 'ref', '7631'],
+              ['1525749970', 'name', 'Southwest 5th & Washington', 'ref', '7642'],
+              ['1525749970', 'name', 'Southwest 5th & Washington', 'ref', '7642'],
+              ['1525749970', 'name', 'Southwest 5th & Washington', 'ref', '7642'],
+              ['1525749970', 'name', 'Southwest 5th & Washington', 'ref', '7642'],
+              ['1525749987', 'name', 'Southwest 6th & Stark', 'ref', '7797'],
+              ['1525749987', 'name', 'Southwest 6th & Stark', 'ref', '7797'],
+              ['1525749987', 'name', 'Southwest 6th & Stark', 'ref', '7797'],
+              ['1525749987', 'name', 'Southwest 6th & Stark', 'ref', '7797'],
+              ['1525749987', 'name', 'Southwest 6th & Stark', 'ref', '7797'],
+              ['1525749987', 'name', 'Southwest 6th & Stark', 'ref', '7797'],
+              ['1525760109', 'name', 'Southwest 5th & Salmon', 'ref', '7634'],
+              ['1525760109', 'name', 'Southwest 5th & Salmon', 'ref', '7634'],
+              ['1525760109', 'name', 'Southwest 5th & Salmon', 'ref', '7634'],
+              ['1525760109', 'name', 'Southwest 5th & Salmon', 'ref', '7634'],
+              ['1525760109', 'name', 'Southwest 5th & Salmon', 'ref', '7634'],
+              ['1525760223', 'name', 'Southwest 6th & Taylor', 'ref', '7800'],
+              ['1525760223', 'name', 'Southwest 6th & Taylor', 'ref', '7800'],
+              ['1525760223', 'name', 'Southwest 6th & Taylor', 'ref', '7800'],
+              ['1525760223', 'name', 'Southwest 6th & Taylor', 'ref', '7800'],
+              ['1525760223', 'name', 'Southwest 6th & Taylor', 'ref', '7800'],
+              ['1525820922', 'name', 'Southwest Madison & 1st', 'ref', '3635'],
+              ['1525820922', 'name', 'Southwest Madison & 1st', 'ref', '3635'],
+              ['1525820922', 'name', 'Southwest Madison & 1st', 'ref', '3635'],
+              ['1525820922', 'name', 'Southwest Madison & 1st', 'ref', '3635'],
+              ['1525820928', 'name', 'Southwest Madison & 4th', 'ref', '3639'],
+              ['1525820928', 'name', 'Southwest Madison & 4th', 'ref', '3639'],
+              ['1525820928', 'name', 'Southwest Madison & 4th', 'ref', '3639'],
+              ['1525820928', 'name', 'Southwest Madison & 4th', 'ref', '3639'],
+              ['1525820928', 'name', 'Southwest Madison & 4th', 'ref', '3639'],
+              ['1525820928', 'name', 'Southwest Madison & 4th', 'ref', '3639'],
+              ['1525825853', 'name', 'Southwest Main & 2nd', 'ref', '11956'],
+              ['1525825853', 'name', 'Southwest Main & 2nd', 'ref', '11956'],
+              ['1525825853', 'name', 'Southwest Main & 2nd', 'ref', '11956'],
+              ['2681749539', 'name', 'Southeast Martin Luther King & Mill', 'ref', '5933'],
+              ['2681749539', 'name', 'Southeast Martin Luther King & Mill', 'ref', '5933'],
+              ['2681749539', 'name', 'Southeast Martin Luther King & Mill', 'ref', '5933'],
+              ['2681749539', 'name', 'Southeast Martin Luther King & Mill', 'ref', '5933'],
+              ['2681753018', 'name', 'Southeast Grand & Mill', 'ref', '2171'],
+              ['2681753018', 'name', 'Southeast Grand & Mill', 'ref', '2171'],
+              ['2681753018', 'name', 'Southeast Grand & Mill', 'ref', '2171'],
+              ['2681753018', 'name', 'Southeast Grand & Mill', 'ref', '2171'],
+              ['2681754930', 'name', 'Southeast McLoughlin & 17th', 'ref', '3859'],
+              ['2681754930', 'name', 'Southeast McLoughlin & 17th', 'ref', '3859'],
+              ['2681754930', 'name', 'Southeast McLoughlin & 17th', 'ref', '3859'],
+              ['2681754930', 'name', 'Southeast McLoughlin & 17th', 'ref', '3859']]
+relation_ids = [2688727]
+relations_info = [['name', 'Southeast Grand & Mill', 'ref', '2171'],
+                  ['name', 'Southeast McLoughlin & 17th', 'ref', '3859'],
+                  ['ref', '13']]
+
 
 def get_nodes_within100m(lon, loat):
     query = "SELECT * FROM osmapp_node WHERE ST_DWithin(geom, 'Point({0} {1})', 100)".format(lon, lat)  # lon, lat
@@ -424,6 +482,21 @@ def saveextra(request):
     return render(request, 'gs/define-relation.html')
 
 
+def equalizer(data):
+    largest_length = 0  # To define the largest length
+
+    for l in data:
+        if len(l) > largest_length:
+            largest_length = len(l)  # Will define the largest length in data.
+
+    for i, l in enumerate(data):
+        if len(l) < largest_length:
+            remainder = largest_length - len(l)  # Difference of length of particular list and largest length
+            data[i].extend([None for i in range(remainder)])  # Add None through the largest length limit
+
+    return data
+
+
 def download_relation(request):
     if request.method == 'POST':
         feed_id = request.POST.get('feed_id')
@@ -456,11 +529,15 @@ def download_relation(request):
         xmlfiledir = xmlfiledir = os.path.join(os.path.dirname(PROJECT_ROOT), 'osmapp', 'static')
         xmlfile = xmlfiledir + '/relation.osm'
 
-        nodes_info, relation_ids, relations_info = load(xmlfile, feed_id, 'comp_relation')
+        with open(xmlfile, 'wb') as fh:
+            fh.write(result.content)
+        print("Data copied to xml")
+        #nodes_info, relation_ids, relations_info = load(xmlfile, feed_id, 'comp_relation')
         print(' {}\n\n {}\n\n {}'.format(nodes_info, relation_ids, relations_info))
-
-        Relation_data.objects.create(token=token, all_node_info=nodes_info, relation_ids=relation_ids,
-                                     relation_info=relations_info)
+        equalized_nodes_info = equalizer(nodes_info)
+        equalized_relation_info = equalizer(relations_info)
+        #Relation_data.objects.create(token='f4d04bdf-b8c0-4069-b78c-995e474921d1', all_node_info=equalized_nodes_info, rel_ids=relation_ids,
+        #                            relation_info=equalized_relation_info)
 
         print('{} {}'.format(len(relations_info), len(relation_ids)))
 

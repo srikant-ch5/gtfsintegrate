@@ -1,0 +1,663 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="Overpass API 0.7.55.4 3079d8ea">
+<note>The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.</note>
+<meta osm_base="2018-07-28T15:16:02Z"/>
+
+  <bounds minlat="45.2858660" minlon="-122.3544760" maxlat="45.3967737" maxlon="-122.2499320"/>
+
+  <node id="37008337" lat="45.4135911" lon="-122.5732494" version="11" timestamp="2018-02-14T01:37:26Z" changeset="56339022" uid="4018842" user="Stephen214">
+    <tag k="highway" v="motorway_junction"/>
+    <tag k="ref" v="13"/>
+  </node>
+  <node id="37252871" lat="45.3941430" lon="-122.4936773" version="4" timestamp="2011-04-08T23:22:20Z" changeset="7809056" uid="371688" user="betsy"/>
+  <node id="37254851" lat="45.4331198" lon="-122.6138757" version="7" timestamp="2018-02-14T01:38:45Z" changeset="56339034" uid="4018842" user="Stephen214">
+    <tag k="highway" v="motorway_junction"/>
+  </node>
+  <node id="37293703" lat="45.4280969" lon="-122.6019953" version="9" timestamp="2018-02-14T01:38:45Z" changeset="56339034" uid="4018842" user="Stephen214">
+    <tag k="highway" v="motorway_junction"/>
+  </node>
+
+  <node id="264610454" lat="45.4371253" lon="-122.5790442" version="12" timestamp="2014-11-28T04:19:45Z" changeset="27081839" uid="81676" user="Peter Dobratz"/>
+  <node id="264730734" lat="45.4170963" lon="-122.5737514" version="27" timestamp="2016-02-06T02:44:51Z" changeset="37034258" uid="393906" user="Grant Humphries"/>
+  <node id="333462441" lat="45.5141569" lon="-122.6745511" version="10" timestamp="2012-02-16T07:38:42Z" changeset="10699280" uid="393906" user="Grant Humphries"/>
+  <node id="333464674" lat="45.5129394" lon="-122.6628838" version="5" timestamp="2012-11-09T19:39:29Z" changeset="13813319" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="333465019" lat="45.5129546" lon="-122.6656323" version="14" timestamp="2012-02-16T07:38:42Z" changeset="10699280" uid="393906" user="Grant Humphries"/>
+  <node id="333470228" lat="45.5122616" lon="-122.6663497" version="10" timestamp="2012-02-16T07:38:47Z" changeset="10699280" uid="393906" user="Grant Humphries"/>
+  <node id="333480690" lat="45.5009449" lon="-122.6605143" version="6" timestamp="2012-02-21T18:03:42Z" changeset="10752337" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="333480827" lat="45.5015307" lon="-122.6606484" version="9" timestamp="2015-03-24T18:58:25Z" changeset="29710778" uid="393906" user="Grant Humphries"/>
+  <node id="333922089" lat="45.5187700" lon="-122.6775602" version="23" timestamp="2012-03-22T18:55:56Z" changeset="11066355" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="railway" v="level_crossing"/>
+  </node>
+  <node id="333922985" lat="45.5190705" lon="-122.6786551" version="20" timestamp="2012-03-09T00:59:45Z" changeset="10915395" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="railway" v="level_crossing"/>
+  </node>
+  <node id="333926111" lat="45.5184323" lon="-122.6789868" version="19" timestamp="2015-03-31T00:30:51Z" changeset="29865510" uid="393906" user="Grant Humphries">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="railway" v="level_crossing"/>
+  </node>
+  <node id="333926195" lat="45.5181417" lon="-122.6778992" version="15" timestamp="2012-03-09T01:44:47Z" changeset="10915541" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="traffic_signals"/>
+    <tag k="railway" v="level_crossing"/>
+  </node>
+  <node id="335020842" lat="45.4148383" lon="-122.5739673" version="20" timestamp="2011-09-12T20:05:59Z" changeset="9283700" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="335021144" lat="45.4249089" lon="-122.5775344" version="12" timestamp="2018-02-14T01:37:26Z" changeset="56339022" uid="4018842" user="Stephen214">
+    <tag k="highway" v="motorway_junction"/>
+  </node>
+  <node id="335022430" lat="45.4183078" lon="-122.5746366" version="12" timestamp="2016-02-06T02:44:52Z" changeset="37034258" uid="393906" user="Grant Humphries"/>
+  <node id="335023645" lat="45.4145974" lon="-122.5738811" version="8" timestamp="2011-09-12T20:06:00Z" changeset="9283700" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="335023657" lat="45.4169344" lon="-122.5746965" version="5" timestamp="2011-09-12T20:06:00Z" changeset="9283700" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="335024187" lat="45.4177908" lon="-122.5749597" version="8" timestamp="2011-09-12T20:06:00Z" changeset="9283700" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="335024801" lat="45.4172267" lon="-122.5738305" version="6" timestamp="2016-02-06T02:44:52Z" changeset="37034258" uid="393906" user="Grant Humphries"/>
+  <node id="335024978" lat="45.4186537" lon="-122.5748980" version="3" timestamp="2016-02-06T02:44:52Z" changeset="37034258" uid="393906" user="Grant Humphries"/>
+  <node id="335027837" lat="45.4261072" lon="-122.5778109" version="8" timestamp="2011-08-16T18:04:49Z" changeset="9039319" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="335028010" lat="45.4264716" lon="-122.5779312" version="8" timestamp="2011-12-12T22:15:48Z" changeset="10103675" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="335028011" lat="45.4285086" lon="-122.5786383" version="6" timestamp="2011-12-12T22:15:49Z" changeset="10103675" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="335028012" lat="45.4296571" lon="-122.5789481" version="6" timestamp="2011-12-12T22:15:49Z" changeset="10103675" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="335028328" lat="45.4296283" lon="-122.5790910" version="5" timestamp="2011-12-12T22:15:49Z" changeset="10103675" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="335028329" lat="45.4290347" lon="-122.5789444" version="5" timestamp="2011-12-12T22:15:49Z" changeset="10103675" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="335028330" lat="45.4284664" lon="-122.5787818" version="5" timestamp="2011-12-12T22:15:49Z" changeset="10103675" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="335028331" lat="45.4275836" lon="-122.5784713" version="5" timestamp="2011-12-12T22:15:49Z" changeset="10103675" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="335028332" lat="45.4264912" lon="-122.5780891" version="7" timestamp="2011-12-12T22:15:49Z" changeset="10103675" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="335028487" lat="45.4260841" lon="-122.5779583" version="8" timestamp="2011-08-16T18:04:50Z" changeset="9039319" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="335028488" lat="45.4252823" lon="-122.5776743" version="6" timestamp="2011-09-12T20:06:00Z" changeset="9283700" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="335028779" lat="45.4237483" lon="-122.5771261" version="6" timestamp="2012-10-26T21:24:59Z" changeset="13643728" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="335035915" lat="45.4067404" lon="-122.5732271" version="20" timestamp="2012-04-21T01:07:26Z" changeset="11369829" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="335050150" lat="45.4075117" lon="-122.5708622" version="5" timestamp="2012-04-21T01:07:27Z" changeset="11369829" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="335050158" lat="45.4075169" lon="-122.5718124" version="9" timestamp="2012-04-21T01:07:27Z" changeset="11369829" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="353301521" lat="45.5025561" lon="-122.6607547" version="6" timestamp="2015-03-24T18:58:25Z" changeset="29710778" uid="393906" user="Grant Humphries"/>
+  <node id="366678720" lat="45.4105320" lon="-122.5229394" version="6" timestamp="2011-12-12T22:27:54Z" changeset="10103777" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="390672452" lat="45.5088610" lon="-122.6608280" version="6" timestamp="2013-02-04T20:04:21Z" changeset="14914497" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="428983680" lat="45.4591296" lon="-122.6397899" version="9" timestamp="2012-11-01T19:03:45Z" changeset="13714425" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750358" lat="45.4812076" lon="-122.6422740" version="5" timestamp="2012-11-05T20:44:22Z" changeset="13765872" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750359" lat="45.4747652" lon="-122.6405946" version="6" timestamp="2012-04-11T22:13:09Z" changeset="11270960" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750360" lat="45.4861260" lon="-122.6482145" version="5" timestamp="2012-04-11T21:55:56Z" changeset="11270828" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="432750362" lat="45.4694101" lon="-122.6393560" version="4" timestamp="2011-07-09T02:26:04Z" changeset="8671152" uid="372357" user="PJ Houser"/>
+  <node id="432750363" lat="45.4670337" lon="-122.6387980" version="4" timestamp="2011-07-09T02:26:04Z" changeset="8671152" uid="372357" user="PJ Houser"/>
+  <node id="432750365" lat="45.4844991" lon="-122.6449258" version="4" timestamp="2012-11-05T20:44:22Z" changeset="13765872" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750367" lat="45.4815628" lon="-122.6424385" version="3" timestamp="2012-11-05T20:44:22Z" changeset="13765872" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750368" lat="45.4687648" lon="-122.6391976" version="4" timestamp="2011-07-09T02:26:04Z" changeset="8671152" uid="372357" user="PJ Houser"/>
+  <node id="432750369" lat="45.4822005" lon="-122.6427817" version="3" timestamp="2012-11-05T20:44:22Z" changeset="13765872" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750372" lat="45.4892834" lon="-122.6527951" version="5" timestamp="2011-08-25T18:05:33Z" changeset="9123467" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750374" lat="45.4837306" lon="-122.6439614" version="4" timestamp="2012-11-05T20:44:22Z" changeset="13765872" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750375" lat="45.4819616" lon="-122.6426449" version="3" timestamp="2012-11-05T20:44:22Z" changeset="13765872" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750376" lat="45.5005215" lon="-122.6604990" version="5" timestamp="2012-04-11T21:16:24Z" changeset="11270365" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750377" lat="45.4925713" lon="-122.6566281" version="6" timestamp="2012-04-11T21:16:24Z" changeset="11270365" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <node id="432750378" lat="45.4840389" lon="-122.6442972" version="4" timestamp="2012-04-11T21:55:56Z" changeset="11270828" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750381" lat="45.4849212" lon="-122.6456871" version="3" timestamp="2011-07-19T23:13:16Z" changeset="8773816" uid="372357" user="PJ Houser"/>
+  <node id="432750384" lat="45.4866106" lon="-122.6491999" version="3" timestamp="2012-11-05T20:44:22Z" changeset="13765872" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750385" lat="45.4647248" lon="-122.6384596" version="6" timestamp="2012-11-01T20:00:55Z" changeset="13715041" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750386" lat="45.4910207" lon="-122.6554240" version="4" timestamp="2011-04-15T01:46:52Z" changeset="7866295" uid="372357" user="PJ Houser"/>
+  <node id="432750387" lat="45.4942767" lon="-122.6576521" version="5" timestamp="2012-04-11T21:16:24Z" changeset="11270365" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750390" lat="45.4952506" lon="-122.6582550" version="4" timestamp="2012-04-11T21:16:25Z" changeset="11270365" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750393" lat="45.4962729" lon="-122.6588360" version="5" timestamp="2012-11-06T01:22:02Z" changeset="13768252" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750395" lat="45.4870265" lon="-122.6500146" version="3" timestamp="2012-11-05T20:44:22Z" changeset="13765872" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750396" lat="45.4846866" lon="-122.6452381" version="5" timestamp="2012-11-05T20:44:22Z" changeset="13765872" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750398" lat="45.4709857" lon="-122.6397199" version="5" timestamp="2011-07-09T02:26:04Z" changeset="8671152" uid="372357" user="PJ Houser"/>
+  <node id="432750399" lat="45.4984360" lon="-122.6597264" version="5" timestamp="2012-04-11T21:16:25Z" changeset="11270365" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750400" lat="45.4889981" lon="-122.6524516" version="5" timestamp="2011-08-25T18:05:34Z" changeset="9123467" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750401" lat="45.4616062" lon="-122.6390824" version="5" timestamp="2012-11-01T19:03:45Z" changeset="13714425" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750402" lat="45.4921157" lon="-122.6563454" version="8" timestamp="2012-11-06T01:22:02Z" changeset="13768252" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750403" lat="45.4658739" lon="-122.6385313" version="6" timestamp="2012-11-01T20:00:55Z" changeset="13715041" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750404" lat="45.4875075" lon="-122.6507797" version="3" timestamp="2011-08-25T18:05:34Z" changeset="9123467" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750405" lat="45.4916094" lon="-122.6559915" version="7" timestamp="2012-11-06T01:22:03Z" changeset="13768252" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750407" lat="45.4722275" lon="-122.6400230" version="5" timestamp="2011-07-09T02:26:05Z" changeset="8671152" uid="372357" user="PJ Houser"/>
+  <node id="432750408" lat="45.4906747" lon="-122.6549716" version="5" timestamp="2012-11-06T01:22:03Z" changeset="13768252" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750410" lat="45.4806990" lon="-122.6420628" version="4" timestamp="2012-11-05T20:44:23Z" changeset="13765872" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750411" lat="45.4895284" lon="-122.6531164" version="5" timestamp="2011-08-25T18:05:34Z" changeset="9123467" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750413" lat="45.4907702" lon="-122.6551072" version="4" timestamp="2011-04-15T01:46:47Z" changeset="7866295" uid="372357" user="PJ Houser"/>
+  <node id="432750415" lat="45.4768852" lon="-122.6410933" version="9" timestamp="2012-11-05T20:44:23Z" changeset="13765872" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750418" lat="45.4871078" lon="-122.6501680" version="4" timestamp="2011-08-25T20:11:36Z" changeset="9124537" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750419" lat="45.4899815" lon="-122.6538263" version="4" timestamp="2011-08-25T18:05:34Z" changeset="9123467" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750421" lat="45.4848258" lon="-122.6454906" version="4" timestamp="2011-11-15T19:27:26Z" changeset="9838015" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750422" lat="45.4833301" lon="-122.6435981" version="6" timestamp="2012-04-11T21:55:56Z" changeset="11270828" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750423" lat="45.4835540" lon="-122.6437935" version="5" timestamp="2012-11-05T20:44:23Z" changeset="13765872" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750424" lat="45.4976545" lon="-122.6594170" version="5" timestamp="2012-04-11T21:16:25Z" changeset="11270365" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750425" lat="45.4640275" lon="-122.6385293" version="7" timestamp="2012-11-01T20:00:55Z" changeset="13715041" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750426" lat="45.4733334" lon="-122.6402726" version="5" timestamp="2011-07-09T02:26:05Z" changeset="8671152" uid="372357" user="PJ Houser"/>
+  <node id="432750427" lat="45.4798405" lon="-122.6417887" version="4" timestamp="2012-11-05T20:44:23Z" changeset="13765872" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750429" lat="45.4901808" lon="-122.6541670" version="4" timestamp="2011-08-25T18:05:35Z" changeset="9123467" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750430" lat="45.4996512" lon="-122.6602004" version="3" timestamp="2011-04-15T01:46:54Z" changeset="7866295" uid="372357" user="PJ Houser"/>
+  <node id="432750431" lat="45.4831177" lon="-122.6434321" version="7" timestamp="2012-11-05T20:44:23Z" changeset="13765872" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <node id="432750432" lat="45.4727567" lon="-122.6401347" version="5" timestamp="2011-07-09T02:26:05Z" changeset="8671152" uid="372357" user="PJ Houser"/>
+  <node id="432750433" lat="45.4637881" lon="-122.6385624" version="8" timestamp="2012-11-01T20:00:55Z" changeset="13715041" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750434" lat="45.4855538" lon="-122.6470416" version="4" timestamp="2012-11-05T20:44:23Z" changeset="13765872" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750435" lat="45.4897258" lon="-122.6534076" version="4" timestamp="2011-08-25T18:05:35Z" changeset="9123467" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750436" lat="45.4823817" lon="-122.6428910" version="3" timestamp="2012-11-05T20:44:23Z" changeset="13765872" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750437" lat="45.4887220" lon="-122.6521474" version="5" timestamp="2012-11-05T20:44:23Z" changeset="13765872" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750438" lat="45.4873546" lon="-122.6503257" version="3" timestamp="2012-04-11T21:45:32Z" changeset="11270716" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750441" lat="45.4861933" lon="-122.6483696" version="5" timestamp="2012-11-05T20:44:23Z" changeset="13765872" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <node id="432750442" lat="45.4856745" lon="-122.6472847" version="5" timestamp="2012-11-05T20:44:23Z" changeset="13765872" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750443" lat="45.4838638" lon="-122.6441026" version="4" timestamp="2012-04-11T21:55:57Z" changeset="11270828" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750444" lat="45.4817376" lon="-122.6425276" version="2" timestamp="2012-11-05T20:44:23Z" changeset="13765872" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750445" lat="45.4777200" lon="-122.6412881" version="5" timestamp="2012-11-05T20:44:23Z" changeset="13765872" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750446" lat="45.4767721" lon="-122.6410664" version="8" timestamp="2012-11-01T20:00:55Z" changeset="13715041" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750449" lat="45.4628804" lon="-122.6387206" version="4" timestamp="2012-11-01T20:00:55Z" changeset="13715041" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750455" lat="45.4569944" lon="-122.6402126" version="5" timestamp="2012-11-01T19:03:45Z" changeset="13714425" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750474" lat="45.4565623" lon="-122.6402960" version="5" timestamp="2012-11-01T19:03:45Z" changeset="13714425" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750514" lat="45.4482585" lon="-122.6424794" version="3" timestamp="2012-04-20T01:29:23Z" changeset="11359736" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750526" lat="45.4603533" lon="-122.6394400" version="4" timestamp="2012-11-01T19:03:45Z" changeset="13714425" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750535" lat="45.4576585" lon="-122.6401096" version="5" timestamp="2012-11-01T19:03:45Z" changeset="13714425" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750542" lat="45.4581154" lon="-122.6400231" version="5" timestamp="2012-11-01T19:03:45Z" changeset="13714425" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750551" lat="45.4468407" lon="-122.6428926" version="4" timestamp="2012-04-20T01:29:23Z" changeset="11359736" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750553" lat="45.4460869" lon="-122.6429515" version="6" timestamp="2012-04-20T01:29:23Z" changeset="11359736" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750560" lat="45.4502128" lon="-122.6419408" version="8" timestamp="2018-02-14T01:38:45Z" changeset="56339034" uid="4018842" user="Stephen214">
+    <tag k="highway" v="motorway_junction"/>
+  </node>
+  <node id="432750564" lat="45.4611198" lon="-122.6392214" version="4" timestamp="2012-11-01T19:03:45Z" changeset="13714425" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750568" lat="45.4455135" lon="-122.6428854" version="5" timestamp="2011-12-29T02:46:40Z" changeset="10231937" uid="393906" user="Grant Humphries"/>
+  <node id="432750570" lat="45.4607473" lon="-122.6393254" version="5" timestamp="2012-11-01T20:00:55Z" changeset="13715041" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750571" lat="45.4528644" lon="-122.6412484" version="5" timestamp="2012-11-01T19:03:45Z" changeset="13714425" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <node id="432750585" lat="45.4511638" lon="-122.6413048" version="5" timestamp="2012-11-01T19:03:45Z" changeset="13714425" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750586" lat="45.4847652" lon="-122.6453782" version="5" timestamp="2012-04-11T21:55:57Z" changeset="11270828" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432750587" lat="45.4587081" lon="-122.6398962" version="6" timestamp="2012-11-01T19:03:45Z" changeset="13714425" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <node id="432751870" lat="45.4967706" lon="-122.6588974" version="4" timestamp="2012-04-11T21:16:25Z" changeset="11270365" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432751871" lat="45.5014220" lon="-122.6607366" version="4" timestamp="2012-02-21T18:03:45Z" changeset="10752337" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="432751873" lat="45.5021054" lon="-122.6608657" version="5" timestamp="2012-02-21T18:03:45Z" changeset="10752337" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="454100852" lat="45.4058540" lon="-122.5021780" version="6" timestamp="2012-04-10T19:47:56Z" changeset="11257187" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="454104847" lat="45.4135257" lon="-122.5734909" version="5" timestamp="2012-05-08T19:49:47Z" changeset="11543053" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="454104852" lat="45.4128086" lon="-122.5732382" version="5" timestamp="2012-05-08T19:49:47Z" changeset="11543053" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="454105014" lat="45.4098047" lon="-122.5275029" version="5" timestamp="2011-12-30T23:21:31Z" changeset="10250783" uid="393906" user="Grant Humphries"/>
+  <node id="454105450" lat="45.4065071" lon="-122.5825587" version="3" timestamp="2012-04-23T22:17:14Z" changeset="11400408" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="454105454" lat="45.4065083" lon="-122.5819180" version="3" timestamp="2012-04-23T22:17:14Z" changeset="11400408" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="454105466" lat="45.4064415" lon="-122.5788738" version="3" timestamp="2012-04-23T22:17:14Z" changeset="11400408" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="454105467" lat="45.4064637" lon="-122.5799190" version="3" timestamp="2012-04-23T22:17:14Z" changeset="11400408" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="454105468" lat="45.4064795" lon="-122.5804698" version="3" timestamp="2012-04-23T22:17:14Z" changeset="11400408" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="454105469" lat="45.4064064" lon="-122.5774391" version="3" timestamp="2012-04-23T22:17:14Z" changeset="11400408" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="454105470" lat="45.4064260" lon="-122.5781565" version="3" timestamp="2012-04-23T22:17:14Z" changeset="11400408" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="474147241" lat="45.4632505" lon="-122.6386349" version="4" timestamp="2012-11-01T20:00:56Z" changeset="13715041" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="474202065" lat="45.4465307" lon="-122.6323200" version="6" timestamp="2015-09-03T00:52:30Z" changeset="33763524" uid="146549" user="Bickendan">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <node id="474202067" lat="45.4451830" lon="-122.6317163" version="7" timestamp="2015-09-03T00:52:30Z" changeset="33763524" uid="146549" user="Bickendan">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <node id="474202071" lat="45.4433774" lon="-122.6297852" version="5" timestamp="2015-09-03T00:52:30Z" changeset="33763524" uid="146549" user="Bickendan">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <node id="474202077" lat="45.4393255" lon="-122.6247115" version="7" timestamp="2015-09-03T00:52:29Z" changeset="33763524" uid="146549" user="Bickendan">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <node id="474202081" lat="45.4340936" lon="-122.6158691" version="6" timestamp="2015-09-03T00:52:29Z" changeset="33763524" uid="146549" user="Bickendan">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <node id="474202087" lat="45.4244016" lon="-122.5926451" version="4" timestamp="2015-09-03T00:52:29Z" changeset="33763524" uid="146549" user="Bickendan">
+    <tag k="crossing" v="traffic_signals"/>
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <node id="474202110" lat="45.4246142" lon="-122.5939197" version="3" timestamp="2015-09-03T00:52:29Z" changeset="33763524" uid="146549" user="Bickendan"/>
+  <node id="474202111" lat="45.4250589" lon="-122.5953424" version="5" timestamp="2017-06-10T03:33:04Z" changeset="49412088" uid="3125856" user="cowdog"/>
+  <node id="474202112" lat="45.4253988" lon="-122.5961841" version="4" timestamp="2015-09-03T00:52:29Z" changeset="33763524" uid="146549" user="Bickendan"/>
+  <node id="474202114" lat="45.4308141" lon="-122.6077591" version="2" timestamp="2011-07-06T23:38:16Z" changeset="8653309" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="474202117" lat="45.4330879" lon="-122.6134974" version="2" timestamp="2011-07-26T03:38:22Z" changeset="8831935" uid="372357" user="PJ Houser"/>
+  <node id="474202119" lat="45.4367909" lon="-122.6216807" version="3" timestamp="2015-09-03T00:52:29Z" changeset="33763524" uid="146549" user="Bickendan"/>
+  <node id="474202120" lat="45.4373101" lon="-122.6226646" version="3" timestamp="2015-09-03T00:52:29Z" changeset="33763524" uid="146549" user="Bickendan"/>
+  <node id="474202121" lat="45.4378564" lon="-122.6234614" version="3" timestamp="2015-09-03T00:52:29Z" changeset="33763524" uid="146549" user="Bickendan"/>
+  <node id="474202122" lat="45.4384155" lon="-122.6240062" version="6" timestamp="2018-02-14T01:38:45Z" changeset="56339034" uid="4018842" user="Stephen214">
+    <tag k="highway" v="motorway_junction"/>
+  </node>
+  <node id="474202126" lat="45.4399416" lon="-122.6251384" version="4" timestamp="2015-09-03T00:52:30Z" changeset="33763524" uid="146549" user="Bickendan"/>
+  <node id="474202127" lat="45.4408002" lon="-122.6257706" version="2" timestamp="2015-09-03T00:52:30Z" changeset="33763524" uid="146549" user="Bickendan"/>
+  <node id="474202128" lat="45.4413322" lon="-122.6262788" version="2" timestamp="2015-09-03T00:52:30Z" changeset="33763524" uid="146549" user="Bickendan"/>
+  <node id="474202129" lat="45.4419070" lon="-122.6270451" version="2" timestamp="2015-09-03T00:52:30Z" changeset="33763524" uid="146549" user="Bickendan"/>
+  <node id="474202130" lat="45.4424147" lon="-122.6279354" version="2" timestamp="2015-09-03T00:52:30Z" changeset="33763524" uid="146549" user="Bickendan"/>
+  <node id="474202132" lat="45.4439793" lon="-122.6307162" version="2" timestamp="2015-09-03T00:52:30Z" changeset="33763524" uid="146549" user="Bickendan"/>
+  <node id="474202133" lat="45.4445369" lon="-122.6312752" version="5" timestamp="2015-09-03T00:52:30Z" changeset="33763524" uid="146549" user="Bickendan"/>
+  <node id="474202135" lat="45.4458461" lon="-122.6320253" version="4" timestamp="2015-09-03T00:52:30Z" changeset="33763524" uid="146549" user="Bickendan"/>
+  <node id="567256149" lat="45.5230254" lon="-122.6753863" version="12" timestamp="2013-02-24T21:36:23Z" changeset="15154564" uid="564585" user="wegavision">
+    <tag k="highway" v="traffic_signals"/>
+  </node>
+  <node id="632869991" lat="45.4770367" lon="-122.6410279" version="5" timestamp="2012-11-01T20:00:56Z" changeset="13715041" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="632870057" lat="45.4770304" lon="-122.6411278" version="5" timestamp="2012-11-05T20:44:23Z" changeset="13765872" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="672317045" lat="45.5161328" lon="-122.6790138" version="4" timestamp="2015-03-08T07:46:32Z" changeset="29324102" uid="2441939" user="thevirginian">
+    <tag k="railway" v="level_crossing"/>
+  </node>
+  <node id="672317259" lat="45.5164149" lon="-122.6800763" version="6" timestamp="2015-03-31T00:30:51Z" changeset="29865510" uid="393906" user="Grant Humphries">
+    <tag k="railway" v="level_crossing"/>
+  </node>
+
+  <node id="1525729024" lat="45.5228842" lon="-122.6764095" version="7" timestamp="2017-12-01T21:54:16Z" changeset="54251316" uid="3735764" user="Brett_Ham">
+    <tag k="bench" v="yes"/>
+    <tag k="bus" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Southwest 6th &amp; West Burnside"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="ref" v="7751"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="1525737720" lat="45.5222472" lon="-122.6758511" version="6" timestamp="2017-07-11T01:45:46Z" changeset="50190155" uid="6260818" user="oznogon">
+    <tag k="bus" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Southwest 5th &amp; Pine"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="ref" v="7631"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="1525749970" lat="45.5202661" lon="-122.6768627" version="6" timestamp="2017-07-11T01:49:01Z" changeset="50190155" uid="6260818" user="oznogon">
+    <tag k="bus" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="local_ref" v="B"/>
+    <tag k="name" v="Southwest 5th &amp; Washington"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="ref" v="7642"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="1525749987" lat="45.5209414" lon="-122.6775476" version="7" timestamp="2016-05-14T01:48:37Z" changeset="39303536" uid="81676" user="Peter Dobratz">
+    <tag k="bench" v="yes"/>
+    <tag k="bus" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="local_ref" v="Y"/>
+    <tag k="name" v="Southwest 6th &amp; Stark"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="ref" v="7797"/>
+    <tag k="ref:ctran" v="6006"/>
+    <tag k="shelter" v="yes"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="1525760109" lat="45.5169394" lon="-122.6786546" version="6" timestamp="2016-02-14T17:06:21Z" changeset="37207843" uid="81676" user="Peter Dobratz">
+    <tag k="bench" v="yes"/>
+    <tag k="bus" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="local_ref" v="B"/>
+    <tag k="name" v="Southwest 5th &amp; Salmon"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="ref" v="7634"/>
+    <tag k="ref:ctran" v="5003"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="1525760223" lat="45.5176008" lon="-122.6793558" version="7" timestamp="2016-05-14T04:05:37Z" changeset="39304324" uid="81676" user="Peter Dobratz">
+    <tag k="bench" v="yes"/>
+    <tag k="bus" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="local_ref" v="Y"/>
+    <tag k="name" v="Southwest 6th &amp; Taylor"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="ref" v="7800"/>
+    <tag k="ref:ctran" v="6004"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="1525820922" lat="45.5144589" lon="-122.6758086" version="4" timestamp="2015-11-26T01:01:19Z" changeset="35583160" uid="81676" user="Peter Dobratz">
+    <tag k="bench" v="no"/>
+    <tag k="bus" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Southwest Madison &amp; 1st"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="ref" v="3635"/>
+    <tag k="shelter" v="no"/>
+  </node>
+  <node id="1525820928" lat="45.5151953" lon="-122.6785774" version="6" timestamp="2018-04-17T15:31:01Z" changeset="58165712" uid="290680" user="wheelmap_visitor">
+    <tag k="bench" v="yes"/>
+    <tag k="bus" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Southwest Madison &amp; 4th"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="ref" v="3639"/>
+    <tag k="shelter" v="yes"/>
+    <tag k="toilets:wheelchair" v="no"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="1525825853" lat="45.5152625" lon="-122.6755664" version="3" timestamp="2014-10-25T15:54:29Z" changeset="26324226" uid="81676" user="Peter Dobratz">
+    <tag k="bus" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Southwest Main &amp; 2nd"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="ref" v="11956"/>
+  </node>
+  <node id="1536042061" lat="45.4090962" lon="-122.5302406" version="2" timestamp="2012-04-24T18:32:51Z" changeset="11408112" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1538638250" lat="45.3620016" lon="-122.3645363" version="2" timestamp="2014-08-04T05:51:06Z" changeset="24528112" uid="331031" user="baradam"/>
+  <node id="1538638280" lat="45.3629886" lon="-122.3660267" version="1" timestamp="2011-12-09T20:52:31Z" changeset="10076371" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1538638284" lat="45.3636601" lon="-122.3669973" version="1" timestamp="2011-12-09T20:52:31Z" changeset="10076371" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1538638296" lat="45.3651529" lon="-122.3689169" version="2" timestamp="2014-08-04T05:51:06Z" changeset="24528112" uid="331031" user="baradam"/>
+  <node id="1538638300" lat="45.3653074" lon="-122.3691009" version="2" timestamp="2014-08-04T05:51:06Z" changeset="24528112" uid="331031" user="baradam"/>
+  <node id="1538638325" lat="45.3677036" lon="-122.3713225" version="2" timestamp="2014-08-04T05:51:06Z" changeset="24528112" uid="331031" user="baradam"/>
+  <node id="1538638327" lat="45.3687670" lon="-122.3722876" version="2" timestamp="2014-08-04T05:51:06Z" changeset="24528112" uid="331031" user="baradam"/>
+  <node id="1538638330" lat="45.3699327" lon="-122.3733696" version="2" timestamp="2014-08-04T05:51:06Z" changeset="24528112" uid="331031" user="baradam"/>
+  <node id="1538638333" lat="45.3700487" lon="-122.3735050" version="2" timestamp="2014-08-04T05:51:06Z" changeset="24528112" uid="331031" user="baradam"/>
+  <node id="1538638336" lat="45.3701750" lon="-122.3736567" version="2" timestamp="2014-08-04T05:51:06Z" changeset="24528112" uid="331031" user="baradam"/>
+  <node id="1538638463" lat="45.3790291" lon="-122.3852321" version="1" timestamp="2011-12-09T20:52:37Z" changeset="10076371" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1538638558" lat="45.3802274" lon="-122.3867996" version="1" timestamp="2011-12-09T20:52:42Z" changeset="10076371" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1538638583" lat="45.3804448" lon="-122.3870869" version="1" timestamp="2011-12-09T20:52:43Z" changeset="10076371" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1538638806" lat="45.3850232" lon="-122.3944658" version="1" timestamp="2011-12-09T20:52:52Z" changeset="10076371" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1538638816" lat="45.3854351" lon="-122.3951327" version="1" timestamp="2011-12-09T20:52:53Z" changeset="10076371" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1538638823" lat="45.3856516" lon="-122.3954929" version="1" timestamp="2011-12-09T20:52:53Z" changeset="10076371" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1538638870" lat="45.3878313" lon="-122.4028882" version="1" timestamp="2011-12-09T20:52:54Z" changeset="10076371" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1538638891" lat="45.3885391" lon="-122.4055141" version="1" timestamp="2011-12-09T20:52:55Z" changeset="10076371" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1538638902" lat="45.3892588" lon="-122.4075183" version="2" timestamp="2018-07-09T18:18:01Z" changeset="60548934" uid="81676" user="Peter Dobratz"/>
+  <node id="1538638912" lat="45.3894703" lon="-122.4081557" version="1" timestamp="2011-12-09T20:52:56Z" changeset="10076371" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1538638915" lat="45.3896680" lon="-122.4088754" version="1" timestamp="2011-12-09T20:52:56Z" changeset="10076371" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1538679090" lat="45.3860338" lon="-122.3961848" version="1" timestamp="2011-12-09T21:20:11Z" changeset="10076603" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1538826498" lat="45.2851435" lon="-122.3329725" version="3" timestamp="2013-01-30T19:37:14Z" changeset="14851516" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1543304183" lat="45.4303322" lon="-122.5791531" version="3" timestamp="2012-06-26T23:17:46Z" changeset="12031839" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1543326322" lat="45.4324272" lon="-122.5792555" version="1" timestamp="2011-12-12T22:27:37Z" changeset="10103777" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1543405154" lat="45.4074161" lon="-122.5719804" version="4" timestamp="2013-01-18T23:41:37Z" changeset="14702678" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1548207854" lat="45.4275399" lon="-122.6008022" version="2" timestamp="2015-09-03T00:52:29Z" changeset="33763524" uid="146549" user="Bickendan"/>
+  <node id="1548207857" lat="45.4279928" lon="-122.6017784" version="3" timestamp="2016-05-16T12:30:59Z" changeset="39351411" uid="3029661" user="saikabhi"/>
+  <node id="1556497688" lat="45.4456582" lon="-122.6404471" version="2" timestamp="2012-04-25T00:04:25Z" changeset="11410434" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1556497689" lat="45.4457283" lon="-122.6399331" version="1" timestamp="2011-12-21T01:59:45Z" changeset="10168457" uid="393906" user="Grant Humphries"/>
+  <node id="1556497694" lat="45.4457488" lon="-122.6398636" version="1" timestamp="2011-12-21T01:59:45Z" changeset="10168457" uid="393906" user="Grant Humphries"/>
+  <node id="1556497695" lat="45.4457840" lon="-122.6397922" version="1" timestamp="2011-12-21T01:59:45Z" changeset="10168457" uid="393906" user="Grant Humphries"/>
+  <node id="1556497699" lat="45.4458266" lon="-122.6397370" version="1" timestamp="2011-12-21T01:59:45Z" changeset="10168457" uid="393906" user="Grant Humphries"/>
+  <node id="1556497732" lat="45.4458750" lon="-122.6396928" version="1" timestamp="2011-12-21T01:59:47Z" changeset="10168457" uid="393906" user="Grant Humphries"/>
+  <node id="1556497734" lat="45.4458928" lon="-122.6396793" version="1" timestamp="2011-12-21T01:59:47Z" changeset="10168457" uid="393906" user="Grant Humphries"/>
+  <node id="1556497737" lat="45.4459390" lon="-122.6396488" version="1" timestamp="2011-12-21T01:59:47Z" changeset="10168457" uid="393906" user="Grant Humphries"/>
+  <node id="1556497744" lat="45.4461786" lon="-122.6395588" version="1" timestamp="2011-12-21T01:59:48Z" changeset="10168457" uid="393906" user="Grant Humphries"/>
+  <node id="1556497745" lat="45.4462137" lon="-122.6395407" version="1" timestamp="2011-12-21T01:59:48Z" changeset="10168457" uid="393906" user="Grant Humphries"/>
+  <node id="1556497769" lat="45.4462325" lon="-122.6395273" version="1" timestamp="2011-12-21T01:59:50Z" changeset="10168457" uid="393906" user="Grant Humphries"/>
+  <node id="1556497771" lat="45.4462482" lon="-122.6395142" version="1" timestamp="2011-12-21T01:59:50Z" changeset="10168457" uid="393906" user="Grant Humphries"/>
+  <node id="1556497772" lat="45.4462600" lon="-122.6395036" version="1" timestamp="2011-12-21T01:59:50Z" changeset="10168457" uid="393906" user="Grant Humphries"/>
+  <node id="1556497774" lat="45.4463226" lon="-122.6394249" version="1" timestamp="2011-12-21T01:59:50Z" changeset="10168457" uid="393906" user="Grant Humphries"/>
+  <node id="1556497775" lat="45.4463387" lon="-122.6393877" version="1" timestamp="2011-12-21T01:59:50Z" changeset="10168457" uid="393906" user="Grant Humphries"/>
+  <node id="1556497777" lat="45.4463727" lon="-122.6392862" version="1" timestamp="2011-12-21T01:59:50Z" changeset="10168457" uid="393906" user="Grant Humphries"/>
+  <node id="1556497778" lat="45.4463781" lon="-122.6392577" version="1" timestamp="2011-12-21T01:59:50Z" changeset="10168457" uid="393906" user="Grant Humphries"/>
+  <node id="1556497780" lat="45.4463821" lon="-122.6392289" version="1" timestamp="2011-12-21T01:59:50Z" changeset="10168457" uid="393906" user="Grant Humphries"/>
+  <node id="1556497781" lat="45.4463853" lon="-122.6391945" version="1" timestamp="2011-12-21T01:59:50Z" changeset="10168457" uid="393906" user="Grant Humphries"/>
+  <node id="1556497816" lat="45.4464888" lon="-122.6344317" version="2" timestamp="2012-04-23T19:58:45Z" changeset="11399250" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1556560363" lat="45.4371759" lon="-122.5694688" version="1" timestamp="2011-12-21T03:07:26Z" changeset="10168582" uid="393906" user="Grant Humphries"/>
+  <node id="1556560365" lat="45.4371803" lon="-122.5696851" version="1" timestamp="2011-12-21T03:07:26Z" changeset="10168582" uid="393906" user="Grant Humphries"/>
+  <node id="1556560366" lat="45.4371846" lon="-122.5699027" version="1" timestamp="2011-12-21T03:07:26Z" changeset="10168582" uid="393906" user="Grant Humphries"/>
+  <node id="1556560368" lat="45.4371889" lon="-122.5701194" version="1" timestamp="2011-12-21T03:07:26Z" changeset="10168582" uid="393906" user="Grant Humphries"/>
+  <node id="1556560375" lat="45.4371932" lon="-122.5703356" version="1" timestamp="2011-12-21T03:07:26Z" changeset="10168582" uid="393906" user="Grant Humphries"/>
+  <node id="1556560376" lat="45.4371978" lon="-122.5705615" version="1" timestamp="2011-12-21T03:07:26Z" changeset="10168582" uid="393906" user="Grant Humphries"/>
+  <node id="1556560377" lat="45.4372022" lon="-122.5707848" version="1" timestamp="2011-12-21T03:07:26Z" changeset="10168582" uid="393906" user="Grant Humphries"/>
+  <node id="1556560378" lat="45.4372065" lon="-122.5709981" version="1" timestamp="2011-12-21T03:07:26Z" changeset="10168582" uid="393906" user="Grant Humphries"/>
+  <node id="1556560379" lat="45.4372159" lon="-122.5714333" version="1" timestamp="2011-12-21T03:07:26Z" changeset="10168582" uid="393906" user="Grant Humphries"/>
+  <node id="1556560380" lat="45.4372210" lon="-122.5716512" version="1" timestamp="2011-12-21T03:07:26Z" changeset="10168582" uid="393906" user="Grant Humphries"/>
+  <node id="1556560411" lat="45.4372237" lon="-122.5718628" version="1" timestamp="2011-12-21T03:07:28Z" changeset="10168582" uid="393906" user="Grant Humphries"/>
+  <node id="1556560412" lat="45.4372356" lon="-122.5720963" version="1" timestamp="2011-12-21T03:07:28Z" changeset="10168582" uid="393906" user="Grant Humphries"/>
+  <node id="1556560573" lat="45.4382789" lon="-122.5757715" version="2" timestamp="2012-03-20T20:32:29Z" changeset="11045221" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1556560606" lat="45.4382783" lon="-122.5787561" version="2" timestamp="2012-04-25T20:04:17Z" changeset="11418637" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1556605327" lat="45.4065514" lon="-122.5876816" version="2" timestamp="2012-04-23T17:52:55Z" changeset="11397880" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1556605518" lat="45.4234065" lon="-122.5931267" version="2" timestamp="2012-04-23T18:10:27Z" changeset="11398038" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1568707525" lat="45.4018282" lon="-122.5003492" version="1" timestamp="2011-12-30T03:24:29Z" changeset="10241911" uid="393906" user="Grant Humphries"/>
+  <node id="1568707527" lat="45.4040127" lon="-122.5008132" version="1" timestamp="2011-12-30T03:24:29Z" changeset="10241911" uid="393906" user="Grant Humphries"/>
+  <node id="1568707530" lat="45.4040583" lon="-122.5008257" version="1" timestamp="2011-12-30T03:24:29Z" changeset="10241911" uid="393906" user="Grant Humphries"/>
+  <node id="1568707531" lat="45.4041929" lon="-122.5008775" version="1" timestamp="2011-12-30T03:24:29Z" changeset="10241911" uid="393906" user="Grant Humphries"/>
+  <node id="1568707532" lat="45.4042413" lon="-122.5008991" version="1" timestamp="2011-12-30T03:24:29Z" changeset="10241911" uid="393906" user="Grant Humphries"/>
+  <node id="1568707533" lat="45.4042936" lon="-122.5009293" version="1" timestamp="2011-12-30T03:24:29Z" changeset="10241911" uid="393906" user="Grant Humphries"/>
+  <node id="1568707534" lat="45.4057499" lon="-122.5020820" version="1" timestamp="2011-12-30T03:24:30Z" changeset="10241911" uid="393906" user="Grant Humphries"/>
+  <node id="1568707535" lat="45.4063586" lon="-122.5025940" version="2" timestamp="2018-07-09T18:18:01Z" changeset="60548934" uid="81676" user="Peter Dobratz"/>
+  <node id="1568707565" lat="45.4084357" lon="-122.5042883" version="1" timestamp="2011-12-30T03:24:31Z" changeset="10241911" uid="393906" user="Grant Humphries"/>
+  <node id="1568707568" lat="45.4093487" lon="-122.5050021" version="1" timestamp="2011-12-30T03:24:31Z" changeset="10241911" uid="393906" user="Grant Humphries"/>
+  <node id="1568707569" lat="45.4093644" lon="-122.5051357" version="1" timestamp="2011-12-30T03:24:31Z" changeset="10241911" uid="393906" user="Grant Humphries"/>
+  <node id="1568707572" lat="45.4094011" lon="-122.5051888" version="1" timestamp="2011-12-30T03:24:32Z" changeset="10241911" uid="393906" user="Grant Humphries"/>
+  <node id="1568707573" lat="45.4094146" lon="-122.5052104" version="1" timestamp="2011-12-30T03:24:32Z" changeset="10241911" uid="393906" user="Grant Humphries">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1568707582" lat="45.4094166" lon="-122.5050379" version="1" timestamp="2011-12-30T03:24:32Z" changeset="10241911" uid="393906" user="Grant Humphries"/>
+  <node id="1568707606" lat="45.4094317" lon="-122.5050400" version="1" timestamp="2011-12-30T03:24:34Z" changeset="10241911" uid="393906" user="Grant Humphries"/>
+  <node id="1568707609" lat="45.4094458" lon="-122.5052605" version="1" timestamp="2011-12-30T03:24:34Z" changeset="10241911" uid="393906" user="Grant Humphries"/>
+  <node id="1568707611" lat="45.4094532" lon="-122.5050376" version="1" timestamp="2011-12-30T03:24:34Z" changeset="10241911" uid="393906" user="Grant Humphries"/>
+  <node id="1568707616" lat="45.4094842" lon="-122.5053321" version="1" timestamp="2011-12-30T03:24:34Z" changeset="10241911" uid="393906" user="Grant Humphries"/>
+  <node id="1568707622" lat="45.4095537" lon="-122.5054882" version="1" timestamp="2011-12-30T03:24:34Z" changeset="10241911" uid="393906" user="Grant Humphries"/>
+  <node id="1568707657" lat="45.4097191" lon="-122.5054694" version="1" timestamp="2011-12-30T03:24:36Z" changeset="10241911" uid="393906" user="Grant Humphries"/>
+  <node id="1568707659" lat="45.4097253" lon="-122.5055531" version="1" timestamp="2011-12-30T03:24:36Z" changeset="10241911" uid="393906" user="Grant Humphries"/>
+  <node id="1568707665" lat="45.4097293" lon="-122.5056803" version="1" timestamp="2011-12-30T03:24:36Z" changeset="10241911" uid="393906" user="Grant Humphries"/>
+  <node id="1568707666" lat="45.4097550" lon="-122.5072139" version="1" timestamp="2011-12-30T03:24:36Z" changeset="10241911" uid="393906" user="Grant Humphries"/>
+  <node id="1570102875" lat="45.4074163" lon="-122.5628775" version="1" timestamp="2011-12-30T23:19:08Z" changeset="10250783" uid="393906" user="Grant Humphries"/>
+  <node id="1570102877" lat="45.4074845" lon="-122.5618314" version="1" timestamp="2011-12-30T23:19:08Z" changeset="10250783" uid="393906" user="Grant Humphries"/>
+  <node id="1570102897" lat="45.4075915" lon="-122.5604908" version="1" timestamp="2011-12-30T23:19:09Z" changeset="10250783" uid="393906" user="Grant Humphries"/>
+  <node id="1570102948" lat="45.4077626" lon="-122.5585197" version="2" timestamp="2012-04-21T01:28:41Z" changeset="11369875" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1570102949" lat="45.4077756" lon="-122.5579487" version="2" timestamp="2012-04-21T01:28:41Z" changeset="11369875" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1570102956" lat="45.4077835" lon="-122.5574146" version="2" timestamp="2012-04-21T01:28:41Z" changeset="11369875" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1570102958" lat="45.4077887" lon="-122.5567133" version="1" timestamp="2011-12-30T23:19:12Z" changeset="10250783" uid="393906" user="Grant Humphries"/>
+  <node id="1570102960" lat="45.4078498" lon="-122.5459469" version="1" timestamp="2011-12-30T23:19:12Z" changeset="10250783" uid="393906" user="Grant Humphries"/>
+  <node id="1570102962" lat="45.4078568" lon="-122.5453071" version="2" timestamp="2012-04-13T22:26:26Z" changeset="11293351" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1570102964" lat="45.4078585" lon="-122.5451350" version="1" timestamp="2011-12-30T23:19:12Z" changeset="10250783" uid="393906" user="Grant Humphries">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1570102966" lat="45.4078605" lon="-122.5447415" version="1" timestamp="2011-12-30T23:19:12Z" changeset="10250783" uid="393906" user="Grant Humphries"/><node id="1642030441" lat="45.5075224" lon="-122.6610417" version="1" timestamp="2012-02-21T18:03:05Z" changeset="10752337" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1642030477" lat="45.5084714" lon="-122.6615798" version="2" timestamp="2013-02-04T20:04:18Z" changeset="14914497" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1642030500" lat="45.5088487" lon="-122.6617948" version="2" timestamp="2013-02-04T20:04:18Z" changeset="14914497" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1642030526" lat="45.5093161" lon="-122.6618634" version="4" timestamp="2015-03-24T19:14:47Z" changeset="29711197" uid="393906" user="Grant Humphries"/>
+  <node id="1642030554" lat="45.5094540" lon="-122.6608082" version="5" timestamp="2012-11-08T23:01:19Z" changeset="13803682" uid="362111" user="Mele Sax-Barnett">
+    <tag k="railway" v="level_crossing"/>
+  </node>
+  <node id="1663754821" lat="45.5115537" lon="-122.6618926" version="2" timestamp="2012-04-28T00:18:07Z" changeset="11437301" uid="362111" user="Mele Sax-Barnett">
+    <tag k="railway" v="level_crossing"/>
+  </node>
+  <node id="1663754825" lat="45.5116495" lon="-122.6619571" version="1" timestamp="2012-03-07T04:07:41Z" changeset="10896518" uid="393906" user="Grant Humphries"/>
+  <node id="1666741087" lat="45.5229225" lon="-122.6753834" version="1" timestamp="2012-03-09T01:43:45Z" changeset="10915541" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1666751895" lat="45.5157429" lon="-122.6773962" version="1" timestamp="2012-03-09T02:20:20Z" changeset="10915643" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1683777997" lat="45.4355085" lon="-122.5688833" version="3" timestamp="2012-04-25T22:08:17Z" changeset="11419571" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1683778022" lat="45.4355646" lon="-122.5688979" version="3" timestamp="2012-04-25T22:08:17Z" changeset="11419571" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1683778030" lat="45.4355684" lon="-122.5684784" version="1" timestamp="2012-03-20T20:31:34Z" changeset="11045221" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1683778037" lat="45.4355877" lon="-122.5686684" version="3" timestamp="2012-04-25T22:08:18Z" changeset="11419571" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1683778087" lat="45.4360703" lon="-122.5691230" version="1" timestamp="2012-03-20T20:31:36Z" changeset="11045221" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1683778113" lat="45.4373611" lon="-122.5756622" version="1" timestamp="2012-03-20T20:31:36Z" changeset="11045221" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1696626845" lat="45.2856603" lon="-122.3341158" version="1" timestamp="2012-03-29T19:10:33Z" changeset="11142592" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1696626892" lat="45.2866254" lon="-122.3340477" version="1" timestamp="2012-03-29T19:10:34Z" changeset="11142592" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1696626957" lat="45.2867691" lon="-122.3340428" version="1" timestamp="2012-03-29T19:10:35Z" changeset="11142592" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1696626972" lat="45.2876177" lon="-122.3340068" version="1" timestamp="2012-03-29T19:10:35Z" changeset="11142592" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1696627016" lat="45.2877574" lon="-122.3340014" version="1" timestamp="2012-03-29T19:10:35Z" changeset="11142592" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1696627102" lat="45.2895955" lon="-122.3339196" version="1" timestamp="2012-03-29T19:10:37Z" changeset="11142592" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1696627147" lat="45.2897348" lon="-122.3339131" version="2" timestamp="2012-04-10T18:37:37Z" changeset="11256066" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1696627209" lat="45.2905750" lon="-122.3338778" version="1" timestamp="2012-03-29T19:10:40Z" changeset="11142592" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1696627225" lat="45.2916999" lon="-122.3338414" version="1" timestamp="2012-03-29T19:10:40Z" changeset="11142592" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1696653075" lat="45.2943901" lon="-122.3337546" version="1" timestamp="2012-03-29T19:27:18Z" changeset="11142772" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1696653117" lat="45.2945561" lon="-122.3348290" version="1" timestamp="2012-03-29T19:27:20Z" changeset="11142772" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1696671555" lat="45.2967824" lon="-122.3379192" version="3" timestamp="2013-01-30T19:37:15Z" changeset="14851516" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1696671575" lat="45.2972062" lon="-122.3379657" version="2" timestamp="2013-01-30T19:37:15Z" changeset="14851516" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1696711489" lat="45.3891289" lon="-122.4074250" version="1" timestamp="2012-03-29T20:03:17Z" changeset="11143507" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1696711490" lat="45.3891868" lon="-122.4075900" version="1" timestamp="2012-03-29T20:03:17Z" changeset="11143507" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1696758994" lat="45.4097340" lon="-122.5058412" version="2" timestamp="2012-04-10T20:08:14Z" changeset="11257602" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1696759037" lat="45.4101484" lon="-122.5174557" version="2" timestamp="2012-03-29T21:01:05Z" changeset="11144689" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1710507738" lat="45.4096946" lon="-122.5052873" version="1" timestamp="2012-04-10T20:07:58Z" changeset="11257602" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1711943758" lat="45.4918163" lon="-122.6558967" version="1" timestamp="2012-04-11T21:12:44Z" changeset="11270365" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1711943775" lat="45.4924327" lon="-122.6565464" version="1" timestamp="2012-04-11T21:12:46Z" changeset="11270365" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1711943777" lat="45.4925011" lon="-122.6563392" version="1" timestamp="2012-04-11T21:12:46Z" changeset="11270365" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1711943781" lat="45.4926843" lon="-122.6566948" version="1" timestamp="2012-04-11T21:12:47Z" changeset="11270365" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1711943782" lat="45.4927467" lon="-122.6564891" version="1" timestamp="2012-04-11T21:12:47Z" changeset="11270365" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1711943792" lat="45.4960032" lon="-122.6586963" version="2" timestamp="2012-11-06T01:22:00Z" changeset="13768252" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1711943793" lat="45.4960031" lon="-122.6585234" version="1" timestamp="2012-04-11T21:12:48Z" changeset="11270365" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1711943799" lat="45.4966058" lon="-122.6589930" version="1" timestamp="2012-04-11T21:12:49Z" changeset="11270365" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1711943814" lat="45.4999726" lon="-122.6603020" version="1" timestamp="2012-04-11T21:12:50Z" changeset="11270365" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1711943817" lat="45.5000839" lon="-122.6602261" version="1" timestamp="2012-04-11T21:12:50Z" changeset="11270365" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1711943818" lat="45.5001986" lon="-122.6603873" version="1" timestamp="2012-04-11T21:12:50Z" changeset="11270365" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1711986640" lat="45.4874962" lon="-122.6505353" version="1" timestamp="2012-04-11T21:45:06Z" changeset="11270716" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1711986642" lat="45.4877973" lon="-122.6509136" version="1" timestamp="2012-04-11T21:45:06Z" changeset="11270716" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1712007155" lat="45.4832085" lon="-122.6435026" version="2" timestamp="2012-11-05T20:44:21Z" changeset="13765872" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1712007169" lat="45.4862837" lon="-122.6485777" version="2" timestamp="2012-11-05T20:44:21Z" changeset="13765872" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1724795494" lat="45.4075035" lon="-122.5691591" version="2" timestamp="2013-01-18T23:41:37Z" changeset="14702678" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1728225633" lat="45.4065139" lon="-122.5877904" version="1" timestamp="2012-04-23T17:52:07Z" changeset="11397880" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1728225656" lat="45.4078154" lon="-122.5894306" version="1" timestamp="2012-04-23T17:52:08Z" changeset="11397880" uid="362111" user="Mele Sax-Barnett"/>
+  <node id="1728225658" lat="45.4096837" lon="-122.5900552" version="1" timestamp="2012-04-23T17:52:08Z" changeset="11397880" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1728225677" lat="45.4107338" lon="-122.5903699" version="1" timestamp="2012-04-23T17:52:09Z" changeset="11397880" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="1728225690" lat="45.4109019" lon="-122.5904257" version="1" timestamp="2012-04-23T17:52:09Z" changeset="11397880" uid="362111" user="Mele Sax-Barnett">
+    <tag k="highway" v="crossing"/>
+  </node>
+  <node id="2681749539" lat="45.5096442" lon="-122.6619675" version="3" timestamp="2015-10-11T05:07:13Z" changeset="34562329" uid="81676" user="Peter Dobratz">
+    <tag k="bus" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Southeast Martin Luther King &amp; Mill"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="ref" v="5933"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="2681753018" lat="45.5100260" lon="-122.6607260" version="2" timestamp="2014-11-26T21:42:11Z" changeset="27055988" uid="81676" user="Peter Dobratz">
+    <tag k="bus" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Southeast Grand &amp; Mill"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="ref" v="2171"/>
+    <tag k="shelter" v="yes"/>
+  </node>
+  <node id="2681754930" lat="45.4857955" lon="-122.6477199" version="3" timestamp="2016-03-02T07:45:17Z" changeset="37560841" uid="81676" user="Peter Dobratz">
+    <tag k="bench" v="yes"/>
+    <tag k="bus" v="yes"/>
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="Southeast McLoughlin &amp; 17th"/>
+    <tag k="public_transport" v="platform"/>
+    <tag k="ref" v="3859"/>
+    <tag k="shelter" v="no"/>
+  </node>
+
+  <way id="606460626" version="1" timestamp="2018-07-09T18:17:56Z" changeset="60548934" uid="81676" user="Peter Dobratz">
+    <nd ref="2681754930"/>
+    <nd ref="2681753018"/>
+    <tag k="NHS" v="yes"/>
+    <tag k="cycleway" v="lane"/>
+    <tag k="hgv" v="designated"/>
+    <tag k="hgv:national_network" v="yes"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="5"/>
+    <tag k="lanes:backward" v="3"/>
+    <tag k="lanes:forward" v="2"/>
+    <tag k="name" v="Carver Road"/>
+    <tag k="name_1" v="State Highway 212"/>
+    <tag k="name_2" v="State Highway 224"/>
+    <tag k="name_3" v="Southeast Highway 212"/>
+    <tag k="ref" v="OR 212;OR 224"/>
+    <tag k="sidewalk" v="no"/>
+    <tag k="source:hgv:national_network" v="Title 23: Highways Part 658 http://ecfr.gpoaccess.gov/cgi/t/text/text-idx?c=ecfr&amp;rgn=div5&amp;view=text&amp;node=23:1.0.1.7.33&amp;idno=23"/>
+    <tag k="turn:lanes:backward" v="left|none|none"/>
+  </way>
+  <way id="606460632" version="1" timestamp="2018-07-09T18:17:57Z" changeset="60548934" uid="81676" user="Peter Dobratz">
+    <nd ref="1728225656"/>
+    <nd ref="1696759037"/>
+    <tag k="bicycle" v="designated"/>
+    <tag k="cycleway" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="4"/>
+    <tag k="lanes:backward" v="1"/>
+    <tag k="lanes:forward" v="3"/>
+    <tag k="maxspeed" v="45 mph"/>
+    <tag k="name" v="Clackamas Highway"/>
+    <tag k="name_1" v="Southeast Highway 224"/>
+    <tag k="name_2" v="State Highway 224"/>
+    <tag k="ref" v="OR 224"/>
+    <tag k="sidewalk" v="right"/>
+    <tag k="source:maxspeed" v="sign"/>
+    <tag k="turn:lanes:forward" v="left|none|right"/>
+  </way>
+  <way id="606460633" version="1" timestamp="2018-07-09T18:17:57Z" changeset="60548934" uid="81676" user="Peter Dobratz">
+    <nd ref="454100852"/>
+    <nd ref="1568707534"/>
+    <nd ref="1538826498"/>
+    <tag k="bicycle" v="designated"/>
+    <tag k="cycleway" v="lane"/>
+    <tag k="highway" v="primary"/>
+    <tag k="lanes" v="3"/>
+    <tag k="lanes:backward" v="2"/>
+    <tag k="lanes:forward" v="1"/>
+    <tag k="maxspeed" v="45 mph"/>
+    <tag k="name" v="Clackamas Highway"/>
+    <tag k="name_1" v="Southeast Highway 224"/>
+    <tag k="name_2" v="State Highway 224"/>
+    <tag k="ref" v="OR 224"/>
+    <tag k="sidewalk" v="both"/>
+    <tag k="source:maxspeed" v="sign"/>
+    <tag k="turn:lanes:backward" v="left|none"/>
+    <tag k="zip_left" v="97089"/>
+    <tag k="zip_right" v="97089"/>
+  </way>
+
+  <relation id="2688727" version="28" timestamp="2018-07-09T18:18:20Z" changeset="60548934" uid="81676" user="Peter Dobratz">
+    <member type="node" ref="2681753018" role="platform"/>
+    <member type="node" ref="2681754930" role="platform"/>
+    <member type="node" ref="37008337" role="platform"/>
+
+    <tag k="from" v="Estacada"/>
+    <tag k="name" v="Bus 30: Estacada =&gt; Clackamas Town Center"/>
+    <tag k="network" v="TriMet"/>
+    <tag k="operator" v="TriMet"/>
+    <tag k="public_transport:version" v="2"/>
+    <tag k="ref" v="30"/>
+    <tag k="route" v="bus"/>
+    <tag k="to" v="Clackamas Town Center"/>
+    <tag k="type" v="route"/>
+  </relation>
+  <relation id="268868795" version="28" timestamp="2018-07-09T18:18:20Z" changeset="60548934" uid="81676" user="Peter Dobratz">
+    <member type="node" ref="1525820922" role="platform"/>
+    <member type="node" ref="1525729024" role="platform"/>
+    <member type="node" ref="1525825853" role="platform"/>
+
+    <tag k="from" v="Estacada"/>
+    <tag k="name" v="Bus 30: Estacada =&gt; Clackamas Town Center second bus"/>
+    <tag k="network" v="TriMet"/>
+    <tag k="operator" v="TriMet"/>
+    <tag k="public_transport:version" v="2"/>
+    <tag k="ref" v="34"/>
+    <tag k="route" v="bus"/>
+    <tag k="to" v="Clackamas Town Center"/>
+    <tag k="type" v="route"/>
+  </relation>
+
+</osm>

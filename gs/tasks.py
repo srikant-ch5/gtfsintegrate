@@ -84,7 +84,7 @@ def get_itineraries(route_id_db, feed_id, start):
             while result[j][3] != 1 and j < len(result):
                 slat = Stop.objects.get(feed=feed_id, stop_id=result[j][0]).geom.x
                 slon = Stop.objects.get(feed=feed_id, stop_id=result[j][0]).geom.y
-                dnormal_name = result[j][2].replace("'", "").replace('"', '')
+                dnormal_name = result[j][2].replace("'", "").replace('"', '').replace('\"', '')
 
                 data = [result[j][3], dnormal_name, slat, slon]
                 it.append(data)
@@ -255,6 +255,7 @@ def connect_to_JOSM(xml):
         response = requests.get(josm_url)
     except requests.exceptions.RequestException as e:
         context['error'] += 'JOSM not open {}'.format(e)
+
 
 '''Methods for downloading and reseting feeds'''
 

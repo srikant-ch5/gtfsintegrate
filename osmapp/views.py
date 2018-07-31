@@ -328,6 +328,7 @@ def load(xmlfile, feed_id, purpose):
                             for it in range(0, node_tags.count()):
                                 if node_tags[it].key.value == 'name' or node_tags[it].key.value == 'ref':
                                     print(node_tags[it].key.value)
+                                    ar.append(str(rid))
                                     ar.append(node_tags[it].key.value)
                                     ar.append(node_tags[it].value.value)
                             print("{} is len of ar".format(len(ar)))
