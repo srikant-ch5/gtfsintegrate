@@ -373,10 +373,12 @@ p {
     margin: 0 0 28px;
 }
 
-
+#osmrelheading{
+    padding-left:80px;
+}
 
 a:hover {
-    color: #333333;
+    color: #18c944;
     text-decoration: underline;
 }
 
@@ -388,8 +390,8 @@ a:hover {
     margin-bottom: 28px;
 }
 
-.author a {
-    color: #c73036;
+.author  {
+    color: #c73035fd;
     font-family: "Helvetica Neue", sans-serif;
     font-weight: bold;
     text-decoration: none;
