@@ -9,69 +9,13 @@ from gs.forms import Correspondence_Route_Form, Correspondence_Agency_Form
 from gs.tasks import save_comp, connect_to_JOSM, get_itineraries
 from multigtfs.models import Stop, Feed, Route
 from osmapp.views import load
+from osmapp.models import Node, Way, OSM_Relation, Tag, KeyValueString
 from requests import post
+from osmapp import OSM_MapLayer
 
 from .models import CMP_Stop
 from .models import Relation_data
 from . import data
-
-nodes_info = [['37008337', 'ref', '13'], ['1525729024', 'name', 'Southwest 6th & West Burnside', 'ref', '7751'],
-              ['1525729024', 'name', 'Southwest 6th & West Burnside', 'ref', '7751'],
-              ['1525729024', 'name', 'Southwest 6th & West Burnside', 'ref', '7751'],
-              ['1525729024', 'name', 'Southwest 6th & West Burnside', 'ref', '7751'],
-              ['1525737720', 'name', 'Southwest 5th & Pine', 'ref', '7631'],
-              ['1525737720', 'name', 'Southwest 5th & Pine', 'ref', '7631'],
-              ['1525737720', 'name', 'Southwest 5th & Pine', 'ref', '7631'],
-              ['1525737720', 'name', 'Southwest 5th & Pine', 'ref', '7631'],
-              ['1525749970', 'name', 'Southwest 5th & Washington', 'ref', '7642'],
-              ['1525749970', 'name', 'Southwest 5th & Washington', 'ref', '7642'],
-              ['1525749970', 'name', 'Southwest 5th & Washington', 'ref', '7642'],
-              ['1525749970', 'name', 'Southwest 5th & Washington', 'ref', '7642'],
-              ['1525749987', 'name', 'Southwest 6th & Stark', 'ref', '7797'],
-              ['1525749987', 'name', 'Southwest 6th & Stark', 'ref', '7797'],
-              ['1525749987', 'name', 'Southwest 6th & Stark', 'ref', '7797'],
-              ['1525749987', 'name', 'Southwest 6th & Stark', 'ref', '7797'],
-              ['1525749987', 'name', 'Southwest 6th & Stark', 'ref', '7797'],
-              ['1525749987', 'name', 'Southwest 6th & Stark', 'ref', '7797'],
-              ['1525760109', 'name', 'Southwest 5th & Salmon', 'ref', '7634'],
-              ['1525760109', 'name', 'Southwest 5th & Salmon', 'ref', '7634'],
-              ['1525760109', 'name', 'Southwest 5th & Salmon', 'ref', '7634'],
-              ['1525760109', 'name', 'Southwest 5th & Salmon', 'ref', '7634'],
-              ['1525760109', 'name', 'Southwest 5th & Salmon', 'ref', '7634'],
-              ['1525760223', 'name', 'Southwest 6th & Taylor', 'ref', '7800'],
-              ['1525760223', 'name', 'Southwest 6th & Taylor', 'ref', '7800'],
-              ['1525760223', 'name', 'Southwest 6th & Taylor', 'ref', '7800'],
-              ['1525760223', 'name', 'Southwest 6th & Taylor', 'ref', '7800'],
-              ['1525760223', 'name', 'Southwest 6th & Taylor', 'ref', '7800'],
-              ['1525820922', 'name', 'Southwest Madison & 1st', 'ref', '3635'],
-              ['1525820922', 'name', 'Southwest Madison & 1st', 'ref', '3635'],
-              ['1525820922', 'name', 'Southwest Madison & 1st', 'ref', '3635'],
-              ['1525820922', 'name', 'Southwest Madison & 1st', 'ref', '3635'],
-              ['1525820928', 'name', 'Southwest Madison & 4th', 'ref', '3639'],
-              ['1525820928', 'name', 'Southwest Madison & 4th', 'ref', '3639'],
-              ['1525820928', 'name', 'Southwest Madison & 4th', 'ref', '3639'],
-              ['1525820928', 'name', 'Southwest Madison & 4th', 'ref', '3639'],
-              ['1525820928', 'name', 'Southwest Madison & 4th', 'ref', '3639'],
-              ['1525820928', 'name', 'Southwest Madison & 4th', 'ref', '3639'],
-              ['1525825853', 'name', 'Southwest Main & 2nd', 'ref', '11956'],
-              ['1525825853', 'name', 'Southwest Main & 2nd', 'ref', '11956'],
-              ['1525825853', 'name', 'Southwest Main & 2nd', 'ref', '11956'],
-              ['2681749539', 'name', 'Southeast Martin Luther King & Mill', 'ref', '5933'],
-              ['2681749539', 'name', 'Southeast Martin Luther King & Mill', 'ref', '5933'],
-              ['2681749539', 'name', 'Southeast Martin Luther King & Mill', 'ref', '5933'],
-              ['2681749539', 'name', 'Southeast Martin Luther King & Mill', 'ref', '5933'],
-              ['2681753018', 'name', 'Southeast Grand & Mill', 'ref', '2171'],
-              ['2681753018', 'name', 'Southeast Grand & Mill', 'ref', '2171'],
-              ['2681753018', 'name', 'Southeast Grand & Mill', 'ref', '2171'],
-              ['2681753018', 'name', 'Southeast Grand & Mill', 'ref', '2171'],
-              ['2681754930', 'name', 'Southeast McLoughlin & 17th', 'ref', '3859'],
-              ['2681754930', 'name', 'Southeast McLoughlin & 17th', 'ref', '3859'],
-              ['2681754930', 'name', 'Southeast McLoughlin & 17th', 'ref', '3859'],
-              ['2681754930', 'name', 'Southeast McLoughlin & 17th', 'ref', '3859']]
-relation_ids = [2688727]
-relations_info = [['name', 'Southeast Grand & Mill', 'ref', '2171'],
-                  ['name', 'Southeast McLoughlin & 17th', 'ref', '3859'],
-                  ['ref', '13']]
 
 
 def get_nodes_within100m(lon, loat):
@@ -536,12 +480,47 @@ def download_relation(request):
         with open(xmlfile, 'wb') as fh:
             fh.write(result.content)
         print("Data copied to xml")
-        #nodes_info, relation_ids, relations_info = load(xmlfile, feed_id, 'comp_relation')
-        print(' {}\n\n {}\n\n {}'.format(nodes_info, relation_ids, relations_info))
-        #equalized_nodes_info = equalizer(nodes_info)
-        #equalized_relation_info = equalizer(relations_info)
-        #Relation_data.objects.create(token=token, all_node_info=equalized_nodes_info,
+        # nodes_info, relation_ids, relations_info = load(xmlfile, feed_id, 'comp_relation')
+        # equalized_nodes_info = equalizer(nodes_info)
+        # equalized_relation_info = equalizer(relations_info)
+        # Relation_data.objects.create(token=token, all_node_info=equalized_nodes_info,
         #                            rel_ids=relation_ids,
         #                             relation_info=equalized_relation_info)
 
     return render(request, 'gs/saved_relation.html', {'context': context})
+
+
+def match_relations(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.POST.get('data'))
+        except Exception as e:
+            print('******ERROR {} *****'.format(e))
+
+        # filtering data from POST data
+        try:
+            for i in range(0, len(data)):
+                single_match = data[i]
+                relation = int(single_match[0])
+                line_name = single_match[1]
+                gtfs_stops = single_match[2]
+
+        except Exception as e:
+            print('******ERROR {} *****'.format(e))
+
+        all_nodes_in_relation = []
+        token = request.POST.get('token')
+        relation_data_obj = Relation_data.objects.get(token=token)
+        all_nodes_in_relation_data_obj = relation_data_obj.all_node_info
+
+        for i in range(0,len(all_nodes_in_relation_data_obj)):
+            all_nodes_in_relation.append(int(all_nodes_in_relation_data_obj[i][0]))
+
+        all_relations = relation_data_obj.rel_ids
+
+        maplayer = OSM_MapLayer.MapLayer()
+        maplayer.nodes = nodes
+        maplayer.ways = ways
+        maplayer.relations = relations
+
+    return render(request, 'gs/saved_relation.html')

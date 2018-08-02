@@ -38,4 +38,5 @@ urlpatterns = [
     url(r'^save_ag_corr/$', compview.save_ag_corr, name="save_ag_corr"),
     url(r'^saveextra/$', compview.saveextra, name="saveextra"),
     url(r'^download_relation/$', compview.download_relation, name="download_relation"),
+    url(r'^match_relations/$', compview.match_relations, name="match_relations")
 ]

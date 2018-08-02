@@ -24,6 +24,13 @@
 		</div>
 	</div>
 </div>
+<div class="container" id="matching-btn">
+		<a class="btn btn-primary" id="export-relations" onclick="match_relations()"></a>
+		<a class="btn btn-primary" id="send-data-todjango" onclick="send_data()">Send data</a>
+</div>
+<div class="container" id="matching">
+
+</div>
 <div class="container">
 	<div class="row">
 		<div class="col-xs-6">
@@ -47,8 +54,11 @@
 
 <script type="text/javascript">
 
-	let token,clicked_gtfsitinerary;
+	let token,clicked_gtfsitinerary, clicked_osmrelation;
+	let matched_pairs = [];
+	let matched_line_data = [];//data to send to django view
 	let all_nodes_info, relations_info,relation_ids;
+	let clicked_line_data;
 	window.onload = function () {
         document.getElementById("loading").style.display = "none"
     };
@@ -203,8 +213,10 @@
 		let line_rep = lineid.split('-')
 		let line_name = line_rep[0];
 		let line_index_in_arr = line_rep[1];
-		
-		let line_data = complete_data[46];
+		line_index_in_arr = 46;
+
+		let line_data = complete_data[line_index_in_arr];
+		clicked_line_data = line_data
 
 		for (i in map._layers) {
 		    if (map._layers[i].options.format == undefined) {
@@ -247,7 +259,6 @@
 		for(let i=0;i<line_data[2].length;i++){
 			let it = i+1;
 			let idname = line_name+'-'+it;
-			clicked_gtfsitinerary = idname;
 			console.log("gtfs div id "+idname+"-div");
 			html += "<a onclick='gtfsdivclick(this.id)' id='"+idname+"'><div class='it-div' id='"+idname+"-div'><h2>Itinerary	 " + it + "</h2>";
 
@@ -370,7 +381,8 @@
 	}
 
 	function relation_div(id){
-	
+		
+		clicked_osmrelation = id;
 		relation_ids.forEach(function(relation) {
 			let divid = relation+'-div';
 			console.log(divid);
@@ -381,10 +393,12 @@
 		if(clicked_gtfsitinerary !== undefined){
 		document.getElementById(ide).style.background = "#93F09E"
 		}
+		$("#export-relations").text("match "+clicked_gtfsitinerary + " with " + clicked_osmrelation);
 	}
 
 	function gtfsdivclick(divid){
-
+		match_pair = [];
+		clicked_gtfsitinerary = divid;
 		let linename = divid.split('-')[0]
 		console.log(divid);
 		for(let i=0;i<complete_data.length;i++){
@@ -400,6 +414,42 @@
 		if(clicked_gtfsitinerary !== undefined){
 			document.getElementById(ide).style.background = "#93F09E";
 		}
+		$("#export-relations").text("match "+clicked_gtfsitinerary + " with " + clicked_osmrelation);
+	}
+
+	function match_relations(){
+		let gtfsline_name = clicked_gtfsitinerary.split('-')[0]
+		let gtfsit_index = clicked_gtfsitinerary.split('-')[1] -1;
+		let ar = [clicked_osmrelation,gtfsline_name,clicked_line_data[2][gtfsit_index]];
+		matched_line_data.push(ar);
+		console.log(clicked_line_data[2][gtfsit_index]);
+		let sar = [clicked_gtfsitinerary,clicked_osmrelation]
+		matched_pairs.push(sar);
+		$('#matching').append("<h4>"+ clicked_gtfsitinerary + " matched with "+ clicked_osmrelation);
+	}
+
+	function send_data(){
+		try{
+			
+			let datatosend = JSON.stringify(match_relations);
+			$.ajax({
+				url : '{% url "match_relations" %}',
+				method: 'POST',
+				data : {
+					'data': JSON.stringify(matched_line_data),
+					'csrfmiddlewaretoken': '{{ csrf_token }}'
+				},
+				error: function(status, xhr, e){
+					alert(status);
+					alert(xhr);
+					alert(e);
+					document.getElementById("loading").style.display="none";
+				}
+			});
+		}catch(e){
+			alert(e);
+		}
+		document.getElementById("loading").style.display="none";
 	}
 
 </script>

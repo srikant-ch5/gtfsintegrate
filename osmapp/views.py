@@ -206,9 +206,7 @@ def load(xmlfile, feed_id, purpose):
                 slat = float(primitive.attrib.get("lat"))
                 slon = float(primitive.attrib.get("lon"))
 
-                node = Node(feed=feed, id=snode_id, timestamp=stimestamp, uid=suid, user=suser, version=sversion,
-                            visible=True,
-                            changeset=schangeset, incomplete=False, purpose=purpose)
+                node = Node(feed=feed, id=snode_id, timestamp=stimestamp, uid=suid, user=suser, version=sversion,visible=True,changeset=schangeset, incomplete=False, purpose=purpose)
                 node.set_cordinates(slon, slat)
                 node.save()
                 single_node.append(str(snode_id))

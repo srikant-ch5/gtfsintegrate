@@ -55,6 +55,7 @@ class Relation_data(models.Model):
     relation_info = ArrayField(ArrayField(models.CharField(max_length=250, blank=True, null=True)), blank=True,
                                null=True)
     rel_ids = ArrayField(models.BigIntegerField(), blank=True, null=True)
+    way_ids = ArrayField(models.BigIntegerField(), blank=True, null=True)
 
     def __str__(self):
         return '{} '.format(self.token)

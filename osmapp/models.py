@@ -112,6 +112,31 @@ class OSM_Primitive(models.Model):
         for key, value in tagsdict:
             self.add_tag(key=key, value=value)
 
+    def to_xml(self, outputparams=None, body=''):
+        if outputparams is None:
+            _outputparams = {'newline': '\n', 'indent': '  '}
+        else:
+            _outputparams = outputparams
+        _outputparams['primitive'] = self.primitive
+        self.xml = '{newline}<{primitive} '.format(**_outputparams)
+        for attr in ['id', 'lat', 'lon', 'action', 'timestamp', 'uid', 'user', 'visible', 'version', 'changeset']:
+            if attr in self.attributes:
+                if attr == 'timestamp':
+                    self.attributes[attr] = str(self.attributes[attr]).replace(' ', 'T') + 'Z'
+                if attr == 'user':
+                    self.attributes[attr] = osmlib.xmlsafe(self.attributes[attr])
+                self.xml += "{}='{}' ".format(attr, str(self.attributes[attr]), **_outputparams)
+        self.xml += '>'
+        for key in self.tags:
+            # self.xml += "{newline}{indent}<tag k='{key}' v='{tag}' />".format(key=key, tag=osmlib.xmlsafe(str(self.tags[key])), **_outputparams)
+            self.xml += "{newline}{indent}<tag k='{key}' v='{tag}' />".format(key=key, tag=self.tags[key],
+                                                                              **_outputparams)
+        if body:
+            self.xml += body
+        self.xml += '{newline}</{primitive}>'.format(**_outputparams)
+
+        return self.xml
+
 
 class Node(OSM_Primitive):
     geom = models.PointField(geography=True, spatial_index=True, null=True)  # geography will force srid to be 4326
@@ -120,54 +145,6 @@ class Node(OSM_Primitive):
     def set_cordinates(self, lat, lon):
         self.geom = Point(lat, lon)
         self.save()
-
-    def to_xml(self, version_inc, outputparams=None):
-
-        if outputparams is None:
-            _outputparams = {'newline': '\n', 'indent': ' '}
-        else:
-            _outputparams = outputparams
-
-        self.xml = '{newline}<node action="modify" '.format(**_outputparams)
-        print("Version bool in node to xml {}".format(version_inc))
-        for attr, value in self.__dict__.items():
-            if attr == '_state':
-                continue
-            elif attr == 'feed_id':
-                continue
-            elif attr == 'purpose':
-                continue
-            elif attr == 'version':
-                version_num = int(value)
-                print("Version at first {}".format(version_num))
-                if version_inc:
-                    version_num = version_num + 1
-                    print("Version at first {}".format(version_num))
-                self.xml += "{}='{}' ".format(attr, version_num)
-            elif attr == 'xml':
-                continue
-            elif attr == 'timestamp':
-                ts_main = str(value).split('+')
-                ts_value = ts_main[0].replace(' ', 'T') + 'Z'
-                self.xml += "{}='{}' ".format(attr, ts_value, **_outputparams)
-            elif attr == 'geom':
-                lon = str(value[0])
-                self.xml += "{}='{}' ".format('lon', lon)
-                lat = str(value[1])
-                self.xml += "{}='{}' ".format('lat', lat)
-            else:
-                self.xml += "{}='{}' ".format(attr, str(value), **_outputparams)
-
-        self.xml += '>'
-
-        tags = self.tags.all()
-
-        for tag in tags:
-            self.xml += tag.to_xml(_outputparams)
-
-        self.xml += '{newline}</node>'.format(**_outputparams)
-        return self.xml
-
 
 class Way(OSM_Primitive):
     nodes = models.ManyToManyField('Node', through='WN', related_name="nodes_in_way")
