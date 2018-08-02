@@ -297,7 +297,7 @@
 			success : function(data){
 				document.getElementById("loading").style.display="none";
 				for(var i=0;i<data.length;i++)
-				 if(data[i].token == 'f4d04bdf-b8c0-4069-b78c-995e474921d1'){
+				 if(data[i].token == token){
 				
 					all_nodes_info = data[i].all_node_info;
 					relations_info = data[i].relation_info;

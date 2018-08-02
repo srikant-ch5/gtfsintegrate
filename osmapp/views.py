@@ -327,11 +327,9 @@ def load(xmlfile, feed_id, purpose):
                             print("{} node tags counts is {}".format(rel_node.id,node_tags.count()))
                             for it in range(0, node_tags.count()):
                                 if node_tags[it].key.value == 'name' or node_tags[it].key.value == 'ref':
-                                    print(node_tags[it].key.value)
                                     ar.append(str(rid))
                                     ar.append(node_tags[it].key.value)
                                     ar.append(node_tags[it].value.value)
-                            print("{} is len of ar".format(len(ar)))
                             if len(ar) > 1:
                                 relations_info.append(ar)
                         elif type == 'way':

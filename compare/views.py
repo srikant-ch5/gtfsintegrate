@@ -13,6 +13,7 @@ from requests import post
 
 from .models import CMP_Stop
 from .models import Relation_data
+from . import data
 
 nodes_info = [['37008337', 'ref', '13'], ['1525729024', 'name', 'Southwest 6th & West Burnside', 'ref', '7751'],
               ['1525729024', 'name', 'Southwest 6th & West Burnside', 'ref', '7751'],
@@ -363,6 +364,7 @@ def save_ag_corr(request):
             routes_list = Route.objects.filter(feed=entered_agency_corr_form_feed_id)
             routes_form = Correspondence_Route.objects.get(feed_id=entered_agency_corr_form_feed_id)
 
+            '''
             valid_routes_attr_list = {}
             long_names_list = []
             short_names_list = []
@@ -458,9 +460,11 @@ def save_ag_corr(request):
                     complete_data.append(
                         get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=False))
 
-            context['complete_data'] = json.dumps(complete_data)
+            print(complete_data)
+            print(routes_data)'''
+            context['complete_data'] = json.dumps(data.complete_data)
             context['feed_id'] = entered_agency_corr_form_feed_id
-            context['routes_data'] = json.dumps(routes_data)
+            context['routes_data'] = json.dumps(data.routes_data)
         return render(request, 'gs/saved_relation.html', {'context': context, 'agency_form': agency_form})
 
 
@@ -532,12 +536,13 @@ def download_relation(request):
         with open(xmlfile, 'wb') as fh:
             fh.write(result.content)
         print("Data copied to xml")
-        #nodes_info, relation_ids, relations_info = load(xmlfile, feed_id, 'comp_relation')
+        nodes_info, relation_ids, relations_info = load(xmlfile, feed_id, 'comp_relation')
         print(' {}\n\n {}\n\n {}'.format(nodes_info, relation_ids, relations_info))
         equalized_nodes_info = equalizer(nodes_info)
         equalized_relation_info = equalizer(relations_info)
-        #Relation_data.objects.create(token='f4d04bdf-b8c0-4069-b78c-995e474921d1', all_node_info=equalized_nodes_info, rel_ids=relation_ids,
-        #                            relation_info=equalized_relation_info)
+        Relation_data.objects.create(token=token, all_node_info=equalized_nodes_info,
+                                     rel_ids=relation_ids,
+                                     relation_info=equalized_relation_info)
 
         print('{} {}'.format(len(relations_info), len(relation_ids)))
 

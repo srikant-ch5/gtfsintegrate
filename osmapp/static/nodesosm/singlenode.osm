@@ -1,11 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <osm version='0.6' generator='Python Script'>
 
-<node action="modify" id='4214685182' timestamp='2016-05-30T01:51:03Z' uid='4018842' user='Stephen214' visible='True' version='2' changeset='39653800' incomplete='False' lon='-96.6843812' lat='32.7183521' >
- <tag k='bus' v='yes' />
- <tag k='highway' v='bus_stop' />
+<node action="modify" id='4768163702' timestamp='2017-03-31T19:38:06Z' uid='651869' user='Aurimas Fišeras' visible='True' version='2' changeset='47336803' incomplete='False' lon='23.8934846' lat='53.9549825' >
  <tag k='public_transport' v='stop_position' />
- <tag k='name' v='Peachtree Park Shopping Center' />
- <tag k='ref' v='2382404' />
+ <tag k='name' v='Gerdašiai' />
+ <tag k='ref' v='236' />
 </node>
 </osm>

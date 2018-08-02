@@ -1,0 +1,76 @@
+Itinerary 1
+SAUJON - Richelieu
+SAUJON - Salicorne
+SABLONCEAUX - Chailloux
+SAINT-ROMAIN-DE-BENET - Fief Perrières
+SABLONCEAUX - Brandet
+SABLONCEAUX - Coupé-Gorge
+SABLONCEAUX - Pont
+SABLONCEAUX - Saint André
+SABLONCEAUX - Maulin
+SABLONCEAUX - Vinaigrière
+
+
+
+Relation 1
+Centre Bourg
+Gare SNCF
+Mairie — Saujon
+Saujon - Place Richelieu
+
+
+Relation 2
+Saujon - Place Richelieu
+Mairie — Saujon
+Gare SNCF
+Centre Bourg
+
+
+Gare SNCF
+Centre Bourg
+
+Relation 3
+Rochefort - Gare SNCF
+Rochefort - Thermes
+Rochefort - Thermes
+Rochefort - Roy Bry 4
+Rochefort - Roy Bry 3
+Rochefort - Avenue des Déportés
+Rochefort - Avenue des Déportés
+Rochefort - La Fayette
+Rochefort - La Fayette
+Rochefort - Centre Commercial
+Rochefort - Centre Commercial
+Saint-Agnant - La Bridoire
+Saint-Agnant - La Bridoire
+Saint-Agnant - Jean Monnet
+Saint-Agnant - Villeneuve
+Le Gua - Cadeuil
+Le Gua - Cadeuil
+Le Gua - Croix de Châlons
+Le Gua - Croix de Châlons
+Le Gua - Poste
+Le Gua - Poste
+L'Eguille - Salle des Fêtes
+Saujon - Brulot (Route de la Tremblade)
+Saujon - Brulot (Route de la Tremblade)
+Saujon - Place Richelieu
+Médis - Route de Saujon
+Médis - Route de Saujon (Côté Garage)
+
+
+
+Relation 4
+Saintes - Gare SNCF (Parvis)
+Saintes - Gare Routière (F-J)
+Pessines - Mairie
+Pisany - Place des Halles
+Saint-Romain-de-Benet - Villeneuve
+Saint-Romain-de-Benet - Rue de la côte de Beauté
+Saint-Romain-de-Benet - Rue de la côte de Beauté
+Saint-Romain-de-Benet - Griffarin
+Sablonceaux - Les Frogers
+Sablonceaux - Les Frogers
+Saujon - Place Richelieu
+Médis - Route de Saujon
+Médis - Route de Saujon (Côté Garage)
