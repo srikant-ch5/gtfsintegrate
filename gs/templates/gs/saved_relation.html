@@ -106,10 +106,24 @@
 	
 	const feed_id = parseInt('{{context.feed_id|safe}}');
     const routes_data_json = '{{context.routes_data | safe}}';
-    let routes_data = JSON.parse(routes_data_json);
+    let routes_data = JSON.parse(routes_data_json);//object
     const complete_data_json = '{{context.complete_data | safe}}';
     const complete_data = JSON.parse(complete_data_json);
-	console.log("Routes data"+routes_data);
+
+	/*
+		******Complete_data****** 
+		complete_data.length = total number of lines in routes.txt
+		complete_data[0] -> first line
+		complete_data[0][0] -> Name of the first line
+		complete_data[0][1] -> Index of line to be taken into reference
+		complete_data[0][2] -> Contains all the unique itineraries under that line
+		complete_data[0][2].length -> Number of unique itineraries under that line
+		complete_data[0][2][0] -> First Unique itinerary of first line in routes.txt
+		compelte_data[0][2][0][0] -> Sequence number of stop in the first itinerary
+		complete_data[0][2][0][1] -> Name of the stop in itnerary
+		complete_data[0][2][0][2], complete_data[0][2][0][3] -> latitude and longitude of the stop
+	*/
+
 	$.ajaxSetup({
         async: false
     });
@@ -124,7 +138,8 @@
 	}
 
 	console.log(arr);
-
+	
+	//For showing lines and itinerary buttons
 	for(let i=0;i<arr.length;i++){
 		if( arr[i][2] == 0){
 			let html = "<div class='linebtn'><a class='btn btn-primary' onclick='linefunc(this.id)' id='"+arr[i][1]+"-"+arr[i][0]+"'>"+arr[i][1]+"</a><br><br><a class='btn btn-success singlelinebtn' onclick='showrelfunc(this.id)' id='"+arr[i][0]+"-"+arr[i][1]+"-"+arr[i][2]+"'>Line-"+arr[i][2].toString()+"</a></div><br>";
@@ -135,6 +150,7 @@
 		}
 	}
 
+	//show single clicked itinerary on the map
 	function showrelfunc(id){
 		for (i in map._layers) {
 		    if (map._layers[i].options.format == undefined) {
@@ -181,6 +197,7 @@
 	});
 	}
 
+	//Show the complete line by combining all the itineraries of the line
 	function linefunc(lineid){
 
 		let line_rep = lineid.split('-')
@@ -223,7 +240,9 @@
 
 		bounds = new L.LatLngBounds(stopsarr);
 		map.fitBounds(bounds);
-
+		
+		console.log("Complete Data len "+complete_data.length);
+		console.log("Rouets Data is "+routes_data);
 		let html = '';
 		for(let i=0;i<line_data[2].length;i++){
 			let it = i+1;
@@ -297,7 +316,7 @@
 			success : function(data){
 				document.getElementById("loading").style.display="none";
 				for(var i=0;i<data.length;i++)
-				 if(data[i].token == token){
+				 if(data[i].token == 'e95130c5-fae4-484e-8286-5412d332e5fd'){
 				
 					all_nodes_info = data[i].all_node_info;
 					relations_info = data[i].relation_info;

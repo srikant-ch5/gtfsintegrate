@@ -536,14 +536,12 @@ def download_relation(request):
         with open(xmlfile, 'wb') as fh:
             fh.write(result.content)
         print("Data copied to xml")
-        nodes_info, relation_ids, relations_info = load(xmlfile, feed_id, 'comp_relation')
+        #nodes_info, relation_ids, relations_info = load(xmlfile, feed_id, 'comp_relation')
         print(' {}\n\n {}\n\n {}'.format(nodes_info, relation_ids, relations_info))
-        equalized_nodes_info = equalizer(nodes_info)
-        equalized_relation_info = equalizer(relations_info)
-        Relation_data.objects.create(token=token, all_node_info=equalized_nodes_info,
-                                     rel_ids=relation_ids,
-                                     relation_info=equalized_relation_info)
-
-        print('{} {}'.format(len(relations_info), len(relation_ids)))
+        #equalized_nodes_info = equalizer(nodes_info)
+        #equalized_relation_info = equalizer(relations_info)
+        #Relation_data.objects.create(token=token, all_node_info=equalized_nodes_info,
+        #                            rel_ids=relation_ids,
+        #                             relation_info=equalized_relation_info)
 
     return render(request, 'gs/saved_relation.html', {'context': context})
