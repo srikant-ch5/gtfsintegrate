@@ -480,13 +480,12 @@ def download_relation(request):
         with open(xmlfile, 'wb') as fh:
             fh.write(result.content)
         print("Data copied to xml")
-        # nodes_info, relation_ids, relations_info = load(xmlfile, feed_id, 'comp_relation')
-        # equalized_nodes_info = equalizer(nodes_info)
-        # equalized_relation_info = equalizer(relations_info)
-        # Relation_data.objects.create(token=token, all_node_info=equalized_nodes_info,
-        #                            rel_ids=relation_ids,
-        #                             relation_info=equalized_relation_info)
-
+        '''nodes_ids, relation_ids, relations_info, way_ids = load(xmlfile, feed_id, 'comp_relation')
+        equalized_relation_info = equalizer(relations_info)
+        Relation_data.objects.create(token=token, nodes_ids=nodes_ids,
+                                     rels_ids=relation_ids,
+                                     relations_info=equalized_relation_info, ways_ids=way_ids)
+        '''
     return render(request, 'gs/saved_relation.html', {'context': context})
 
 
@@ -498,29 +497,42 @@ def match_relations(request):
             print('******ERROR {} *****'.format(e))
 
         # filtering data from POST data
-        try:
-            for i in range(0, len(data)):
-                single_match = data[i]
-                relation = int(single_match[0])
-                line_name = single_match[1]
-                gtfs_stops = single_match[2]
 
-        except Exception as e:
-            print('******ERROR {} *****'.format(e))
-
-        all_nodes_in_relation = []
         token = request.POST.get('token')
         relation_data_obj = Relation_data.objects.get(token=token)
-        all_nodes_in_relation_data_obj = relation_data_obj.all_node_info
+        ways = relation_data_obj.ways_ids
+        nodes = relation_data_obj.nodes_ids
 
-        for i in range(0,len(all_nodes_in_relation_data_obj)):
-            all_nodes_in_relation.append(int(all_nodes_in_relation_data_obj[i][0]))
+        all_relations_ids = relation_data_obj.rels_ids
+        all_relations_data = {}
 
-        all_relations = relation_data_obj.rel_ids
+        try:
+            for i in range(0, len(all_relations_ids)):
+                rel_id = all_relations_ids[i]
+                ar = []
+
+                for j in range(0, len(data)):
+                    if rel_id == int(data[j][0]):
+                        stop_names = []
+                        for stop in data[j][2]:
+                            stop_names.append(stop[1])
+                        ar = stop_names
+                all_relations_data.update({rel_id: ar})
+
+        except Exception as e:
+            print('****** ERROR {} *****'.format(e))
 
         maplayer = OSM_MapLayer.MapLayer()
-        maplayer.nodes = nodes
+        maplayer.nodes =nodes
         maplayer.ways = ways
-        maplayer.relations = relations
+        maplayer.relations = all_relations_data
+        xml = maplayer.to_xml()
+        print(xml)
+        PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+        xmlfiledir = xmlfiledir = os.path.join(os.path.dirname(PROJECT_ROOT), 'osmapp', 'static')
+        xmlfile = xmlfiledir + '/xmltojosm.osm'
+
+        with open(xmlfile, 'w') as fh:
+            fh.write(xml)
 
     return render(request, 'gs/saved_relation.html')

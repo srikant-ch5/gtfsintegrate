@@ -7,6 +7,16 @@ from django.db.models import Manager as GeoManager
 
 
 # model for storing bounds specific to the operator
+
+def xmlsafe(name):
+    return str(name).replace('&', '&amp;').replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;").replace('"',
+                                                                                                                    "&quot;")
+
+
+def urlsafe(name):
+    return xmlsafe(name).replace(' ', '%20')
+
+
 class Bounds(models.Model):
     feed_id = models.IntegerField(blank=True)
     operator_name = models.CharField(max_length=200)
@@ -47,7 +57,7 @@ class Tag(models.Model):
 
         self.xml = ''
 
-        self.xml += "{newline}{indent}<tag k='{key}' v='{value}' />".format(key=key, value=value, **_outputparams)
+        self.xml += "{newline}  <tag k='{key}' v='{value}' />".format(key=key, value=value, **_outputparams)
 
         return self.xml
 
@@ -112,27 +122,39 @@ class OSM_Primitive(models.Model):
         for key, value in tagsdict:
             self.add_tag(key=key, value=value)
 
-    def to_xml(self, outputparams=None, body=''):
+    def base_to_xml(self, primitive, outputparams=None, body='', attributes=[]):
         if outputparams is None:
             _outputparams = {'newline': '\n', 'indent': '  '}
         else:
             _outputparams = outputparams
-        _outputparams['primitive'] = self.primitive
+        _outputparams['primitive'] = primitive
         self.xml = '{newline}<{primitive} '.format(**_outputparams)
-        for attr in ['id', 'lat', 'lon', 'action', 'timestamp', 'uid', 'user', 'visible', 'version', 'changeset']:
-            if attr in self.attributes:
+        for attr, value in self.__dict__.items():
+            if attr in attributes:
                 if attr == 'timestamp':
-                    self.attributes[attr] = str(self.attributes[attr]).replace(' ', 'T') + 'Z'
-                if attr == 'user':
-                    self.attributes[attr] = osmlib.xmlsafe(self.attributes[attr])
-                self.xml += "{}='{}' ".format(attr, str(self.attributes[attr]), **_outputparams)
+                    ts_main = str(value).split('+')
+                    ts_value = ts_main[0].replace(' ', 'T') + 'Z'
+                    self.xml += "{}='{}' ".format(attr, ts_value, **_outputparams)
+                elif attr == 'user':
+                    self.xml += "{}='{}' ".format(attr, ts_value, **_outputparams)
+                elif attr == 'geom':
+                    lon = str(value[0])
+                    self.xml += "{}='{}' ".format('lon', lon)
+                    lat = str(value[1])
+                    self.xml += "{}='{}' ".format('lat', lat)
+                else:
+                    self.xml += "{}='{}' ".format(attr, str(value), **_outputparams)
+
         self.xml += '>'
-        for key in self.tags:
-            # self.xml += "{newline}{indent}<tag k='{key}' v='{tag}' />".format(key=key, tag=osmlib.xmlsafe(str(self.tags[key])), **_outputparams)
-            self.xml += "{newline}{indent}<tag k='{key}' v='{tag}' />".format(key=key, tag=self.tags[key],
-                                                                              **_outputparams)
+
+        tags = self.tags.all()
+
         if body:
             self.xml += body
+
+        for tag in tags:
+            self.xml += tag.to_xml(_outputparams)
+
         self.xml += '{newline}</{primitive}>'.format(**_outputparams)
 
         return self.xml
@@ -145,6 +167,12 @@ class Node(OSM_Primitive):
     def set_cordinates(self, lat, lon):
         self.geom = Point(lat, lon)
         self.save()
+
+    def to_xml(self, outputparams=None):
+        attributes = ['id', 'geom', 'action', 'timestamp', 'uid', 'user', 'visible', 'version', 'changeset']
+
+        return super().base_to_xml(primitive='node', attributes=attributes)
+
 
 class Way(OSM_Primitive):
     nodes = models.ManyToManyField('Node', through='WN', related_name="nodes_in_way")
@@ -184,6 +212,17 @@ class Way(OSM_Primitive):
         self.geom = LineString(nodes)
         self.save()
 
+    def to_xml(self, outputparams=None, body=''):
+        if outputparams is None:
+            _outputparams = {'newline': '\n', 'indent': '  '}
+        else:
+            _outputparams = outputparams
+
+        attributes = ['id', 'action', 'timestamp', 'uid', 'user', 'visible', 'version', 'changeset']
+        for node in self.nodes.all():
+            body += "{newline}  <nd ref='{node_id}' />".format(node_id=node.id, **_outputparams)
+        return super().base_to_xml(body=body, attributes=attributes, primitive='way')
+
 
 class WN(models.Model):
     node = models.ForeignKey('Node', on_delete=models.CASCADE)
@@ -192,6 +231,10 @@ class WN(models.Model):
 
     class Meta:
         unique_together = ("node", "way", "sequence")
+
+    def to_xml(self, outputparams):
+        return "{newline}{indent}<member type='{primtype}' ref='{ref}' />".format(
+            primtype='node', ref=self.node.id, **outputparams)
 
 
 class MemberRelation(models.Model):
@@ -253,3 +296,31 @@ class OSM_Relation(OSM_Primitive):
         rm.save()
 
         return rm
+
+    def to_xml(self, outputparams=None, stops=[], body=''):
+        if outputparams is None:
+            _outputparams = {'newline': '\n'}
+        else:
+            _outputparams = outputparams
+        attributes = ['id', 'action', 'timestamp', 'uid', 'user', 'visible', 'version', 'changeset']
+        for member in self.memberrelation_set.filter(type='n'):
+            mem_role = member.role
+            mem_type = 'node'
+            mem_id = member.member_node.id
+            body += "{newline}  <member type='{primtype}' ref='{ref}' role='{role}' />".format(
+                primtype=mem_type, ref=mem_id, role=mem_role, **outputparams)
+        for member_way in self.memberrelation_set.filter(type='w'):
+            mem_role = member_way.role
+            mem_type = 'way'
+            mem_id = member_way.member_way.id
+            body += "{newline}  <member type='{primtype}' ref='{ref}' role='{role}' />".format(
+                primtype=mem_type, ref=mem_id, role=mem_role, **outputparams)
+
+        for member_relation in self.memberrelation_set.filter(type='r'):
+            mem_role = member_relation.role
+            mem_type = 'relation'
+            mem_id = member_relation.member_relation.id
+            body += "{newline}  <member type='{primtype}' ref='{ref}' role='{role}' />".format(
+                primtype=mem_type, ref=mem_id, role=mem_role, **outputparams)
+
+        return super().base_to_xml(outputparams=_outputparams, attributes=attributes, body=body, primitive='relation')

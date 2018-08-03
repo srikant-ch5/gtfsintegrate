@@ -184,6 +184,8 @@ def load(xmlfile, feed_id, purpose):
     relation_ids = []
     relations_info = []
     all_nodes_info = []
+    all_nodes_ids = []
+    way_ids = []
 
     print("Downloading the nodes")
     data = open(xmlfile)
@@ -209,6 +211,7 @@ def load(xmlfile, feed_id, purpose):
                 node = Node(feed=feed, id=snode_id, timestamp=stimestamp, uid=suid, user=suser, version=sversion,visible=True,changeset=schangeset, incomplete=False, purpose=purpose)
                 node.set_cordinates(slon, slat)
                 node.save()
+                all_nodes_ids.append(snode_id)
                 single_node.append(str(snode_id))
             except Exception as e:
                 print(e)
@@ -245,6 +248,7 @@ def load(xmlfile, feed_id, purpose):
                           version=wversion, changeset=wchangeset, purpose=purpose)
                 way.save()
                 way.wn_set.all().delete()
+                way_ids.append(wway_id)
 
             except Exception as e:
                 print(e)
@@ -320,6 +324,7 @@ def load(xmlfile, feed_id, purpose):
                         if type == 'node':
                             rel_node = Node.objects.get(id=ref)
                             rm = relation.add_member(rel_node, type, role)
+
                             node_tags = rel_node.tags.all()
                             ar = []
                             print("{} node tags counts is {}".format(rel_node.id,node_tags.count()))
@@ -362,4 +367,4 @@ def load(xmlfile, feed_id, purpose):
 
     print("The data has been downloaded")
 
-    return all_nodes_info, relation_ids, relations_info
+    return all_nodes_ids, relation_ids, relations_info, way_ids

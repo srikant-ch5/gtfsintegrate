@@ -1,6 +1,8 @@
 import re
 from urllib.parse import urlencode
 from osmapp.models import Node, Way, OSM_Relation, Tag, KeyValueString
+
+
 def xmlsafe(name):
     return str(name).replace('&', '&amp;').replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;").replace('"',
                                                                                                                     "&quot;")
@@ -14,7 +16,7 @@ class MapLayer():
     def __init__(self):
         self.nodes = []
         self.ways = []
-        self.relations = []
+        self.relations = {}
 
     def to_xml(self, output='doc', upload=False, generator='Python script'):
         """
@@ -43,14 +45,14 @@ class MapLayer():
             **outputparams)
 
         for n in self.nodes:
-            print(n)
-            #xml += self.nodes[n].to_xml(outputparams=outputparams)
+            node = Node.objects.get(id=n)
+            xml += node.to_xml(outputparams=outputparams)
         for w in self.ways:
-            print(w)
-            #xml += self.ways[w].to_xml(outputparams=outputparams)
-        for r in self.relations:
-            print(r)
-            #xml += self.relations[r].to_xml(outputparams=outputparams)
+            way = Way.objects.get(id=w)
+            xml += way.to_xml(outputparams=outputparams)
+        for rel_id,stop_names in self.relations.items():
+            relation = OSM_Relation.objects.get(id=rel_id)
+            xml += relation.to_xml(outputparams=outputparams, stops=stop_names)
 
         xml += '''{newline}</osm>'''.format(**outputparams)
         return xml
@@ -92,11 +94,3 @@ class MapLayer():
         print(params)
 
         return '<a href="{url}">{linktext}</a>'.format(**params)
-
-
-maplayer = MapLayer()
-maplayer.nodes = [1,2,3]
-maplayer.ways = [34,45,78]
-maplayer.relations = [55,6,7,8]
-
-print(maplayer.to_xml())

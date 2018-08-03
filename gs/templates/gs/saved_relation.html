@@ -40,8 +40,7 @@
 		</div>
 		<div class="col-xs-6 ">
 			<h2 id="osmrelheading">OSM Route Stops</h2>
-			<div id="osm-stops-list">
-			</div><br>
+			
 			<div id="single-rel">
 			</div>
 		</div>
@@ -57,7 +56,7 @@
 	let token,clicked_gtfsitinerary, clicked_osmrelation;
 	let matched_pairs = [];
 	let matched_line_data = [];//data to send to django view
-	let all_nodes_info, relations_info,relation_ids;
+	let relations_info,relation_ids;
 	let clicked_line_data;
 	window.onload = function () {
         document.getElementById("loading").style.display = "none"
@@ -327,11 +326,9 @@
 			success : function(data){
 				document.getElementById("loading").style.display="none";
 				for(var i=0;i<data.length;i++)
-				 if(data[i].token == 'e95130c5-fae4-484e-8286-5412d332e5fd'){
-				
-					all_nodes_info = data[i].all_node_info;
-					relations_info = data[i].relation_info;
-					relation_ids = data[i].rel_ids;
+				 if(data[i].token == 'ce40ceac-7a08-4f8b-b119-7335b19a72c3'){
+					relations_info = data[i].relations_info;
+					relation_ids = data[i].rels_ids;
 				 }
 			},
 			error: function(status, xhr, e){
@@ -341,12 +338,12 @@
 		});
 		let osmhtml = '';
 		let arr = [];
-		all_nodes_info.forEach(function(e){
+		/*all_nodes_info.forEach(function(e){
 			if( arr.indexOf(e[0]) === -1){
 				arr.push(e[0])
 				osmhtml +=  "<h4>"+e[2]+"</h4>"
 			}
-		});
+		});*/
 		let relhtml='';
 		//Seperate all the nodes based on relation
 		relation_ids.forEach(function(relation){
@@ -376,7 +373,6 @@
 			}
 		});
 		
-		$("#osm-stops-list").html(osmhtml);
 		$("#single-rel").html(relhtml);
 	}
 
@@ -436,12 +432,11 @@
 				url : '{% url "match_relations" %}',
 				method: 'POST',
 				data : {
+					'token': 'ce40ceac-7a08-4f8b-b119-7335b19a72c3',
 					'data': JSON.stringify(matched_line_data),
 					'csrfmiddlewaretoken': '{{ csrf_token }}'
 				},
 				error: function(status, xhr, e){
-					alert(status);
-					alert(xhr);
 					alert(e);
 					document.getElementById("loading").style.display="none";
 				}

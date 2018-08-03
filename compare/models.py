@@ -50,12 +50,11 @@ class Line_Stop(models.Model):
 
 class Relation_data(models.Model):
     token = models.CharField(max_length=200, blank=True, null=True)
-    all_node_info = ArrayField(ArrayField(models.CharField(max_length=250), blank=True, null=True), blank=True,
+    nodes_ids = ArrayField(models.BigIntegerField(), blank=True, null=True)
+    relations_info = ArrayField(ArrayField(models.CharField(max_length=250, blank=True, null=True)), blank=True,
                                null=True)
-    relation_info = ArrayField(ArrayField(models.CharField(max_length=250, blank=True, null=True)), blank=True,
-                               null=True)
-    rel_ids = ArrayField(models.BigIntegerField(), blank=True, null=True)
-    way_ids = ArrayField(models.BigIntegerField(), blank=True, null=True)
+    rels_ids = ArrayField(models.BigIntegerField(), blank=True, null=True)
+    ways_ids = ArrayField(models.BigIntegerField(), blank=True, null=True)
 
     def __str__(self):
         return '{} '.format(self.token)
