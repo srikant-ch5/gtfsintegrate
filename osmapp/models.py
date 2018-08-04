@@ -297,18 +297,59 @@ class OSM_Relation(OSM_Primitive):
 
         return rm
 
-    def to_xml(self, outputparams=None, stops=[], body=''):
+    def to_xml(self, outputparams=None, stops=[], body='', counter_arr=[]):
         if outputparams is None:
             _outputparams = {'newline': '\n'}
         else:
             _outputparams = outputparams
         attributes = ['id', 'action', 'timestamp', 'uid', 'user', 'visible', 'version', 'changeset']
-        for member in self.memberrelation_set.filter(type='n'):
-            mem_role = member.role
-            mem_type = 'node'
-            mem_id = member.member_node.id
-            body += "{newline}  <member type='{primtype}' ref='{ref}' role='{role}' />".format(
-                primtype=mem_type, ref=mem_id, role=mem_role, **outputparams)
+        print(stops)
+
+        new_nodes = []
+
+        if len(stops) > 0:
+            stops_in_osm = []
+            for member in self.memberrelation_set.filter(type='n'):
+                node = Node.objects.get(id=member.member_node.id)
+                node_tags = node.tags
+                mem_role = member.role
+
+                for tag in node_tags.all():
+                    if tag.key.value == 'name':
+                        data = {'node_id': node.id, 'node_name': xmlsafe(tag.value.value), 'mem_role': mem_role}
+                    else:
+                        data = {'node_id': node.id, 'mem_role': mem_role}
+
+                stops_in_osm.append(data)
+            print(stops_in_osm)
+            for i in range(0, len(stops)):
+                for key, value in stops_in_osm[i].items():
+                    if key == 'node_name':
+                        if stops[i] == stops_in_osm[i]['node_name'] or stops_in_osm[i]['node_name'] == 'L&apos;Étrade':
+                            role = stops_in_osm[i]['mem_role']
+                            node_id = stops_in_osm[i]['node_id']
+                            body += "{newline}  <member type='{primtype}' ref='{ref}' role='{role}' />".format(
+                                primtype='node', ref=node_id, role=role, **outputparams)
+                        else:
+                            neg_number = counter_arr[len(counter_arr) - 1] - 1
+                            counter_arr.append(neg_number)
+
+                            stops_in_osm.insert(i, {'node_id': '-1', 'mem_role': ''})
+                            node_id = str(neg_number)
+                            new_ar = [stops[i], node_id]
+                            new_nodes.append(new_ar)
+                            role = 'platform'
+                            body += "{newline}  <member type='{primtype}' ref='{ref}' role='{role}' />".format(
+                                primtype='node', ref=node_id, role=role, **outputparams)
+
+        elif len(stops) == 0:
+            for member_node in self.memberrelation_set.filter(type='n'):
+                mem_role = member_node.role
+                mem_type = 'node'
+                mem_id = member_node.member_node.id
+                body += "{newline}  <member type='{primtype}' ref='{ref}' role='{role}' />".format(
+                    primtype=mem_type, ref=mem_id, role=mem_role, **outputparams)
+
         for member_way in self.memberrelation_set.filter(type='w'):
             mem_role = member_way.role
             mem_type = 'way'
@@ -323,4 +364,21 @@ class OSM_Relation(OSM_Primitive):
             body += "{newline}  <member type='{primtype}' ref='{ref}' role='{role}' />".format(
                 primtype=mem_type, ref=mem_id, role=mem_role, **outputparams)
 
-        return super().base_to_xml(outputparams=_outputparams, attributes=attributes, body=body, primitive='relation')
+        xml = super().base_to_xml(outputparams=_outputparams, attributes=attributes, body=body, primitive='relation')
+
+        node_xml = ''
+        if len(new_nodes) > 0:
+            for new_node in new_nodes:
+                new_node_name = new_node[0]
+                new_node_id = new_node[1]
+                node_xml += '''
+                    <node id="'''+new_node_id+''''" lat="45.6412701" lon="-1.0443883" version="1" timestamp="2018-04-20T15:37:11Z" changeset="58267589" uid="23981" user="NaSH">
+                        <tag k="bus" v="yes"/>
+                        <tag k="name" v="'''+new_node_name+'''"/>
+                        <tag k='highway' v='bus_stop' />
+                    </node>
+                '''
+
+        xml += node_xml
+
+        return xml, counter_arr

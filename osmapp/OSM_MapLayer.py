@@ -19,6 +19,8 @@ class MapLayer():
         self.relations = {}
 
     def to_xml(self, output='doc', upload=False, generator='Python script'):
+
+        counter = [-10000]
         """
             :type output: string doc for formatted file output, url for concise output
             :type generator: string documentation to be added to OSM xml file for tool that generated the XML data
@@ -44,15 +46,17 @@ class MapLayer():
         xml = '''<?xml version='1.0' encoding='UTF-8'?>{newline}<osm version='0.6'{upload}{generator}>{newline}'''.format(
             **outputparams)
 
-        for n in self.nodes:
+        '''for n in self.nodes:
             node = Node.objects.get(id=n)
             xml += node.to_xml(outputparams=outputparams)
         for w in self.ways:
             way = Way.objects.get(id=w)
-            xml += way.to_xml(outputparams=outputparams)
-        for rel_id,stop_names in self.relations.items():
+            xml += way.to_xml(outputparams=outputparams)'''
+        for rel_id, stop_names in self.relations.items():
             relation = OSM_Relation.objects.get(id=rel_id)
-            xml += relation.to_xml(outputparams=outputparams, stops=stop_names)
+            xml_returned, counter_arr = relation.to_xml(outputparams=outputparams, stops=stop_names, counter_arr=counter)
+            counter = counter_arr
+            xml += xml_returned
 
         xml += '''{newline}</osm>'''.format(**outputparams)
         return xml

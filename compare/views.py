@@ -527,7 +527,6 @@ def match_relations(request):
         maplayer.ways = ways
         maplayer.relations = all_relations_data
         xml = maplayer.to_xml()
-        print(xml)
         PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
         xmlfiledir = xmlfiledir = os.path.join(os.path.dirname(PROJECT_ROOT), 'osmapp', 'static')
         xmlfile = xmlfiledir + '/xmltojosm.osm'
