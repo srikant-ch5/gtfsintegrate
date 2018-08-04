@@ -308,7 +308,7 @@ def save_ag_corr(request):
             routes_list = Route.objects.filter(feed=entered_agency_corr_form_feed_id)
             routes_form = Correspondence_Route.objects.get(feed_id=entered_agency_corr_form_feed_id)
 
-            '''
+
             valid_routes_attr_list = {}
             long_names_list = []
             short_names_list = []
@@ -405,7 +405,7 @@ def save_ag_corr(request):
                         get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=False))
 
             print(complete_data)
-            print(routes_data)'''
+            print(routes_data)
             context['complete_data'] = json.dumps(data.complete_data)
             context['feed_id'] = entered_agency_corr_form_feed_id
             context['routes_data'] = json.dumps(data.routes_data)
@@ -480,12 +480,12 @@ def download_relation(request):
         with open(xmlfile, 'wb') as fh:
             fh.write(result.content)
         print("Data copied to xml")
-        '''nodes_ids, relation_ids, relations_info, way_ids = load(xmlfile, feed_id, 'comp_relation')
+        nodes_ids, relation_ids, relations_info, way_ids = load(xmlfile, feed_id, 'comp_relation')
         equalized_relation_info = equalizer(relations_info)
         Relation_data.objects.create(token=token, nodes_ids=nodes_ids,
                                      rels_ids=relation_ids,
                                      relations_info=equalized_relation_info, ways_ids=way_ids)
-        '''
+
     return render(request, 'gs/saved_relation.html', {'context': context})
 
 
@@ -493,6 +493,7 @@ def match_relations(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.POST.get('data'))
+            print(data)
         except Exception as e:
             print('******ERROR {} *****'.format(e))
 
@@ -515,15 +516,17 @@ def match_relations(request):
                     if rel_id == int(data[j][0]):
                         stop_names = []
                         for stop in data[j][2]:
-                            stop_names.append(stop[1])
+                            stop_ar = [stop[1], stop[2], stop[3]]
+                            stop_names.append(stop_ar)
                         ar = stop_names
                 all_relations_data.update({rel_id: ar})
 
+            print(all_relations_data)
         except Exception as e:
             print('****** ERROR {} *****'.format(e))
 
         maplayer = OSM_MapLayer.MapLayer()
-        maplayer.nodes =nodes
+        maplayer.nodes = nodes
         maplayer.ways = ways
         maplayer.relations = all_relations_data
         xml = maplayer.to_xml()
@@ -534,4 +537,10 @@ def match_relations(request):
         with open(xmlfile, 'w') as fh:
             fh.write(xml)
 
+        try:
+            josm_url = 'http://127.0.0.1:8111/open_file?filename=' + xmlfile
+            response = requests.get(josm_url)
+        except requests.exceptions.RequestException as e:
+            context['error'] += 'JOSM not open {}'.format(e)
+            print(e)
     return render(request, 'gs/saved_relation.html')

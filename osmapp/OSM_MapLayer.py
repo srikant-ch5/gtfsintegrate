@@ -31,7 +31,7 @@ class MapLayer():
             outputparams['indent'] = ''
         else:
             outputparams['newline'] = '\n'
-            outputparams['ident'] = '  '
+            outputparams['indent'] = '  '
 
         if upload is False:
             outputparams["upload"] = " upload='false'"
@@ -46,15 +46,16 @@ class MapLayer():
         xml = '''<?xml version='1.0' encoding='UTF-8'?>{newline}<osm version='0.6'{upload}{generator}>{newline}'''.format(
             **outputparams)
 
-        '''for n in self.nodes:
+        for n in self.nodes:
             node = Node.objects.get(id=n)
             xml += node.to_xml(outputparams=outputparams)
         for w in self.ways:
             way = Way.objects.get(id=w)
-            xml += way.to_xml(outputparams=outputparams)'''
+            xml += way.to_xml(outputparams=outputparams)
         for rel_id, stop_names in self.relations.items():
             relation = OSM_Relation.objects.get(id=rel_id)
-            xml_returned, counter_arr = relation.to_xml(outputparams=outputparams, stops=stop_names, counter_arr=counter)
+            xml_returned, counter_arr = relation.to_xml(outputparams=outputparams, stops=stop_names,
+                                                        counter_arr=counter)
             counter = counter_arr
             xml += xml_returned
 

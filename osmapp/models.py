@@ -122,13 +122,20 @@ class OSM_Primitive(models.Model):
         for key, value in tagsdict:
             self.add_tag(key=key, value=value)
 
-    def base_to_xml(self, primitive, outputparams=None, body='', attributes=[]):
+    def base_to_xml(self, primitive, outputparams=None, body='', attributes=[], modify=False):
         if outputparams is None:
             _outputparams = {'newline': '\n', 'indent': '  '}
         else:
             _outputparams = outputparams
         _outputparams['primitive'] = primitive
-        self.xml = '{newline}<{primitive} '.format(**_outputparams)
+
+        if modify:
+            self.xml = "{newline}<{primitive} action='modify' ".format(**_outputparams)
+        else:
+            self.xml = '{newline}<{primitive} '.format(**_outputparams)
+
+        tags = self.tags.all()
+
         for attr, value in self.__dict__.items():
             if attr in attributes:
                 if attr == 'timestamp':
@@ -145,9 +152,10 @@ class OSM_Primitive(models.Model):
                 else:
                     self.xml += "{}='{}' ".format(attr, str(value), **_outputparams)
 
-        self.xml += '>'
-
-        tags = self.tags.all()
+        if tags.count() == 0:
+            self.xml += '/>'
+        else:
+            self.xml += '>'
 
         if body:
             self.xml += body
@@ -155,7 +163,8 @@ class OSM_Primitive(models.Model):
         for tag in tags:
             self.xml += tag.to_xml(_outputparams)
 
-        self.xml += '{newline}</{primitive}>'.format(**_outputparams)
+        if tags.count() > 0:
+            self.xml += '{newline}</{primitive}>'.format(**_outputparams)
 
         return self.xml
 
@@ -220,7 +229,7 @@ class Way(OSM_Primitive):
 
         attributes = ['id', 'action', 'timestamp', 'uid', 'user', 'visible', 'version', 'changeset']
         for node in self.nodes.all():
-            body += "{newline}  <nd ref='{node_id}' />".format(node_id=node.id, **_outputparams)
+            body += "{newline}{indent}<nd ref='{node_id}' />".format(node_id=node.id, **_outputparams)
         return super().base_to_xml(body=body, attributes=attributes, primitive='way')
 
 
@@ -298,16 +307,17 @@ class OSM_Relation(OSM_Primitive):
         return rm
 
     def to_xml(self, outputparams=None, stops=[], body='', counter_arr=[]):
+
         if outputparams is None:
             _outputparams = {'newline': '\n'}
         else:
             _outputparams = outputparams
         attributes = ['id', 'action', 'timestamp', 'uid', 'user', 'visible', 'version', 'changeset']
-        print(stops)
-
+        modify = False
         new_nodes = []
 
         if len(stops) > 0:
+            modify = True
             stops_in_osm = []
             for member in self.memberrelation_set.filter(type='n'):
                 node = Node.objects.get(id=member.member_node.id)
@@ -322,61 +332,79 @@ class OSM_Relation(OSM_Primitive):
 
                 stops_in_osm.append(data)
             print(stops_in_osm)
-            for i in range(0, len(stops)):
-                for key, value in stops_in_osm[i].items():
-                    if key == 'node_name':
-                        if stops[i] == stops_in_osm[i]['node_name'] or stops_in_osm[i]['node_name'] == 'L&apos;Étrade':
-                            role = stops_in_osm[i]['mem_role']
-                            node_id = stops_in_osm[i]['node_id']
-                            body += "{newline}  <member type='{primtype}' ref='{ref}' role='{role}' />".format(
-                                primtype='node', ref=node_id, role=role, **outputparams)
-                        else:
-                            neg_number = counter_arr[len(counter_arr) - 1] - 1
-                            counter_arr.append(neg_number)
 
-                            stops_in_osm.insert(i, {'node_id': '-1', 'mem_role': ''})
-                            node_id = str(neg_number)
-                            new_ar = [stops[i], node_id]
-                            new_nodes.append(new_ar)
-                            role = 'platform'
-                            body += "{newline}  <member type='{primtype}' ref='{ref}' role='{role}' />".format(
-                                primtype='node', ref=node_id, role=role, **outputparams)
+            for i in range(0, len(stops)):
+                if i < len(stops_in_osm):
+                    for key, value in stops_in_osm[i].items():
+                        if key == 'node_name':
+                            if stops[i][0] == stops_in_osm[i]['node_name'] or stops_in_osm[i][
+                                'node_name'] == 'L&apos;Étrade':
+                                role = stops_in_osm[i]['mem_role']
+                                node_id = stops_in_osm[i]['node_id']
+                                body += "{newline}{indent}<member type='{primtype}' ref='{ref}' role='{role}' />".format(
+                                    primtype='node', ref=node_id, role=role, **outputparams)
+                            else:
+                                neg_number = counter_arr[len(counter_arr) - 1] - 1
+                                counter_arr.append(neg_number)
+
+                                stops_in_osm.insert(i, {'node_id': '-1', 'mem_role': ''})
+                                node_id = str(neg_number)
+                                new_ar = [stops[i][0], stops[i][1], stops[i][2], node_id]
+                                new_nodes.append(new_ar)
+                                role = 'platform'
+                                body += "{newline}{indent}<member type='{primtype}' ref='{ref}' role='{role}' />".format(
+                                    primtype='node', ref=node_id, role=role, **outputparams)
+                else:
+                    neg_number = counter_arr[len(counter_arr) - 1] - 1
+                    counter_arr.append(neg_number)
+
+                    stops_in_osm.insert(i, {'node_id': '-1', 'mem_role': ''})
+                    node_id = str(neg_number)
+                    new_ar = [stops[i][0], stops[i][1], stops[i][2], node_id]
+                    new_nodes.append(new_ar)
+                    role = 'platform'
+                    body += "{newline}{indent}<member type='{primtype}' ref='{ref}' role='{role}' />".format(
+                        primtype='node', ref=node_id, role=role, **outputparams)
+
 
         elif len(stops) == 0:
             for member_node in self.memberrelation_set.filter(type='n'):
                 mem_role = member_node.role
                 mem_type = 'node'
                 mem_id = member_node.member_node.id
-                body += "{newline}  <member type='{primtype}' ref='{ref}' role='{role}' />".format(
+                body += "{newline}{indent}<member type='{primtype}' ref='{ref}' role='{role}' />".format(
                     primtype=mem_type, ref=mem_id, role=mem_role, **outputparams)
 
         for member_way in self.memberrelation_set.filter(type='w'):
             mem_role = member_way.role
             mem_type = 'way'
             mem_id = member_way.member_way.id
-            body += "{newline}  <member type='{primtype}' ref='{ref}' role='{role}' />".format(
+            body += "{newline}{indent}<member type='{primtype}' ref='{ref}' role='{role}' />".format(
                 primtype=mem_type, ref=mem_id, role=mem_role, **outputparams)
 
         for member_relation in self.memberrelation_set.filter(type='r'):
             mem_role = member_relation.role
             mem_type = 'relation'
             mem_id = member_relation.member_relation.id
-            body += "{newline}  <member type='{primtype}' ref='{ref}' role='{role}' />".format(
+            body += "{newline}{indent}<member type='{primtype}' ref='{ref}' role='{role}' />".format(
                 primtype=mem_type, ref=mem_id, role=mem_role, **outputparams)
 
-        xml = super().base_to_xml(outputparams=_outputparams, attributes=attributes, body=body, primitive='relation')
+        xml = super().base_to_xml(outputparams=_outputparams, attributes=attributes, body=body, primitive='relation',
+                                  modify=modify)
 
         node_xml = ''
         if len(new_nodes) > 0:
             for new_node in new_nodes:
                 new_node_name = new_node[0]
-                new_node_id = new_node[1]
+                new_node_lat = str(new_node[1])
+                new_node_lon = str(new_node[2])
+                new_node_id = str(new_node[3])
                 node_xml += '''
-                    <node id="'''+new_node_id+''''" lat="45.6412701" lon="-1.0443883" version="1" timestamp="2018-04-20T15:37:11Z" changeset="58267589" uid="23981" user="NaSH">
-                        <tag k="bus" v="yes"/>
-                        <tag k="name" v="'''+new_node_name+'''"/>
-                        <tag k='highway' v='bus_stop' />
-                    </node>
+    <node id="''' + new_node_id + '''" action='modify' lat="''' + new_node_lat + '''" lon="''' + new_node_lon + '''" version="1" >
+        <tag k="bus" v="yes"/>
+        <tag k="name" v="''' + new_node_name + '''"/>
+        <tag k='highway' v='bus_stop' />
+    </node>
                 '''
 
         xml += node_xml
