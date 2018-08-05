@@ -14,6 +14,8 @@ from compare.models import CMP_Stop
 from multigtfs.models import Feed, Stop
 from osmapp.models import Node, Tag
 from .models import GTFSForm
+import requests
+from urllib.parse import urlencode
 
 topleft_block_stops = []
 topright_block_stops = []
@@ -232,12 +234,13 @@ def save_comp(gtfs_stop, osm_stop, feed_id, stops_layer):
             ref_tag = tag.add_tag('ref', osm_stop_ref)
             osm_stop_obj.tags.add(ref_tag)
 
-        xml = cmp_stop_obj.to_xml('yes', version_inc=version_inc_cond)
+        outputparams = {'newline': '', 'indent': ''}
+        xml = cmp_stop_obj.cmp_single_node_to_xml('yes', version_inc=version_inc_cond)
 
     return xml
 
 
-def connect_to_JOSM(xml):
+def connect_to_JOSM_using_file(xml):
     PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
     xmlfiledir = os.path.join(os.path.dirname(PROJECT_ROOT), 'osmapp', 'static')
     xmlfile = xmlfiledir + '/nodesosm/singlenode.osm'
@@ -256,6 +259,10 @@ def connect_to_JOSM(xml):
     except requests.exceptions.RequestException as e:
         context['error'] += 'JOSM not open {}'.format(e)
 
+
+def connect_to_JOSM_using_link(link):
+    print(link)
+    response = requests.get("http://localhost:8111/load_data?"+urlencode(link))
 
 '''Methods for downloading and reseting feeds'''
 

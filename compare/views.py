@@ -6,7 +6,7 @@ from conversionapp.models import Correspondence, ExtraField, Correspondence_Rout
 from django.db import connection
 from django.shortcuts import render
 from gs.forms import Correspondence_Route_Form, Correspondence_Agency_Form
-from gs.tasks import save_comp, connect_to_JOSM, get_itineraries
+from gs.tasks import save_comp, connect_to_JOSM_using_link, get_itineraries
 from multigtfs.models import Stop, Feed, Route
 from osmapp.views import load
 from osmapp.models import Node, Way, OSM_Relation, Tag, KeyValueString
@@ -110,7 +110,6 @@ def match_stop(request):
 
         data_to_match_json = request.POST.get('data_to_match')
         data_to_match = json.loads(data_to_match_json)
-
         print(data_to_match)
 
         feed_id = data_to_match[0]['feed_id']
@@ -119,8 +118,8 @@ def match_stop(request):
 
         generator = 'Python Script'
         outputparams = {
-            'newline': '\n',
-            'indent': ' ',
+            'newline': '',
+            'indent': '',
             'upload': '',
             'generator': " generator='{}'".format(generator)
         }
@@ -129,7 +128,10 @@ def match_stop(request):
             **outputparams)
         xml += save_comp(gtfs_stop_data, osm_stop_data, feed_id, stops_layer=False)
         xml += '''{newline}</osm>'''.format(**outputparams)
-        connect_to_JOSM(xml)
+
+        values = {'data': xml,'new_layer':'true'}
+
+        connect_to_JOSM_using_link(values)
 
         print(xml)
 
@@ -308,7 +310,6 @@ def save_ag_corr(request):
             routes_list = Route.objects.filter(feed=entered_agency_corr_form_feed_id)
             routes_form = Correspondence_Route.objects.get(feed_id=entered_agency_corr_form_feed_id)
 
-
             valid_routes_attr_list = {}
             long_names_list = []
             short_names_list = []
@@ -382,7 +383,7 @@ def save_ag_corr(request):
                             xml += "<tag k='" + str(tag_key) + "' v='" + str(tag_val) + "' />\n"
 
             print(xml)
-
+            '''
             complete_data = []
 
             if '' in long_names_list:
@@ -406,7 +407,7 @@ def save_ag_corr(request):
                         get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=False))
 
             print(complete_data)
-            print(routes_data)
+            print(routes_data)'''
             context['complete_data'] = json.dumps(data.complete_data)
             context['feed_id'] = entered_agency_corr_form_feed_id
             context['routes_data'] = json.dumps(data.routes_data)
@@ -481,12 +482,12 @@ def download_relation(request):
         with open(xmlfile, 'wb') as fh:
             fh.write(result.content)
         print("Data copied to xml")
-        nodes_ids, relation_ids, relations_info, way_ids = load(xmlfile, feed_id, 'comp_relation')
+        '''nodes_ids, relation_ids, relations_info, way_ids = load(xmlfile, feed_id, 'comp_relation')
         equalized_relation_info = equalizer(relations_info)
         Relation_data.objects.create(token=token, nodes_ids=nodes_ids,
                                      rels_ids=relation_ids,
                                      relations_info=equalized_relation_info, ways_ids=way_ids)
-
+        '''
     return render(request, 'gs/saved_relation.html', {'context': context})
 
 
@@ -530,8 +531,8 @@ def match_relations(request):
         maplayer.nodes = nodes
         maplayer.ways = ways
         maplayer.relations = all_relations_data
-        xml = maplayer.to_xml()
-        PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+        link = maplayer.to_url()
+        '''PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
         xmlfiledir = xmlfiledir = os.path.join(os.path.dirname(PROJECT_ROOT), 'osmapp', 'static')
         xmlfile = xmlfiledir + '/xmltojosm.osm'
 
@@ -543,5 +544,6 @@ def match_relations(request):
             response = requests.get(josm_url)
         except requests.exceptions.RequestException as e:
             context['error'] += 'JOSM not open {}'.format(e)
-            print(e)
+            print(e)'''
+        response = requests.get(link)
     return render(request, 'gs/saved_relation.html')
