@@ -346,7 +346,9 @@ class OSM_Relation(OSM_Primitive):
                                 body += "{newline}{indent}<member type='{primtype}' ref='{ref}' role='{role}' />".format(
                                     primtype='node', ref=node_id, role=role, **outputparams)
                             else:
-                                print('Fuzz of {} {} {}'.format(stops[i][0],stops_in_osm[i]['node_name'], fuzz.ratio(stops[i][0], xmlsafe(stops_in_osm[i]['node_name']))))
+                                print('Fuzz of {} {} {}'.format(stops[i][0], stops_in_osm[i]['node_name'],
+                                                                fuzz.ratio(stops[i][0],
+                                                                           xmlsafe(stops_in_osm[i]['node_name']))))
 
                                 neg_number = counter_arr[len(counter_arr) - 1] - 1
                                 counter_arr.append(neg_number)
