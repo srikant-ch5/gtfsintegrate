@@ -5,6 +5,10 @@ from django.contrib.gis.geos import Point, LineString
 from django.contrib.postgres.fields import ArrayField
 from django.db.models import Manager as GeoManager
 
+# for string matcing
+from fuzzywuzzy import fuzz
+from fuzzywuzzy import process
+
 
 # model for storing bounds specific to the operator
 
@@ -331,30 +335,34 @@ class OSM_Relation(OSM_Primitive):
                         data = {'node_id': node.id, 'mem_role': mem_role}
 
                 stops_in_osm.append(data)
-            print(stops_in_osm)
 
             for i in range(0, len(stops)):
                 if i < len(stops_in_osm):
                     for key, value in stops_in_osm[i].items():
                         if key == 'node_name':
-                            if stops[i][0] == stops_in_osm[i]['node_name'] or stops_in_osm[i][
-                                'node_name'] == 'L&apos;Étrade':
+                            if fuzz.ratio(stops[i][0], xmlsafe(stops_in_osm[i]['node_name'])) >= 50:
                                 role = stops_in_osm[i]['mem_role']
                                 node_id = stops_in_osm[i]['node_id']
                                 body += "{newline}{indent}<member type='{primtype}' ref='{ref}' role='{role}' />".format(
                                     primtype='node', ref=node_id, role=role, **outputparams)
                             else:
+                                print('Fuzz of {} {} {}'.format(stops[i][0],stops_in_osm[i]['node_name'], fuzz.ratio(stops[i][0], xmlsafe(stops_in_osm[i]['node_name']))))
+
                                 neg_number = counter_arr[len(counter_arr) - 1] - 1
                                 counter_arr.append(neg_number)
-
-                                stops_in_osm.insert(i, {'node_id': '-1', 'mem_role': ''})
                                 node_id = str(neg_number)
+
                                 new_ar = [stops[i][0], stops[i][1], stops[i][2], node_id]
                                 new_nodes.append(new_ar)
+
+                                stops_in_osm.insert(i, {'node_id': str(neg_number), 'mem_role': 'paltform',
+                                                        'node_name': stops[i][0]})
+
                                 role = 'platform'
                                 body += "{newline}{indent}<member type='{primtype}' ref='{ref}' role='{role}' />".format(
                                     primtype='node', ref=node_id, role=role, **outputparams)
                 else:
+
                     neg_number = counter_arr[len(counter_arr) - 1] - 1
                     counter_arr.append(neg_number)
 
@@ -365,7 +373,6 @@ class OSM_Relation(OSM_Primitive):
                     role = 'platform'
                     body += "{newline}{indent}<member type='{primtype}' ref='{ref}' role='{role}' />".format(
                         primtype='node', ref=node_id, role=role, **outputparams)
-
 
         elif len(stops) == 0:
             for member_node in self.memberrelation_set.filter(type='n'):
@@ -396,16 +403,12 @@ class OSM_Relation(OSM_Primitive):
         if len(new_nodes) > 0:
             for new_node in new_nodes:
                 new_node_name = new_node[0]
-                new_node_lat = str(new_node[1])
-                new_node_lon = str(new_node[2])
+                new_node_lon = str(new_node[1])
+                new_node_lat = str(new_node[2])
                 new_node_id = str(new_node[3])
-                node_xml += '''
-    <node id="''' + new_node_id + '''" action='modify' lat="''' + new_node_lat + '''" lon="''' + new_node_lon + '''" version="1" >
-        <tag k="bus" v="yes"/>
-        <tag k="name" v="''' + new_node_name + '''"/>
-        <tag k='highway' v='bus_stop' />
-    </node>
-                '''
+                node_xml += "{newline}<node id='{nodeid}' action='modify' lat='{nodelat}' lon='{nodelon}' version='1' >{newline}{indent}<tag k='bus' v='yes'/>{newline}{indent}<tag k='name' v='{nodename}' />{newline}{indent}<tag k='highway' v='bus_stop' />{newline}</node>".format(
+                    newline=_outputparams['newline'], indent=_outputparams['indent'], nodelat=new_node_lat,
+                    nodelon=new_node_lon, nodename=new_node_name, nodeid=new_node_id)
 
         xml += node_xml
 

@@ -166,7 +166,7 @@ def match_stops(request):
         print(xml)
         connect_to_JOSM(xml)
 
-        '''
+
         stops_layer = True
         data_in_string = request.POST.get('match_data')
         data_in_json = json.loads(data_in_string)
@@ -181,11 +181,11 @@ def match_stops(request):
             'upload': '',
             'generator': " generator='{}'".format(generator)
         }
-        '''
+
         # xml = '''<?xml version='1.0' encoding='UTF-8' ?>{newline}<osm version='0.6'{upload}{generator}>{newline}'''.format(
         #    **outputparams)
 
-        '''
+
         for i in range(0, len(data_in_json)):
             str = data_in_json[i]['gtfs_stop'].split('-')
             gtfs_feed_id = str[0]
@@ -193,7 +193,7 @@ def match_stops(request):
             osm_stop_id = data_in_json[i]['osm_stop']
 
             xml += save_comp(gtfs_feed_id, gtfs_stop_id, osm_stop_id, tags_data[i], stops_layer)
-        '''
+
         # xml += '''{newline}</osm>'''.format(**outputparams)
         # connect_to_JOSM(xml)
 
@@ -307,7 +307,6 @@ def save_ag_corr(request):
             # get the routes form with that feed
             routes_list = Route.objects.filter(feed=entered_agency_corr_form_feed_id)
             routes_form = Correspondence_Route.objects.get(feed_id=entered_agency_corr_form_feed_id)
-
 
             valid_routes_attr_list = {}
             long_names_list = []
@@ -485,7 +484,6 @@ def download_relation(request):
         Relation_data.objects.create(token=token, nodes_ids=nodes_ids,
                                      rels_ids=relation_ids,
                                      relations_info=equalized_relation_info, ways_ids=way_ids)
-
     return render(request, 'gs/saved_relation.html', {'context': context})
 
 

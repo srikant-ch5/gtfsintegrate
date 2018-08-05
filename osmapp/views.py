@@ -13,6 +13,9 @@ from gs.tasks import getmidpoint, reduce_bounds
 from multigtfs.models import Feed
 from .models import Tag, KeyValueString, Node, Way, OSM_Relation
 
+def xmlsafe(name):
+    return str(name).replace('&', '&amp;').replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;").replace('"',
+                                                                                                                    "&quot;")
 
 def get_osm_data(feed_id):
     print("Osm data in view")
@@ -223,6 +226,7 @@ def load(xmlfile, feed_id, purpose):
                 if getkey_fromxml == 'name':
                     single_node.append(getkey_fromxml)
                     single_node.append(getvalue_fromxml)
+                    getvalue_fromxml = xmlsafe(getvalue_fromxml)
                 elif getkey_fromxml == 'ref':
                     single_node.append(getkey_fromxml)
                     single_node.append(getvalue_fromxml)

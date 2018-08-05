@@ -9,6 +9,7 @@ django-rest-swagger==2.2.0
 django==2.0.6
 djangorestframework==3.8.2
 flup6==1.1.1
+fuzzywuzzy==0.16.0
 geographiclib==1.49
 geojson==2.4.0
 gunicorn==19.8.1
@@ -25,6 +26,7 @@ pycodestyle==2.4.0
 pylint==1.9.2
 python-decouple==3.1
 pytz==2018.4
+python-Levenshtein==0.12.0
 raven==6.9.0
 requests==2.19.0
 shapely==1.6.4
