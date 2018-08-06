@@ -581,7 +581,6 @@ def dividemap(east=None, west=None, north=None, south=None, northeast_lat=None, 
     plt.show()
     '''
 
-
 def getmidpoint(lat1, lon1, lat2, lon2):
     l = Geodesic.WGS84.InverseLine(lat1, lon1, lat2, lon2)
 
@@ -634,3 +633,18 @@ def plotblock(v0, v1, v2, v3, stops_coordinates, block=None):
     '''
 
     return block
+
+
+'''For gettings keys'''
+def get_keys(feed_id , type_of_nodes):
+    nodes_in_feed = Node.objects.filter(feed=feed_id, purpose=type_of_nodes)
+    keys = []
+
+    for node in nodes_in_feed:
+        node_tags = node.tags
+
+        for tag in node_tags.all():
+            if not tag.key.value in keys:
+                keys.append(tag.key.value)
+
+    return keys

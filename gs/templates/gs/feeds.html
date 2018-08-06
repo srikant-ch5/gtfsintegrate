@@ -1,10 +1,11 @@
 {% extends 'gs/home.html' %}
 {% block main %}
+<br><br><br>
     {% if feed_list %}
         <ul>
             {% for single_feed in feed_list %}
                 <li>
-                    <h3>{{ single_feed.name }}</h3>
+                    <h2>{{ single_feed.name }}</h2>
                 </li>
             {% endfor % %}
         </ul>

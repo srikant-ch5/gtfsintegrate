@@ -129,7 +129,7 @@ def match_stop(request):
         xml += save_comp(gtfs_stop_data, osm_stop_data, feed_id, stops_layer=False)
         xml += '''{newline}</osm>'''.format(**outputparams)
 
-        values = {'data': xml,'new_layer':'true'}
+        values = {'data': xml, 'new_layer': 'true'}
 
         connect_to_JOSM_using_link(values)
 
@@ -151,8 +151,8 @@ def match_stops(request):
 
         generator = 'Python Script'
         outputparams = {
-            'newline': '\n',
-            'indent': ' ',
+            'newline': '',
+            'indent': '',
             'upload': '',
             'generator': " generator='{}'".format(generator)
         }
@@ -165,9 +165,11 @@ def match_stops(request):
             xml += save_comp(gtfs_stop_data, osm_stop_data, feed_id, stops_layer=True)
 
         xml += '''{newline}</osm>'''.format(**outputparams)
-        print(xml)
-        connect_to_JOSM(xml)
+        values = {'data': xml, 'new_layer': 'true'}
 
+        connect_to_JOSM_using_link(values)
+
+        #connect to JOSM using xml file
         '''
         stops_layer = True
         data_in_string = request.POST.get('match_data')
@@ -383,7 +385,7 @@ def save_ag_corr(request):
                             xml += "<tag k='" + str(tag_key) + "' v='" + str(tag_val) + "' />\n"
 
             print(xml)
-            '''
+
             complete_data = []
 
             if '' in long_names_list:
@@ -407,10 +409,10 @@ def save_ag_corr(request):
                         get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=False))
 
             print(complete_data)
-            print(routes_data)'''
-            context['complete_data'] = json.dumps(data.complete_data)
+            print(routes_data)
+            context['complete_data'] = json.dumps(complete_data)
             context['feed_id'] = entered_agency_corr_form_feed_id
-            context['routes_data'] = json.dumps(data.routes_data)
+            context['routes_data'] = json.dumps(routes_data)
         return render(request, 'gs/saved_relation.html', {'context': context, 'agency_form': agency_form})
 
 
@@ -482,12 +484,12 @@ def download_relation(request):
         with open(xmlfile, 'wb') as fh:
             fh.write(result.content)
         print("Data copied to xml")
-        '''nodes_ids, relation_ids, relations_info, way_ids = load(xmlfile, feed_id, 'comp_relation')
+        nodes_ids, relation_ids, relations_info, way_ids = load(xmlfile, feed_id, 'comp_relation')
         equalized_relation_info = equalizer(relations_info)
         Relation_data.objects.create(token=token, nodes_ids=nodes_ids,
                                      rels_ids=relation_ids,
                                      relations_info=equalized_relation_info, ways_ids=way_ids)
-        '''
+
     return render(request, 'gs/saved_relation.html', {'context': context})
 
 
@@ -532,7 +534,9 @@ def match_relations(request):
         maplayer.ways = ways
         maplayer.relations = all_relations_data
         link = maplayer.to_url()
-        '''PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+        '''
+        #connect to JOSM using file
+        PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
         xmlfiledir = xmlfiledir = os.path.join(os.path.dirname(PROJECT_ROOT), 'osmapp', 'static')
         xmlfile = xmlfiledir + '/xmltojosm.osm'
 

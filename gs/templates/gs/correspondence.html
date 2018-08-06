@@ -5,11 +5,22 @@
     <img id="loading-image" src='http://i.stack.imgur.com/FhHRx.gif' alt="Loading..."/>
 </div>
 <div class="container">
-    <h2 id="feed-name-heading">You are working on {{ context.feed_name }}</h2>
-    <h3>{{ context.feed_download_status }}</h3>
-    <h3>{{ context.error }}</h3>
-    <h3>{{ context.connection_error }}</h3>
-    <h3>{{ context.saved_status }}</h3>
+    
+    <h2 id="feed-name-heading-corr">You are working on {{ context.feed_name }} Feed</h2>
+    <ul>
+        {% if context.feed_download_status %}
+        <li><h4>{{ context.feed_download_status }}</h4></li>
+        {%endif%}
+        {% if context.error %}
+        <li><h4>{{ context.error }}</h4></li>
+        {%endif%}
+        {%if context.connection_error%}
+        <li><h4>{{ context.connection_error }}</h4></li>
+        {%endif%}
+        {%if context.saved_status%}
+        <li><h4>{{ context.saved_status }}</h4></li>
+        {%endif%}
+    </ul>
 
     <h1>Define Correspondence</h1>
 
@@ -29,7 +40,7 @@
                 <div class="tags-box">
                     <h2>Keys in downloaded OSM data</h2>
                     {% for key_string in context.key_strings %}
-                    <div><h3 id='tag-key'>-> {{ key_string }}</a></h3></div>
+                    <div><h4 id='tag-key'>-> {{ key_string }}</a></h4></div>
                     {% endfor %}
                 </div>
             </div>

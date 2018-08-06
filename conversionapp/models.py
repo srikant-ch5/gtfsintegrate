@@ -30,25 +30,6 @@ class Correspondence(models.Model):
         max_length=255, blank=True, null=True,
         help_text="Timezone of the stop")
 
-    agency_name = models.CharField(max_length=255, blank=True, null=True,
-                                   help_text="Full name of the transit agency")
-    agency_id = models.CharField(
-        max_length=255, blank=True, null=True,
-        help_text="Unique identifier for transit agency")
-    agency_url = models.CharField(max_length=255,
-                                  blank=True, null=True, help_text="URL of the transit agency")
-    agency_timezone = models.CharField(
-        max_length=255, blank=True, null=True,
-        help_text="Timezone of the agency")
-    agency_lang = models.CharField(
-        max_length=2, blank=True, null=True,
-        help_text="ISO 639-1 code for the primary language")
-    agency_phone = models.CharField(
-        max_length=255, blank=True, null=True,
-        help_text="Voice telephone number")
-    agency_fare_url = models.CharField(max_length=255,
-                                       blank=True, null=True, help_text="URL for purchasing tickets online")
-
     def __str__(self):
         return '{} '.format(self.id)
 

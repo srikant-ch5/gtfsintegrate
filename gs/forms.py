@@ -38,14 +38,7 @@ class CorrespondenceForm(forms.ModelForm):
             'stop_url',
             'stop_location_type',
             'stop_parent_station',
-            'stop_timezone',
-            'agency_name',
-            'agency_id',
-            'agency_url',
-            'agency_timezone',
-            'agency_lang',
-            'agency_phone',
-            'agency_fare_url')
+            'stop_timezone')
 
     def __init__(self, *args, **kwargs):
         super(CorrespondenceForm, self).__init__(*args, **kwargs)
@@ -89,34 +82,6 @@ class CorrespondenceForm(forms.ModelForm):
         self.fields['stop_timezone'].widget.attrs = {
             'id': 'stop_timezone',
             'name': 'Stop timezone'
-        }
-        self.fields['agency_name'].widget.attrs = {
-            'id': 'agency_name',
-            'name': 'Agency name'
-        }
-        self.fields['agency_id'].widget.attrs = {
-            'id': 'agency_id',
-            'name': 'Agency id'
-        }
-        self.fields['agency_url'].widget.attrs = {
-            'id': 'agency_url',
-            'name': 'Agency url'
-        }
-        self.fields['agency_timezone'].widget.attrs = {
-            'id': 'agency_timezone',
-            'name': 'Agency timezone'
-        }
-        self.fields['agency_lang'].widget.attrs = {
-            'id': 'agency_lang',
-            'name': 'Agency lang'
-        }
-        self.fields['agency_phone'].widget.attrs = {
-            'id': 'agency_phone',
-            'name': 'Agency phone'
-        }
-        self.fields['agency_fare_url'].widget.attrs = {
-            'id': 'agency_fare_url',
-            'name': 'Agency fare url'
         }
 
 

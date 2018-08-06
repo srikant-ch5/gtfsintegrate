@@ -28,15 +28,6 @@ def save_correspondence(request):
                 corr_form.stop_location_type = entered_corr_form.stop_location_type
                 corr_form.stop_parent_station = entered_corr_form.stop_parent_station
                 corr_form.stop_timezone = entered_corr_form.stop_timezone
-
-                corr_form.agency_name = entered_corr_form.agency_name
-                corr_form.agency_id = entered_corr_form.agency_id
-                corr_form.agency_url = entered_corr_form.agency_url
-                corr_form.agency_timezone = entered_corr_form.agency_timezone
-                corr_form.agency_lang = entered_corr_form.agency_lang
-                corr_form.agency_phone = entered_corr_form.agency_phone
-                corr_form.agency_fare_url = entered_corr_form.agency_fare_url
-
                 corr_form.save()
 
             else:

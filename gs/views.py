@@ -8,7 +8,7 @@ from multigtfs.models import Feed
 from osmapp.views import get_osm_data
 from .forms import GTFSInfoForm, CorrespondenceForm
 from .models import GTFSForm
-from .tasks import download_feed_task, reset_feed
+from .tasks import download_feed_task, reset_feed, get_keys
 
 
 def feed_form(request):
@@ -160,11 +160,13 @@ def correspondence_view(request):
             context['error'], context['form_reset_'], feed_id = reset_feed(formId, associated_feed_id)
             print(feed_id)
             feed_name = Feed.objects.get(id=feed_id).name
+            request.session['feed'] = feed_name
 
             context['feed_id'] = feed_id
-            context['feed_name'] = feed_name
+            context['feed_name'] = feed_name.split('-')[0]
 
             get_osm_data(feed_id)
+            context['key_strings'] = get_keys(feed_id, 'cmp_nodes')
         else:
             if form.is_valid():
                 gtfs_feed_info = form.save()
@@ -181,10 +183,13 @@ def correspondence_view(request):
                 gtfs_form_obj.save()
 
                 feed_obj = Feed.objects.get(id=feed_id)
+                feed_name = feed_obj.name
+                request.session['feed'] = feed_name
                 context['feed_id'] = feed_id
-                context['feed_name'] = feed_obj.name
+                context['feed_name'] = feed_name.split('-')[0]
 
                 get_osm_data(feed_id)
+                context['key_strings'] = get_keys(feed_id, 'cmp_nodes')
 
         corr_form = CorrespondenceForm()
 
