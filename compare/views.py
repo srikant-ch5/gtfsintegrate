@@ -6,7 +6,7 @@ from conversionapp.models import Correspondence, ExtraField, Correspondence_Rout
 from django.db import connection
 from django.shortcuts import render
 from gs.forms import Correspondence_Route_Form, Correspondence_Agency_Form
-from gs.tasks import save_comp, connect_to_JOSM_using_link, get_itineraries
+from gs.tasks import save_comp, connect_to_JOSM_using_link, get_itineraries, save_single_comp
 from multigtfs.models import Stop, Feed, Route
 from osmapp.views import load
 from osmapp.models import Node, Way, OSM_Relation, Tag, KeyValueString
@@ -126,7 +126,7 @@ def match_stop(request):
 
         xml = '''<?xml version='1.0' encoding='UTF-8' ?>{newline}<osm version='0.6'{upload}{generator}>{newline}'''.format(
             **outputparams)
-        xml += save_comp(gtfs_stop_data, osm_stop_data, feed_id, stops_layer=False)
+        xml += save_single_comp(gtfs_stop_data, osm_stop_data, feed_id, stops_layer=False)
         xml += '''{newline}</osm>'''.format(**outputparams)
 
         values = {'data': xml, 'new_layer': 'true'}

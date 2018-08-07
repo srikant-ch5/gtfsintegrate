@@ -381,11 +381,16 @@
                     ref_from = 'gtfs';
                 }
             }
-
+        
+        if(this.name == undefined){
+            name_to_be_assigned = clicked_gtfs_stop['name'];
+        }else{
+            name_to_be_assigned = this.name;
+        }
 
         clicked_osm_stop = {
             'node_id': osm_stop,
-            'osm_name': this.name,
+            'osm_name': name_to_be_assigned,
             'comp_name':t_name,
             'ref':reference
         };
@@ -466,8 +471,6 @@
                 alert(new_marker_lon)
                 $('#stopreffromgtfs').text('>');
                 $('#stopnamefromgtfs').text('>');
-                $('#stopnamefromosm').html('<a class="btn btn-primary"> + </a>');
-                $('#stopreffromosm').html('<a class="btn btn-primary"> + </a>');
                 $('#resultstopref').text(gtfs_stop_id);
                 $('#resultstopname').text(gtfs_stop_name);
                 $('#export-new-stop').show();
@@ -735,7 +738,7 @@ function show_on_result(name, ref, name_from, ref_from){
 }
 
 function stopnamefromgtfsclick(){
-    clicked_osm_stop['cmp_name'] = clicked_gtfs_stop['name'];
+    clicked_osm_stop['osm_name'] = clicked_gtfs_stop['name'];
     $('#resultstopname').text(clicked_gtfs_stop['name']);
     $('#stopnamefromgtfs').html('<h4> > </h4>');
     $('#stopnamefromosm').html('<h4> - </h4>');

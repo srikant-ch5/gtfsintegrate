@@ -65,6 +65,30 @@ class Tag(models.Model):
 
         return self.xml
 
+    def node_tags_to_xml(self, outputparams=None, name=None):
+        if outputparams is None:
+            _outputparams = {'newline': '\n', 'indent': ' '}
+        else:
+            _outputparams = outputparams
+
+        key = self.key.value
+        value = self.value.value.replace('&', '&amp;').replace("'", "&apos;").replace("<", "&lt;").replace(">",
+                                                                                                           "&gt;").replace(
+            '"', "&quot;")
+
+        if key == 'name' and not name is None:
+            print("***** Changing names *********")
+            self.xml = ''
+
+            self.xml += "{newline}{indent}<tag k='{key}' v='{value}' />".format(key=key, value=name, **_outputparams)
+
+        else:
+            self.xml = ''
+
+            self.xml += "{newline}{indent}<tag k='{key}' v='{value}' />".format(key=key, value=value, **_outputparams)
+
+        return self.xml
+
     def add_tag(self, key, value):
 
         # check if the tag with same key
@@ -186,7 +210,7 @@ class Node(OSM_Primitive):
 
         return super().base_to_xml(primitive='node', attributes=attributes)
 
-    def single_node_to_xml(self, version_inc, outputparams=None):
+    def single_node_to_xml(self, version_inc, outputparams=None, name=''):
 
         if outputparams is None:
             _outputparams = {'newline': '\n', 'indent': ' '}
@@ -228,7 +252,7 @@ class Node(OSM_Primitive):
         tags = self.tags.all()
 
         for tag in tags:
-            self.xml += tag.to_xml(_outputparams)
+            self.xml += tag.node_tags_to_xml(outputparams=_outputparams, name=name)
 
         self.xml += '{newline}</node>'.format(**_outputparams)
         return self.xml
@@ -393,7 +417,9 @@ class OSM_Relation(OSM_Primitive):
                                 body += "{newline}{indent}<member type='{primtype}' ref='{ref}' role='{role}' />".format(
                                     primtype='node', ref=node_id, role=role, **outputparams)
                             else:
-                                print('Fuzz of {} {} {}'.format(stops[i][0],stops_in_osm[i]['node_name'], fuzz.ratio(stops[i][0], xmlsafe(stops_in_osm[i]['node_name']))))
+                                print('Fuzz of {} {} {}'.format(stops[i][0], stops_in_osm[i]['node_name'],
+                                                                fuzz.ratio(stops[i][0],
+                                                                           xmlsafe(stops_in_osm[i]['node_name']))))
 
                                 neg_number = counter_arr[len(counter_arr) - 1] - 1
                                 counter_arr.append(neg_number)

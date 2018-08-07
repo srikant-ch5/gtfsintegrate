@@ -239,6 +239,131 @@ def save_comp(gtfs_stop, osm_stop, feed_id, stops_layer):
 
     return xml
 
+def save_single_comp(gtfs_stop, osm_stop, feed_id, stops_layer):
+    context = {
+        'match_success': 0,
+        'error': ''
+    }
+
+    name_field = gtfs_stop['name_field']
+    ref_field = gtfs_stop['ref_field']
+    print('{} {}'.format(name_field, ref_field))
+    xml = ''
+    # check if the supplied tags are present
+
+    if name_field == 'normalized_name' and ref_field == 'stop_id':
+        gtfs_feed_id = int(feed_id)
+        gtfs_stop_id = gtfs_stop['ref_stop_id']
+
+        osm_stop_id = osm_stop['node_id']
+        osm_stop_name = osm_stop['comp_name']
+        osm_stop_ref = osm_stop['ref']
+
+        print('matching gtfs stop {0} with {1}'.format(gtfs_stop_id, osm_stop_id))
+        try:
+            gtfs_stop_obj = Stop.objects.get(feed=gtfs_feed_id, stop_id=gtfs_stop_id)
+            print(gtfs_stop_obj)
+            cmp_stop_obj = CMP_Stop.objects.get(gtfs_stop=gtfs_stop_obj)
+            print(cmp_stop_obj)
+            context['match_success'] = 1
+        except Exception as e:
+            print(e)
+            context['match_success'] = 0
+            context['error'] += 'gtfs stop doesnt exist or is undefined'
+
+        try:
+            osm_stop_obj = Node.objects.get(id=osm_stop_id, feed=gtfs_feed_id)
+            osm_stop_name = xmlsafe(osm_stop_obj.name)
+            context['match_success'] = 1
+        except Exception as e:
+            print(e)
+            context['match_success'] = 0
+            context['error'] += 'osm stop doesnt exist {}'.format(e)
+
+        try:
+            if cmp_stop_obj.fixed_match is None:
+                print("Creating new match ")
+
+                cmp_stop_obj.fixed_match = osm_stop_obj
+                cmp_stop_obj.save()
+            else:
+                cmp_stop_obj.fixed_match = None
+                cmp_stop_obj.save()
+                cmp_stop_obj.fixed_match = osm_stop_obj
+                cmp_stop_obj.save()
+
+            print("Match made")
+        except Exception as e:
+            print("relation already exists")
+
+        print("Creating tags in node")
+
+        # get tags data
+        # if the osm_name is not already then json will not include that as its undefined
+
+        name_to_josm = osm_stop['osm_name']
+
+        try:
+            osm_name = osm_stop['osm_name']
+            osm_name_defined = True
+        except Exception as e:
+            osm_name_defined = False
+
+        if osm_name_defined:
+            osm_stop_name = osm_stop['osm_name']
+        else:
+            osm_stop_name = osm_stop['comp_name']
+
+        # get all tags of node
+        node_tags = osm_stop_obj.tags.all()
+
+        name_changed = False
+        ref_changed = False
+        name_tag_in_node = False
+        ref_tag_in_node = False
+        version_inc_cond = False
+
+        for node_tag in node_tags:
+            key = node_tag.key
+            kvalue = node_tag.value
+
+            if key.value == 'name':
+                if not kvalue.value == osm_stop_name:
+                    name_changed = True
+                name_tag_in_node = True
+            elif node_tag.value == 'ref':
+                if not kvalue.value == osm_stop_ref:
+                    ref_changed = True
+                ref_tag_in_node = True
+
+        # Condition 1 if name is not present and ref is not present
+        if not name_tag_in_node and not ref_tag_in_node:
+            version_inc_cond = True
+        print("Version cond at firstcase {}".format(version_inc_cond))
+        # create KeyValueString for name and ref if the data in osm table dosent have them
+        if name_tag_in_node:
+            if name_changed:
+                version_inc_cond = True
+        else:
+            version_inc_cond = True
+            tag = Tag()
+            name_tag = tag.add_tag('name', osm_stop_name)
+            osm_stop_obj.tags.add(name_tag)
+
+        if ref_tag_in_node:
+            if ref_changed:
+                version_inc_cond = True
+        else:
+            version_inc_cond = True
+            tag = Tag()
+            ref_tag = tag.add_tag('ref', osm_stop_ref)
+            osm_stop_obj.tags.add(ref_tag)
+
+        outputparams = {'newline': '', 'indent': ''}
+        xml = cmp_stop_obj.cmp_single_node_to_xml(is_present='yes', version_inc=version_inc_cond, name=name_to_josm)
+
+    return xml
+
 
 def connect_to_JOSM_using_file(xml):
     PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))

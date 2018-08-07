@@ -7,14 +7,14 @@ class CMP_Stop(models.Model):
     fixed_match = models.OneToOneField('osmapp.Node', related_name='by_user', on_delete=models.CASCADE, blank=True,
                                        null=True)
 
-    def cmp_single_node_to_xml(self, is_present, version_inc, **tags):
+    def cmp_single_node_to_xml(self, is_present, version_inc, name):
         outputparams = {
             'newline': '',
             'indent': '',
             'upload': 'True',
         }
         xml = ''
-        xml += self.fixed_match.single_node_to_xml(version_inc, outputparams=outputparams)
+        xml += self.fixed_match.single_node_to_xml(version_inc=version_inc, outputparams=outputparams, name=name)
 
         return xml
 
