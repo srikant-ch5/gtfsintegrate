@@ -28,11 +28,9 @@
             <a class="btn btn-success" id="export-new-stop" onclick="match_new_stop()"></a>
             <a class="btn btn-primary" id="add_to_list" onclick="add_to_match_list()">Add to Match List</a>
             <a class="btn btn-primary" id="export_all_stops" onclick="match_stops()">Match All Stops from Match List</a>
+            <a class="btn btn-primary float-right" id="define-relation" href="/gtfs/define_relation/{{context.feed_id}}">Define Relation</a>
         </div>
     </div>
-</div>
-<div class="container">
-    <a class="btn btn-primary" id="define-relation" href="/gtfs/define_relation/{{context.feed_id}}">Define Relation</a>
 </div>
 <!-- The Modal -->
 <div id="myModal" class="modal">
@@ -466,6 +464,8 @@
                 alert(new_marker_lon)
                 $('#stopreffromgtfs').text('>');
                 $('#stopnamefromgtfs').text('>');
+                $('#stopnamefromosm').html('<a class="btn btn-primary">+</a>');
+                $('#stopreffromosm').html('<a class="btn btn-primary">+</a>');
                 $('#resultstopref').text(gtfs_stop_id);
                 $('#resultstopname').text(gtfs_stop_name);
                 $('#export-new-stop').show();
@@ -501,9 +501,6 @@
     }catch(error){
         alert(error+" in relation bounding box");
     }
-
-
-
 }
 
 function get_correspondene_form_data(){
@@ -725,12 +722,14 @@ function show_on_result(name, ref, name_from, ref_from){
         $("#stopnamefromgtfs").text('>');
     }else if(name_from === 'osm'){
         $("#stopnamefromosm").text('<');
+        $("#stopnamefromgtfs").html('<a class="btn btn-primary"> + </a>');
     }
 
     if(ref_from === 'gtfs'){
         $("#stopreffromgtfs").text('>');
     }else if(ref_from === 'osm'){
         $("#stopreffromosm").text('<');
+        $('#stopreffromgtfs').html('<a class="btn btn-primary"> + </a>');
     }
 }
 

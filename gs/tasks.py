@@ -150,6 +150,7 @@ def save_comp(gtfs_stop, osm_stop, feed_id, stops_layer):
 
         try:
             osm_stop_obj = Node.objects.get(id=osm_stop_id, feed=gtfs_feed_id)
+            osm_stop_name = xmlsafe(osm_stop_obj.name)
             context['match_success'] = 1
         except Exception as e:
             print(e)
@@ -176,7 +177,6 @@ def save_comp(gtfs_stop, osm_stop, feed_id, stops_layer):
 
         # get tags data
         # if the osm_name is not already then json will not include that as its undefined
-        osm_name_defined = False
 
         try:
             osm_name = osm_stop['osm_name']
@@ -188,6 +188,7 @@ def save_comp(gtfs_stop, osm_stop, feed_id, stops_layer):
             osm_stop_name = osm_stop['osm_name']
         else:
             osm_stop_name = osm_stop['comp_name']
+
 
         # get all tags of node
         node_tags = osm_stop_obj.tags.all()

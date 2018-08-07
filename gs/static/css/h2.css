@@ -317,7 +317,7 @@ label {
 }
 
 #feeds-box {
-    background: #A29D9F;
+    background: 
 }
 
 #feeds-box:hover, #feeds-nox:focus {
@@ -424,7 +424,12 @@ a:hover {
     margin-left: 70px;
     /* The Modal (background) */
 }
-
+#feed-name-heading{
+    margin-top:50px;
+}
+#define-relation{
+    margin-left:1050px;
+}
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
