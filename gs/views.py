@@ -157,16 +157,20 @@ def correspondence_view(request):
             form_entry = GTFSForm.objects.get(url=request.POST['url'])
             associated_feed_id = form_entry.feed_id
             formId = form_entry.id
-            context['error'], context['form_reset_'], feed_id = reset_feed(formId, associated_feed_id)
-            print(feed_id)
-            feed_name = Feed.objects.get(id=feed_id).name
-            request.session['feed'] = feed_name
+            if not form_entry.timestamp is None:
+                context['error'], context['form_reset_'], feed_id = reset_feed(formId, associated_feed_id)
+                print(feed_id)
+                feed_name = Feed.objects.get(id=feed_id).name
+                request.session['feed'] = feed_name
 
-            context['feed_id'] = feed_id
-            context['feed_name'] = feed_name.split('-')[0]
+                context['feed_id'] = feed_id
+                context['feed_name'] = feed_name.split('-')[0]
 
-            get_osm_data(feed_id)
-            context['key_strings'] = get_keys(feed_id, 'cmp_nodes')
+                get_osm_data(feed_id)
+                context['key_strings'] = get_keys(feed_id, 'cmp_nodes')
+            else:
+                context['error'] = "Feed was not properly downloaded"
+
         else:
             if form.is_valid():
                 gtfs_feed_info = form.save()
