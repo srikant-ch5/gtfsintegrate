@@ -186,10 +186,10 @@ def match_stops(request):
             'generator': " generator='{}'".format(generator)
         }
         '''
-        # xml = '''<?xml version='1.0' encoding='UTF-8' ?>{newline}<osm version='0.6'{upload}{generator}>{newline}'''.format(
-        #    **outputparams)
+        xml = '''<?xml version='1.0' encoding='UTF-8' ?>{newline}<osm version='0.6'{upload}{generator}>{newline}'''.format(
+            **outputparams)
 
-        '''
+
         for i in range(0, len(data_in_json)):
             str = data_in_json[i]['gtfs_stop'].split('-')
             gtfs_feed_id = str[0]
@@ -197,9 +197,9 @@ def match_stops(request):
             osm_stop_id = data_in_json[i]['osm_stop']
 
             xml += save_comp(gtfs_feed_id, gtfs_stop_id, osm_stop_id, tags_data[i], stops_layer)
-        '''
-        # xml += '''{newline}</osm>'''.format(**outputparams)
-        # connect_to_JOSM(xml)
+
+        xml += '''{newline}</osm>'''.format(**outputparams)
+        connect_to_JOSM(xml)
 
     return render(request, 'gs/comparison.html', {'context': context})
 
