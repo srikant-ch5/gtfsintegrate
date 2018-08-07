@@ -52,14 +52,14 @@
                             <th>OSM</th>
                         </tr>
                         <tr>
-                            <td id="gtfsstopid"></td>
+                            <td id="gtfsstopcode"></td>
                             <td id="stopidfromgtfs"></td>
                             <td id="resultstopid"></td>
                             <td id="stopidfromosm"></td>
                             <td id="osmstopid"></td>
                         </tr>
                         <tr>
-                            <td id="gtfsstopcode"></td>
+                            <td id="gtfsstopid"></td>
                             <td id="stopreffromgtfs"></td>
                             <td id="resultstopref"></td>
                             <td id="stopreffromosm"></td>
@@ -178,6 +178,8 @@
                     if(gtfs_to_osm_stop_name === 'name'){
                         gtfs_to_osm_stop_name = 'normalized_name';
                     }
+
+                    //gets data from user entered correspondence form 
                     marker.comp_name = data.features[i].properties[gtfs_to_osm_stop_name];
                     marker.comp_ref = data.features[i].properties[gtfs_to_osm_ref_full];
 
@@ -342,59 +344,59 @@
                 console.log("No ref");
             }
 
-            if(this.name !== undefined && this.ref !== undefined){
+            /*if(this.name !== undefined && this.ref !== undefined){
                 alert("The stop is already has name and ref");
+            }*/
+            if(this.name !== undefined){
+                t_name = this.name;
+                name_from = 'osm';
+                console.log(t_name);
+            }else{
+                t_name = gtfs_stop_name;
+                name_from = 'gtfs';
+                console.log(t_name);
             }
-                if(this.name !== undefined){
-                    t_name = this.name;
-                    name_from = 'osm';
-                    console.log(t_name);
+            //check whether the corr form has ref:operator or ref
+            let ref_oper = true;
+            let ref_in_gtfs_key;
+            for(let key in feed_corr_data){
+                if(feed_corr_data[key] === 'ref'){
+                    ref_in_gtfs_key = key;
+                    ref_oper = false;
+                }else if(feed_corr_data[key] === "ref:operator"){
+                    ref_in_gtfs_key = key;
+                    ref_oper = true;
+                }
+            }
+
+            if(this.ref !== undefined){
+                reference = this.ref;
+                ref_from = 'osm';
+            }else{
+                if(ref_oper){
+                    reference = "ref:"+feed_name+"="+gtfs_stop_id;
+                    ref_from = 'gtfs';
                 }else{
-                    t_name = gtfs_stop_name;
-                    name_from = 'gtfs';
-                    console.log(t_name);
+                    reference = gtfs_stop_id;
+                    ref_from = 'gtfs';
                 }
-                //check whether the corr form has ref:operator or ref
-                let ref_oper = true;
-                let ref_in_gtfs_key;
-                for(let key in feed_corr_data){
-                    if(feed_corr_data[key] === 'ref'){
-                        ref_in_gtfs_key = key;
-                        ref_oper = false;
-                    }else if(feed_corr_data[key] === "ref:operator"){
-                        ref_in_gtfs_key = key;
-                        ref_oper = true;
-                    }
-                }
-
-                if(this.ref !== undefined){
-                    reference = this.ref;
-                    ref_from = 'osm';
-                }else{
-                    if(ref_oper){
-                        reference = "ref:"+feed_name+"="+gtfs_stop_id;
-                        ref_from = 'gtfs';
-                    }else{
-                        reference = gtfs_stop_id;
-                        ref_from = 'gtfs';
-                    }
-                }
+            }
 
 
-            clicked_osm_stop = {
-                'node_id': osm_stop,
-                'osm_name': this.name,
-                'comp_name':t_name,
-                'ref':reference
-            };
+        clicked_osm_stop = {
+            'node_id': osm_stop,
+            'osm_name': this.name,
+            'comp_name':t_name,
+            'ref':reference
+        };
 
-            show_on_result(t_name, reference, name_from, ref_from);
+        show_on_result(t_name, reference, name_from, ref_from);
 
-            console.log(ref_in_gtfs_key);
-            let jqDiv = $('#export-stop');
-            jqDiv.show();
-            jqDiv.text("Match " + gtfs_stop + " with " + osm_stop);
-            $('#add_to_list').show();
+        console.log(ref_in_gtfs_key);
+        let jqDiv = $('#export-stop');
+        jqDiv.show();
+        jqDiv.text("Match " + gtfs_stop + " with " + osm_stop);
+        $('#add_to_list').show();
 
         }catch(error){
             alert(error + " in osm stop click");
@@ -464,8 +466,8 @@
                 alert(new_marker_lon)
                 $('#stopreffromgtfs').text('>');
                 $('#stopnamefromgtfs').text('>');
-                $('#stopnamefromosm').html('<a class="btn btn-primary">+</a>');
-                $('#stopreffromosm').html('<a class="btn btn-primary">+</a>');
+                $('#stopnamefromosm').html('<a class="btn btn-primary"> + </a>');
+                $('#stopreffromosm').html('<a class="btn btn-primary"> + </a>');
                 $('#resultstopref').text(gtfs_stop_id);
                 $('#resultstopname').text(gtfs_stop_name);
                 $('#export-new-stop').show();
@@ -722,18 +724,23 @@ function show_on_result(name, ref, name_from, ref_from){
         $("#stopnamefromgtfs").text('>');
     }else if(name_from === 'osm'){
         $("#stopnamefromosm").text('<');
-        $("#stopnamefromgtfs").html('<a class="btn btn-primary"> + </a>');
+        $("#stopnamefromgtfs").html('<a class="btn btn-primary" onclick="stopnamefromgtfsclick()"> + </a>');
     }
 
     if(ref_from === 'gtfs'){
         $("#stopreffromgtfs").text('>');
     }else if(ref_from === 'osm'){
         $("#stopreffromosm").text('<');
-        $('#stopreffromgtfs').html('<a class="btn btn-primary"> + </a>');
     }
 }
 
-
+function stopnamefromgtfsclick(){
+    clicked_osm_stop['cmp_name'] = clicked_gtfs_stop['name'];
+    $('#resultstopname').text(clicked_gtfs_stop['name']);
+    $('#stopnamefromgtfs').html('<h4> > </h4>');
+    $('#stopnamefromosm').html('<h4> - </h4>');
+    
+}
 
 </script>
 

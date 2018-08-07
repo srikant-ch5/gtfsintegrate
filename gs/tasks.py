@@ -189,7 +189,6 @@ def save_comp(gtfs_stop, osm_stop, feed_id, stops_layer):
         else:
             osm_stop_name = osm_stop['comp_name']
 
-
         # get all tags of node
         node_tags = osm_stop_obj.tags.all()
 
@@ -263,7 +262,8 @@ def connect_to_JOSM_using_file(xml):
 
 def connect_to_JOSM_using_link(link):
     print(link)
-    response = requests.get("http://localhost:8111/load_data?"+urlencode(link))
+    response = requests.get("http://localhost:8111/load_data?" + urlencode(link))
+
 
 '''Methods for downloading and reseting feeds'''
 
@@ -582,6 +582,7 @@ def dividemap(east=None, west=None, north=None, south=None, northeast_lat=None, 
     plt.show()
     '''
 
+
 def getmidpoint(lat1, lon1, lat2, lon2):
     l = Geodesic.WGS84.InverseLine(lat1, lon1, lat2, lon2)
 
@@ -637,7 +638,9 @@ def plotblock(v0, v1, v2, v3, stops_coordinates, block=None):
 
 
 '''For gettings keys'''
-def get_keys(feed_id , type_of_nodes):
+
+
+def get_keys(feed_id, type_of_nodes):
     nodes_in_feed = Node.objects.filter(feed=feed_id, purpose=type_of_nodes)
     keys = []
 
