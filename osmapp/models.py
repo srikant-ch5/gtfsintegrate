@@ -212,6 +212,7 @@ class Node(OSM_Primitive):
 
     def single_node_to_xml(self, version_inc, outputparams=None, name=''):
 
+        attributes = ['id', 'geom', 'visible', 'version']
         if outputparams is None:
             _outputparams = {'newline': '\n', 'indent': ' '}
         else:
@@ -220,22 +221,16 @@ class Node(OSM_Primitive):
         self.xml = '{newline}<node action="modify" '.format(**_outputparams)
         print("Version bool in node to xml {}".format(version_inc))
         for attr, value in self.__dict__.items():
-            if attr == '_state':
+            if not attr in attributes:
                 continue
-            elif attr == 'feed_id':
-                continue
-            elif attr == 'purpose':
-                continue
-            elif attr == 'version':
+            '''elif attr == 'version':
                 version_num = int(value)
                 print("Version at first {}".format(version_num))
                 if version_inc:
                     version_num = version_num + 1
                     print("Version at first {}".format(version_num))
-                self.xml += "{}='{}' ".format(attr, version_num)
-            elif attr == 'xml':
-                continue
-            elif attr == 'timestamp':
+                self.xml += "{}='{}' ".format(attr, version_num)'''
+            if attr == 'timestamp':
                 ts_main = str(value).split('+')
                 ts_value = ts_main[0].replace(' ', 'T') + 'Z'
                 self.xml += "{}='{}' ".format(attr, ts_value, **_outputparams)

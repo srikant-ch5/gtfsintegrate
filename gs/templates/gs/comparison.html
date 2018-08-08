@@ -622,11 +622,6 @@ function get_kvstrings(){
 }
 
 function match_stop(){
-
-    if(name_from === 'osm' && ref_from === 'osm'){
-        let choice = prompt("Please Select which tag in OSM stop should include clicked gtfs stop data");
-
-    }
     data_to_match = [];
     const data = {
         'feed_id': feed_id,
