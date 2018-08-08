@@ -162,7 +162,7 @@ def match_stops(request):
             feed_id = data_to_match[i]['feed_id']
             gtfs_stop_data = data_to_match[i]['gtfs']
             osm_stop_data = data_to_match[i]['osm']
-            xml += save_comp(gtfs_stop_data, osm_stop_data, feed_id, stops_layer=True)
+            xml += save_single_comp(gtfs_stop_data, osm_stop_data, feed_id, stops_layer=True)
 
         xml += '''{newline}</osm>'''.format(**outputparams)
         values = {'data': xml, 'new_layer': 'true'}
@@ -185,8 +185,9 @@ def match_stops(request):
             'upload': '',
             'generator': " generator='{}'".format(generator)
         }
-        '''
-        xml = '''<?xml version='1.0' encoding='UTF-8' ?>{newline}<osm version='0.6'{upload}{generator}>{newline}'''.format(
+        
+        
+        xml = "<?xml version='1.0' encoding='UTF-8' ?>{newline}<osm version='0.6'{upload}{generator}>{newline}".format(
             **outputparams)
 
 
@@ -198,8 +199,8 @@ def match_stops(request):
 
             xml += save_comp(gtfs_feed_id, gtfs_stop_id, osm_stop_id, tags_data[i], stops_layer)
 
-        xml += '''{newline}</osm>'''.format(**outputparams)
-        connect_to_JOSM(xml)
+        xml += "{newline}</osm>".format(**outputparams)
+        connect_to_JOSM(xml)'''
 
     return render(request, 'gs/comparison.html', {'context': context})
 
