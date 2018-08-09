@@ -15,6 +15,7 @@ from multigtfs.models import Feed, Stop
 from osmapp.models import Node, Tag
 from .models import GTFSForm
 import requests
+import webbrowser
 from urllib.parse import urlencode
 
 topleft_block_stops = []
@@ -239,6 +240,7 @@ def save_comp(gtfs_stop, osm_stop, feed_id, stops_layer):
 
     return xml
 
+
 def save_single_comp(gtfs_stop, osm_stop, feed_id, stops_layer):
     context = {
         'match_success': 0,
@@ -380,14 +382,14 @@ def connect_to_JOSM_using_file(xml):
     print("Opening the node  in josm")
     try:
         josm_url = 'http://127.0.0.1:8111/open_file?filename=' + xmlfile
-        response = requests.get(josm_url)
+        webbrowser.open(josm_url)
     except requests.exceptions.RequestException as e:
         context['error'] += 'JOSM not open {}'.format(e)
 
 
 def connect_to_JOSM_using_link(link):
     print(link)
-    response = requests.get("http://localhost:8111/load_data?" + urlencode(link))
+    webbrowser.open("http://localhost:8111/load_data?" + urlencode(link))
 
 
 '''Methods for downloading and reseting feeds'''

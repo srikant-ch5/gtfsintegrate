@@ -11,6 +11,7 @@ from multigtfs.models import Stop, Feed, Route
 from osmapp.views import load
 from osmapp.models import Node, Way, OSM_Relation, Tag, KeyValueString
 from requests import post
+import webbrowser
 from osmapp import OSM_MapLayer
 
 from .models import CMP_Stop
@@ -96,7 +97,7 @@ def create_stop(request):
         values = {'data': xml, 'new_layer': True}
         link = "http://localhost:8111/add_node?lon=" + str(lon) + "&lat=" + str(lat) + "&addtags=name=" + \
                name + "|ref=" + str(gtfs_stop_data['stop_id'])
-        response = requests.get(link)
+        webbrowser.open(link)
 
         return render(request, 'gs/comparison.html')
 
@@ -169,7 +170,7 @@ def match_stops(request):
 
         connect_to_JOSM_using_link(values)
 
-        #connect to JOSM using xml file
+        # connect to JOSM using xml file
         '''
         stops_layer = True
         data_in_string = request.POST.get('match_data')
@@ -550,5 +551,5 @@ def match_relations(request):
         except requests.exceptions.RequestException as e:
             context['error'] += 'JOSM not open {}'.format(e)
             print(e)'''
-        response = requests.get(link)
+        webbrowser.open(link)
     return render(request, 'gs/saved_relation.html')
