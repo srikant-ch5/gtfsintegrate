@@ -427,7 +427,11 @@
             }
         });
         const drawControl = new L.Control.Draw({
+            
             draw : {
+                circle:false,
+                polyline:false,
+                
                 marker : {
                     icon : new customMarker()
                 }

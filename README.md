@@ -1,6 +1,6 @@
 # gtfsintegrate
 
-This is the main GSOC project repository.
+This is the main Google Summer of Code 2018 - GTFS2OSM Integration Tool project repository.
 
 ### Requirements
 This application requires several tools to run it. These tools are:

@@ -1,8 +1,6 @@
 import re
 from urllib.parse import urlencode
 from osmapp.models import Node, Way, OSM_Relation, Tag, KeyValueString
-
-
 def xmlsafe(name):
     return str(name).replace('&', '&amp;').replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;").replace('"',
                                                                                                                     "&quot;")
@@ -16,11 +14,9 @@ class MapLayer():
     def __init__(self):
         self.nodes = []
         self.ways = []
-        self.relations = {}
+        self.relations = []
 
     def to_xml(self, output='doc', upload=False, generator='Python script'):
-
-        counter = [-10000]
         """
             :type output: string doc for formatted file output, url for concise output
             :type generator: string documentation to be added to OSM xml file for tool that generated the XML data
@@ -31,7 +27,7 @@ class MapLayer():
             outputparams['indent'] = ''
         else:
             outputparams['newline'] = '\n'
-            outputparams['indent'] = '  '
+            outputparams['ident'] = '  '
 
         if upload is False:
             outputparams["upload"] = " upload='false'"
@@ -47,17 +43,14 @@ class MapLayer():
             **outputparams)
 
         for n in self.nodes:
-            node = Node.objects.get(id=n)
-            xml += node.to_xml(outputparams=outputparams)
+            print(n)
+            #xml += self.nodes[n].to_xml(outputparams=outputparams)
         for w in self.ways:
-            way = Way.objects.get(id=w)
-            xml += way.to_xml(outputparams=outputparams)
-        for rel_id, stop_names in self.relations.items():
-            relation = OSM_Relation.objects.get(id=rel_id)
-            xml_returned, counter_arr = relation.to_xml(outputparams=outputparams, stops=stop_names,
-                                                        counter_arr=counter)
-            counter = counter_arr
-            xml += xml_returned
+            print(w)
+            #xml += self.ways[w].to_xml(outputparams=outputparams)
+        for r in self.relations:
+            print(r)
+            #xml += self.relations[r].to_xml(outputparams=outputparams)
 
         xml += '''{newline}</osm>'''.format(**outputparams)
         return xml

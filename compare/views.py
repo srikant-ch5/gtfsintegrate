@@ -10,6 +10,8 @@ from gs.tasks import save_comp, connect_to_JOSM_using_link, get_itineraries, sav
 from multigtfs.models import Stop, Feed, Route
 from requests import post
 import webbrowser
+from urllib.parse import urlencode
+
 from osmapp import OSM_MapLayer
 
 from .models import CMP_Stop
@@ -95,7 +97,7 @@ def create_stop(request):
         values = {'data': xml, 'new_layer': True}
         link = "http://localhost:8111/add_node?lon=" + str(lon) + "&lat=" + str(lat) + "&addtags=name=" + \
                name + "|ref=" + str(gtfs_stop_data['stop_id'])
-        webbrowser.open(link)
+        webbrowser.open(urlencode(link))
 
         return render(request, 'gs/comparison.html')
 
