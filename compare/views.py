@@ -8,8 +8,6 @@ from django.shortcuts import render
 from gs.forms import Correspondence_Route_Form, Correspondence_Agency_Form
 from gs.tasks import save_comp, connect_to_JOSM_using_link, get_itineraries, save_single_comp
 from multigtfs.models import Stop, Feed, Route
-from osmapp.views import load
-from osmapp.models import Node, Way, OSM_Relation, Tag, KeyValueString
 from requests import post
 import webbrowser
 from osmapp import OSM_MapLayer
@@ -168,6 +166,7 @@ def match_stops(request):
         xml += '''{newline}</osm>'''.format(**outputparams)
         values = {'data': xml, 'new_layer': 'true'}
 
+        # connect to JOSM using link
         connect_to_JOSM_using_link(values)
 
         # connect to JOSM using xml file
@@ -397,8 +396,6 @@ def save_ag_corr(request):
                 else:
                     long_names_list = short_names_list
 
-            print(long_names_list)
-
             for (route_id, name) in zip(route_ids_db, long_names_list):
                 data = {"id": route_id, "name": name}
                 routes_data[route_id] = name
@@ -410,8 +407,6 @@ def save_ag_corr(request):
                     complete_data.append(
                         get_itineraries(route_ids_db[i], entered_agency_corr_form_feed_id, start=False))
 
-            print(complete_data)
-            print(routes_data)
             context['complete_data'] = json.dumps(complete_data)
             context['feed_id'] = entered_agency_corr_form_feed_id
             context['routes_data'] = json.dumps(routes_data)
@@ -499,12 +494,10 @@ def match_relations(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.POST.get('data'))
-            print(data)
         except Exception as e:
             print('******ERROR {} *****'.format(e))
 
-        # filtering data from POST data
-
+        #get all the data of clicked lines relation
         token = request.POST.get('token')
         relation_data_obj = Relation_data.objects.get(token=token)
         ways = relation_data_obj.ways_ids
@@ -513,6 +506,7 @@ def match_relations(request):
         all_relations_ids = relation_data_obj.rels_ids
         all_relations_data = {}
 
+        #prepare data for all relations as a dict will rel id as key and data as value
         try:
             for i in range(0, len(all_relations_ids)):
                 rel_id = all_relations_ids[i]
@@ -522,19 +516,22 @@ def match_relations(request):
                     if rel_id == int(data[j][0]):
                         stop_names = []
                         for stop in data[j][2]:
+                            #stop[1] = stop_name stop[2] = stop lat stops[3] = stop lon
                             stop_ar = [stop[1], stop[2], stop[3]]
                             stop_names.append(stop_ar)
                         ar = stop_names
                 all_relations_data.update({rel_id: ar})
 
-            print(all_relations_data)
         except Exception as e:
             print('****** ERROR {} *****'.format(e))
 
+        #create a maplayer and add nodes,ways and relations to MapLayer
         maplayer = OSM_MapLayer.MapLayer()
         maplayer.nodes = nodes
         maplayer.ways = ways
         maplayer.relations = all_relations_data
+
+        #create a url and connect to JOSM using that URl
         link = maplayer.to_url()
         '''
         #connect to JOSM using file

@@ -325,7 +325,7 @@
 			success : function(data){
 				document.getElementById("loading").style.display="none";
 				for(var i=0;i<data.length;i++)
-				 if(data[i].token == 'ce40ceac-7a08-4f8b-b119-7335b19a72c3'){
+				 if(data[i].token == token){
 					relations_info = data[i].relations_info;
 					relation_ids = data[i].rels_ids;
 				 }
