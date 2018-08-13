@@ -6,26 +6,20 @@ from conversionapp.models import Correspondence, ExtraField, Correspondence_Rout
 from django.db import connection
 from django.shortcuts import render
 from gs.forms import Correspondence_Route_Form, Correspondence_Agency_Form
-from gs.tasks import save_comp, connect_to_JOSM_using_link, get_itineraries, save_single_comp
+from gs.tasks import save_comp, connect_to_JOSM_using_link, connect_to_JOSM_using_file, get_itineraries, \
+    save_single_comp
 from multigtfs.models import Stop, Feed, Route
 from requests import post
 import webbrowser
-from urllib.parse import urlencode
-
 from osmapp import OSM_MapLayer
 
 from .models import CMP_Stop
 from .models import Relation_data
+import uuid
+
+from urllib.parse import urlencode
+
 from . import data
-
-
-def get_nodes_within100m(lon, loat):
-    query = "SELECT * FROM osmapp_node WHERE ST_DWithin(geom, 'Point({0} {1})', 100)".format(lon, lat)  # lon, lat
-    cursor = connection.cursor()
-    cursor.execute(query)
-    result = cursor.fetchall()
-
-    return result
 
 
 def showmap_with_comp(request, pk):
@@ -52,23 +46,6 @@ def showmap_with_comp(request, pk):
     except Exception as e:
         context['error'] = e
 
-    '''
-    #to be executed if the matching needs to be done by the app
-    for stop in stops:
-        nodes = get_nodes_within100m(str(stop.lon),str(stop.lat))
-
-        # create a cmp_stop data
-        if CMP_Stop.objects.filter(gtfs_stop=stop).exists():
-            comp_stop = CMP_Stop.objects.get(gtfs_stop=stop)
-            if len(result) > 0:
-                for osm_node_info in result:
-                    osm_node = Node.objects.get(id=osm_node_info[0])
-                    comp_stop.probable_matched_stops.add(osm_node)
-                    comp_stop.save()
-        else:
-            comp_stop = CMP_Stop.objects.create(gtfs_stop=stop, matching_type='LOCATION')
-            comp_stop.save()'''
-
     return render(request, 'gs/comparison.html', {'context': context})
 
 
@@ -82,22 +59,32 @@ def create_stop(request):
         lon = data[0]['lon']
         print(gtfs_stop_data)
 
-        outputparams = {'newline': '', 'ident': '', 'generator': 'Python script', 'upload': True}
+        generator = 'Python Script'
+        outputparams = {
+            'newline': '\n',
+            'indent': '  ',
+            'generator': " generator='{}'".format(generator)
+        }
 
-        xml = "<?xml version='1.0' encoding='UTF-8'?>{newline}<osm version='0.6'{upload}{generator}>{newline}".format(
-            **outputparams)
         name = gtfs_stop_data['name'].replace('&', '&amp;').replace("'", "&apos;").replace("<", "&lt;").replace(">",
                                                                                                                 "&gt;").replace(
             '"', "&quot;")
-        xml += '''<nd action="modify" id='-1' timestamp='2013-04-23T05:33:57Z' uid='28923' user='testuser' visible='True' version='1' changeset='15832248' incomplete='False' feed_id='2' lon="''' + str(
-            lon) + '''" lat="''' + str(
-            lat) + '''" ><tag k='public_transport' v='platform' /><tag k='bus' v='yes' /><tag k='name' v="''' + \
-               name + '''" /><tag k='ref' v="''' + str(
-            gtfs_stop_data['stop_id']) + '''" /></node></osm></xml>'''
-        values = {'data': xml, 'new_layer': True}
-        link = "http://localhost:8111/add_node?lon=" + str(lon) + "&lat=" + str(lat) + "&addtags=name=" + \
+
+        xml = "<?xml version='1.0' encoding='UTF-8'?>{newline}<osm version='0.6'{generator}>{newline}".format(
+            **outputparams)
+
+        xml += ('<node action="modify" id="-1" visible="True" incomplete="False" lat="{longitude}" lon="{latitude}" >'
+                '{newline}{indent}<tag  k="public_transport" v="platform" />'
+                '{newline}{indent}<tag k="bus" v="yes" />'
+                '{newline}{indent}<tag k="name" v="{stop_name}" />'
+                '{newline}{indent}<tag k="ref" v="{ref_value}" />'
+                '{newline}</node>{newline}</osm>'.format(latitude=str(lon), longitude=str(lat), stop_name=name,
+                                                         ref_value=str(gtfs_stop_data['stop_id']), **outputparams))
+
+        connect_to_JOSM_using_file(xml)
+        '''link = "http://localhost:8111/add_node?lon=" + str(lon) + "&lat=" + str(lat) + "&addtags=name=" + \
                name + "|ref=" + str(gtfs_stop_data['stop_id'])
-        webbrowser.open(urlencode(link))
+        webbrowser.open(urlencode(link))'''
 
         return render(request, 'gs/comparison.html')
 
@@ -119,20 +106,19 @@ def match_stop(request):
 
         generator = 'Python Script'
         outputparams = {
-            'newline': '',
-            'indent': '',
-            'upload': '',
+            'newline': '\n',
+            'indent': '  ',
             'generator': " generator='{}'".format(generator)
         }
 
-        xml = '''<?xml version='1.0' encoding='UTF-8' ?>{newline}<osm version='0.6'{upload}{generator}>{newline}'''.format(
+        xml = '''<?xml version='1.0' encoding='UTF-8'?>{newline}<osm version='0.6'{generator}>{newline}'''.format(
             **outputparams)
         xml += save_single_comp(gtfs_stop_data, osm_stop_data, feed_id, stops_layer=False)
         xml += '''{newline}</osm>'''.format(**outputparams)
 
         values = {'data': xml, 'new_layer': 'true'}
 
-        connect_to_JOSM_using_link(values)
+        connect_to_JOSM_using_file(xml)
 
         print(xml)
 
@@ -157,7 +143,7 @@ def match_stops(request):
             'upload': '',
             'generator': " generator='{}'".format(generator)
         }
-        xml = '''<?xml version='1.0' encoding='UTF-8' ?>{newline}<osm version='0.6'{upload}{generator}>{newline}'''.format(
+        xml = '''<?xml version='1.0' encoding='UTF-8' ?>{newline}<osm version='0.6'{generator}>{newline}'''.format(
             **outputparams)
         for i in range(0, len(data_to_match)):
             feed_id = data_to_match[i]['feed_id']
@@ -166,43 +152,8 @@ def match_stops(request):
             xml += save_single_comp(gtfs_stop_data, osm_stop_data, feed_id, stops_layer=True)
 
         xml += '''{newline}</osm>'''.format(**outputparams)
-        values = {'data': xml, 'new_layer': 'true'}
 
-        # connect to JOSM using link
-        connect_to_JOSM_using_link(values)
-
-        # connect to JOSM using xml file
-        '''
-        stops_layer = True
-        data_in_string = request.POST.get('match_data')
-        data_in_json = json.loads(data_in_string)
-        tags_json = request.POST.get('tags')
-        tags_data = json.loads(tags_json)
-        print(tags_data)
-
-        generator = 'Python Script'
-        outputparams = {
-            'newline': '\n',
-            'indent': ' ',
-            'upload': '',
-            'generator': " generator='{}'".format(generator)
-        }
-        
-        
-        xml = "<?xml version='1.0' encoding='UTF-8' ?>{newline}<osm version='0.6'{upload}{generator}>{newline}".format(
-            **outputparams)
-
-
-        for i in range(0, len(data_in_json)):
-            str = data_in_json[i]['gtfs_stop'].split('-')
-            gtfs_feed_id = str[0]
-            gtfs_stop_id = str[1]
-            osm_stop_id = data_in_json[i]['osm_stop']
-
-            xml += save_comp(gtfs_feed_id, gtfs_stop_id, osm_stop_id, tags_data[i], stops_layer)
-
-        xml += "{newline}</osm>".format(**outputparams)
-        connect_to_JOSM(xml)'''
+        connect_to_JOSM_using_file(xml)
 
     return render(request, 'gs/comparison.html', {'context': context})
 
@@ -499,7 +450,7 @@ def match_relations(request):
         except Exception as e:
             print('******ERROR {} *****'.format(e))
 
-        #get all the data of clicked lines relation
+        # get all the data of clicked lines relation
         token = request.POST.get('token')
         relation_data_obj = Relation_data.objects.get(token=token)
         ways = relation_data_obj.ways_ids
@@ -508,7 +459,7 @@ def match_relations(request):
         all_relations_ids = relation_data_obj.rels_ids
         all_relations_data = {}
 
-        #prepare data for all relations as a dict will rel id as key and data as value
+        # prepare data for all relations as a dict will rel id as key and data as value
         try:
             for i in range(0, len(all_relations_ids)):
                 rel_id = all_relations_ids[i]
@@ -518,7 +469,7 @@ def match_relations(request):
                     if rel_id == int(data[j][0]):
                         stop_names = []
                         for stop in data[j][2]:
-                            #stop[1] = stop_name stop[2] = stop lat stops[3] = stop lon
+                            # stop[1] = stop_name stop[2] = stop lat stops[3] = stop lon
                             stop_ar = [stop[1], stop[2], stop[3]]
                             stop_names.append(stop_ar)
                         ar = stop_names
@@ -527,28 +478,28 @@ def match_relations(request):
         except Exception as e:
             print('****** ERROR {} *****'.format(e))
 
-        #create a maplayer and add nodes,ways and relations to MapLayer
+        # create a maplayer and add nodes,ways and relations to MapLayer
         maplayer = OSM_MapLayer.MapLayer()
         maplayer.nodes = nodes
         maplayer.ways = ways
         maplayer.relations = all_relations_data
 
-        #create a url and connect to JOSM using that URl
-        link = maplayer.to_url()
-        '''
-        #connect to JOSM using file
+        # get xml
+        xml = maplayer.to_xml()
+
+        # connect to JOSM using file
         PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-        xmlfiledir = xmlfiledir = os.path.join(os.path.dirname(PROJECT_ROOT), 'osmapp', 'static')
-        xmlfile = xmlfiledir + '/xmltojosm.osm'
+        xmlfiledir = os.path.join(os.path.dirname(PROJECT_ROOT), 'osmapp', 'static')
+        xmlfile = xmlfiledir + '/xmltojosm_' + str(uuid.uuid4()) + '.osm'
 
         with open(xmlfile, 'w') as fh:
             fh.write(xml)
 
         try:
-            josm_url = 'http://127.0.0.1:8111/open_file?filename=' + xmlfile
-            response = requests.get(josm_url)
+            josm_url = 'http://localhost:8111/open_file?filename=' + xmlfile
+            webbrowser.open(josm_url)
         except requests.exceptions.RequestException as e:
             context['error'] += 'JOSM not open {}'.format(e)
-            print(e)'''
-        webbrowser.open(link)
+            print(e)
+
     return render(request, 'gs/saved_relation.html')

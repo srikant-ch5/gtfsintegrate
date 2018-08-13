@@ -1,9 +1,1 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<osm version='0.6' generator='Python Script'>
-
-<node action="modify" id='4768163702' timestamp='2017-03-31T19:38:06Z' uid='651869' user='Aurimas Fišeras' visible='True' version='2' changeset='47336803' incomplete='False' lon='23.8934846' lat='53.9549825' >
- <tag k='public_transport' v='stop_position' />
- <tag k='name' v='Gerdašiai' />
- <tag k='ref' v='236' />
-</node>
-</osm>
+<?xml version='1.0' encoding='UTF-8' ?><osm version='0.6' generator='Python Script'><node action="modify" id='3764723875' visible='True' version='1' lon='-72.293368' lat='43.6855223' ><tag k='ref' v='160' /><tag k='covered' v='yes' /><tag k='highway' v='bus_stop' /><tag k='shelter' v='yes' /><tag k='bench' v='yes' /><tag k='name' v='Gould Road' /><tag k='network' v='Advanced Transit' /></node></osm>

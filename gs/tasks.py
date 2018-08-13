@@ -17,6 +17,8 @@ from .models import GTFSForm
 import requests
 import webbrowser
 from urllib.parse import urlencode
+import uuid
+from django.contrib.staticfiles.storage import staticfiles_storage
 
 topleft_block_stops = []
 topright_block_stops = []
@@ -370,7 +372,7 @@ def save_single_comp(gtfs_stop, osm_stop, feed_id, stops_layer):
 def connect_to_JOSM_using_file(xml):
     PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
     xmlfiledir = os.path.join(os.path.dirname(PROJECT_ROOT), 'osmapp', 'static')
-    xmlfile = xmlfiledir + '/nodesosm/singlenode.osm'
+    xmlfile = xmlfiledir + '/nodesosm/nodes_' + str(uuid.uuid4()) + '.osm'
 
     context = {
         'data': 'data',
@@ -381,14 +383,15 @@ def connect_to_JOSM_using_file(xml):
 
     print("Opening the node  in josm")
     try:
-        josm_url = 'http://127.0.0.1:8111/open_file?filename=' + xmlfile
+        josm_url = 'http://localhost:8111/open_file?filename=' + xmlfile
         webbrowser.open(josm_url)
     except requests.exceptions.RequestException as e:
         context['error'] += 'JOSM not open {}'.format(e)
 
 
 def connect_to_JOSM_using_link(link):
-    print(link)
+    print("http://localhost:8111/load_data?" + urlencode(link))
+
     webbrowser.open("http://localhost:8111/load_data?" + urlencode(link))
 
 
