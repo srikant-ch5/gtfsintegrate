@@ -6,7 +6,7 @@ django-geojson==2.11.0
 django-leaflet==0.24.0
 django-nose==1.4.5
 django-rest-swagger==2.2.0
-django==2.0.6
+django==2.2.10
 djangorestframework==3.8.2
 flup6==1.1.1
 fuzzywuzzy==0.16.0
