@@ -15,7 +15,7 @@ geojson==2.4.0
 gunicorn==19.8.1
 idna==2.7
 jsonfield==2.0.2
-lxml==4.2.1
+lxml==4.6.3
 mypy==0.610
 numpy==1.14.5
 ordered_set==2.0.2
